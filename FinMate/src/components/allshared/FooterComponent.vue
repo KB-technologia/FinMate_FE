@@ -25,6 +25,16 @@
         <li>Copyright © 2025 FinMate. All rights reserved.</li>
       </ul>
     </div>
+    <div class="footer-right">
+      <i class="fa-brands fa-instagram footer-icon"></i>
+      <a
+        href="https://github.com/KB-technologia"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fa-brands fa-github footer-icon"></i>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -41,6 +51,7 @@ import 'hover.css/css/hover-min.css';
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
+  padding: 3vh;
 }
 
 .footer-left {
@@ -74,6 +85,23 @@ import 'hover.css/css/hover-min.css';
 .footer-link:hover {
   cursor: pointer;
   color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+.footer-right {
+  margin-right: 2vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2vw;
+}
+.footer-icon {
+  font-size: 3rem;
+  color: #fff;
+  margin-right: 1vw;
+}
+
+.footer-icon:hover {
+  color: #636362;
   transition: all 0.2s ease-in-out;
 }
 </style>
