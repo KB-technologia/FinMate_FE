@@ -55,6 +55,10 @@ const scrollingData = [
   background-color: #f8fdfb;
 }
 
+.real-time-info-bar-wrapper:hover .real-time-info-bar-track {
+  animation-play-state: paused;
+}
+
 .real-time-info-bar {
   width: 95vw;
   overflow: hidden;
