@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'TMONBlack';
+  src: url('./TMONBlack.ttf') format('truetype');
+}
+
+body {
+  font-family: 'TMONBlack';
+}
