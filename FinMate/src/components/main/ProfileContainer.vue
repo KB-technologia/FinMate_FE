@@ -2,7 +2,14 @@
   <div class="profile-container">
     <div v-if="isLoggedIn" class="profile-header">
       <button class="quiz-button">오늘의 퀴즈</button>
-      <div class="logout-button" @click="handleLoginClick">로그아웃</div>
+      <div class="logout-button" @click="handleLoginClick">
+        <img
+          src="@/assets/images/LogoutRounded.png"
+          class="logout-logo"
+          alt="로그아웃 아이콘"
+        />
+        <span>로그아웃</span>
+      </div>
     </div>
     <div v-if="isLoggedIn" class="profile-info">
       <img
@@ -46,7 +53,10 @@ function handleLoginClick() {
   if (!isLoggedIn.value) {
     router.push('/login');
   } else {
-    authStore.logout();
+    const confirmed = window.confirm('정말 로그아웃하시겠습니까?');
+    if (confirmed) {
+      authStore.logout();
+    }
   }
 }
 </script>
@@ -61,7 +71,7 @@ function handleLoginClick() {
   align-items: center;
   justify-content: center;
   border-radius: 2vh;
-  padding: 1rem;
+  padding: 3vh;
 }
 .profile-header {
   width: 100%;
@@ -69,7 +79,12 @@ function handleLoginClick() {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+}
+
+.logout-logo {
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-right: 0.5rem;
 }
 
 .profile-info {
@@ -98,12 +113,12 @@ function handleLoginClick() {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 4rem;
+  width: 5rem;
   padding: 0.5rem;
   cursor: pointer;
   border: red solid 1px;
   font-weight: bold;
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   border-radius: 1vh;
 }
 
@@ -113,7 +128,7 @@ function handleLoginClick() {
 }
 
 .capybara-img {
-  width: 10vh;
+  width: 12vh;
   margin-bottom: 0.5rem;
 }
 
