@@ -25,7 +25,7 @@
 <style scoped>
 .footer-container {
   width: 100vw;
-  height: 25vh;
+  height: 30vh;
   background-color: #89caa2;
   display: flex;
   justify-content: center;
@@ -45,7 +45,7 @@
 
 .empty-content {
   width: 100%;
-  height: 12vh;
+  height: 30%;
 }
 
 .footer-content-top {

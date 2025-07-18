@@ -37,12 +37,13 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100vw;
   height: 100vh;
 }
 
 .main-view-content {
-  padding-top: 3vh;
+  padding-top: 1vh;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -50,11 +51,10 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
   align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
-  gap: 5vh;
+  gap: 3vh;
 }
 
 .main-view-show-stats-and-profile-container {
-  margin-top: 2vh;
   display: flex;
   flex-direction: row;
 }
@@ -63,7 +63,6 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
 }
 
 .main-view-random-product-container {
-  margin-top: 2vh;
   display: flex;
   flex-direction: row;
   width: 100vw;

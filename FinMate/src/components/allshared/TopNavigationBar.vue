@@ -6,7 +6,10 @@
         src="../../assets/images/kiwiLogo.png"
         alt="logo"
       />
-      <div class="top-navigation-bar-title hvr-underline-from-center">
+      <div
+        class="top-navigation-bar-title hvr-underline-from-center"
+        @click="$router.push('/')"
+      >
         FIN MATE
       </div>
     </div>
@@ -41,7 +44,7 @@ import 'hover.css/css/hover-min.css';
   flex-direction: row;
   align-items: center;
   width: 100vw;
-  height: 15vh;
+  height: 13vh;
   background-color: #89caa2;
   justify-content: space-between;
   font-family: 'TMONBlack';
@@ -67,7 +70,7 @@ import 'hover.css/css/hover-min.css';
 }
 
 .top-navigation-bar-title {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: bold;
 }
 .top-navigation-bar-title:hover {
