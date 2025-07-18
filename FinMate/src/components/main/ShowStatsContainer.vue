@@ -1,7 +1,16 @@
 <template>
   <!-- 로그인 상태일 때: 통계 그래프 -->
   <div v-if="isLoggedIn" class="show-stats-container">
-    <div class="stat-row" v-for="(stat, index) in stats" :key="index">
+    <div class="stat-row" v-for="(stat, index) in statsLeft" :key="index">
+      <span class="stat-label">{{ stat.label }}</span>
+      <div class="stat-bar-outer">
+        <div
+          class="stat-bar-fill"
+          :style="{ width: stat.percent + '%', backgroundColor: stat.color }"
+        ></div>
+      </div>
+    </div>
+    <div class="stat-row" v-for="(stat, index) in statsRight" :key="index">
       <span class="stat-label">{{ stat.label }}</span>
       <div class="stat-bar-outer">
         <div
@@ -39,10 +48,13 @@ const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 
 // 로그인 상태일 때 보여줄 stat 데이터
-const stats = [
+const statsLeft = [
   { label: '가치관', percent: 90, color: 'red' },
   { label: '속도', percent: 70, color: 'blue' },
   { label: '운/전략', percent: 85, color: 'yellow' },
+];
+
+const statsRight = [
   { label: '재정', percent: 75, color: 'orange' },
   { label: '모험 성향', percent: 80, color: 'green' },
 ];
