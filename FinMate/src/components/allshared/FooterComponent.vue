@@ -1,66 +1,79 @@
 <template>
   <div class="footer-container">
-    <div></div>
-    <div class="footer-content">
-      <div class="empty-content"></div>
-      <div class="footer-content-top">
-        <div class="footer-logo">
-          <img
-            class="footer-logo-image"
-            src="@/assets/images/kiwiLogo_Footer.png"
-            alt="FIN MATE Logo"
-          />
-          <p>FIN MATE</p>
-        </div>
-        <div class="footer-navigate">Navigate</div>
-        <div class="footer-address">주소</div>
+    <div class="footer-left">
+      <div class="footer-logo-container">
+        <span>FIN MATE</span>
+        <img
+          src="@/assets/images/kiwiLogo_Footer.png"
+          alt="logo"
+          class="footer-logo"
+        />
       </div>
-      <p>Copyright © 2025 FIN MATE All rights reserved</p>
+      <ul class="footer-text">
+        <li>서울특별시 강남구 테헤란로 123</li>
+      </ul>
+      <ul class="footer-text">
+        <li>대표전화: 02-1234-5678</li>
+        <li>|</li>
+        <li>qwer1234@gmail.com</li>
+      </ul>
+      <ul class="footer-text">
+        <li class="footer-link">About</li>
+        <li>|</li>
+        <li class="footer-link">FAQ</li>
+        <li>|</li>
+        <li>Copyright © 2025 FinMate. All rights reserved.</li>
+      </ul>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import 'hover.css/css/hover-min.css';
+</script>
 
 <style scoped>
 .footer-container {
   width: 100vw;
-  height: 30vh;
+  height: 25vh;
   background-color: #89caa2;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  flex-direction: row;
 }
 
-.footer-content {
-  width: 80vw;
-  color: black;
-  font-size: 1.5rem;
+.footer-left {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 90%;
+  gap: 1vh;
+  margin-left: 5vw;
 }
 
-.empty-content {
-  width: 100%;
-  height: 30%;
-}
-
-.footer-content-top {
-  width: 100%;
+.footer-logo-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  font-size: 4vh;
 }
-
 .footer-logo {
+  width: 5vw;
+  height: auto;
+}
+.footer-text {
+  color: #808080;
+  font-size: 0.8rem;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  font-size: 2rem;
-  font-weight: bold;
+  list-style: none;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link:hover {
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.2s ease-in-out;
 }
 </style>

@@ -44,7 +44,6 @@ const authStore = useAuthStore();
 
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 
-// 예시 경험치 (나중엔 store에서 불러올 수 있음)
 const currentXp = 2000;
 const maxXp = 3000;
 const fillPercentage = computed(() => (currentXp / maxXp) * 100);
