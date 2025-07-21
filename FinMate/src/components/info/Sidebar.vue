@@ -41,8 +41,6 @@ const current = ref("stat");
 .sidebar {
   width: 300px;
   height: 60vh;
-  margin-top: 3rem;
-  margin-left: 4rem;
   padding: 0;
   border: 3px solid var(--color-primary-bluegray);
   border-radius: 4px;
