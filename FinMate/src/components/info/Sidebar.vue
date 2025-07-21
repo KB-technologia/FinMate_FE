@@ -44,12 +44,12 @@ const current = ref("stat");
   margin-top: 3rem;
   margin-left: 4rem;
   padding: 0;
-  border: 3px solid #2e404c;
+  border: 3px solid var(--color-primary-bluegray);
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: sans-serif;
+  font-family: var(--font-tmon);
 }
 
 .top-area {
@@ -63,16 +63,14 @@ const current = ref("stat");
 }
 
 .username {
-  font-weight: bold;
   font-size: 1.5rem;
   margin-bottom: 0.25rem;
   text-align: left;
 }
 
 .level {
-  font-weight: bold;
   font-size: 0.95rem;
-  color: orange;
+  color: var(--color-orange);
   margin-bottom: 0.75rem;
   text-align: left;
 }
@@ -83,8 +81,8 @@ const current = ref("stat");
 }
 
 .edit-btn {
-  background-color: #2e404c;
-  color: white;
+  background-color: var(--color-primary-bluegray);
+  color: var(--color-white);
   border: none;
   border-radius: 4px;
   padding: 0.6rem 2rem;
@@ -93,6 +91,8 @@ const current = ref("stat");
   width: 80%;
   margin: 0 auto;
   display: block;
+  font-family: var(--font-inter);
+  font-weight: bold;
 }
 
 .bottom-area {
@@ -118,18 +118,17 @@ const current = ref("stat");
   align-items: center;
   justify-content: flex-start;
   padding-left: 1rem;
-  font-weight: bold;
   cursor: pointer;
 }
 
 .menu-area li.active {
-  background-color: black;
-  color: white;
+  background-color: var(--color-black);
+  color: var(--color-white);
 }
 
 .divider {
   height: 1px;
-  background-color: #2e404c;
+  background-color: var(--color-primary-bluegray);
   width: 100%;
   margin: 0;
   padding: 0;
@@ -142,8 +141,7 @@ const current = ref("stat");
   align-items: center;
   justify-content: flex-start;
   padding-left: 1rem;
-  font-weight: bold;
-  color: red;
+  color: var(--color-red);
   cursor: pointer;
 }
 
