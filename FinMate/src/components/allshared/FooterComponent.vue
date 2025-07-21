@@ -40,6 +40,7 @@
 
 <script setup>
 import 'hover.css/css/hover-min.css';
+import '../../assets/fonts/font.css';
 </script>
 
 <style scoped>
@@ -52,6 +53,7 @@ import 'hover.css/css/hover-min.css';
   align-items: center;
   flex-direction: row;
   padding: 3vh;
+  font-family: 'TMONBlack';
 }
 
 .footer-left {
