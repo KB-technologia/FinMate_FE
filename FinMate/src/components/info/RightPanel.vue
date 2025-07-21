@@ -4,10 +4,6 @@
   </section>
 </template>
 
-<script setup>
-// 이 컴포넌트는 내용 삽입을 위한 래퍼입니다.
-</script>
-
 <style scoped>
 .right-panel {
   flex-grow: 1;
