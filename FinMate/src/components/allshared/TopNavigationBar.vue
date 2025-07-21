@@ -26,7 +26,10 @@
       <div class="top-navigation-menu-right-item hvr-underline-from-center">
         투자 성향 테스트
       </div>
-      <div class="top-navigation-menu-right-item hvr-underline-from-center">
+      <div
+        class="top-navigation-menu-right-item hvr-underline-from-center"
+        @click="$router.push('/my-info')"
+      >
         내 정보
       </div>
     </div>

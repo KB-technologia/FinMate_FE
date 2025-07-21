@@ -3,7 +3,12 @@
     <span class="Product-Text">추천 상품</span>
 
     <div class="button-container">
-      <button @click="prev" :disabled="currentIndex === 0">◀</button>
+      <div
+        @click="prev"
+        :class="['arrow-button', { disabled: currentIndex === 0 }]"
+      >
+        ◀
+      </div>
 
       <div class="CardContainer">
         <MainProductCard
@@ -13,16 +18,24 @@
         />
       </div>
 
-      <button @click="next" :disabled="currentIndex + 4 >= products.length">
+      <div
+        @click="next"
+        :class="[
+          'arrow-button',
+          { disabled: currentIndex + 4 >= products.length },
+        ]"
+      >
         ▶
-      </button>
+      </div>
     </div>
+    <button class="detail-button">나의 추천 아이템 보러 가기</button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import MainProductCard from './MainProductCard.vue';
+import '../../assets/fonts/font.css';
 
 const products = ref([
   {
@@ -118,6 +131,8 @@ const next = () => {
   border-radius: 2vh;
   display: flex;
   flex-direction: column;
+  font-family: 'TMONBlack';
+  align-items: center;
 }
 
 .Product-Text {
@@ -134,5 +149,33 @@ const next = () => {
   width: 100%;
   height: 80%;
   gap: 2vw;
+}
+
+.detail-button {
+  width: 15vw;
+  height: 5vh;
+  border-radius: 2vh;
+  background-color: #0086e6;
+  color: white;
+  border: none;
+}
+
+.detail-button:hover {
+  border: 0.4vh solid white;
+  transition: all 0.1s ease-in-out;
+}
+
+.arrow-button {
+  color: white;
+  border-radius: 1vh;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.arrow-button.disabled {
+  pointer-events: none;
+  opacity: 0.3;
+  cursor: default;
 }
 </style>
