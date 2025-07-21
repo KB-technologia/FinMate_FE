@@ -15,11 +15,11 @@
           <button @click="kakaoLogin">카카오 로그인</button>
         </div>
         <div class="etc">
+          <p>회원가입</p>
+          <p>|</p>
           <p>아이디 찾기</p>
           <p>|</p>
           <p>비밀번호 찾기</p>
-          <p>|</p>
-          <p>회원가입</p>
         </div>
       </div>
     </div>
@@ -30,6 +30,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth/auth';
+import '../../assets/fonts/font.css';
 
 const id = ref('');
 const password = ref('');
@@ -60,6 +61,7 @@ const kakaoLogin = () => {
   height: 70vh;
   align-items: center;
   justify-content: center;
+  font-family: 'InterVariable';
 }
 
 .login-container {
@@ -120,5 +122,6 @@ input:focus {
 .etc {
   display: flex;
   justify-content: space-between;
+  padding: 3vh;
 }
 </style>

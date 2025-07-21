@@ -43,6 +43,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
+import '../../assets/fonts/font.css';
 
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
@@ -106,6 +107,7 @@ onMounted(() => {
   gap: 1rem;
   padding: 2vh;
   overflow: hidden;
+  font-family: 'TMONBlack';
 }
 
 /* 📊 로그인 상태 - 그래프 */

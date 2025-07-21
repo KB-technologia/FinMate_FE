@@ -29,7 +29,7 @@
       class="custom-login-button"
       @click="handleLoginClick"
     >
-      로그인
+      로그인 하러 가기
     </button>
   </div>
 </template>
@@ -38,6 +38,7 @@
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth/auth';
 import { computed } from 'vue';
+import '../../assets/fonts/font.css';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -71,6 +72,7 @@ function handleLoginClick() {
   justify-content: center;
   border-radius: 2vh;
   padding: 3vh;
+  font-family: 'TMONBlack';
 }
 .profile-header {
   width: 100%;
