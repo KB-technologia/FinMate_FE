@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import '../../assets/fonts/font.css';
-import 'hover.css/css/hover-min.css';
+import "@/styles/fonts.css";
+import "hover.css/css/hover-min.css";
 </script>
 
 <style scoped>
@@ -47,7 +47,7 @@ import 'hover.css/css/hover-min.css';
   height: 13vh;
   background-color: #89caa2;
   justify-content: space-between;
-  font-family: 'TMONBlack';
+  font-family: "TMONBlack";
 }
 
 .top-navigation-bar-logo-container {
