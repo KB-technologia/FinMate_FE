@@ -24,6 +24,7 @@ defineProps({
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
+  max-height: 82vh;
 }
 
 .scrollable {
