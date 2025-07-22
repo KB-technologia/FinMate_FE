@@ -91,6 +91,11 @@ const router = createRouter({
       name: 'quizStart',
       component: () => import('../views/quiz/QuizStartView.vue'),
     },
+    {
+      path: '/quiz',
+      name: 'quiz',
+      component: () => import('../views/quiz/QuizView.vue'),
+    },
 
     // 404
     {

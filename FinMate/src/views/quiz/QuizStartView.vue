@@ -28,7 +28,7 @@
               <p>테스트 해볼래?</p>
             </div>
           </div>
-          <button>시작하기</button>
+          <button @click="startQuiz">시작하기</button>
         </div>
         <div class="keyword-cloud">
           <span class="word word1 bold" style="top: 30%; left: 80%"
@@ -54,6 +54,12 @@
 <script setup>
 import FooterComponent from '../../components/allshared/FooterComponent.vue';
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
+
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const startQuiz = () => {
+  router.push('/quiz');
+};
 </script>
 
 <style scoped>
