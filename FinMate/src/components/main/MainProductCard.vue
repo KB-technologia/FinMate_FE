@@ -35,7 +35,7 @@ defineProps({
   font-family: 'TMONBlack';
 }
 .card-container:hover {
-  border: 0.7vh solid #fff;
+  border: 0.7vh solid var(--color-white);
   transition: all 0.1s ease-in-out;
 }
 

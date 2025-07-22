@@ -48,7 +48,6 @@ import '../../assets/fonts/font.css';
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 
-// 로그인 상태일 때 보여줄 stat 데이터
 const statsLeft = [
   { label: '가치관', percent: 90, color: 'red' },
   { label: '속도', percent: 70, color: 'blue' },
@@ -60,7 +59,6 @@ const statsRight = [
   { label: '모험 성향', percent: 80, color: 'green' },
 ];
 
-// 비로그인 상태일 때 사용할 이미지 리스트
 const images = [
   new URL('@/assets/images/cat.png', import.meta.url).href,
   new URL('@/assets/images/capybara.png', import.meta.url).href,
@@ -98,7 +96,7 @@ onMounted(() => {
 .show-stats-container {
   width: 68vw;
   height: 30vh;
-  background-color: #ffeab4;
+  background-color: var(--color-primary-yellow);
   border-radius: 2vh;
   display: flex;
   flex-direction: column;
@@ -107,10 +105,8 @@ onMounted(() => {
   gap: 1rem;
   padding: 2vh;
   overflow: hidden;
-  font-family: 'TMONBlack';
 }
 
-/* 📊 로그인 상태 - 그래프 */
 .stat-row {
   width: 90%;
   display: flex;
@@ -125,7 +121,7 @@ onMounted(() => {
 .stat-bar-outer {
   flex: 1;
   height: 2.5vh;
-  background-color: white;
+  background-color: var(--color-white);
   border-radius: 2vh;
   overflow: hidden;
 }
@@ -137,7 +133,7 @@ onMounted(() => {
 .detail-button {
   width: 10vw;
   height: 4vh;
-  background-color: #eaddbb;
+  background-color: var(--color-main-button);
   border: none;
   border-radius: 2vh;
   font-weight: bold;
@@ -149,7 +145,6 @@ onMounted(() => {
   transition: all 0.3s ease-in-out;
 }
 
-/* 🐾 비로그인 상태 - 랜덤 이미지 & 설명 */
 .description {
   font-size: 2rem;
   text-align: center;

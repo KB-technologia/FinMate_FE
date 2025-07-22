@@ -80,7 +80,7 @@ defineProps({
 }
 
 .highlight {
-  color: #f4a200;
+  color: var(--color-orange);
   font-weight: bold;
   font-size: 22px;
 }
@@ -95,7 +95,7 @@ defineProps({
   flex: 1;
   border: 1px solid #ccc;
   padding: 10px;
-  background-color: white;
+  background-color: var(--color-white);
   border-radius: 5px;
 }
 

@@ -37,8 +37,8 @@
 </template>
 
 <script setup>
-import "@/styles/fonts.css";
-import "hover.css/css/hover-min.css";
+import '@/styles/fonts.css';
+import 'hover.css/css/hover-min.css';
 </script>
 
 <style scoped>
@@ -48,9 +48,9 @@ import "hover.css/css/hover-min.css";
   align-items: center;
   width: 100vw;
   height: 13vh;
-  background-color: #89caa2;
+  background-color: var(--color-primary-green);
   justify-content: space-between;
-  font-family: "TMONBlack";
+  font-family: var(--font-tmon);
 }
 
 .top-navigation-bar-logo-container {
@@ -78,12 +78,12 @@ import "hover.css/css/hover-min.css";
 }
 .top-navigation-bar-title:hover {
   cursor: pointer;
-  color: #fff;
+  color: var(--color-white);
   transition: all 0.2s ease-in-out;
 }
 
 .top-navigation-bar-title.hvr-underline-from-center::before {
-  background-color: #fff;
+  background-color: var(--color-white);
 }
 
 .top-navigation-menu-right {
@@ -102,11 +102,11 @@ import "hover.css/css/hover-min.css";
 
 .top-navigation-menu-right-item:hover {
   cursor: pointer;
-  color: #fff;
+  color: var(--color-white);
   transition: all 0.2s ease-in-out;
 }
 
 .top-navigation-menu-right-item.hvr-underline-from-center::before {
-  background-color: #fff;
+  background-color: var(--color-white);
 }
 </style>

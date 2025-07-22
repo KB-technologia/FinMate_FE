@@ -12,7 +12,14 @@
         />
         <button @click="login" class="login-button">로그인</button>
         <div class="kakao-login">
-          <button @click="kakaoLogin">카카오 로그인</button>
+          <button @click="kakaoLogin" class="kakao-button">
+            <img
+              src="@/assets/images/speech.png"
+              alt="speech"
+              class="speech-icon"
+            />
+            카카오 로그인
+          </button>
         </div>
         <div class="etc">
           <p>회원가입</p>
@@ -61,7 +68,7 @@ const kakaoLogin = () => {
   height: 70vh;
   align-items: center;
   justify-content: center;
-  font-family: 'InterVariable';
+  font-family: var(--font-inter);
 }
 
 .login-container {
@@ -88,20 +95,20 @@ input {
 }
 
 input:hover {
-  border-color: #89caa2;
+  border-color: var(--color-primary-green);
   outline: none;
 }
 
 input:focus {
-  border-color: #89caa2;
+  border-color: var(--color-primary-green);
   outline: none;
 }
 
 .login-button {
   width: 100%;
   padding: 10px;
-  background-color: #636362;
-  color: white;
+  background-color: var(--color-dark-gray);
+  color: var(--color-white);
   border: none;
   border-radius: 1vh;
   cursor: pointer;
@@ -113,10 +120,16 @@ input:focus {
   padding: 10px;
   height: 6vh;
   background-color: #fee500;
-  color: black;
+  color: var(--color-black);
   border: none;
   border-radius: 1vh;
   cursor: pointer;
+}
+
+.speech-icon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 1rem;
 }
 
 .etc {
