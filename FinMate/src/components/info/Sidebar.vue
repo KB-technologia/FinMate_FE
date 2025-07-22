@@ -68,7 +68,10 @@ const current = computed(() => {
 
 .user-info {
   width: 100%;
-  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 1rem;
 }
 
 .username {
@@ -84,24 +87,20 @@ const current = computed(() => {
   text-align: left;
 }
 
-.username,
-.level {
-  text-align: left;
-}
-
 .edit-btn {
-  background-color: var(--color-primary-bluegray);
-  color: var(--color-white);
-  border: none;
-  border-radius: 4px;
-  padding: 0.6rem 2rem;
-  cursor: pointer;
-  text-align: center;
+  align-self: center;
+  padding: 0.6rem 0;
   width: 80%;
-  margin: 0 auto;
-  display: block;
+  max-width: 240px;
+  margin-top: 0.5rem;
   font-family: var(--font-inter);
   font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-primary-bluegray);
+  color: var(--color-white);
+  cursor: pointer;
+  text-align: center;
 }
 
 .bottom-area {
@@ -110,7 +109,6 @@ const current = computed(() => {
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-  gap: 0;
 }
 
 .menu-area ul {
