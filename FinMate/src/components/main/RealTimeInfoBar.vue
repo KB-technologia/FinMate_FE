@@ -50,9 +50,11 @@ const scrollingData = [
 .real-time-info-bar-wrapper {
   overflow: hidden;
   width: 100%;
-  border: 1px solid #89caa2;
+  border: 1px solid var(--color-primary-green);
   border-radius: 2vh;
   background-color: #f8fdfb;
+  font-family: var(--font-inter);
+  font-weight: bold;
 }
 
 .real-time-info-bar-wrapper:hover .real-time-info-bar-track {
