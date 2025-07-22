@@ -5,6 +5,35 @@ const password = ref("");
 const passwordCheck = ref("");
 const email = ref("");
 const birthdate = ref("");
+const isComposing = ref(false);
+
+const onCompositionStart = () => {
+  isComposing.value = true;
+};
+
+const onCompositionEnd = (e) => {
+  isComposing.value = false;
+  const raw = e.target.value;
+  const filtered = raw.replace(/[^0-9]/g, "");
+  birthdate.value = filtered;
+  e.target.value = filtered;
+};
+
+const onBirthdateInput = (e) => {
+  if (isComposing.value) return;
+  const raw = e.target.value;
+  const filtered = raw.replace(/[^0-9]/g, "");
+  birthdate.value = filtered;
+  e.target.value = filtered;
+};
+
+const isPasswordMatch = computed(() => {
+  return passwordCheck.value === "" || password.value === passwordCheck.value;
+});
+
+const isBirthdateValid = computed(() => {
+  return birthdate.value === "" || /^\d{8}$/.test(birthdate.value);
+});
 
 const isDirty = computed(() => {
   return (
@@ -14,10 +43,6 @@ const isDirty = computed(() => {
     email.value !== "" ||
     birthdate.value !== ""
   );
-});
-
-const isPasswordMatch = computed(() => {
-  return passwordCheck.value === "" || password.value === passwordCheck.value;
 });
 </script>
 
@@ -59,7 +84,19 @@ const isPasswordMatch = computed(() => {
 
     <div class="form-group">
       <label>생년월일</label>
-      <input type="text" placeholder="yyyymmdd" v-model="birthdate" />
+      <input
+        type="text"
+        placeholder="yyyymmdd"
+        :value="birthdate"
+        maxlength="8"
+        inputmode="numeric"
+        @input="onBirthdateInput"
+        @compositionstart="onCompositionStart"
+        @compositionend="onCompositionEnd"
+      />
+      <p v-if="!isBirthdateValid" class="error-msg">
+        생년월일은 yyyymmdd 형식으로 8자리 입력해주세요.
+      </p>
     </div>
 
     <div class="btn-group">
