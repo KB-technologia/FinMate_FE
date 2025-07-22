@@ -12,11 +12,11 @@
       <div class="menu-area">
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'products' }">PRODUCTS</li>
+          <li :class="{ active: current === 'stat' }">STAT</li>
         </ul>
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'stat' }">STAT</li>
+          <li :class="{ active: current === 'products' }">PRODUCTS</li>
         </ul>
         <div class="divider"></div>
         <ul>
