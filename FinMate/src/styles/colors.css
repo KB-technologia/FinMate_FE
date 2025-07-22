@@ -1,0 +1,23 @@
+:root {
+  /* 기본색 */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-red: #ff0000;
+  --color-orange: #f99a0f;
+
+  /* 대표색 */
+  --color-primary-yellow: #ffeab4;
+  --color-primary-green: #89caa2;
+  --color-primary-bluegray: #2e404c;
+
+  /* 자주 쓰이는 색 */
+  --color-modal-bg: #fffdf0;
+  --color-main-button: #eaddbb;
+  --color-dark-gray: #636362;
+  --color-light-blue: #a4c8e1;
+
+  /* 설문 결과용 색상 */
+  --color-survey-blue: #002bff;
+  --color-survey-yellow: #ffff00;
+  --color-survey-green: #307400;
+}
