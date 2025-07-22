@@ -2,19 +2,18 @@
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import axios from 'axios';
 import { Chart } from 'chart.js/auto';
-
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 import Sidebar from '@/components/info/Sidebar.vue';
 import RightPanel from '@/components/info/RightPanel.vue';
 
-const showModal = ref(false);
-const portfolio = ref(null);
-const chartInstance = ref(null);
-const chartCanvasRef = ref(null);
+const showModal = ref(false); //반응형 Modal 구현 (디폴트 값 : false)
+const portfolio = ref(null); // 사용자 포트폴리오 데이터 저장
+const chartInstance = ref(null); //차트 인스턴스 저장, 렌더링 시 초기화 (포트폴리오 작성하면 바로 반영)
+const chartCanvasRef = ref(null); // 차트가 그려질 canvas 요소에 대한 DOM 참조
 
 function renderChart() {
   const ctx = chartCanvasRef.value?.getContext('2d');
-  chartInstance.value?.destroy();
+  chartInstance.value?.destroy(); //포트폴리오 변경 시마다 차트를 초기화
 
   chartInstance.value = new Chart(ctx, {
     type: 'pie',
@@ -94,12 +93,9 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-
+      <!--portfolio 데이터가 없을 시 보여지는 화면-->
       <div v-else class="right-panel-container empty-portfolio">
         <h2 class="portfolio-title">홍길동님의 재무 포트폴리오</h2>
-        <div class="blurred-chart-bg">
-          <canvas ref="chartCanvasRef" style="opacity: 0.2"></canvas>
-        </div>
         <p class="empty-msg">먼저 포트폴리오를 작성해주세요!</p>
         <button class="create-btn" @click="showModal = true">
           포트폴리오 작성하기
@@ -200,20 +196,6 @@ canvas {
 }
 .legend-color.other {
   background: #ff928a;
-}
-
-.blurred-chart-bg {
-  position: relative;
-  aspect-ratio: 1;
-  max-width: 450px;
-  width: 100%;
-  margin: 0 auto 1.5rem;
-}
-.blurred-chart-bg canvas {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1;
 }
 
 .empty-portfolio {
