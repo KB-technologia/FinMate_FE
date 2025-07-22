@@ -12,20 +12,26 @@
       <div class="menu-area">
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'stat' }">STAT</li>
+          <li class="hover-item" :class="{ active: current === 'stat' }">
+            STAT
+          </li>
         </ul>
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'products' }">PRODUCTS</li>
+          <li class="hover-item" :class="{ active: current === 'products' }">
+            PRODUCTS
+          </li>
         </ul>
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'portfolio' }">PORTFOLIO</li>
+          <li class="hover-item" :class="{ active: current === 'portfolio' }">
+            PORTFOLIO
+          </li>
         </ul>
         <div class="divider"></div>
       </div>
 
-      <div class="exit">
+      <div class="exit hover-item">
         <p>서비스 탈퇴</p>
       </div>
     </div>
@@ -125,12 +131,21 @@ const current = computed(() => {
   align-items: center;
   justify-content: flex-start;
   padding-left: 1rem;
-  cursor: pointer;
 }
 
 .menu-area li.active {
   background-color: var(--color-black);
   color: var(--color-white);
+}
+
+.hover-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.hover-item:hover {
+  background-color: var(--color-primary-yellow);
+  font-weight: bold;
 }
 
 .divider {
@@ -149,7 +164,6 @@ const current = computed(() => {
   justify-content: flex-start;
   padding-left: 1rem;
   color: var(--color-red);
-  cursor: pointer;
 }
 
 .exit p {
