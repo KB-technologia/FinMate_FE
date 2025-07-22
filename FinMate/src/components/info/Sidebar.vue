@@ -33,8 +33,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-const current = ref("stat");
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const current = computed(() => {
+  const path = route.path;
+
+  if (path.includes("/my-products")) return "products";
+  if (path.includes("/my-stat")) return "stat";
+  if (path.includes("/my-portfolio")) return "portfolio";
+  return "";
+});
 </script>
 
 <style scoped>
