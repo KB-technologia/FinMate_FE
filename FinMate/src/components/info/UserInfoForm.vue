@@ -8,18 +8,23 @@ const birthdate = ref("");
 
 const isDirty = computed(() => {
   return (
-    password.value !== "" ||
-    passwordCheck.value !== "" ||
+    (password.value !== "" &&
+      passwordCheck.value !== "" &&
+      isPasswordMatch.value) ||
     email.value !== "" ||
     birthdate.value !== ""
   );
+});
+
+const isPasswordMatch = computed(() => {
+  return passwordCheck.value === "" || password.value === passwordCheck.value;
 });
 </script>
 
 <template>
   <form class="user-info-form">
     <div class="form-group">
-      <label>아이디</label>
+      <label class="readonly-label">아이디</label>
       <input type="text" value="abc1234" disabled class="readonly-input" />
     </div>
 
@@ -39,6 +44,9 @@ const isDirty = computed(() => {
         placeholder="비밀번호를 한 번 더 입력해주세요"
         v-model="passwordCheck"
       />
+      <p v-if="passwordCheck && !isPasswordMatch" class="error-msg">
+        비밀번호가 일치하지 않습니다.
+      </p>
     </div>
 
     <div class="form-group">
@@ -83,6 +91,10 @@ const isDirty = computed(() => {
 
 .form-group label {
   margin-bottom: 0.5rem;
+}
+
+.readonly-label {
+  color: var(--color-light-gray);
 }
 
 input,
@@ -166,5 +178,14 @@ input:focus,
 .submit.inactive {
   background-color: #cfcfcf;
   cursor: not-allowed;
+}
+
+.error-msg {
+  color: var(--color-red);
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+  margin-left: 0.2rem;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
 }
 </style>
