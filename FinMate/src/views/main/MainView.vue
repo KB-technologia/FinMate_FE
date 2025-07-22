@@ -59,6 +59,7 @@ onMounted(() => {
 
 const closeModal = () => {
   showModal.value = false;
+  authStore.isFirst = false;
 };
 </script>
 
