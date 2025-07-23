@@ -25,4 +25,15 @@
   /* 예금/적금 태그 색상 */
   --color-deposit-blue: #2871de;
   --color-saving-orange: #e58500;
+
+  /* Toast 배경색 (연한 배경색) */
+  --toast-bg-success: #e5f6f0;
+  --toast-bg-error: #fdecea;
+  --toast-bg-info: #e8f0fe;
+  --toast-bg-warning: #fff4e5;
+
+  /* Toast 아이콘 색상 */
+  --toast-icon-success: #3c8c75;
+  --toast-icon-error: #d32f2f;
+  --toast-icon-info: #1976d2;
 }
