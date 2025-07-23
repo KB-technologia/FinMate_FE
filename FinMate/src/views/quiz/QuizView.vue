@@ -4,7 +4,9 @@
       <TopNavigationBar />
     </div>
     <div class="quiz-view-content">
-      <div class="quiz"></div>
+      <div class="quiz">
+        <QuizComponent />
+      </div>
       <FooterComponent />
     </div>
   </div>
@@ -13,6 +15,7 @@
 <script setup>
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import QuizComponent from '../../components/quiz/QuizComponent.vue';
 </script>
 
 <style scoped>
