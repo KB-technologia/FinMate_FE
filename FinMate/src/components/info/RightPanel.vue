@@ -1,8 +1,17 @@
 <template>
-  <section class="right-panel">
+  <section class="right-panel" :class="{ scrollable: scroll }">
     <slot />
   </section>
 </template>
+
+<script setup>
+defineProps({
+  scroll: {
+    type: Boolean,
+    default: true,
+  },
+});
+</script>
 
 <style scoped>
 .right-panel {
@@ -12,5 +21,13 @@
   border-radius: 4px;
   min-height: 80vh;
   background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  max-height: 82vh;
+}
+
+.scrollable {
+  overflow-y: auto;
 }
 </style>

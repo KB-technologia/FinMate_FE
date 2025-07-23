@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {},
   setup() {
     const currentRoute = useRoute();

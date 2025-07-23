@@ -9,7 +9,7 @@ import UserInfoForm from "@/components/info/UserInfoForm.vue";
   <TopNavigationBar />
   <div class="mypage-container">
     <Sidebar />
-    <RightPanel>
+    <RightPanel :scroll="false">
       <div class="panel-inner">
         <h2 class="title">회원 정보 수정</h2>
         <UserInfoForm />
