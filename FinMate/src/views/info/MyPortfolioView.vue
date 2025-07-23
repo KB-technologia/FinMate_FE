@@ -27,5 +27,6 @@ import PortfolioContainer from '@/components/portfolio/PortfolioContainer.vue';
   border-radius: 4px;
   min-height: 80vh;
   background-color: var(--color-primary-yellow);
+  max-height: 80vh;
 }
 </style>

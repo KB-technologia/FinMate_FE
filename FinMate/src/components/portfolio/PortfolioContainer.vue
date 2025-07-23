@@ -69,7 +69,7 @@ async function handleSave(updatedData) {
 }
 
 onMounted(async () => {
-  const res = await getPortfolio(1); // DB에서 userId값에 해당하는 포트폴리오 데이터를 가져옴 //TODO userID 임시로 지정해둠
+  const res = await getPortfolio(0); // DB에서 userId값에 해당하는 포트폴리오 데이터를 가져옴 //TODO userID 임시로 지정해둠
   const data = res.data;
   if (data == null) {
     console.log('유저의 데이터가 없습니다');
@@ -137,7 +137,7 @@ onMounted(async () => {
     </div>
   </div>
   <!--portfolio 데이터가 없을 시 보여지는 화면-->
-  <div v-else class="right-panel-container empty-state">
+  <div v-else class="right-panel-container">
     <h2 class="portfolio-title">
       {{ portfolio?.userName || '홍길동' }}님의 재무 포트폴리오
     </h2>
@@ -159,11 +159,9 @@ onMounted(async () => {
         />
       </div>
     </div>
-    <div>
-      <button class="create-btn" @click="showWriteModal = true">
-        포트폴리오 작성하기
-      </button>
-    </div>
+    <button class="create-btn" @click="showWriteModal = true">
+      포트폴리오 작성하기
+    </button>
   </div>
   <PortfolioModal
     v-if="showWriteModal"
@@ -181,11 +179,14 @@ onMounted(async () => {
 </template>
 <style scoped>
 .right-panel-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   margin-top: 2rem;
+  height: 100%;
+  overflow: hidden;
 }
 
 .portfolio-title {
@@ -264,7 +265,6 @@ canvas {
 }
 
 .info-title {
-  display: flex;
   gap: 1.6rem;
   align-items: center;
 }
@@ -308,16 +308,15 @@ canvas {
 }
 
 .blurred-chart {
-  width: 140%;
-  height: 140%;
-  border-radius: 20px;
+  width: 120%;
+  height: 120%;
 }
 
 .lock-icon {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-0%, -30%);
+  transform: translate(-30%, -40%);
   width: 30%;
 }
 
@@ -325,7 +324,7 @@ canvas {
   position: relative;
   width: 50vw;
   max-width: 500px;
-  height: 220px;
+  height: 300px;
 }
 
 .kiwi {
@@ -338,13 +337,17 @@ canvas {
 
 .speech-bubble {
   position: absolute;
-  bottom: 50%;
+  bottom: 60%;
   left: 70%;
-  width: 70%;
+  width: 60%;
   max-width: 350px;
 }
 
 .create-btn {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(30%);
   background: #636362;
   color: #ffffff;
   border: none;
@@ -353,7 +356,6 @@ canvas {
   font-size: 1.2rem;
   cursor: pointer;
 }
-
 .create-btn:hover {
   background: #ffb95e;
 }
