@@ -47,7 +47,7 @@ import '../../assets/fonts/font.css';
 .footer-container {
   width: 100vw;
   height: 25vh;
-  background-color: #89caa2;
+  background-color: var(--color-primary-green);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,7 +86,7 @@ import '../../assets/fonts/font.css';
 
 .footer-link:hover {
   cursor: pointer;
-  color: #fff;
+  color: var(--color-white);
   transition: all 0.2s ease-in-out;
 }
 .footer-right {
@@ -98,7 +98,7 @@ import '../../assets/fonts/font.css';
 }
 .footer-icon {
   font-size: 3rem;
-  color: #fff;
+  color: var(--color-white);
   margin-right: 1vw;
 }
 

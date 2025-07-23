@@ -4,6 +4,7 @@ import { Login } from '@/api/auth/auth';
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token'),
+    isFirst: null,
   }),
   getters: {
     isLoggedIn: (state) => !!state.token,
@@ -14,8 +15,13 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('token', token);
     },
 
+    setIsFirst(isFirst) {
+      this.isFirst = isFirst;
+    },
+
     logout() {
       this.token = null;
+      this.isFirst = null;
       localStorage.removeItem('token');
     },
 
@@ -24,6 +30,9 @@ export const useAuthStore = defineStore('auth', {
         const res = await Login(id, pw);
         if (res.status === 200) {
           this.setToken(res.data.token);
+          this.setIsFirst(res.data.isfirst);
+          console.log(res.data);
+
           return true;
         } else {
           return false;

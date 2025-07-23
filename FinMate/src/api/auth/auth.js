@@ -10,6 +10,7 @@ export const Login = async (id, pw) => {
       data: {
         token: 'mockToken',
         message: '로그인 성공',
+        isfirst: true,
       },
     };
   }

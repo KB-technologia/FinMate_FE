@@ -65,7 +65,7 @@ function handleLoginClick() {
 .profile-container {
   width: 22vw;
   height: 30vh;
-  background-color: #ffeab4;
+  background-color: var(--color-primary-yellow);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -96,8 +96,8 @@ function handleLoginClick() {
 }
 
 .quiz-button {
-  background-color: #eaddbb;
-  color: black;
+  background-color: var(--color-main-button);
+  color: var(--color-black);
   font-size: 1rem;
   border-radius: 2vh;
   cursor: pointer;
@@ -117,14 +117,14 @@ function handleLoginClick() {
   width: 5rem;
   padding: 0.5rem;
   cursor: pointer;
-  border: red solid 1px;
+  border: var(--color-red) solid 1px;
   font-weight: bold;
   font-size: 0.7rem;
   border-radius: 1vh;
 }
 
 .logout-button:hover {
-  color: red;
+  color: var(--color-red);
   transition: all 0.2s ease-in-out;
 }
 
@@ -150,7 +150,7 @@ function handleLoginClick() {
 
 .xp-fill {
   height: 100%;
-  background-color: black;
+  background-color: var(--color-black);
   transition: width 0.5s ease;
 }
 
@@ -161,7 +161,7 @@ function handleLoginClick() {
   width: 100%;
   height: 100%;
   font-size: 12px;
-  color: white;
+  color: var(--color-white);
   text-align: center;
   line-height: 20px;
   z-index: 1;
@@ -170,8 +170,8 @@ function handleLoginClick() {
 .custom-login-button {
   width: 50%;
   height: 4rem;
-  background-color: #eaddbb;
-  color: black;
+  background-color: var(--color-main-button);
+  color: var(--color-black);
   font-size: 1rem;
   border-radius: 2vh;
   cursor: pointer;

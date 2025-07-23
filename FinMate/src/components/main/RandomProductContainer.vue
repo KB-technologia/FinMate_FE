@@ -127,17 +127,17 @@ const next = () => {
 .Product-Container {
   width: 95vw;
   height: 50vh;
-  background-color: #2e404c;
+  background-color: var(--color-primary-bluegray);
   border-radius: 2vh;
   display: flex;
   flex-direction: column;
-  font-family: 'TMONBlack';
+  font-family: var(--font-tmon);
   align-items: center;
 }
 
 .Product-Text {
   margin-top: 2vh;
-  color: white;
+  color: var(--color-white);
   font-size: 2rem;
   text-align: center;
 }
@@ -156,17 +156,17 @@ const next = () => {
   height: 5vh;
   border-radius: 2vh;
   background-color: #0086e6;
-  color: white;
+  color: var(--color-white);
   border: none;
 }
 
 .detail-button:hover {
-  border: 0.4vh solid white;
+  border: 0.4vh solid var(--color-white);
   transition: all 0.1s ease-in-out;
 }
 
 .arrow-button {
-  color: white;
+  color: var(--color-white);
   border-radius: 1vh;
   cursor: pointer;
   user-select: none;
