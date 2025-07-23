@@ -27,29 +27,32 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth/auth';
-import '../../assets/fonts/font.css';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth/auth";
+import { useToast } from "@/composables/useToast";
 
-const id = ref('');
-const password = ref('');
+import "../../assets/fonts/font.css";
+
+const { toast } = useToast();
+const id = ref("");
+const password = ref("");
 const router = useRouter();
 const authStore = useAuthStore();
 
 const login = async () => {
   const success = await authStore.login(id.value, password.value);
-  console.log(success);
+
   if (success) {
-    alert('로그인 성공');
-    router.push('/');
+    toast("환영합니다! 성공적으로 로그인되었어요.", "success");
+    router.push("/");
   } else {
-    alert('로그인 실패: 아이디 또는 비밀번호가 잘못되었습니다.');
+    toast("로그인에 실패했습니다. 다시 시도해주세요.", "error");
   }
 };
 
 const kakaoLogin = () => {
-  console.log('카카오 로그인 버튼 클릭');
+  console.log("카카오 로그인 버튼 클릭");
 };
 </script>
 
@@ -61,7 +64,7 @@ const kakaoLogin = () => {
   height: 70vh;
   align-items: center;
   justify-content: center;
-  font-family: 'InterVariable';
+  font-family: "InterVariable";
 }
 
 .login-container {
