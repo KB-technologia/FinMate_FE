@@ -50,7 +50,7 @@ import 'hover.css/css/hover-min.css';
   flex-direction: row;
   align-items: center;
   width: 100vw;
-  height: 13vh;
+  height: 10vh;
   background-color: var(--color-primary-green);
   justify-content: space-between;
   font-family: var(--font-tmon);
@@ -60,7 +60,7 @@ import 'hover.css/css/hover-min.css';
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 30vw;
+  width: 40vw;
   height: 10vw;
 }
 
@@ -70,7 +70,7 @@ import 'hover.css/css/hover-min.css';
 }
 
 .top-navigation-bar-logo-image {
-  width: 8vw;
+  width: 6vw;
   height: 100%;
   object-fit: contain;
 }

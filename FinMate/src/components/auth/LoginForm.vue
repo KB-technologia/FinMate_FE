@@ -34,16 +34,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth/auth";
-import { useToast } from "@/composables/useToast";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth/auth';
+import { useToast } from '@/composables/useToast';
 
-import "../../assets/fonts/font.css";
+import '../../assets/fonts/font.css';
 
 const { toast } = useToast();
-const id = ref("");
-const password = ref("");
+const id = ref('');
+const password = ref('');
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -51,15 +51,18 @@ const login = async () => {
   const success = await authStore.login(id.value, password.value);
 
   if (success) {
-    toast("환영합니다! 성공적으로 로그인되었어요.", "success");
-    router.push("/");
+    toast('환영합니다! 성공적으로 로그인되었어요.', 'success');
+    router.push('/');
   } else {
-    toast("로그인에 실패했습니다. 다시 시도해주세요.", "error");
+    toast('로그인에 실패했습니다. 다시 시도해주세요.', 'error');
   }
 };
 
 const kakaoLogin = () => {
-  console.log("카카오 로그인 버튼 클릭");
+  toast(
+    '카카오 로그인 버튼 클릭됨. 카카오 로그인 기능은 아직 구현되지 않았습니다.',
+    'error'
+  );
 };
 </script>
 
