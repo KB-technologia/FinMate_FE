@@ -69,7 +69,7 @@ const kakaoLogin = () => {
   height: 70vh;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
 }
 
 .login-container {

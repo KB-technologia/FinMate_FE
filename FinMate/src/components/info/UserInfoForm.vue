@@ -185,7 +185,7 @@ input:focus,
   border-bottom-left-radius: 0;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-wanted);
   font-weight: bold;
   cursor: pointer;
 }
@@ -222,7 +222,7 @@ input:focus,
   font-size: 0.75rem;
   margin-top: 0.3rem;
   margin-left: 0.2rem;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-wanted);
   font-weight: bold;
 }
 </style>

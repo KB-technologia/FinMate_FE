@@ -61,7 +61,7 @@ const tagClass = computed(() => {
   border-radius: 16px;
   padding: 1.5rem;
   background-color: var(--color-white);
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -136,6 +136,6 @@ li:not(:last-child) {
 }
 
 .value {
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
 }
 </style>

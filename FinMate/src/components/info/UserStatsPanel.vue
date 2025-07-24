@@ -111,7 +111,7 @@ const hideSpeech = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
 }
 
 .level-title {

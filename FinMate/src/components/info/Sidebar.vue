@@ -99,7 +99,7 @@ const current = computed(() => {
   width: 80%;
   max-width: 240px;
   margin-top: 0.5rem;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
   font-weight: bold;
   border: none;
   border-radius: 4px;
