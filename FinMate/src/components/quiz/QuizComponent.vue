@@ -1,6 +1,5 @@
 <template>
   <div class="quiz-wrapper">
-    <!-- 상단 인디케이터 -->
     <div class="indicator">
       <div
         v-for="(answer, idx) in selectedAnswers"
@@ -13,12 +12,20 @@
       </div>
     </div>
 
-    <!-- 문제 카드 -->
     <transition name="slide" mode="out-in">
       <div v-if="quizData.length" :key="currentQuestion.id" class="quiz-card">
-        <div class="quiz-narration">📜 {{ currentQuestion.narration }}</div>
         <div class="quiz-question">
-          Q{{ currentQuestion.id }}. {{ currentQuestion.question }}
+          Q{{ currentQuestion.id }}. {{ currentQuestion.narration }}
+          <div
+            class="tooltip-wrapper"
+            @mouseenter="showTooltip = true"
+            @mouseleave="showTooltip = false"
+          >
+            <i class="fa-solid fa-circle-info icon-info"></i>
+            <div v-if="showTooltip" class="tooltip-box">
+              {{ currentQuestion.question }}
+            </div>
+          </div>
         </div>
         <ul class="quiz-options">
           <li v-for="(option, idx) in currentQuestion.options" :key="idx">
@@ -36,7 +43,6 @@
       </div>
     </transition>
 
-    <!-- 이전/다음 버튼 -->
     <div class="quiz-navigation">
       <button
         class="nav-button"
@@ -55,7 +61,6 @@
       </button>
     </div>
 
-    <!-- 완료 버튼 -->
     <div class="submit-container">
       <button class="submit-button" :disabled="!isComplete">완료</button>
     </div>
@@ -69,23 +74,20 @@ import quizJson from '@/assets/quiz.json';
 const quizData = ref([]);
 const currentIndex = ref(0);
 const selectedAnswers = ref(Array(7).fill(null));
+const showTooltip = ref(false);
 
-// 현재 문제
 const currentQuestion = computed(
   () => quizData.value[currentIndex.value] || {}
 );
 
-// 완료 버튼 활성화 조건
 const isComplete = computed(() =>
   selectedAnswers.value.every((answer) => answer !== null)
 );
 
-// 인디케이터 클릭 시 이동
 const goToQuestion = (idx) => {
   currentIndex.value = idx;
 };
 
-// 이전/다음 문제 이동
 const prevQuestion = () => {
   if (currentIndex.value > 0) currentIndex.value--;
 };
@@ -93,7 +95,6 @@ const nextQuestion = () => {
   if (currentIndex.value < quizData.value.length - 1) currentIndex.value++;
 };
 
-// 퀴즈 데이터 로드
 onMounted(() => {
   quizData.value = quizJson;
 });
@@ -107,7 +108,6 @@ onMounted(() => {
   font-family: var(--font-inter);
 }
 
-/* 상단 인디케이터 */
 .indicator {
   display: flex;
   justify-content: space-between;
@@ -162,7 +162,6 @@ onMounted(() => {
   margin: 0.3rem 0;
 }
 
-/* 이전/다음 버튼 */
 .quiz-navigation {
   display: flex;
   justify-content: space-between;
@@ -189,7 +188,6 @@ onMounted(() => {
   box-shadow: none;
 }
 
-/* 완료 버튼 */
 .submit-container {
   text-align: center;
 }
@@ -222,5 +220,33 @@ onMounted(() => {
 .slide-leave-to {
   opacity: 0;
   transform: translateX(-100px);
+}
+
+.icon-info {
+  color: var(--color-black);
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.tooltip-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.tooltip-box {
+  position: absolute;
+  top: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  opacity: 0.95;
 }
 </style>
