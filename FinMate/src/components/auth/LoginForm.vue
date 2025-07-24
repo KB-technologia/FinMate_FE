@@ -22,11 +22,11 @@
           </button>
         </div>
         <div class="etc">
-          <p>회원가입</p>
+          <router-link to="/signup1">회원가입</router-link>
           <p>|</p>
-          <p>아이디 찾기</p>
+          <router-link to="/find-id">아이디 찾기</router-link>
           <p>|</p>
-          <p>비밀번호 찾기</p>
+          <router-link to="/find-pw">비밀번호 찾기</router-link>
         </div>
       </div>
     </div>
@@ -136,5 +136,14 @@ input:focus {
   display: flex;
   justify-content: space-between;
   padding: 3vh;
+}
+
+.etc a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.etc a:hover {
+  text-decoration: underline;
 }
 </style>
