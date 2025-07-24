@@ -31,7 +31,7 @@
       </div>
       <div
         class="top-navigation-menu-right-item hvr-underline-from-center"
-        @click="$router.push('/my-info')"
+        @click="$router.push('/my-stats')"
       >
         내 정보
       </div>

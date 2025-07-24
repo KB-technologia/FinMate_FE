@@ -12,20 +12,26 @@
       <div class="menu-area">
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'products' }">PRODUCTS</li>
+          <li class="hover-item" :class="{ active: current === 'stat' }">
+            STAT
+          </li>
         </ul>
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'stat' }">STAT</li>
+          <li class="hover-item" :class="{ active: current === 'products' }">
+            PRODUCTS
+          </li>
         </ul>
         <div class="divider"></div>
         <ul>
-          <li :class="{ active: current === 'portfolio' }">PORTFOLIO</li>
+          <li class="hover-item" :class="{ active: current === 'portfolio' }">
+            PORTFOLIO
+          </li>
         </ul>
         <div class="divider"></div>
       </div>
 
-      <div class="exit">
+      <div class="exit hover-item">
         <p>서비스 탈퇴</p>
       </div>
     </div>
@@ -33,8 +39,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-const current = ref("stat");
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const current = computed(() => {
+  const path = route.path;
+
+  if (path.includes("/my-products")) return "products";
+  if (path.includes("/my-stat")) return "stat";
+  if (path.includes("/my-portfolio")) return "portfolio";
+  return "";
+});
 </script>
 
 <style scoped>
@@ -57,7 +74,10 @@ const current = ref("stat");
 
 .user-info {
   width: 100%;
-  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 1rem;
 }
 
 .username {
@@ -73,24 +93,20 @@ const current = ref("stat");
   text-align: left;
 }
 
-.username,
-.level {
-  text-align: left;
-}
-
 .edit-btn {
-  background-color: var(--color-primary-bluegray);
-  color: var(--color-white);
-  border: none;
-  border-radius: 4px;
-  padding: 0.6rem 2rem;
-  cursor: pointer;
-  text-align: center;
+  align-self: center;
+  padding: 0.6rem 0;
   width: 80%;
-  margin: 0 auto;
-  display: block;
+  max-width: 240px;
+  margin-top: 0.5rem;
   font-family: var(--font-inter);
   font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-primary-bluegray);
+  color: var(--color-white);
+  cursor: pointer;
+  text-align: center;
 }
 
 .bottom-area {
@@ -99,7 +115,6 @@ const current = ref("stat");
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-  gap: 0;
 }
 
 .menu-area ul {
@@ -116,12 +131,21 @@ const current = ref("stat");
   align-items: center;
   justify-content: flex-start;
   padding-left: 1rem;
-  cursor: pointer;
 }
 
 .menu-area li.active {
   background-color: var(--color-black);
   color: var(--color-white);
+}
+
+.hover-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.hover-item:hover {
+  background-color: var(--color-primary-yellow);
+  font-weight: bold;
 }
 
 .divider {
@@ -140,7 +164,6 @@ const current = ref("stat");
   justify-content: flex-start;
   padding-left: 1rem;
   color: var(--color-red);
-  cursor: pointer;
 }
 
 .exit p {
