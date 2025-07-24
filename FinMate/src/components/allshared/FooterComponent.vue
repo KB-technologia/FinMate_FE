@@ -46,7 +46,7 @@ import '../../assets/fonts/font.css';
 <style scoped>
 .footer-container {
   width: 100vw;
-  height: 25vh;
+  height: 20vh;
   background-color: var(--color-primary-green);
   display: flex;
   justify-content: space-between;

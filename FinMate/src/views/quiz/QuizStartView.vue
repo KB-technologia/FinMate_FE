@@ -31,19 +31,15 @@
           <button @click="startQuiz">시작하기</button>
         </div>
         <div class="keyword-cloud">
-          <span class="word word1 bold" style="top: 30%; left: 80%"
-            >용맹한</span
-          >
-          <span class="word word2" style="top: 25%; left: 20%">섬세한</span>
-          <span class="word word3" style="top: 35%; left: 75%">신중한</span>
-          <span class="word word4 bold" style="top: 50%; left: 15%"
-            >도전적인</span
-          >
-          <span class="word word5" style="top: 60%; left: 70%">적극적인</span>
-          <span class="word word6" style="top: 55%; left: 30%">소심한</span>
-          <span class="word word7" style="top: 70%; left: 75%">느긋한</span>
-          <span class="word word8" style="top: 65%; left: 20%">현실적인</span>
-          <span class="word word9" style="top: 45%; left: 10%">과감한</span>
+          <span class="word word1 bold">용맹한</span>
+          <span class="word word2">섬세한</span>
+          <span class="word word3">신중한</span>
+          <span class="word word4 bold">도전적인</span>
+          <span class="word word5">적극적인</span>
+          <span class="word word6">소심한</span>
+          <span class="word word7">느긋한</span>
+          <span class="word word8">현실적인</span>
+          <span class="word word9">과감한</span>
         </div>
       </div>
       <FooterComponent />
@@ -86,6 +82,9 @@ const startQuiz = () => {
 .quiz-start-header-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 80vw;
   height: 100vh;
 }
 
@@ -95,8 +94,8 @@ const startQuiz = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: 70vw;
+  height: 30vh;
 }
 
 .quiz-start-description {
@@ -108,12 +107,11 @@ const startQuiz = () => {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
   font-size: 2rem;
 }
 
 .icon-title {
-  margin-right: 10px;
+  margin-right: 1vw;
   align-items: center;
   justify-content: center;
 }
@@ -188,48 +186,91 @@ button:hover {
 }
 
 .keyword-cloud {
-  flex: 3;
-  width: 100vw;
+  position: relative;
+  width: 50vw;
   height: 60vh;
-  background-color: #fffef8;
+  overflow: hidden;
 }
 
 .word {
   position: absolute;
-  font-size: 1.2rem;
   font-weight: 400;
-  opacity: 0.9;
   white-space: nowrap;
+  opacity: 0.7;
+  animation: floatWord 10s infinite alternate ease-in-out;
+  transition: transform 0.3s ease;
+}
+
+.word:hover {
+  transform: scale(1.2) rotate(2deg);
+  z-index: 10;
+  opacity: 1;
 }
 .bold {
   font-weight: 700;
   font-size: 2rem;
 }
 .word1 {
-  color: #e57373; /* 빨강 */
+  top: 10%;
+  left: 15%;
+  font-size: 2rem;
+  color: #e57373;
+  transform: rotate(-10deg);
 }
 .word2 {
-  color: #81c784; /* 연초록 */
+  top: 30%;
+  left: 50%;
+  font-size: 1.5rem;
+  color: #81c784;
+  transform: rotate(8deg);
 }
 .word3 {
-  color: #64b5f6; /* 파랑 */
+  top: 60%;
+  left: 20%;
+  font-size: 1.8rem;
+  color: #64b5f6;
+  transform: rotate(-5deg);
 }
 .word4 {
-  color: #4db6ac; /* 청록 */
+  top: 20%;
+  left: 70%;
+  font-size: 2.2rem;
+  color: #4db6ac;
+  transform: rotate(15deg);
 }
 .word5 {
-  color: #ffb74d; /* 주황 */
+  top: 50%;
+  left: 80%;
+  font-size: 1.4rem;
+  color: #ffb74d;
+  transform: rotate(-12deg);
 }
 .word6 {
-  color: #9575cd; /* 보라 */
+  top: 40%;
+  left: 35%;
+  font-size: 1.6rem;
+  color: #9575cd;
+  transform: rotate(5deg);
 }
 .word7 {
-  color: #f06292; /* 핑크 */
+  top: 70%;
+  left: 60%;
+  font-size: 1.3rem;
+  color: #f06292;
+  transform: rotate(12deg);
 }
 .word8 {
-  color: #a1887f; /* 갈색 */
+  top: 15%;
+  left: 40%;
+  font-size: 1.7rem;
+  color: #a1887f;
+  transform: rotate(-7deg);
 }
 .word9 {
-  color: #90a4ae; /* 회청 */
+  top: 80%;
+  left: 10%;
+  font-size: 1.5rem;
+  color: #90a4ae;
+  transform: rotate(10deg);
 }
 </style>
