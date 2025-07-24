@@ -99,13 +99,13 @@ onMounted(async () => {
       <div class="info-boxes">
         <div class="info-box">
           <div class="info-title">
-            <div>
+            <span>
               <img
                 src="@/assets/images/totalassets.png"
                 alt="총 자산 이미지"
                 class="info-image"
               />
-            </div>
+            </span>
             <span class="label">총 자산</span>
           </div>
           <div class="label explanation">
@@ -252,25 +252,28 @@ canvas {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  align-items: center;
-  text-align: center;
 }
 
 .info-box {
-  border: 2px solid #333;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--color-black);
   border-radius: 20px;
-  padding: 1.5rem;
-  margin: 1rem;
+  padding: 2rem 1.5rem;
   width: 20vw;
 }
 
 .info-title {
-  gap: 1.6rem;
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .info-image {
   width: 80px;
+  justify-content: flex-start;
 }
 
 .label {
@@ -279,11 +282,15 @@ canvas {
 
 .label.explanation {
   font-size: 1.5rem;
+  text-align: center;
 }
 
 .edit-btn {
   all: unset;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 0.4rem;
 }
 
 .edit-btn:hover {
