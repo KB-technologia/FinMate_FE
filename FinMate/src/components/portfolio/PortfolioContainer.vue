@@ -192,7 +192,7 @@ onMounted(async () => {
 .portfolio-title {
   font-size: 3rem;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .chart-info-row {
@@ -261,6 +261,7 @@ canvas {
   border-radius: 20px;
   padding: 2rem 1.5rem;
   width: 20vw;
+  margin-top: 2rem;
 }
 
 .info-title {
