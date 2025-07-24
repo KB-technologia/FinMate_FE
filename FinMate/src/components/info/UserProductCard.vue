@@ -88,7 +88,7 @@ const tagClass = computed(() => {
 }
 
 .type {
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
@@ -131,7 +131,7 @@ li:not(:last-child) {
 }
 
 .label {
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
   font-weight: bold;
 }
 

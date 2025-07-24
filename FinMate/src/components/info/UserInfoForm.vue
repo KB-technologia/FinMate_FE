@@ -117,7 +117,7 @@ const isDirty = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
 }
 
 .form-group {
@@ -140,7 +140,7 @@ input,
   padding: 0 1rem 0 1.2rem;
   border: 2px solid var(--color-black);
   border-radius: 20px;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
   font-size: 0.8rem;
   color: var(--color-black);
   width: 100%;

@@ -64,7 +64,7 @@ const current = computed(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
 }
 
 .top-area {

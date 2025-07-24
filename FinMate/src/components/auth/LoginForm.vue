@@ -39,8 +39,6 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth/auth";
 import { useToast } from "@/composables/useToast";
 
-import "../../assets/fonts/font.css";
-
 const { toast } = useToast();
 const id = ref("");
 const password = ref("");

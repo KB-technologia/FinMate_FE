@@ -116,7 +116,7 @@ const hideSpeech = () => {
 
 .level-title {
   min-width: 200px;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
   font-size: 1.8rem;
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;
