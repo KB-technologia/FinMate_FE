@@ -92,50 +92,18 @@ const router = createRouter({
     },
     // Quiz
     {
-      path: "/quiz/start",
-      name: "quizStart",
-      component: () => import("../views/quiz/QuizStartView.vue"),
+
+      path: '/quizstart',
+      name: 'quizStart',
+      component: () => import('../views/quiz/QuizStartView.vue'),
     },
     {
-      path: "/quiz/0",
-      name: "quiz0",
-      component: () => import("../views/quiz/Quiz0View.vue"),
+      path: '/quiz',
+      name: 'quiz',
+      component: () => import('../views/quiz/QuizView.vue'),
+
     },
-    {
-      path: "/quiz/1",
-      name: "quiz1",
-      component: () => import("../views/quiz/Quiz1View.vue"),
-    },
-    {
-      path: "/quiz/2",
-      name: "quiz2",
-      component: () => import("../views/quiz/Quiz2View.vue"),
-    },
-    {
-      path: "/quiz/3",
-      name: "quiz3",
-      component: () => import("../views/quiz/Quiz3View.vue"),
-    },
-    {
-      path: "/quiz/4",
-      name: "quiz4",
-      component: () => import("../views/quiz/Quiz4View.vue"),
-    },
-    {
-      path: "/quiz/5",
-      name: "quiz5",
-      component: () => import("../views/quiz/Quiz5View.vue"),
-    },
-    {
-      path: "/quiz/6",
-      name: "quiz6",
-      component: () => import("../views/quiz/Quiz6View.vue"),
-    },
-    {
-      path: "/quiz/7",
-      name: "quiz7",
-      component: () => import("../views/quiz/Quiz7View.vue"),
-    },
+
     // 404
     {
       path: "/:pathMatch(.*)*",
