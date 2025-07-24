@@ -200,12 +200,12 @@ onMounted(async () => {
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  width: 70vw;
+  width: 65vw;
 }
 
 .chart-wrapper {
   position: relative;
-  width: 30vw;
+  width: 29vw;
   height: 28vw;
 }
 
