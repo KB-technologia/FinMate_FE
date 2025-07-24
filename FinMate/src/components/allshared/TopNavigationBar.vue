@@ -25,12 +25,16 @@
       </div>
       <div
         class="top-navigation-menu-right-item hvr-underline-from-center"
+        :class="{
+          active: route.path === '/quizstart' || route.path === '/quiz',
+        }"
         @click="$router.push('/quizstart')"
       >
         투자 성향 테스트
       </div>
       <div
         class="top-navigation-menu-right-item hvr-underline-from-center"
+        :class="{ active: route.path === '/my-stats' }"
         @click="$router.push('/my-stats')"
       >
         내 정보
@@ -42,6 +46,8 @@
 <script setup>
 import '@/styles/fonts.css';
 import 'hover.css/css/hover-min.css';
+import { useRoute } from 'vue-router';
+const route = useRoute();
 </script>
 
 <style scoped>
@@ -110,6 +116,20 @@ import 'hover.css/css/hover-min.css';
 }
 
 .top-navigation-menu-right-item.hvr-underline-from-center::before {
+  background-color: var(--color-white);
+}
+.top-navigation-menu-right-item.active {
+  color: var(--color-white);
+  font-weight: bold;
+  position: relative;
+}
+
+.top-navigation-menu-right-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
   background-color: var(--color-white);
 }
 </style>
