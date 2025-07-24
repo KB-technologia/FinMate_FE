@@ -2,11 +2,10 @@
 import { ref, onMounted } from 'vue';
 import { createPortfolio, updatePortfolio } from '@/api/portfolio/portfolio.js';
 
-const emit = defineEmits(['close', 'save']); //부모 컴포넌트(PortfolioContainer에게 이벤트 전달)
+const emit = defineEmits(['close', 'save']);
 const error = ref(false);
 
 const props = defineProps({
-  //mode를 통해 모달이 수정인지 작성인지 구분
   mode: {
     type: String,
     default: 'write',
@@ -18,7 +17,6 @@ const props = defineProps({
 });
 
 const form = ref({
-  //사용자에게 입력받을 초깃값 세팅
   age: null,
   annualIncome: null,
   totalAssets: null,
@@ -31,7 +29,6 @@ const form = ref({
 onMounted(() => {
   //
   if (props.mode === 'edit' && props.initialData) {
-    //부모가 전달한 데이터 (portfolio)가 있는지? 부모가 수정 모드로 열었는지 확인
     form.value = { ...props.initialData };
   }
 });
@@ -45,7 +42,6 @@ const fields = [
   { name: 'other', label: '기타 자산', unit: '원' },
 ];
 async function onSubmit() {
-  //필수 데이터 검증 (없다면) error 메시지 출력
   const requiredFields = [
     'age',
     'annualIncome',
@@ -68,7 +64,7 @@ async function onSubmit() {
   }
   error.value = false;
 
-  const totalAssets = //DB에 POST 데이터 보내기 데이터 전처리 과정
+  const totalAssets =
     form.value.cash + form.value.bond + form.value.equity + form.value.other;
   const cashRatio = (form.value.cash / totalAssets) * 100;
   const bondRatio = (form.value.bond / totalAssets) * 100;
@@ -88,16 +84,13 @@ async function onSubmit() {
     otherRatio,
   };
   if (props.mode === 'edit') {
-    //수정모달일 때만 DB에 id값을 전달
     fullData.id = form.value.id;
   }
 
   try {
     if (props.mode === 'edit') {
-      //수정모드면 PATCH경로로 전달
       await updatePortfolio(fullData);
     } else {
-      //작성모드면 POST경로로 전달
       await createPortfolio(fullData);
     }
     emit('save', fullData);
@@ -156,7 +149,7 @@ function onCancel() {
 }
 
 .modal-container {
-  background: #fffdf0;
+  background: var(--color-modal-bg);
   border-radius: 20px;
   padding: 0.5rem 1.5rem;
   width: 45vw;
@@ -180,7 +173,7 @@ function onCancel() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid #aaaaaa;
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -193,7 +186,7 @@ label {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 input {
@@ -206,10 +199,10 @@ input {
 
 .unit-inside {
   position: absolute;
-  right: 0.5vw;
+  right: 0.25vw;
   color: #abaaaa;
   pointer-events: none;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .input-short {
