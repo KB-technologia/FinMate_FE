@@ -240,8 +240,8 @@ input {
   border: none;
   font-size: 1.3rem;
   cursor: pointer;
-  background-color: #fffdf0;
-  color: #000;
+  background-color: var(--color-modal-bg);
+  color: var(--color-black);
   border: 1px solid #c4c0c0;
   border-radius: 20px;
 }
@@ -251,12 +251,12 @@ input {
   border: none;
   font-size: 1.3rem;
   cursor: pointer;
-  background-color: #2e404c;
-  color: #ffffff;
+  background-color: var(--color-primary-bluegray);
+  color: var(--color-white);
   border-radius: 20px;
 }
 
 .submit:hover {
-  background-color: #555;
+  background-color: var(--color-dark-gray);
 }
 </style>

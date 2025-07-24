@@ -7,16 +7,16 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const showWriteModal = ref(false); //반응형 Modal 구현 (디폴트 값 : false)
-const showModifyModal = ref(false); //반응형 Modal 구현 (디폴트 값 : false)
-const portfolio = ref(null); // 사용자 포트폴리오 데이터 저장
-const chartInstance = ref(null); //차트 인스턴스 저장, 렌더링 시 초기화 (포트폴리오 작성하면 바로 반영)
-const chartCanvasRef = ref(null); // 차트가 그려질 canvas 요소에 대한 DOM 참조
+const showWriteModal = ref(false);
+const showModifyModal = ref(false);
+const portfolio = ref(null);
+const chartInstance = ref(null);
+const chartCanvasRef = ref(null);
 
 function renderChart() {
   const ctx = chartCanvasRef.value?.getContext('2d');
-  chartInstance.value?.destroy(); // 차트를 다시 그리기 위해 초기화
-  chartInstance.value = null; // 차트의 값 초기화
+  chartInstance.value?.destroy();
+  chartInstance.value = null;
 
   chartInstance.value = new Chart(ctx, {
     type: 'pie',
@@ -38,7 +38,7 @@ function renderChart() {
     options: {
       plugins: {
         datalabels: {
-          color: '#000',
+          color: 'var(--color-black)',
           font: {
             weight: 'bold',
             size: 16,
@@ -60,7 +60,7 @@ async function handleSave(updatedData) {
   try {
     portfolio.value = { ...updatedData };
     await nextTick();
-    renderChart(); // 갱신해서 차트 다시 그리기
+    renderChart();
   } catch (e) {
     console.error('재조회 실패:', e);
   }
@@ -69,7 +69,7 @@ async function handleSave(updatedData) {
 }
 
 onMounted(async () => {
-  const res = await getPortfolio(0); // DB에서 userId값에 해당하는 포트폴리오 데이터를 가져옴 //TODO userID 임시로 지정해둠
+  const res = await getPortfolio(1); //TODO userID 테스트 용도
   const data = res.data;
   if (data == null) {
     console.log('유저의 데이터가 없습니다');
@@ -348,8 +348,8 @@ canvas {
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%) translateY(30%);
-  background: #636362;
-  color: #ffffff;
+  background: var(--color-primary-bluegray);
+  color: var(--color-white);
   border: none;
   border-radius: 20px;
   padding: 1.5rem 2.8rem;
