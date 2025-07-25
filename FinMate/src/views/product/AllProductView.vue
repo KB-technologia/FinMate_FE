@@ -209,19 +209,15 @@ const getBankNameForCode = (bankCode) => {
 };
 
 const handleProductSelect = (product) => {
-  console.log('상품 선택:', product.name);
-
   const index = selectedProducts.value.findIndex((p) => p.id === product.id);
 
   if (index > -1) {
     // 이미 선택된 상품이면 제거
     selectedProducts.value.splice(index, 1);
-    console.log('상품 선택 해제');
   } else {
     // 최대 2개까지만 선택 가능
     if (selectedProducts.value.length < 2) {
       selectedProducts.value.push(product);
-      console.log('상품 선택됨');
     } else {
       alert('최대 2개 상품까지 선택할 수 있습니다.');
     }
@@ -229,7 +225,6 @@ const handleProductSelect = (product) => {
 };
 
 const handleProductDetail = (product) => {
-  console.log('상품 상세보기:', product.name);
   // 상품 상세 페이지로 이동
   router.push(`/product/${product.id}`);
 };
@@ -240,8 +235,6 @@ const handleCompareProducts = async ({ product1, product2 }) => {
       product1.id,
       product2.id
     );
-
-    console.log('비교 결과:', response.data);
 
     alert(
       `${product1.name}과 ${product2.name} 비교 결과:\n\n${response.data.comparisonResult}`
@@ -265,7 +258,6 @@ const handleRemoveProduct = (product) => {
   const index = selectedProducts.value.findIndex((p) => p.id === product.id);
   if (index > -1) {
     selectedProducts.value.splice(index, 1);
-    console.log('상품 제거:', product.name);
   }
 };
 </script>
