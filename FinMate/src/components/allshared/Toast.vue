@@ -73,7 +73,8 @@ const IconComponent = computed(() => iconMap[props.type]);
 .message {
   flex: 1;
   font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-wanted);
+  font-weight: 700;
   color: var(--color-black);
   font-weight: 500;
 }

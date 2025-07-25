@@ -68,8 +68,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import quizJson from '@/assets/quiz.json';
+import { ref, computed, onMounted } from "vue";
+import quizJson from "@/assets/quiz.json";
 
 const quizData = ref([]);
 const currentIndex = ref(0);
@@ -105,7 +105,7 @@ onMounted(() => {
   width: 50vw;
   height: 45vh;
   margin: auto;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
 }
 
 .indicator {
