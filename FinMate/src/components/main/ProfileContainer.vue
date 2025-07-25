@@ -67,7 +67,7 @@ function handleLoginClick() {
 
 <style scoped>
 .profile-container {
-  width: 22vw;
+  width: 23vw;
   height: 30vh;
   background-color: var(--color-primary-yellow);
   display: flex;

@@ -6,7 +6,7 @@ import TrueButton from "@/components/dailyquiz/TrueButton.vue";
 import CorrectAnswerModal from "@/components/dailyquiz/CorrectAnswerModal.vue";
 import WrongAnswerModal from "@/components/dailyquiz/WrongAnswerModal.vue";
 
-const emit = defineEmits(["close"]); // ✅ 추가
+const emit = defineEmits(["close"]);
 
 const quiz = ref(null);
 const isAnswer = ref("");
