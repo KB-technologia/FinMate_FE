@@ -35,10 +35,9 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth/auth';
-import { computed } from 'vue';
-import '../../assets/fonts/font.css';
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth/auth";
+import { computed } from "vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -51,9 +50,9 @@ const fillPercentage = computed(() => (currentXp / maxXp) * 100);
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push('/login');
+    router.push("/login");
   } else {
-    const confirmed = window.confirm('정말 로그아웃하시겠습니까?');
+    const confirmed = window.confirm("정말 로그아웃하시겠습니까?");
     if (confirmed) {
       authStore.logout();
     }
@@ -72,7 +71,7 @@ function handleLoginClick() {
   justify-content: center;
   border-radius: 2vh;
   padding: 3vh;
-  font-family: 'TMONBlack';
+  font-family: var(--font-wanted);
 }
 .profile-header {
   width: 100%;

@@ -39,8 +39,8 @@
 </template>
 
 <script setup>
-import 'hover.css/css/hover-min.css';
-import '../../assets/fonts/font.css';
+import "hover.css/css/hover-min.css";
+import "@/styles/fonts.css";
 </script>
 
 <style scoped>
@@ -53,7 +53,7 @@ import '../../assets/fonts/font.css';
   align-items: center;
   flex-direction: row;
   padding: 3vh;
-  font-family: 'TMONBlack';
+  font-family: var(--font-wanted);
 }
 
 .footer-left {
