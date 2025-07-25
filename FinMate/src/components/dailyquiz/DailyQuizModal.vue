@@ -16,6 +16,7 @@ onMounted(async () => {
   try {
     const res = await getDailyQuiz();
     quiz.value = res.data;
+    console.log(quiz.value);
   } catch (error) {
     console.error('퀴즈 가져오기 실패', error);
   }
@@ -25,12 +26,13 @@ async function checkAnswer(userAnswer) {
   showQuizModal.value = false;
   try {
     const res = await getAnswerDailyQuiz(quiz.value.id, userAnswer);
-    isAnswer.value = res.data;
+    const correctAnswer = res.data.correct;
+    isAnswer.value = res.data.message;
 
-    const correctAnswer =
-      quiz.value.answer === true || quiz.value.answer === 'true';
+    console.log('유저 선택:', userAnswer);
+    console.log('정답:', quiz.value);
 
-    if (correctAnswer === userAnswer) {
+    if (correctAnswer) {
       showCorrectModal.value = true;
     } else {
       showWrongModal.value = true;
