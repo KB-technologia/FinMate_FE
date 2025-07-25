@@ -11,8 +11,6 @@
 </template>
 
 <script setup>
-import '../../assets/fonts/font.css';
-
 defineProps({
   product: {
     type: Object,
@@ -25,14 +23,14 @@ defineProps({
 .card-container {
   width: 20vw;
   height: 30vh;
-  background-color: #a4c8e1;
+  background-color: var(--color-light-blue);
   border-radius: 1vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
   transition: all 0.2s ease-in-out;
-  font-family: 'TMONBlack';
+  font-family: var(--font-wanted);
 }
 .card-container:hover {
   border: 0.7vh solid var(--color-white);

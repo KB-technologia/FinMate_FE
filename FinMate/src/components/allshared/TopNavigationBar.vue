@@ -40,8 +40,8 @@
 </template>
 
 <script setup>
-import '@/styles/fonts.css';
-import 'hover.css/css/hover-min.css';
+import "@/styles/fonts.css";
+import "hover.css/css/hover-min.css";
 </script>
 
 <style scoped>
@@ -53,7 +53,8 @@ import 'hover.css/css/hover-min.css';
   height: 13vh;
   background-color: var(--color-primary-green);
   justify-content: space-between;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
+  font-weight: 800;
 }
 
 .top-navigation-bar-logo-container {

@@ -22,6 +22,8 @@ onMounted(() => {
 </script>
 
 <style>
+@import "@/styles/fonts.css";
+
 html,
 body,
 #app {
