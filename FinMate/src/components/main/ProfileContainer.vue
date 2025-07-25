@@ -96,8 +96,9 @@ function handleLoginClick() {
 
 .quiz-button {
   background-color: var(--color-main-button);
+  font-weight: var(--font-weight-bold);
   color: var(--color-black);
-  font-size: 1rem;
+  font-size: 0.9rem;
   border-radius: 2vh;
   cursor: pointer;
   border: none;
@@ -117,7 +118,7 @@ function handleLoginClick() {
   padding: 0.5rem;
   cursor: pointer;
   border: var(--color-red) solid 1px;
-  font-weight: bold;
+  font-weight: var(--font-weight-extrabold);
   font-size: 0.7rem;
   border-radius: 1vh;
 }
@@ -133,16 +134,16 @@ function handleLoginClick() {
 }
 
 .level-text {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  font-weight: var(--font-weight-extrabold);
+  font-size: 1.1rem;
 }
 
 .xp-bar {
   position: relative;
-  width: 180px;
-  height: 20px;
-  background-color: #ccc;
-  border-radius: 10px;
+  width: 240px;
+  height: 30px;
+  background-color: var(--color-light-gray);
+  border-radius: 20px;
   overflow: hidden;
   margin-bottom: 1rem;
 }
@@ -155,14 +156,14 @@ function handleLoginClick() {
 
 .xp-text {
   position: absolute;
-  top: 0;
+  top: 5px;
   left: 0;
   width: 100%;
   height: 100%;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-white);
+  font-weight: var(--font-weight-medium);
   text-align: center;
-  line-height: 20px;
   z-index: 1;
 }
 

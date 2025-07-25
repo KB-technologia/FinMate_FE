@@ -2,10 +2,10 @@
   <div class="card-container">
     <div class="card-content">
       <h3>{{ product.name }}</h3>
-      <p><strong>은행:</strong> {{ product.bank }}</p>
-      <p><strong>유형:</strong> {{ product.type }}</p>
-      <p><strong>위험도:</strong> {{ product.risk }}</p>
-      <p><strong>예상 수익률:</strong> {{ product.return }}</p>
+      <p>은행: {{ product.bank }}</p>
+      <p>유형: {{ product.type }}</p>
+      <p>위험도: {{ product.risk }}</p>
+      <p>예상 수익률: {{ product.return }}</p>
     </div>
   </div>
 </template>
@@ -32,6 +32,7 @@ defineProps({
   transition: all 0.2s ease-in-out;
   font-family: var(--font-wanted);
 }
+
 .card-container:hover {
   border: 0.7vh solid var(--color-white);
   transition: all 0.1s ease-in-out;
@@ -40,7 +41,40 @@ defineProps({
 .card-content {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.6px;
+  text-align: left;
+  align-items: flex-start;
+}
+
+.card-content p {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-regular);
+}
+
+.card-content h3 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 1.4rem;
+  width: 100%;
   text-align: center;
+}
+
+.card-info-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: var(--font-weight-regular);
+}
+
+.card-info-row .label {
+  width: 6rem;
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+}
+
+.card-info-row .value {
+  text-align: left;
+  font-weight: var(--font-weight-regular);
 }
 </style>

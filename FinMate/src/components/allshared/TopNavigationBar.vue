@@ -54,7 +54,7 @@ import "hover.css/css/hover-min.css";
   background-color: var(--color-primary-green);
   justify-content: space-between;
   font-family: var(--font-wanted);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 
 .top-navigation-bar-logo-container {
@@ -101,7 +101,7 @@ import "hover.css/css/hover-min.css";
 }
 
 .top-navigation-menu-right-item {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .top-navigation-menu-right-item:hover {
