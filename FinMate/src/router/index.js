@@ -47,6 +47,9 @@ const router = createRouter({
       path: '/products',
       name: 'allProducts',
       component: () => import('../views/product/AllProductView.vue'),
+      meta: {
+        allowScroll: true,
+      },
     },
     {
       path: '/product/:id',
