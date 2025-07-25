@@ -116,13 +116,13 @@ const userName = "홍길동";
   font-size: 2rem;
   margin-bottom: 1.5rem;
   text-align: center;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
 }
 
 .subtitle {
   text-align: left;
   margin-bottom: 1.8rem;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
   color: var(--color-dark-gray);
   font-size: 1.2rem;
   font-weight: bold;

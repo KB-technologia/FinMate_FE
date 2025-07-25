@@ -26,11 +26,11 @@
 
 <script setup>
 const data = [
-  { name: 'KOSPI', value: '3,194.55', change: '-20.35 (0.63%)' },
-  { name: '달러 환율', value: '1,315.20', change: '+5.20 (0.41%)' },
-  { name: 'NASDAQ', value: '14,105.00', change: '+120.35 (0.85%)' },
-  { name: '비트코인', value: '61,200,000', change: '-1,350,000 (-2.2%)' },
-  { name: 'S&P500', value: '4,328.21', change: '+12.31 (0.29%)' },
+  { name: "KOSPI", value: "3,194.55", change: "-20.35 (0.63%)" },
+  { name: "달러 환율", value: "1,315.20", change: "+5.20 (0.41%)" },
+  { name: "NASDAQ", value: "14,105.00", change: "+120.35 (0.85%)" },
+  { name: "비트코인", value: "61,200,000", change: "-1,350,000 (-2.2%)" },
+  { name: "S&P500", value: "4,328.21", change: "+12.31 (0.29%)" },
 ];
 
 const scrollingData = [
@@ -53,7 +53,7 @@ const scrollingData = [
   border: 1px solid var(--color-primary-green);
   border-radius: 2vh;
   background-color: #f8fdfb;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
   font-weight: bold;
 }
 
