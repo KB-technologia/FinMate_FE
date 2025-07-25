@@ -16,9 +16,11 @@
         :loading="loading"
         :error="error"
         :selected-products="selectedProducts"
+        :currentSortOrder="currentSortOrder"
         @product-select="handleProductSelect"
         @product-detail="handleProductDetail"
         @retry-fetch="fetchProducts"
+        @sort-change="handleSortChange"
       />
     </div>
 
@@ -51,6 +53,7 @@ const products = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const selectedProducts = ref([]);
+const currentSortOrder = ref('desc');
 
 // 필터링 관련 상태
 const currentFilters = ref({
@@ -71,7 +74,10 @@ const fetchProducts = async () => {
   error.value = null;
 
   try {
-    const response = await productService.getAllProducts();
+    const apiParams = buildApiParams(); // { sortOrder: 'desc' } 포함
+    const response = await productService.getFilteredProducts(apiParams);
+
+    // const response = await productService.getAllProducts();
     products.value = response.data || [];
     console.log('상품 데이터 로드 완료:', products.value.length);
   } catch (err) {
@@ -134,6 +140,23 @@ const handleFilterChange = (filterData) => {
   }
 };
 
+// ProductContainer에 이벤트 핸들러 추가
+const handleSortChange = (newSortOrder) => {
+  currentSortOrder.value = newSortOrder;
+
+  // 현재 필터와 함께 새로운 정렬로 API 재호출
+  const apiParams = buildApiParams();
+  apiParams.sortOrder = newSortOrder;
+
+  if (Object.keys(apiParams).length > 1) {
+    // sortOrder 외에 다른 필터가 있으면
+    fetchFilteredProducts(apiParams);
+  } else {
+    // 필터가 없으면 전체 조회 (sortOrder만 포함)
+    fetchFilteredProducts({ sortOrder: newSortOrder });
+  }
+};
+
 const buildApiParams = () => {
   const params = {};
 
@@ -162,7 +185,7 @@ const buildApiParams = () => {
     params.fundType = currentFilters.value.subCategories;
   }
 
-  params.sortOrder = 'desc';
+  params.sortOrder = currentSortOrder.value;
   return params;
 };
 
