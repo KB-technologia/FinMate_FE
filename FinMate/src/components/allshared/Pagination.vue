@@ -275,7 +275,7 @@ const handlePageSizeChange = (event) => {
 
 .page-size-select:focus {
   outline: none;
-  border-color: #4caf50;
+  border-color: #89caa2;
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
