@@ -10,21 +10,34 @@
 
     <div class="bottom-area">
       <div class="menu-area">
-        <div class="divider"></div>
         <ul>
-          <li class="hover-item" :class="{ active: current === 'stat' }">
+          <li
+            class="hover-item"
+            :class="{ active: current === 'stat' }"
+            @click="goTo('stat')"
+          >
             STAT
           </li>
         </ul>
         <div class="divider"></div>
+
         <ul>
-          <li class="hover-item" :class="{ active: current === 'products' }">
+          <li
+            class="hover-item"
+            :class="{ active: current === 'products' }"
+            @click="goTo('products')"
+          >
             PRODUCTS
           </li>
         </ul>
         <div class="divider"></div>
+
         <ul>
-          <li class="hover-item" :class="{ active: current === 'portfolio' }">
+          <li
+            class="hover-item"
+            :class="{ active: current === 'portfolio' }"
+            @click="goTo('portfolio')"
+          >
             PORTFOLIO
           </li>
         </ul>
@@ -40,9 +53,10 @@
 
 <script setup>
 import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 
 const current = computed(() => {
   const path = route.path;
@@ -52,6 +66,12 @@ const current = computed(() => {
   if (path.includes("/my-portfolio")) return "portfolio";
   return "";
 });
+
+const goTo = (target) => {
+  if (target === "stat") router.push("/my-stats");
+  else if (target === "products") router.push("/my-products");
+  else if (target === "portfolio") router.push("/my-portfolio");
+};
 </script>
 
 <style scoped>
