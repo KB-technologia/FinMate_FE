@@ -52,7 +52,7 @@ async function checkAnswer(userAnswer) {
           />
           <span>오늘의 퀴즈</span>
         </div>
-        <button @click="$emit('close')" class="close-btn">
+        <button @click="showQuizModal = false" class="close-btn">
           <img src="@/assets/images/modalclose.png" class="close-img" />
         </button>
       </div>
@@ -89,7 +89,7 @@ async function checkAnswer(userAnswer) {
 
 .quiz-modal-box {
   background: var(--color-modal-bg);
-  border-radius: 16px;
+  border-radius: 30px;
   padding: 2rem 2.5rem;
   width: 40vw;
   height: 45vh;
@@ -112,7 +112,6 @@ async function checkAnswer(userAnswer) {
   display: flex;
   align-items: center;
   gap: 1rem;
-  font-weight: bold;
   font-size: 2.7rem;
 }
 

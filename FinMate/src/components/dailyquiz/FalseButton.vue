@@ -12,11 +12,12 @@ function falseClick() {
 .FalseButton {
   background-color: rgba(231, 36, 36, 0.21);
   border: none;
-  border-radius: 8px;
+  border-radius: 20px;
   padding: 0.8rem 1.5rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   cursor: pointer;
-  width: 5vw;
-  height: 10vh;
+  width: 6vw;
+  height: 12vh;
+  color: var(--color-red);
 }
 </style>
