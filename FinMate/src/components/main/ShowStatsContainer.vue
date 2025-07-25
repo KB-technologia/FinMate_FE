@@ -19,7 +19,7 @@
         ></div>
       </div>
     </div>
-    <button class="detail-button">자세히 보기</button>
+    <button class="detail-button" @click="goToStatsPage">자세히 보기</button>
   </div>
 
   <!-- 비로그인 상태일 때: 랜덤 이미지 & 문구 -->
@@ -43,9 +43,15 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useAuthStore } from "@/stores/auth/auth";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
+
+const goToStatsPage = () => {
+  router.push("/my-stats");
+};
 
 const statsLeft = [
   { label: "가치관", percent: 90, color: "red" },
