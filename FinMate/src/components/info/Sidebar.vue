@@ -10,6 +10,7 @@
 
     <div class="bottom-area">
       <div class="menu-area">
+        <div class="divider"></div>
         <ul>
           <li
             class="hover-item"
@@ -28,6 +29,16 @@
             @click="goTo('products')"
           >
             PRODUCTS
+          </li>
+        </ul>
+        <div class="divider"></div>
+        <ul>
+          <li
+            class="hover-item"
+            :class="{ active: current === 'reviews' }"
+            @click="goTo('reviews')"
+          >
+            REVIEWS
           </li>
         </ul>
         <div class="divider"></div>
