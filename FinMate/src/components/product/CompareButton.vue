@@ -1,4 +1,3 @@
-<!-- components/product/CompareButton.vue -->
 <template>
   <div v-if="selectedProducts.length > 0" class="compare-container">
     <div v-if="selectedProducts.length === 2" class="vs-compare-card">
@@ -12,7 +11,14 @@
         <div class="product-side left-side">
           <div class="product-icon">
             <div class="bank-icon">
-              {{ getBankInitial(selectedProducts[0].bankName) }}
+              <img
+                :src="getBankImagePath(selectedProducts[0].bankName)"
+                :alt="selectedProducts[0].bankName"
+                @error="
+                  (e) => handleImageError(e, selectedProducts[0].bankName)
+                "
+                class="bank-logo"
+              />
             </div>
           </div>
           <div class="product-info">
@@ -31,7 +37,14 @@
         <div class="product-side right-side">
           <div class="product-icon">
             <div class="bank-icon">
-              {{ getBankInitial(selectedProducts[1].bankName) }}
+              <img
+                :src="getBankImagePath(selectedProducts[1].bankName)"
+                :alt="selectedProducts[1].bankName"
+                @error="
+                  (e) => handleImageError(e, selectedProducts[1].bankName)
+                "
+                class="bank-logo"
+              />
             </div>
           </div>
           <div class="product-info">
@@ -60,7 +73,12 @@
             class="bank-icon small"
             :class="getBankClass(selectedProducts[0].bankName)"
           >
-            {{ getBankInitial(selectedProducts[0].bankName) }}
+            <img
+              :src="getBankImagePath(selectedProducts[0].bankName)"
+              :alt="selectedProducts[0].bankName"
+              @error="(e) => handleImageError(e, selectedProducts[0].bankName)"
+              class="bank-logo small-logo"
+            />
           </div>
           <span class="product-name-simple">{{
             selectedProducts[0].name
@@ -110,8 +128,63 @@ const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
 };
 
-const getBankInitial = (bankName) => {
-  return bankName.charAt(0);
+// 은행 이미지 경로 생성 (ProductCard와 동일)
+const getBankImagePath = (bankName) => {
+  const bankCode = getBankCodeFromName(bankName);
+  try {
+    return new URL(
+      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
+      import.meta.url
+    ).href;
+  } catch {
+    // 이미지 로드 실패 시 대체 경로
+    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
+  }
+};
+
+// 은행명을 코드로 변환 (ProductCard와 동일)
+const getBankCodeFromName = (bankName) => {
+  const bankNameMap = {
+    국민은행: 'kb',
+    신한은행: 'shinhan',
+    하나은행: 'hana',
+    우리은행: 'woori',
+    NH농협은행: 'nh',
+    IBK기업은행: 'ibk',
+    카카오뱅크: 'kakao',
+    케이뱅크: 'kbank',
+    SC제일은행: 'sc',
+    토스뱅크: 'toss',
+    BNK부산은행: 'bnk',
+    iM뱅크: 'im',
+  };
+
+  // 정확한 매칭 먼저 시도
+  if (bankNameMap[bankName]) {
+    return bankNameMap[bankName];
+  }
+
+  // 부분 매칭 시도
+  for (const [fullName, code] of Object.entries(bankNameMap)) {
+    if (
+      bankName.includes(fullName.replace('은행', '')) ||
+      fullName.includes(bankName)
+    ) {
+      return code;
+    }
+  }
+
+  // 매칭되지 않으면 첫 글자 사용
+  return bankName.charAt(0).toLowerCase();
+};
+
+// 이미지 로드 실패 시 처리
+const handleImageError = (event, bankName) => {
+  // 이미지 로드 실패 시 텍스트로 대체
+  const bankIcon = event.target.parentElement;
+  event.target.style.display = 'none';
+  bankIcon.style.color = 'inherit';
+  bankIcon.textContent = getBankInitial(bankName);
 };
 </script>
 
@@ -220,15 +293,26 @@ const getBankInitial = (bankName) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 18px;
   background: rgba(255, 255, 255, 0.15);
   color: inherit;
   backdrop-filter: blur(4px);
+  overflow: hidden;
 }
 
 .right-side .bank-icon {
   background: rgba(0, 0, 0, 0.1);
+}
+
+.bank-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 원형에 맞게 조정 */
+}
+
+.bank-logo.small-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .product-info {
@@ -366,7 +450,6 @@ const getBankInitial = (bankName) => {
   height: 32px;
   background: #f5f5f5;
   color: #666;
-  font-size: 14px;
 }
 
 .product-name-simple {
@@ -440,7 +523,7 @@ const getBankInitial = (bankName) => {
   }
 
   .vs-text {
-    font-size: 18px;
+    font-size: 60px;
   }
 
   .compare-btn {
