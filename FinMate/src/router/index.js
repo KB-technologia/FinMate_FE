@@ -42,6 +42,7 @@ const router = createRouter({
       name: 'findPw',
       component: () => import('../views/auth/FindPwView.vue'),
     },
+
     {
       path: '/reset-pw',
       name: 'resetPw',
@@ -52,6 +53,9 @@ const router = createRouter({
       path: '/products',
       name: 'allProducts',
       component: () => import('../views/product/AllProductView.vue'),
+      meta: {
+        allowScroll: true,
+      },
     },
     {
       path: '/product/:id',

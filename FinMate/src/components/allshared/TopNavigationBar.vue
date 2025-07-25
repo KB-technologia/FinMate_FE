@@ -14,7 +14,10 @@
       </div>
     </div>
     <div class="top-navigation-menu-right">
-      <div class="top-navigation-menu-right-item hvr-underline-from-center">
+      <div
+        class="top-navigation-menu-right-item hvr-underline-from-center"
+        @click="$router.push('/products')"
+      >
         금융 아이템
       </div>
       <div class="top-navigation-menu-right-item hvr-underline-from-center">
