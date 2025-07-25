@@ -4,7 +4,7 @@
       <div class="user-info">
         <p class="username">홍길동</p>
         <p class="level">Lv.3 소심한 카피바라</p>
-        <button class="edit-btn">정보 수정</button>
+        <button class="edit-btn" @click="goToMyInfo">정보 수정</button>
       </div>
     </div>
 
@@ -71,6 +71,10 @@ const goTo = (target) => {
   if (target === "stat") router.push("/my-stats");
   else if (target === "products") router.push("/my-products");
   else if (target === "portfolio") router.push("/my-portfolio");
+};
+
+const goToMyInfo = () => {
+  router.push("/my-info");
 };
 </script>
 
