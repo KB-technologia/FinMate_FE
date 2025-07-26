@@ -53,7 +53,7 @@ import "@/styles/fonts.css";
   align-items: center;
   flex-direction: row;
   padding: 3vh;
-  font-family: var(--font-wanted);
+  font-weight: var(--font-weight-medium);
 }
 
 .footer-left {

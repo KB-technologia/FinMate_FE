@@ -116,13 +116,15 @@ onMounted(() => {
   width: 90%;
   display: flex;
 }
+
 .stat-label {
   width: 10vw;
-  font-weight: bold;
+  font-weight: var(--font-weight-extrabold);
   font-size: 1rem;
   text-align: right;
   margin-right: 1vw;
 }
+
 .stat-bar-outer {
   flex: 1;
   height: 2.5vh;
@@ -130,18 +132,20 @@ onMounted(() => {
   border-radius: 2vh;
   overflow: hidden;
 }
+
 .stat-bar-fill {
   height: 100%;
   border-radius: 2vh;
   transition: width 0.5s ease;
 }
+
 .detail-button {
-  width: 10vw;
+  width: 11vw;
   height: 4vh;
   background-color: var(--color-main-button);
   border: none;
   border-radius: 2vh;
-  font-weight: bold;
+  font-weight: var(--font-weight-extrabold);
   cursor: pointer;
 }
 
@@ -155,10 +159,12 @@ onMounted(() => {
   text-align: center;
   padding: 2rem;
 }
+
 .image-wrapper {
   display: flex;
   gap: 2vw;
 }
+
 .animal-image {
   height: 12vh;
   width: auto;
@@ -166,6 +172,7 @@ onMounted(() => {
   transform: scale(0.9);
   transition: all 0.4s ease;
 }
+
 .animal-image.fade-in {
   opacity: 1;
   transform: scale(1);

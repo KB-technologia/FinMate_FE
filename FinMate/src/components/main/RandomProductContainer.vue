@@ -125,6 +125,7 @@ const next = () => {
   align-items: center;
   justify-content: center;
 }
+
 .CardContainer {
   display: flex;
   flex-direction: row;
@@ -132,6 +133,7 @@ const next = () => {
   align-items: center;
   padding: 3vh;
 }
+
 .Product-Container {
   width: 95vw;
   height: 50vh;
@@ -146,9 +148,11 @@ const next = () => {
 .Product-Text {
   margin-top: 2vh;
   color: var(--color-white);
+  font-weight: var(--font-weight-bold);
   font-size: 2rem;
   text-align: center;
 }
+
 .CardContainer {
   display: flex;
   flex-direction: row;
@@ -166,6 +170,8 @@ const next = () => {
   background-color: #0086e6;
   color: var(--color-white);
   border: none;
+  margin: 0 auto;
+  font-weight: var(--font-weight-medium);
 }
 
 .detail-button:hover {
