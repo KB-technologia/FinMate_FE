@@ -2,6 +2,7 @@
 defineProps({
   message: String,
 });
+const expnumber = 10;
 </script>
 <template>
   <div class="modal-container">
@@ -15,13 +16,16 @@ defineProps({
       </div>
       <div class="modal-body">
         <p>{{ message }}</p>
-        <p class="info-exptext">캐릭터가 10의 경험치를 획득했어요!</p>
+        <p class="info-exptext">
+          캐릭터가 {{ expnumber }}의 경험치를 획득했어요!
+        </p>
       </div>
       <div class="exp-bar">
-        <!--TODO : 경험치 바 로직 구현 -->
-        <p class="exp-info">+10</p>
-        <img src="@/assets/images/expfullbar.png" class="expfullbar-img" />
-        <img src="@/assets/images/expbar.png" class="expbar-img" />
+        <div class="exp-label">+{{ expnumber }}</div>
+        <div class="exp-track">
+          <div class="exp-fill" :style="{ width: 30 + '%' }"></div>
+        </div>
+        <!--TODO : width, expnumber 값 조절 -->
       </div>
     </div>
   </div>
@@ -96,14 +100,6 @@ defineProps({
   cursor: pointer;
 }
 
-.exp-bar {
-  position: relative;
-  width: 300px;
-  height: 40px;
-  margin: 0 auto;
-  margin-bottom: 2rem;
-}
-
 .exp-info {
   position: absolute;
   top: -30px;
@@ -114,22 +110,32 @@ defineProps({
   z-index: 3;
 }
 
-.expfullbar-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 120%;
-  height: 100%;
-  z-index: 1;
-  object-fit: contain;
+.exp-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 2rem;
 }
 
-.expbar-img {
-  position: absolute;
-  top: 0;
-  left: 0;
+.exp-label {
+  color: #3ccb7f;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.exp-track {
+  width: 250px;
+  height: 25px;
+  background-color: #e6f8ee;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.exp-fill {
   height: 100%;
-  z-index: 2;
-  object-fit: contain;
+  background-color: #3ccb7f;
+  width: 0%;
+  border-radius: 10px;
 }
 </style>
