@@ -63,6 +63,14 @@ const router = createRouter({
       component: () => import("../views/product/DetailProductView.vue"),
     },
     {
+      path: "/product/:id/reviews",
+      name: "productReviewList",
+      component: () => import("../views/product/ProductReviewListView.vue"),
+      meta: {
+        allowScroll: true,
+      },
+    },
+    {
       path: "/recommend",
       name: "recommendProduct",
       component: () => import("../views/product/RecommendProductView.vue"),
