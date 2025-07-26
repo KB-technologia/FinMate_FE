@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import StarRating from "@/components/allshared/StarRating.vue";
+import StarRating from "@/components/allshared/star/StarRating.vue";
 
 defineProps({
   rating: Number,
