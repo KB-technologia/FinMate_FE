@@ -14,7 +14,7 @@
             :rating="4.5"
             :count="9"
             size="3rem"
-            @open-detail="openReviewModal"
+            @open-detail="openRatingDetailModal"
           />
           <button class="write-review-button" @click="openReviewModal">
             <Pencil class="icon" />
@@ -27,6 +27,13 @@
           :product-image-url="logoPath"
           @submit="handleReviewSubmit"
           @close="isReviewModalOpen = false"
+        />
+        <RatingDetailModal
+          v-if="isRatingDetailOpen"
+          :total-score="3.5"
+          :rating-data="[30, 60, 10, 90, 20]"
+          :review-count="4"
+          @close="isRatingDetailOpen = false"
         />
       </div>
       <ReviewFilterBar />
@@ -66,6 +73,7 @@ import ReviewFilterBar from "@/components/review/ReviewFilterBar.vue";
 import ReviewCard from "@/components/review/ReviewCard.vue";
 import Pagination from "@/components/allshared/Pagination.vue";
 import WriteReviewModal from "@/components/review/WriteReviewModal.vue";
+import RatingDetailModal from "@/components/review/RatingDetailModal.vue";
 
 // TODO: API 연동(테스트용 mock 데이터)
 const mockProduct = {
@@ -117,9 +125,16 @@ const handlePageChange = (newPage) => {
 };
 
 const isReviewModalOpen = ref(false);
+const isRatingDetailOpen = ref(false);
 
 const openReviewModal = () => {
+  isRatingDetailOpen.value = false;
   isReviewModalOpen.value = true;
+};
+
+const openRatingDetailModal = () => {
+  isReviewModalOpen.value = false;
+  isRatingDetailOpen.value = true;
 };
 </script>
 
