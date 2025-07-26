@@ -15,6 +15,11 @@ const routes = [
     component: () => import('@/views/auth/LoginView.vue'),
   },
   {
+    path: '/auth/kakao/redirect',
+    name: 'KakaoRedirect',
+    component: () => import('../views/auth/KakaoRedirect.vue'),
+  },
+  {
     path: '/signup1',
     name: 'signup1',
     component: () => import('@/views/auth/SignUpView1.vue'),
