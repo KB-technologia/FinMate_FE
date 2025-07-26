@@ -1,4 +1,3 @@
-<!-- components/product/ProductContainer.vue -->
 <template>
   <div class="product-container">
     <!-- 로딩 상태 -->
@@ -37,15 +36,12 @@
           <label for="sortOrder" class="sort-label">정렬:</label>
           <select
             id="sortOrder"
-            :value="sortOrder"
+            :value="currentSortOrder"
             @change="handleSortChange"
             class="sort-select"
           >
-            <option value="expectedReturn-desc">수익률 높은순</option>
-            <option value="expectedReturn-asc">수익률 낮은순</option>
-            <option value="name-asc">상품명순</option>
-            <option value="bankName-asc">은행명순</option>
-            <option value="minAmount-asc">최소금액 낮은순</option>
+            <option value="desc">수익률 높은순</option>
+            <option value="asc">수익률 낮은순</option>
           </select>
         </div>
       </div>
@@ -78,7 +74,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import ProductCard from './ProductCard.vue';
-import Pagination from './Pagination.vue';
+import Pagination from '../allshared/Pagination.vue';
 
 const props = defineProps({
   products: {
@@ -97,49 +93,31 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  currentSortOrder: {
+    type: String,
+    default: 'desc',
+  },
 });
 
-const emit = defineEmits(['product-select', 'product-detail', 'retry-fetch']);
+const emit = defineEmits([
+  'product-select',
+  'product-detail',
+  'retry-fetch',
+  'sort-change',
+]);
 
 // 반응형 데이터
 const currentPage = ref(1);
 const pageSize = ref(12);
-const sortOrder = ref('expectedReturn-desc');
+// const sortOrder = ref('expectedReturn-desc');
 
 // Computed 속성들
 const totalProducts = computed(() => props.products.length);
 
-const sortedProducts = computed(() => {
-  const [field, direction] = sortOrder.value.split('-');
-
-  return [...props.products].sort((a, b) => {
-    let aValue = a[field];
-    let bValue = b[field];
-
-    // 문자열 정렬
-    if (typeof aValue === 'string') {
-      aValue = aValue.toLowerCase();
-      bValue = bValue.toLowerCase();
-    }
-
-    // 숫자 정렬
-    if (typeof aValue === 'number') {
-      return direction === 'asc' ? aValue - bValue : bValue - aValue;
-    }
-
-    // 문자열 정렬
-    if (direction === 'asc') {
-      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-    } else {
-      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
-    }
-  });
-});
-
 const paginatedProducts = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
   const end = start + pageSize.value;
-  return sortedProducts.value.slice(start, end);
+  return props.products.slice(start, end);
 });
 
 // 메서드들
@@ -168,6 +146,9 @@ const handlePageSizeChange = (newPageSize) => {
 const handleSortChange = (event) => {
   sortOrder.value = event.target.value;
   currentPage.value = 1; // 정렬 변경 시 첫 페이지로
+
+  // 부모 컴포넌트에 정렬 변경 알림
+  emit('sort-change', event.target.value);
 };
 
 const retryFetch = () => {
