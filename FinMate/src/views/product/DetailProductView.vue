@@ -33,7 +33,12 @@
           :content="review.content"
         />
       </div>
-
+      <Pagination
+        :current-page="currentPage"
+        :total-items="mockReviews.length"
+        :page-size="pageSize"
+        @page-change="handlePageChange"
+      />
       <FooterComponent />
     </div>
   </div>
@@ -50,6 +55,7 @@ import ProductDetailCard from "@/components/product/ProductDetailCard.vue";
 import StarRatingWithDetail from "@/components/allshared/StarRatingWithDetail.vue";
 import ReviewFilterBar from "@/components/review/ReviewFilterBar.vue";
 import ReviewCard from "@/components/review/ReviewCard.vue";
+import Pagination from "@/components/allshared/Pagination.vue";
 
 // TODO: API 연동(테스트용 mock 데이터)
 const mockProduct = {
@@ -84,11 +90,24 @@ const mockReviews = [
     date: "2025.07.20",
     content: "가입도 쉽고 모바일로 관리하기도 편했어요.",
   },
+  {
+    username: "박길동",
+    rating: 1.5,
+    date: "2025.06.20",
+    content: "뭔가 제가 생각한 것보단 별로였어요",
+  },
 ];
 
 // TODO: 작업 완료 후 삭제 (console.log)
 const openReviewModal = () => {
   console.log("리뷰 모달 열기");
+};
+
+const currentPage = ref(1);
+const pageSize = 5;
+
+const handlePageChange = (newPage) => {
+  currentPage.value = newPage;
 };
 </script>
 
