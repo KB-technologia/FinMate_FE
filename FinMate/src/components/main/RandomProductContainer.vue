@@ -28,13 +28,22 @@
         ▶
       </div>
     </div>
-    <button class="detail-button">나의 추천 아이템 보러 가기</button>
+    <button class="detail-button" @click="goToProducts">
+      나의 추천 아이템 보러 가기
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import MainProductCard from "./MainProductCard.vue";
+
+const router = useRouter();
+
+const goToProducts = () => {
+  router.push("/products");
+};
 
 const products = ref([
   {
@@ -116,6 +125,7 @@ const next = () => {
   align-items: center;
   justify-content: center;
 }
+
 .CardContainer {
   display: flex;
   flex-direction: row;
@@ -123,6 +133,7 @@ const next = () => {
   align-items: center;
   padding: 3vh;
 }
+
 .Product-Container {
   width: 95vw;
   height: 50vh;
@@ -137,9 +148,11 @@ const next = () => {
 .Product-Text {
   margin-top: 2vh;
   color: var(--color-white);
+  font-weight: var(--font-weight-bold);
   font-size: 2rem;
   text-align: center;
 }
+
 .CardContainer {
   display: flex;
   flex-direction: row;
@@ -157,6 +170,8 @@ const next = () => {
   background-color: #0086e6;
   color: var(--color-white);
   border: none;
+  margin: 0 auto;
+  font-weight: var(--font-weight-medium);
 }
 
 .detail-button:hover {
