@@ -16,11 +16,18 @@
             size="3rem"
             @open-detail="openReviewModal"
           />
-          <button class="write-review-button">
+          <button class="write-review-button" @click="openReviewModal">
             <Pencil class="icon" />
             리뷰 작성하기
           </button>
         </div>
+        <WriteReviewModal
+          v-if="isReviewModalOpen"
+          :product-name="mockProduct.name"
+          :product-image-url="logoPath"
+          @submit="handleReviewSubmit"
+          @close="isReviewModalOpen = false"
+        />
       </div>
       <ReviewFilterBar />
       <div class="review-list">
@@ -49,13 +56,16 @@ import { ref } from "vue";
 
 import { Pencil } from "lucide-vue-next";
 
+import { getBankLogoPath } from "@/utils/bank";
+
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
 import FooterComponent from "@/components/allshared/FooterComponent.vue";
 import ProductDetailCard from "@/components/product/ProductDetailCard.vue";
-import StarRatingWithDetail from "@/components/allshared/StarRatingWithDetail.vue";
+import StarRatingWithDetail from "@/components/allshared/star/StarRatingWithDetail.vue";
 import ReviewFilterBar from "@/components/review/ReviewFilterBar.vue";
 import ReviewCard from "@/components/review/ReviewCard.vue";
 import Pagination from "@/components/allshared/Pagination.vue";
+import WriteReviewModal from "@/components/review/WriteReviewModal.vue";
 
 // TODO: API 연동(테스트용 mock 데이터)
 const mockProduct = {
@@ -98,16 +108,18 @@ const mockReviews = [
   },
 ];
 
-// TODO: 작업 완료 후 삭제 (console.log)
-const openReviewModal = () => {
-  console.log("리뷰 모달 열기");
-};
-
 const currentPage = ref(1);
-const pageSize = 5;
+const pageSize = 6;
+const logoPath = getBankLogoPath(mockProduct.bankName);
 
 const handlePageChange = (newPage) => {
   currentPage.value = newPage;
+};
+
+const isReviewModalOpen = ref(false);
+
+const openReviewModal = () => {
+  isReviewModalOpen.value = true;
 };
 </script>
 
