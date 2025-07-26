@@ -4,28 +4,33 @@
       <div class="modal-header">
         <h3>별점 정보</h3>
       </div>
-      <div class="review-count">{{ reviewCount }}</div>
-      <div class="stars">
-        <span
-          v-for="n in 5"
-          :key="n"
-          class="star"
-          :class="{ filled: n <= Math.round(totalScore) }"
-          >★</span
-        >
+      <p class="review-description">
+        <span class="review-count">{{ reviewCount }}</span
+        >개의 리뷰가 달렸어요
+      </p>
+      <div class="star-wrapper">
+        <StarRating :rating="totalScore" size="2rem" />
       </div>
-      <div v-for="(label, idx) in labels" :key="idx" class="bar-row">
-        <span class="label">{{ label }}</span>
-        <div class="bar-wrapper">
-          <div class="bar-fill" :style="{ width: ratingData[idx] + '%' }"></div>
+
+      <div class="bar-group">
+        <div v-for="(label, idx) in labels" :key="idx" class="bar-row">
+          <span class="label">{{ label }}</span>
+          <div class="bar-wrapper">
+            <div
+              class="bar-fill"
+              :style="{ width: ratingData[idx] + '%' }"
+            ></div>
+          </div>
+          <span class="percent">{{ ratingData[idx] }}%</span>
         </div>
-        <span class="percent">{{ ratingData[idx] }}%</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import StarRating from "@/components/allshared/star/StarRating.vue";
+
 const props = defineProps({
   totalScore: Number,
   ratingData: Array,
@@ -55,7 +60,7 @@ const emit = defineEmits(["close"]);
   border-radius: 1rem;
   width: 28rem;
   max-width: 90vw;
-  max-height: 48vh;
+  max-height: fit-content;
 }
 
 .modal-header {
@@ -75,55 +80,60 @@ const emit = defineEmits(["close"]);
   font-weight: var(--font-weight-medium);
 }
 
-.review-count {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: var(--font-weight-semibold);
+.review-description {
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-medium);
   color: var(--color-black);
-  margin-bottom: 0.3rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
-.stars {
+.review-count {
+  color: var(--color-orange);
+  font-weight: var(--font-weight-bold);
+}
+
+.star-wrapper {
   display: flex;
   justify-content: center;
-  gap: 0.4rem;
-  margin: 0.5rem 0 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.star {
-  font-size: 2rem;
-  color: var(--color-light-gray);
-}
-
-.star.filled {
-  color: var(--color-orange);
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .bar-row {
   display: flex;
   align-items: center;
+  padding: 0 0.5rem;
   gap: 0.5rem;
-  margin-bottom: 0.8rem;
 }
 
 .label {
   width: 2.5rem;
   text-align: center;
   font-weight: var(--font-weight-bold);
+  margin-right: 0.4rem;
 }
 
 .bar-wrapper {
   flex: 1;
-  height: 2rem;
+  height: 2.2rem;
   background: var(--color-light-gray);
   border-radius: 1rem;
   overflow: hidden;
+  margin-right: 0.4rem;
 }
 
 .bar-fill {
   height: 100%;
   background-color: var(--color-primary-yellow);
 }
+
 .percent {
   width: 3rem;
   text-align: center;
