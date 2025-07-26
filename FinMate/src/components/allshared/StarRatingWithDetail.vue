@@ -44,7 +44,7 @@ const onDetailClick = () => {
 
 .review-count {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   color: var(--color-black);
 }
 
@@ -52,7 +52,7 @@ const onDetailClick = () => {
   background: none;
   border: none;
   color: var(--color-dark-blue);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   text-decoration: underline;
   font-size: 1rem;

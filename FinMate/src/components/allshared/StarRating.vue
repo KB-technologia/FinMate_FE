@@ -35,19 +35,37 @@ const getStarClass = (index) => {
 </script>
 
 <style scoped>
-.star.full {
+.star-rating {
+  display: flex;
+  gap: 0.2rem;
+  line-height: 1;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+}
+
+.star.full,
+.star.empty {
   color: var(--color-orange);
 }
 
-.star.half {
-  background: linear-gradient(to right, var(--color-orange) 50%, #ccc 50%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+.star.empty {
+  color: var(--color-light-gray);
 }
 
-.star.empty {
-  color: #ccc;
+.star.half {
+  color: var(--color-light-gray);
+}
+
+.star.half::before {
+  content: "★";
+  color: var(--color-orange);
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  display: inline-block;
 }
 </style>
