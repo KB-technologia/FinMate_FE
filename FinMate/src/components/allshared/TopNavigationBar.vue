@@ -14,7 +14,10 @@
       </div>
     </div>
     <div class="top-navigation-menu-right">
-      <div class="top-navigation-menu-right-item hvr-underline-from-center">
+      <div
+        class="top-navigation-menu-right-item hvr-underline-from-center"
+        @click="$router.push('/products')"
+      >
         금융 아이템
       </div>
       <div class="top-navigation-menu-right-item hvr-underline-from-center">
@@ -59,7 +62,8 @@ const route = useRoute();
   height: 10vh;
   background-color: var(--color-primary-green);
   justify-content: space-between;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
+  font-weight: var(--font-weight-bold);
 }
 
 .top-navigation-bar-logo-container {
@@ -106,7 +110,7 @@ const route = useRoute();
 }
 
 .top-navigation-menu-right-item {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .top-navigation-menu-right-item:hover {

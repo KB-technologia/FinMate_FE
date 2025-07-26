@@ -1,7 +1,9 @@
 <template>
   <div class="profile-container">
     <div v-if="isLoggedIn" class="profile-header">
-      <button class="quiz-button">오늘의 퀴즈</button>
+      <button class="quiz-button" @click="showQuizModal = true">
+        오늘의 퀴즈
+      </button>
       <div class="logout-button" @click="handleLoginClick">
         <img
           src="@/assets/images/LogoutRounded.png"
@@ -32,18 +34,20 @@
       로그인 하러 가기
     </button>
   </div>
+  <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth/auth';
-import { computed } from 'vue';
-import '../../assets/fonts/font.css';
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth/auth";
+import { ref, computed } from "vue";
+import DailyQuizModal from "@/components/dailyquiz/DailyQuizModal.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
 
 const isLoggedIn = computed(() => authStore.isLoggedIn);
+const showQuizModal = ref(false);
 
 const currentXp = 2000;
 const maxXp = 3000;
@@ -51,9 +55,9 @@ const fillPercentage = computed(() => (currentXp / maxXp) * 100);
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push('/login');
+    router.push("/login");
   } else {
-    const confirmed = window.confirm('정말 로그아웃하시겠습니까?');
+    const confirmed = window.confirm("정말 로그아웃하시겠습니까?");
     if (confirmed) {
       authStore.logout();
     }
@@ -63,7 +67,7 @@ function handleLoginClick() {
 
 <style scoped>
 .profile-container {
-  width: 22vw;
+  width: 23vw;
   height: 30vh;
   background-color: var(--color-primary-yellow);
   display: flex;
@@ -72,7 +76,7 @@ function handleLoginClick() {
   justify-content: center;
   border-radius: 2vh;
   padding: 3vh;
-  font-family: 'TMONBlack';
+  font-family: var(--font-wanted);
 }
 .profile-header {
   width: 100%;
@@ -97,8 +101,9 @@ function handleLoginClick() {
 
 .quiz-button {
   background-color: var(--color-main-button);
+  font-weight: var(--font-weight-bold);
   color: var(--color-black);
-  font-size: 1rem;
+  font-size: 0.9rem;
   border-radius: 2vh;
   cursor: pointer;
   border: none;
@@ -118,7 +123,7 @@ function handleLoginClick() {
   padding: 0.5rem;
   cursor: pointer;
   border: var(--color-red) solid 1px;
-  font-weight: bold;
+  font-weight: var(--font-weight-extrabold);
   font-size: 0.7rem;
   border-radius: 1vh;
 }
@@ -134,16 +139,16 @@ function handleLoginClick() {
 }
 
 .level-text {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  font-weight: var(--font-weight-extrabold);
+  font-size: 1.1rem;
 }
 
 .xp-bar {
   position: relative;
-  width: 180px;
-  height: 20px;
-  background-color: #ccc;
-  border-radius: 10px;
+  width: 240px;
+  height: 30px;
+  background-color: var(--color-light-gray);
+  border-radius: 20px;
   overflow: hidden;
   margin-bottom: 1rem;
 }
@@ -156,14 +161,14 @@ function handleLoginClick() {
 
 .xp-text {
   position: absolute;
-  top: 0;
+  top: 5px;
   left: 0;
   width: 100%;
   height: 100%;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-white);
+  font-weight: var(--font-weight-medium);
   text-align: center;
-  line-height: 20px;
   z-index: 1;
 }
 

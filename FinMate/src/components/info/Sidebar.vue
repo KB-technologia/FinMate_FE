@@ -4,7 +4,7 @@
       <div class="user-info">
         <p class="username">홍길동</p>
         <p class="level">Lv.3 소심한 카피바라</p>
-        <button class="edit-btn">정보 수정</button>
+        <button class="edit-btn" @click="goToMyInfo">정보 수정</button>
       </div>
     </div>
 
@@ -12,19 +12,43 @@
       <div class="menu-area">
         <div class="divider"></div>
         <ul>
-          <li class="hover-item" :class="{ active: current === 'stat' }">
+          <li
+            class="hover-item"
+            :class="{ active: current === 'stat' }"
+            @click="goTo('stat')"
+          >
             STAT
           </li>
         </ul>
         <div class="divider"></div>
+
         <ul>
-          <li class="hover-item" :class="{ active: current === 'products' }">
+          <li
+            class="hover-item"
+            :class="{ active: current === 'products' }"
+            @click="goTo('products')"
+          >
             PRODUCTS
           </li>
         </ul>
         <div class="divider"></div>
         <ul>
-          <li class="hover-item" :class="{ active: current === 'portfolio' }">
+          <li
+            class="hover-item"
+            :class="{ active: current === 'reviews' }"
+            @click="goTo('reviews')"
+          >
+            REVIEWS
+          </li>
+        </ul>
+        <div class="divider"></div>
+
+        <ul>
+          <li
+            class="hover-item"
+            :class="{ active: current === 'portfolio' }"
+            @click="goTo('portfolio')"
+          >
             PORTFOLIO
           </li>
         </ul>
@@ -40,9 +64,10 @@
 
 <script setup>
 import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 
 const current = computed(() => {
   const path = route.path;
@@ -52,6 +77,16 @@ const current = computed(() => {
   if (path.includes("/my-portfolio")) return "portfolio";
   return "";
 });
+
+const goTo = (target) => {
+  if (target === "stat") router.push("/my-stats");
+  else if (target === "products") router.push("/my-products");
+  else if (target === "portfolio") router.push("/my-portfolio");
+};
+
+const goToMyInfo = () => {
+  router.push("/my-info");
+};
 </script>
 
 <style scoped>
@@ -64,7 +99,7 @@ const current = computed(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
 }
 
 .top-area {
@@ -99,7 +134,7 @@ const current = computed(() => {
   width: 80%;
   max-width: 240px;
   margin-top: 0.5rem;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
   font-weight: bold;
   border: none;
   border-radius: 4px;

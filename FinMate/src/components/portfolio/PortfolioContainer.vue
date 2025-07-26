@@ -309,10 +309,10 @@ canvas {
 
 .blurred-chart-wrapper {
   position: relative;
-  width: 50vw;
+  width: 40vw;
   max-width: 500px;
   max-height: 500px;
-  right: 20%;
+  right: 10%;
 }
 
 .blurred-chart {
@@ -330,7 +330,7 @@ canvas {
 
 .kiwi-box {
   position: relative;
-  width: 50vw;
+  width: 30vw;
   max-width: 500px;
   height: 300px;
 }

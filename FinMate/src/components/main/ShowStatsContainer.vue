@@ -19,7 +19,7 @@
         ></div>
       </div>
     </div>
-    <button class="detail-button">자세히 보기</button>
+    <button class="detail-button" @click="goToStatsPage">자세히 보기</button>
   </div>
 
   <!-- 비로그인 상태일 때: 랜덤 이미지 & 문구 -->
@@ -41,35 +41,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useAuthStore } from '@/stores/auth/auth';
-import '../../assets/fonts/font.css';
+import { ref, onMounted, computed } from "vue";
+import { useAuthStore } from "@/stores/auth/auth";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 
+const goToStatsPage = () => {
+  router.push("/my-stats");
+};
+
 const statsLeft = [
-  { label: '가치관', percent: 90, color: 'red' },
-  { label: '속도', percent: 70, color: 'blue' },
-  { label: '운/전략', percent: 85, color: 'yellow' },
+  { label: "가치관", percent: 90, color: "red" },
+  { label: "속도", percent: 70, color: "blue" },
+  { label: "운/전략", percent: 85, color: "yellow" },
 ];
 
 const statsRight = [
-  { label: '재정', percent: 75, color: 'orange' },
-  { label: '모험 성향', percent: 80, color: 'green' },
+  { label: "재정", percent: 75, color: "orange" },
+  { label: "모험 성향", percent: 80, color: "green" },
 ];
 
 const images = [
-  new URL('@/assets/images/cat.png', import.meta.url).href,
-  new URL('@/assets/images/capybara.png', import.meta.url).href,
-  new URL('@/assets/images/desertfox.png', import.meta.url).href,
-  new URL('@/assets/images/flyingsquirrel.png', import.meta.url).href,
-  new URL('@/assets/images/kiwibird.png', import.meta.url).href,
-  new URL('@/assets/images/koala.png', import.meta.url).href,
-  new URL('@/assets/images/panda.png', import.meta.url).href,
-  new URL('@/assets/images/penguin.png', import.meta.url).href,
-  new URL('@/assets/images/redpanda.png', import.meta.url).href,
-  new URL('@/assets/images/seaotter.png', import.meta.url).href,
+  new URL("@/assets/images/cat.png", import.meta.url).href,
+  new URL("@/assets/images/capybara.png", import.meta.url).href,
+  new URL("@/assets/images/desertfox.png", import.meta.url).href,
+  new URL("@/assets/images/flyingsquirrel.png", import.meta.url).href,
+  new URL("@/assets/images/kiwibird.png", import.meta.url).href,
+  new URL("@/assets/images/koala.png", import.meta.url).href,
+  new URL("@/assets/images/panda.png", import.meta.url).href,
+  new URL("@/assets/images/penguin.png", import.meta.url).href,
+  new URL("@/assets/images/redpanda.png", import.meta.url).href,
+  new URL("@/assets/images/seaotter.png", import.meta.url).href,
 ];
 
 const currentImages = ref([]);
@@ -111,13 +116,15 @@ onMounted(() => {
   width: 90%;
   display: flex;
 }
+
 .stat-label {
   width: 10vw;
-  font-weight: bold;
+  font-weight: var(--font-weight-extrabold);
   font-size: 1rem;
   text-align: right;
   margin-right: 1vw;
 }
+
 .stat-bar-outer {
   flex: 1;
   height: 2.5vh;
@@ -125,18 +132,20 @@ onMounted(() => {
   border-radius: 2vh;
   overflow: hidden;
 }
+
 .stat-bar-fill {
   height: 100%;
   border-radius: 2vh;
   transition: width 0.5s ease;
 }
+
 .detail-button {
-  width: 10vw;
+  width: 11vw;
   height: 4vh;
   background-color: var(--color-main-button);
   border: none;
   border-radius: 2vh;
-  font-weight: bold;
+  font-weight: var(--font-weight-extrabold);
   cursor: pointer;
 }
 
@@ -150,10 +159,12 @@ onMounted(() => {
   text-align: center;
   padding: 2rem;
 }
+
 .image-wrapper {
   display: flex;
   gap: 2vw;
 }
+
 .animal-image {
   height: 12vh;
   width: auto;
@@ -161,6 +172,7 @@ onMounted(() => {
   transform: scale(0.9);
   transition: all 0.4s ease;
 }
+
 .animal-image.fade-in {
   opacity: 1;
   transform: scale(1);
