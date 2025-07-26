@@ -1,15 +1,15 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { getDailyQuiz, getAnswerDailyQuiz } from "@/api/dailyquiz/dailyQuiz.js";
-import FalseButton from "@/components/dailyquiz/FalseButton.vue";
-import TrueButton from "@/components/dailyquiz/TrueButton.vue";
-import CorrectAnswerModal from "@/components/dailyquiz/CorrectAnswerModal.vue";
-import WrongAnswerModal from "@/components/dailyquiz/WrongAnswerModal.vue";
+import { ref, onMounted } from 'vue';
+import { getDailyQuiz, getAnswerDailyQuiz } from '@/api/dailyquiz/dailyQuiz.js';
+import FalseButton from '@/components/dailyquiz/FalseButton.vue';
+import TrueButton from '@/components/dailyquiz/TrueButton.vue';
+import CorrectAnswerModal from '@/components/dailyquiz/CorrectAnswerModal.vue';
+import WrongAnswerModal from '@/components/dailyquiz/WrongAnswerModal.vue';
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close']);
 
 const quiz = ref(null);
-const isAnswer = ref("");
+const isAnswer = ref('');
 const showCorrectModal = ref(false);
 const showWrongModal = ref(false);
 
@@ -19,19 +19,15 @@ onMounted(async () => {
     quiz.value = res.data;
     console.log(quiz.value);
   } catch (error) {
-    console.error("퀴즈 가져오기 실패", error);
+    console.error('퀴즈 가져오기 실패', error);
   }
 });
 
 async function checkAnswer(userAnswer) {
-  emit("close");
+  emit('close');
   try {
     const res = await getAnswerDailyQuiz(quiz.value.id, userAnswer);
-    const correctAnswer = res.data.correct;
     isAnswer.value = res.data.message;
-
-    const correctAnswer =
-      quiz.value.answer === true || quiz.value.answer === "true";
 
     if (correctAnswer) {
       showCorrectModal.value = true;
@@ -39,7 +35,7 @@ async function checkAnswer(userAnswer) {
       showWrongModal.value = true;
     }
   } catch (error) {
-    console.error("정답 확인 실패", error);
+    console.error('정답 확인 실패', error);
   }
 }
 </script>

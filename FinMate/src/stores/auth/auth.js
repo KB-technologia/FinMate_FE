@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', {
         const res = await Login(id, pw);
         if (res.status === 200) {
           this.setToken(res.data.token);
-          this.setIsFirst(res.data.isfirst);
+          this.setIsFirst(true);
           console.log(res.data);
 
           return true;
