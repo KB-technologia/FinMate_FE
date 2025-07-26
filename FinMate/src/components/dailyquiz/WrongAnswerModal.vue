@@ -15,7 +15,7 @@ defineProps({
       </div>
       <div class="modal-body">
         <p>{{ message }}</p>
-        <p>다음 퀴즈도 기대해 주세요!</p>
+        <p class="info-next">다음 퀴즈도 기대해 주세요!</p>
       </div>
     </div>
   </div>
@@ -34,9 +34,9 @@ defineProps({
 .modal-box {
   background: var(--color-modal-bg);
   border-radius: 30px;
-  padding: 1rem 2.5rem;
+  padding: 0.5rem 2.5rem;
   width: 40vw;
-  height: 45vh;
+  height: 50vh;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -58,13 +58,18 @@ defineProps({
 }
 
 .wrongkiwi-img {
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
 }
 
 .close-img {
   width: 30px;
   height: 30px;
+}
+
+.info-next {
+  margin-top: 4rem;
+  font-weight: bold;
 }
 
 .close-btn {
