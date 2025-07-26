@@ -22,3 +22,8 @@ export function getBankCodeFromName(bankName) {
   }
   return bankName.charAt(0).toLowerCase();
 }
+
+export function getBankLogoPath(bankName) {
+  const code = getBankCodeFromName(bankName);
+  return new URL(`/src/assets/images/banks/${code}.png`, import.meta.url).href;
+}
