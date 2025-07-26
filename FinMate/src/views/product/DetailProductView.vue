@@ -1,14 +1,15 @@
 <template>
   <TopNavigationBar />
 
-  <div class="product-review-page">
-    <div class="product-card-wrapper">
-      <ProductDetailCard :product="mockProduct" />
+  <div class="product-page-container">
+    <div class="scrollable-content">
+      <div class="product-card-wrapper">
+        <ProductDetailCard :product="mockProduct" />
+      </div>
+      <h1 class="page-title">Product Review</h1>
+      <FooterComponent />
     </div>
-    <h1 class="page-title">Product Review</h1>
   </div>
-
-  <FooterComponent />
 </template>
 
 <script setup>
@@ -38,23 +39,36 @@ const mockProduct = {
 </script>
 
 <style scoped>
-.product-review-page {
-  min-height: 80vh;
-  padding: 4vh 2vw;
+.product-page-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.scrollable-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(1rem, 4vw, 2rem);
+  gap: clamp(1rem, 4vh, 2rem);
 }
 
 .page-title {
   font-size: 2.5rem;
   font-weight: var(--font-weight-bold);
   text-align: center;
-  margin-bottom: 3vh;
   color: var(--color-black);
 }
 
 .product-card-wrapper {
+  width: 100%;
+  max-width: 62.5rem;
+  padding: 0 1rem;
   display: flex;
   justify-content: center;
-  margin-bottom: 3vh;
-  width: 100%;
 }
 </style>
