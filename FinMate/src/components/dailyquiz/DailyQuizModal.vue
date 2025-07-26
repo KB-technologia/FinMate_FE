@@ -17,6 +17,7 @@ onMounted(async () => {
   try {
     const res = await getDailyQuiz();
     quiz.value = res.data;
+
     console.log(quiz.value);
   } catch (error) {
     console.error('퀴즈 가져오기 실패', error);
@@ -24,11 +25,12 @@ onMounted(async () => {
 });
 
 async function checkAnswer(userAnswer) {
-  emit('close');
   try {
     const res = await getAnswerDailyQuiz(quiz.value.id, userAnswer);
+    const correctAnswer = res.data.correct;
     isAnswer.value = res.data.message;
 
+    console.log(isAnswer.value);
     if (correctAnswer) {
       showCorrectModal.value = true;
     } else {
@@ -37,6 +39,12 @@ async function checkAnswer(userAnswer) {
   } catch (error) {
     console.error('정답 확인 실패', error);
   }
+}
+
+function ModalClose() {
+  showCorrectModal.value = false;
+  showWrongModal.value = false;
+  emit('close');
 }
 </script>
 
@@ -68,12 +76,12 @@ async function checkAnswer(userAnswer) {
   <CorrectAnswerModal
     v-if="showCorrectModal"
     :message="isAnswer"
-    @close="showCorrectModal = false"
+    @close="ModalClose"
   />
   <WrongAnswerModal
     v-if="showWrongModal"
     :message="isAnswer"
-    @close="showWrongModal = false"
+    @close="ModalClose"
   />
 </template>
 <style scoped>
