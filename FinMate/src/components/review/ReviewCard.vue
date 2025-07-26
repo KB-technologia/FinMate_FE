@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import StarRating from "@/components/allshared/StarRating.vue";
+import StarRating from "@/components/allshared/star/StarRating.vue";
 
 defineProps({
   username: String,
@@ -36,8 +36,7 @@ defineProps({
 .review-card {
   display: flex;
   align-items: center;
-  border: 2px solid var(--color-black);
-  border-radius: 0.25rem;
+  border: 0.125rem solid var(--color-black);
   padding: 1rem;
   gap: 1.5rem;
 }
@@ -56,7 +55,6 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
 .profile-image {
