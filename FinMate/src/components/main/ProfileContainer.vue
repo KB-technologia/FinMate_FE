@@ -1,7 +1,9 @@
 <template>
   <div class="profile-container">
     <div v-if="isLoggedIn" class="profile-header">
-      <button class="quiz-button">오늘의 퀴즈</button>
+      <button class="quiz-button" @click="showQuizModal = true">
+        오늘의 퀴즈
+      </button>
       <div class="logout-button" @click="handleLoginClick">
         <img
           src="@/assets/images/LogoutRounded.png"
@@ -32,17 +34,20 @@
       로그인 하러 가기
     </button>
   </div>
+  <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth/auth";
-import { computed } from "vue";
+import { ref, computed } from "vue";
+import DailyQuizModal from "@/components/dailyquiz/DailyQuizModal.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
 
 const isLoggedIn = computed(() => authStore.isLoggedIn);
+const showQuizModal = ref(false);
 
 const currentXp = 2000;
 const maxXp = 3000;
@@ -62,7 +67,7 @@ function handleLoginClick() {
 
 <style scoped>
 .profile-container {
-  width: 22vw;
+  width: 23vw;
   height: 30vh;
   background-color: var(--color-primary-yellow);
   display: flex;

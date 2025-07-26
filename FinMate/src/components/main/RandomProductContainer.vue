@@ -28,13 +28,22 @@
         ▶
       </div>
     </div>
-    <button class="detail-button">나의 추천 아이템 보러 가기</button>
+    <button class="detail-button" @click="goToProducts">
+      나의 추천 아이템 보러 가기
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import MainProductCard from "./MainProductCard.vue";
+
+const router = useRouter();
+
+const goToProducts = () => {
+  router.push("/products");
+};
 
 const products = ref([
   {
