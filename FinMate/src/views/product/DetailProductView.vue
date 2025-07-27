@@ -4,7 +4,7 @@
   <div class="product-page-container">
     <div class="scrollable-content">
       <div class="product-card-wrapper">
-        <ProductDetailCard :product="mockProduct" />
+        <ProductDetailCardFund :product="mockProduct" />
       </div>
       <div class="divider" />
       <div class="rating-row">
@@ -70,7 +70,7 @@ import { getBankLogoPath } from "@/utils/bank";
 
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
 import FooterComponent from "@/components/allshared/FooterComponent.vue";
-import ProductDetailCard from "@/components/product/ProductDetailCard.vue";
+import ProductDetailCardFund from "@/components/product/ProductDetailCardFund.vue";
 import StarRatingWithDetail from "@/components/allshared/star/StarRatingWithDetail.vue";
 import ReviewFilterBar from "@/components/review/ReviewFilterBar.vue";
 import ReviewCard from "@/components/review/ReviewCard.vue";
@@ -79,22 +79,69 @@ import WriteReviewModal from "@/components/review/WriteReviewModal.vue";
 import RatingDetailModal from "@/components/review/RatingDetailModal.vue";
 
 // TODO: API 연동(테스트용 mock 데이터)
+
+// const mockProduct = {
+//   id: 1,
+//   name: "국민 퍼스트 예금1",
+//   bankName: "KB국민은행",
+//   productType: "DEPOSIT",
+//   expectedReturn: 1.8,
+//   riskLevel: 1,
+//   detail: {
+//     bonusRate: 1.0,
+//     minTerm: 12,
+//     minAmount: 1000000,
+//     defaultTermMonths: 12,
+//     interestType: "SIMPLE",
+//     compoundingPeriod: "MONTHLY",
+//     earlyWithdrawalPenalty: 0.5,
+//     isFlexible: false,
+//   },
+// };
+
+// const mockProduct = {
+//   id: 2,
+//   name: "하나 자유적금 12개월",
+//   bankName: "하나은행",
+//   productType: "SAVINGS",
+//   expectedReturn: 3.2,
+//   riskLevel: 2,
+//   valueTag: "STABILITY",
+//   speedTag: "SLOW",
+//   strategyTag: "STRATEGY",
+//   description: "매월 자유롭게 납입 가능한 고금리 적금 상품입니다.",
+//   url: "https://example.com/product/savings",
+//   detail: {
+//     bonusRate: 0.8,
+//     minAmount: 10000,
+//     maxAmount: 100000000,
+//     minTerm: 6,
+//     maxTerm: 24,
+//     defaultTermMonths: 12,
+//     interestType: "SIMPLE",
+//     compoundingPeriod: "MONTHLY",
+//     earlyWithdrawalPenalty: 0.4,
+//     isFlexible: true,
+//     paymentCycle: "MONTHLY",
+//     maxMonthlyPayment: 300000,
+//   },
+// };
+
 const mockProduct = {
-  id: 1,
-  name: "국민 퍼스트 예금1",
+  id: 3,
+  name: "KB 글로벌 성장 펀드",
   bankName: "KB국민은행",
-  productType: "DEPOSIT",
-  expectedReturn: 1.8,
-  riskLevel: 1,
+  productType: "FUND",
+  expectedReturn: 6.8,
+  riskLevel: 4,
+  valueTag: "GROWTH",
+  speedTag: "FAST",
+  strategyTag: "DIVERSIFY",
+  description: "글로벌 시장에 분산 투자하는 중위험 중수익 펀드입니다.",
+  url: "https://example.com/product/fund",
   detail: {
-    bonusRate: 1.0,
-    minTerm: 12,
-    minAmount: 1000000,
-    defaultTermMonths: 12,
-    interestType: "SIMPLE",
-    compoundingPeriod: "MONTHLY",
-    earlyWithdrawalPenalty: 0.5,
-    isFlexible: false,
+    minAmount: 100000,
+    maxAmount: 100000000,
   },
 };
 

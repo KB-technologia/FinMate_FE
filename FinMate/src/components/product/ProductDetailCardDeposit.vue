@@ -57,6 +57,12 @@
       <div class="info-value">
         {{ product.detail.isFlexible ? "가능" : "불가능" }}
       </div>
+      <div class="info-label">상품 보러가기</div>
+      <div class="info-value">
+        <a :href="product.url" target="_blank" class="product-link">
+          링크 열기 🔗
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -214,5 +220,11 @@ const getCompoundingPeriod = (period) => {
   font-size: 1.125rem;
   font-weight: var(--font-weight-bold);
   text-align: right;
+}
+
+.product-link {
+  color: var(--color-blue);
+  text-decoration: underline;
+  font-weight: 500;
 }
 </style>
