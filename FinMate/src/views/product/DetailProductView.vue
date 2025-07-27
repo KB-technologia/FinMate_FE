@@ -36,10 +36,10 @@
           @close="isRatingDetailOpen = false"
         />
       </div>
-      <ReviewFilterBar />
+      <ReviewFilterBar @update:sort="handleSortChange" />
       <div class="review-list">
         <ReviewCard
-          v-for="(review, index) in mockReviews"
+          v-for="(review, index) in sortedReviews"
           :key="index"
           :username="review.username"
           :rating="review.rating"
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import { Pencil } from "lucide-vue-next";
 
@@ -115,7 +115,7 @@ const mockReviews = [
     content: "뭔가 제가 생각한 것보단 별로였어요",
   },
 ];
-
+const sort = ref("latest");
 const currentPage = ref(1);
 const pageSize = 6;
 const logoPath = getBankLogoPath(mockProduct.bankName);
@@ -135,6 +135,22 @@ const openReviewModal = () => {
 const openRatingDetailModal = () => {
   isReviewModalOpen.value = false;
   isRatingDetailOpen.value = true;
+};
+
+const sortedReviews = computed(() => {
+  const reviews = [...mockReviews];
+  if (sort.value === "latest") {
+    return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+  } else if (sort.value === "high") {
+    return reviews.sort((a, b) => b.rating - a.rating);
+  } else if (sort.value === "low") {
+    return reviews.sort((a, b) => a.rating - b.rating);
+  }
+  return reviews;
+});
+
+const handleSortChange = (value) => {
+  sort.value = value;
 };
 </script>
 
