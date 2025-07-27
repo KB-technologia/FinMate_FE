@@ -82,12 +82,13 @@ const closeModal = () => {
   align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
-  gap: 3vh;
+  gap: 2vh;
 }
 
 .main-view-show-stats-and-profile-container {
   display: flex;
   flex-direction: row;
+  margin-top: 2vh;
 }
 .empty-space {
   width: 4vw;
@@ -98,6 +99,7 @@ const closeModal = () => {
   flex-direction: row;
   width: 100vw;
   justify-content: center;
+  margin-top: 1vh;
 }
 
 .main-view-footer {
