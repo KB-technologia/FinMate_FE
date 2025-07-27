@@ -19,10 +19,11 @@
     <select class="filter-select" v-model="filter" @change="emitFilterChange">
       <option value="all">모든 별점 보기</option>
       <option value="5">5점</option>
-      <option value="4">4점</option>
-      <option value="3">3점</option>
-      <option value="2">2점</option>
-      <option value="1">1점</option>
+      <option value="4">4.5~4점</option>
+      <option value="3">3.5~3점</option>
+      <option value="2">2.5~2점</option>
+      <option value="1">1.5~1점</option>
+      <option value="1">0점</option>
     </select>
   </div>
 </template>

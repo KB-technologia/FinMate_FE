@@ -36,10 +36,13 @@
           @close="isRatingDetailOpen = false"
         />
       </div>
-      <ReviewFilterBar @update:sort="handleSortChange" />
+      <ReviewFilterBar
+        @update:sort="handleSortChange"
+        @update:filter="handleFilterChange"
+      />
       <div class="review-list">
         <ReviewCard
-          v-for="(review, index) in sortedReviews"
+          v-for="(review, index) in filteredAndSortedReviews"
           :key="index"
           :username="review.username"
           :rating="review.rating"
@@ -115,9 +118,11 @@ const mockReviews = [
     content: "뭔가 제가 생각한 것보단 별로였어요",
   },
 ];
+
+const filter = ref("all");
 const sort = ref("latest");
 const currentPage = ref(1);
-const pageSize = 6;
+const pageSize = 5;
 const logoPath = getBankLogoPath(mockProduct.bankName);
 
 const handlePageChange = (newPage) => {
@@ -137,8 +142,14 @@ const openRatingDetailModal = () => {
   isRatingDetailOpen.value = true;
 };
 
-const sortedReviews = computed(() => {
-  const reviews = [...mockReviews];
+const filteredAndSortedReviews = computed(() => {
+  let reviews = [...mockReviews];
+
+  if (filter.value !== "all") {
+    const ratingFilter = parseInt(filter.value);
+    reviews = reviews.filter((r) => Math.floor(r.rating) === ratingFilter);
+  }
+
   if (sort.value === "latest") {
     return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
   } else if (sort.value === "high") {
@@ -148,6 +159,10 @@ const sortedReviews = computed(() => {
   }
   return reviews;
 });
+
+const handleFilterChange = (value) => {
+  filter.value = value;
+};
 
 const handleSortChange = (value) => {
   sort.value = value;
