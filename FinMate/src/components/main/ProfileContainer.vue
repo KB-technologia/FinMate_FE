@@ -109,11 +109,13 @@ function handleLoginClick() {
   cursor: pointer;
   border: none;
   padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
 }
 
 .quiz-button:hover {
-  box-shadow: 0 1vh 1vw rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0.5vh 0.5vw rgba(0, 0, 0, 0.3);
+
+  transform: translateY(-0.5vh);
 }
 
 .logout-button {
@@ -188,6 +190,6 @@ function handleLoginClick() {
 
 .custom-login-button:hover {
   transform: translateY(-0.6vh);
-  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
 }
 </style>

@@ -148,11 +148,12 @@ onMounted(() => {
   border-radius: 2vh;
   font-weight: var(--font-weight-extrabold);
   cursor: pointer;
+  transition: all 0.1s ease;
 }
 
 .detail-button:hover {
-  box-shadow: 0 1vh 1vw rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0.5vh 0.5vw rgba(0, 0, 0, 0.3);
+  transform: translateY(-0.5vh);
 }
 
 .description {
