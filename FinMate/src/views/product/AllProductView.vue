@@ -273,17 +273,17 @@ const handleRemoveProduct = (product) => {
 }
 
 .all-product-view::-webkit-scrollbar {
-  width: 8px;
+  width: 0.5vw;
 }
 
 .all-product-view::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 4px;
+  border-radius: 0.3vw;
 }
 
 .all-product-view::-webkit-scrollbar-thumb {
   background: #c1c1c1;
-  border-radius: 4px;
+  border-radius: 0.3vw;
 }
 
 .all-product-view::-webkit-scrollbar-thumb:hover {
@@ -293,18 +293,18 @@ const handleRemoveProduct = (product) => {
 /* 검색 섹션 */
 .search-section {
   width: 100%;
-  max-width: 1400px;
+  max-width: 85vw;
   margin: 0 auto;
-  padding: 20px 24px 0 24px;
+  padding: 2vh 2vw 0 2vw;
 }
 
 /* 상품 섹션 */
 .products-section {
   width: 100%;
-  max-width: 1400px;
+  max-width: 85vw;
   margin: 0 auto;
-  padding: 0 24px 24px 24px;
-  margin-bottom: 120px; /* 비교 버튼 공간 확보 */
+  padding: 2vh 2vw 0 2vw;
+  margin-bottom: 8.5vw; /* 비교 버튼 공간 확보 */
 }
 
 /* 반응형 디자인 */
@@ -312,30 +312,30 @@ const handleRemoveProduct = (product) => {
   .search-section,
   .products-section {
     max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 1.8vw;
+    padding-right: 1.8vw;
   }
 }
 
 @media (max-width: 768px) {
   .search-section {
-    padding: 16px 16px 0 16px;
+    padding: 2vh 2vw 0 2vw;
   }
 
   .products-section {
-    padding: 0 16px 16px 16px;
-    margin-bottom: 100px;
+    padding: 2vh 2vw 0 2vw;
+    margin-bottom: 15vh;
   }
 }
 
 @media (max-width: 480px) {
   .search-section {
-    padding: 12px 12px 0 12px;
+    padding: 1.5vh 1.5vw 0 1.5vw;
   }
 
   .products-section {
-    padding: 0 12px 12px 12px;
-    margin-bottom: 80px;
+    padding: 1.5vh 1.5vw 0 1.5vw;
+    margin-bottom: 10vh;
   }
 }
 </style>
