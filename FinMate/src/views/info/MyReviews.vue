@@ -49,7 +49,7 @@
               작성한 리뷰가 없습니다.
             </p>
             <Pagination
-              v-if="filteredReviews.length > pageSize"
+              v-if="filteredReviews.length > 0"
               :current-page="currentPage"
               :total-items="filteredReviews.length"
               :page-size="pageSize"
@@ -100,14 +100,6 @@ const mockReviews = ref([
     username: "홍길동",
     rating: 2.0,
     date: "2025-07-16",
-    content: "금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.",
-    category: "deposit",
-  },
-  {
-    id: 1,
-    username: "홍길동",
-    rating: 4.0,
-    date: "2025-04-26",
     content: "금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.",
     category: "deposit",
   },
@@ -252,6 +244,9 @@ const paginatedReviews = computed(() => {
   width: 100%;
   margin-top: 2rem;
   align-items: center;
+
+  min-height: 50vh;
+  justify-content: space-between;
 }
 
 .card-wrapper {
