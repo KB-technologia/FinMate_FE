@@ -1,82 +1,84 @@
 <template>
-  <TopNavigationBar />
+  <div class="product-page">
+    <TopNavigationBar />
 
-  <div class="product-page-container">
-    <div class="scrollable-content">
-      <div class="product-card-wrapper">
-        <ProductDetailCardFund :product="mockProduct" />
-      </div>
-      <div class="divider" />
-      <div class="rating-row">
-        <h1 class="review-title">Product Review</h1>
-        <div class="rating-detail-wrapper">
-          <StarRatingWithDetail
-            :rating="4.5"
-            :count="9"
-            size="3rem"
-            @open-detail="openRatingDetailModal"
-          />
-          <button class="write-review-button" @click="openReviewModal">
-            <Pencil class="icon" />
-            리뷰 작성하기
-          </button>
+    <div class="product-page-container">
+      <div class="scrollable-content">
+        <div class="product-card-wrapper">
+          <ProductDetailCardFund :product="mockProduct" />
         </div>
-        <WriteReviewModal
-          v-if="isReviewModalOpen"
-          :product-name="mockProduct.name"
-          :product-image-url="logoPath"
-          @submit="handleReviewSubmit"
-          @close="isReviewModalOpen = false"
+        <div class="divider" />
+        <div class="rating-row">
+          <h1 class="review-title">Product Review</h1>
+          <div class="rating-detail-wrapper">
+            <StarRatingWithDetail
+              :rating="4.5"
+              :count="9"
+              size="3rem"
+              @open-detail="openRatingDetailModal"
+            />
+            <button class="write-review-button" @click="openReviewModal">
+              <Pencil class="icon" />
+              리뷰 작성하기
+            </button>
+          </div>
+          <WriteReviewModal
+            v-if="isReviewModalOpen"
+            :product-name="mockProduct.name"
+            :product-image-url="logoPath"
+            @submit="handleReviewSubmit"
+            @close="isReviewModalOpen = false"
+          />
+          <RatingDetailModal
+            v-if="isRatingDetailOpen"
+            :total-score="3.5"
+            :rating-data="[30, 60, 10, 90, 20]"
+            :review-count="4"
+            @close="isRatingDetailOpen = false"
+          />
+        </div>
+        <ReviewFilterBar
+          @update:sort="handleSortChange"
+          @update:filter="handleFilterChange"
         />
-        <RatingDetailModal
-          v-if="isRatingDetailOpen"
-          :total-score="3.5"
-          :rating-data="[30, 60, 10, 90, 20]"
-          :review-count="4"
-          @close="isRatingDetailOpen = false"
+        <div class="review-list">
+          <ReviewCard
+            v-for="(review, index) in filteredAndSortedReviews"
+            :key="index"
+            :username="review.username"
+            :rating="review.rating"
+            :date="review.date"
+            :content="review.content"
+          />
+        </div>
+        <Pagination
+          :current-page="currentPage"
+          :total-items="mockReviews.length"
+          :page-size="pageSize"
+          @page-change="handlePageChange"
         />
+        <FooterComponent />
       </div>
-      <ReviewFilterBar
-        @update:sort="handleSortChange"
-        @update:filter="handleFilterChange"
-      />
-      <div class="review-list">
-        <ReviewCard
-          v-for="(review, index) in filteredAndSortedReviews"
-          :key="index"
-          :username="review.username"
-          :rating="review.rating"
-          :date="review.date"
-          :content="review.content"
-        />
-      </div>
-      <Pagination
-        :current-page="currentPage"
-        :total-items="mockReviews.length"
-        :page-size="pageSize"
-        @page-change="handlePageChange"
-      />
-      <FooterComponent />
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref } from 'vue';
 
-import { Pencil } from "lucide-vue-next";
+import { Pencil } from 'lucide-vue-next';
 
-import { getBankLogoPath } from "@/utils/bank";
+import { getBankLogoPath } from '@/utils/bank';
 
-import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
-import FooterComponent from "@/components/allshared/FooterComponent.vue";
-import ProductDetailCardFund from "@/components/product/ProductDetailCardFund.vue";
-import StarRatingWithDetail from "@/components/allshared/star/StarRatingWithDetail.vue";
-import ReviewFilterBar from "@/components/review/ReviewFilterBar.vue";
-import ReviewCard from "@/components/review/ReviewCard.vue";
-import Pagination from "@/components/allshared/Pagination.vue";
-import WriteReviewModal from "@/components/review/WriteReviewModal.vue";
-import RatingDetailModal from "@/components/review/RatingDetailModal.vue";
+import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
+import FooterComponent from '@/components/allshared/FooterComponent.vue';
+import ProductDetailCardFund from '@/components/product/ProductDetailCardFund.vue';
+import StarRatingWithDetail from '@/components/allshared/star/StarRatingWithDetail.vue';
+import ReviewFilterBar from '@/components/review/ReviewFilterBar.vue';
+import ReviewCard from '@/components/review/ReviewCard.vue';
+import Pagination from '@/components/allshared/Pagination.vue';
+import WriteReviewModal from '@/components/review/WriteReviewModal.vue';
+import RatingDetailModal from '@/components/review/RatingDetailModal.vue';
 
 // TODO: API 연동(테스트용 mock 데이터)
 
@@ -129,16 +131,16 @@ import RatingDetailModal from "@/components/review/RatingDetailModal.vue";
 
 const mockProduct = {
   id: 3,
-  name: "KB 글로벌 성장 펀드",
-  bankName: "KB국민은행",
-  productType: "FUND",
+  name: 'KB 글로벌 성장 펀드',
+  bankName: 'KB국민은행',
+  productType: 'FUND',
   expectedReturn: 6.8,
   riskLevel: 4,
-  valueTag: "GROWTH",
-  speedTag: "FAST",
-  strategyTag: "DIVERSIFY",
-  description: "글로벌 시장에 분산 투자하는 중위험 중수익 펀드입니다.",
-  url: "https://example.com/product/fund",
+  valueTag: 'GROWTH',
+  speedTag: 'FAST',
+  strategyTag: 'DIVERSIFY',
+  description: '글로벌 시장에 분산 투자하는 중위험 중수익 펀드입니다.',
+  url: 'https://example.com/product/fund',
   detail: {
     minAmount: 100000,
     maxAmount: 100000000,
@@ -147,27 +149,27 @@ const mockProduct = {
 
 const mockReviews = [
   {
-    username: "홍길동",
+    username: '홍길동',
     rating: 5,
-    date: "2025.07.24",
-    content: "금리가 높아서 짧은 기간에도 이자 수익이 꽤 나왔어요!",
+    date: '2025.07.24',
+    content: '금리가 높아서 짧은 기간에도 이자 수익이 꽤 나왔어요!',
   },
   {
-    username: "김길동",
+    username: '김길동',
     rating: 4,
-    date: "2025.07.20",
-    content: "가입도 쉽고 모바일로 관리하기도 편했어요.",
+    date: '2025.07.20',
+    content: '가입도 쉽고 모바일로 관리하기도 편했어요.',
   },
   {
-    username: "박길동",
+    username: '박길동',
     rating: 1.5,
-    date: "2025.06.20",
-    content: "뭔가 제가 생각한 것보단 별로였어요",
+    date: '2025.06.20',
+    content: '뭔가 제가 생각한 것보단 별로였어요',
   },
 ];
 
-const filter = ref("all");
-const sort = ref("latest");
+const filter = ref('all');
+const sort = ref('latest');
 const currentPage = ref(1);
 const pageSize = 5;
 const logoPath = getBankLogoPath(mockProduct.bankName);
@@ -192,16 +194,16 @@ const openRatingDetailModal = () => {
 const filteredAndSortedReviews = computed(() => {
   let reviews = [...mockReviews];
 
-  if (filter.value !== "all") {
+  if (filter.value !== 'all') {
     const ratingFilter = parseInt(filter.value);
     reviews = reviews.filter((r) => Math.floor(r.rating) === ratingFilter);
   }
 
-  if (sort.value === "latest") {
+  if (sort.value === 'latest') {
     return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
-  } else if (sort.value === "high") {
+  } else if (sort.value === 'high') {
     return reviews.sort((a, b) => b.rating - a.rating);
-  } else if (sort.value === "low") {
+  } else if (sort.value === 'low') {
     return reviews.sort((a, b) => a.rating - b.rating);
   }
   return reviews;
@@ -217,6 +219,13 @@ const handleSortChange = (value) => {
 </script>
 
 <style scoped>
+.product-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .product-page-container {
   height: 100vh;
   overflow-y: auto;
@@ -227,6 +236,7 @@ const handleSortChange = (value) => {
 }
 
 .scrollable-content {
+  height: 100vh;
   flex-grow: 1;
   display: flex;
   flex-direction: column;

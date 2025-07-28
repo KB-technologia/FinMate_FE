@@ -3,7 +3,7 @@
     <div class="left-section">
       <div class="profile-wrapper">
         <img
-          src="@/assets/images/penguin.png"
+          src="@/assets/images/animals/penguin.png"
           alt="profile"
           class="profile-image"
         />
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import StarRating from "@/components/allshared/star/StarRating.vue";
+import StarRating from '@/components/allshared/star/StarRating.vue';
 
 defineProps({
   username: String,
