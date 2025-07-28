@@ -7,6 +7,5 @@ import { X } from 'lucide-vue-next';
 <style scoped>
 .close-button {
   all: unset;
-  cursor: pointer;
 }
 </style>
