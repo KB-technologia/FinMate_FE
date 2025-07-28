@@ -8,7 +8,7 @@
 
 <script setup>
 import { computed } from 'vue';
-// import { CircleCheckBig, Ban, Info, TriangleAlert } from "lucide-vue-next";
+import { CircleCheckBig, Ban, Info, TriangleAlert } from 'lucide-vue-next';
 
 const props = defineProps({
   message: String,

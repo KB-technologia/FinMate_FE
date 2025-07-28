@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '/api/member/portfolio';
+const API_BASE = 'http://localhost:8080/api/member/portfolio';
 
 export const getPortfolio = (userId) => {
   return axios.get(`${API_BASE}?userId=${userId}`);
