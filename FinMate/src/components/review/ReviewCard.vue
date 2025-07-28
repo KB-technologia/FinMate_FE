@@ -4,7 +4,7 @@
       <div class="profile-wrapper">
         <img
           src="@/assets/images/animals/penguin.png"
-          alt="profile"
+          alt="리뷰 작성자 프로필 이미지"
           class="profile-image"
         />
       </div>
@@ -18,26 +18,34 @@
     <div class="review-content">
       {{ content }}
     </div>
+    <button v-if="showDelete" class="delete-button" @click="$emit('delete')">
+      <Trash2 class="icon-trash" />
+    </button>
   </div>
 </template>
 
 <script setup>
 import StarRating from "@/components/allshared/star/StarRating.vue";
+import { Trash2 } from "lucide-vue-next";
 
 defineProps({
   username: String,
   rating: Number,
   date: String,
   content: String,
+  showDelete: Boolean,
 });
+
+defineEmits(["delete"]);
 </script>
 
 <style scoped>
 .review-card {
+  position: relative;
   display: flex;
   align-items: center;
-  border: 0.125rem solid var(--color-black);
   padding: 1rem;
+  border: 0.125rem solid var(--color-black);
   gap: 1.5rem;
 }
 
@@ -91,5 +99,30 @@ defineProps({
   flex: 1;
   font-size: 1rem;
   font-weight: var(--font-weight-medium);
+}
+
+.delete-button {
+  position: absolute;
+  right: -3.6rem;
+  top: -0.15rem;
+  height: 8.5rem;
+  width: 3.5rem;
+  background-color: var(--color-delete-bg);
+  border: none;
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-trash {
+  color: var(--color-white);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.delete-button:hover .icon-trash {
+  color: var(--color-red);
 }
 </style>
