@@ -30,18 +30,29 @@
             <ChevronDown class="select-icon" />
           </div>
         </div>
+        <div class="review-list">
+          <ReviewCard
+            v-for="(review, index) in filteredReviews"
+            :key="index"
+            :username="review.username"
+            :rating="review.rating"
+            :date="review.date"
+            :content="review.content"
+          />
+        </div>
       </RightPanel>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
 
 import Sidebar from "@/components/info/Sidebar.vue";
 import RightPanel from "@/components/info/RightPanel.vue";
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import ReviewCard from "@/components/review/ReviewCard.vue";
 
 const selectedSort = ref("all");
 const selectedCategory = ref("all");
@@ -52,6 +63,48 @@ const categories = [
   { label: "적금", value: "saving" },
   { label: "펀드", value: "fund" },
 ];
+
+const mockReviews = ref([
+  {
+    username: "홍길동",
+    rating: 4.5,
+    date: "2025-07-25",
+    content: "금리가 높아서 만족했어요.",
+    category: "deposit",
+  },
+  {
+    username: "김길동",
+    rating: 2.0,
+    date: "2025-07-20",
+    content: "기대보다 수익률이 낮았어요.",
+    category: "fund",
+  },
+  {
+    username: "이길동",
+    rating: 5.0,
+    date: "2025-07-18",
+    content: "가입도 쉽고 편했어요!",
+    category: "saving",
+  },
+]);
+
+const filteredReviews = computed(() => {
+  let result = [...mockReviews.value];
+
+  if (selectedCategory.value !== "all") {
+    result = result.filter((r) => r.category === selectedCategory.value);
+  }
+
+  if (selectedSort.value === "latest") {
+    result.sort((a, b) => new Date(b.date) - new Date(a.date));
+  } else if (selectedSort.value === "high") {
+    result.sort((a, b) => b.rating - a.rating);
+  } else if (selectedSort.value === "low") {
+    result.sort((a, b) => a.rating - b.rating);
+  }
+
+  return result;
+});
 </script>
 
 <style scoped>
@@ -149,5 +202,13 @@ const categories = [
   width: 1rem;
   height: 1rem;
   color: var(--color-dark-gray);
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 2rem;
 }
 </style>
