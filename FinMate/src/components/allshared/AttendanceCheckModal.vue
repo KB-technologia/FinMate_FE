@@ -53,8 +53,8 @@ defineProps({
   background-color: var(--color-modal-bg);
   border-radius: 2vh;
   padding: 3vh;
-  width: 40vw;
-  height: 30vh;
+  width: 60vw;
+  height: 40vh;
   max-width: 90vw;
   text-align: center;
   position: relative;
