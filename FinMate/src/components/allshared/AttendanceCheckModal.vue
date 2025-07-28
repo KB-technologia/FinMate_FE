@@ -17,10 +17,14 @@
         <div v-for="day in 7" :key="day" class="day-box">
           <img
             v-if="day <= attendanceDays"
-            src="@/assets/images/stamp-on.png"
+            src="@/assets/images/icons/stamp-on.png"
             alt="출석 완료"
           />
-          <img v-else src="@/assets/images/stamp-off.png" alt="출석 예정" />
+          <img
+            v-else
+            src="@/assets/images/icons/stamp-off.png"
+            alt="출석 예정"
+          />
           <p>{{ day }}일째</p>
         </div>
       </div>

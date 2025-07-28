@@ -6,7 +6,7 @@
       </button>
       <div class="logout-button" @click="handleLoginClick">
         <img
-          src="@/assets/images/LogoutRounded.png"
+          src="@/assets/images/icons/LogoutRounded.png"
           class="logout-logo"
           alt="로그아웃 아이콘"
         />
@@ -15,7 +15,7 @@
     </div>
     <div v-if="isLoggedIn" class="profile-info">
       <img
-        src="@/assets/images/capybara.png"
+        src="@/assets/images/animals/capybara.png"
         alt="카피바라"
         class="capybara-img"
       />
@@ -38,10 +38,10 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth/auth';
-import { ref, computed } from 'vue';
-import DailyQuizModal from '@/components/dailyquiz/DailyQuizModal.vue';
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth/auth";
+import { ref, computed } from "vue";
+import DailyQuizModal from "@/components/dailyquiz/DailyQuizModal.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -55,9 +55,9 @@ const fillPercentage = computed(() => (currentXp / maxXp) * 100);
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push('/login');
+    router.push("/login");
   } else {
-    const confirmed = window.confirm('정말 로그아웃하시겠습니까?');
+    const confirmed = window.confirm("정말 로그아웃하시겠습니까?");
     if (confirmed) {
       authStore.logout();
     }

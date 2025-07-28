@@ -1,14 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { createPortfolio, updatePortfolio } from '@/api/portfolio/portfolio.js';
+import { ref, onMounted } from "vue";
+import { createPortfolio, updatePortfolio } from "@/api/portfolio/portfolio.js";
 
-const emit = defineEmits(['close', 'save']);
+const emit = defineEmits(["close", "save"]);
 const error = ref(false);
 
 const props = defineProps({
   mode: {
     type: String,
-    default: 'write',
+    default: "write",
   },
   initialData: {
     type: Object,
@@ -28,33 +28,33 @@ const form = ref({
 
 onMounted(() => {
   //
-  if (props.mode === 'edit' && props.initialData) {
+  if (props.mode === "edit" && props.initialData) {
     form.value = { ...props.initialData };
   }
 });
 
 const fields = [
-  { name: 'age', label: '나이', unit: '세' },
-  { name: 'annualIncome', label: '연 소득', unit: '원' },
-  { name: 'cash', label: '현금 / 예금', unit: '원' },
-  { name: 'bond', label: '채권', unit: '원' },
-  { name: 'equity', label: '주식 / 펀드', unit: '원' },
-  { name: 'other', label: '기타 자산', unit: '원' },
+  { name: "age", label: "나이", unit: "세" },
+  { name: "annualIncome", label: "연 소득", unit: "원" },
+  { name: "cash", label: "현금 / 예금", unit: "원" },
+  { name: "bond", label: "채권", unit: "원" },
+  { name: "equity", label: "주식 / 펀드", unit: "원" },
+  { name: "other", label: "기타 자산", unit: "원" },
 ];
 async function onSubmit() {
   const requiredFields = [
-    'age',
-    'annualIncome',
-    'cash',
-    'bond',
-    'equity',
-    'other',
+    "age",
+    "annualIncome",
+    "cash",
+    "bond",
+    "equity",
+    "other",
   ];
 
   const hasEmpty = requiredFields.some(
     (key) =>
       form.value[key] === null ||
-      form.value[key] === '' ||
+      form.value[key] === "" ||
       isNaN(form.value[key])
   );
 
@@ -83,24 +83,24 @@ async function onSubmit() {
     equityRatio,
     otherRatio,
   };
-  if (props.mode === 'edit') {
+  if (props.mode === "edit") {
     fullData.id = form.value.id;
   }
 
   try {
-    if (props.mode === 'edit') {
+    if (props.mode === "edit") {
       await updatePortfolio(fullData);
     } else {
       await createPortfolio(fullData);
     }
-    emit('save', fullData);
+    emit("save", fullData);
   } catch (err) {
-    console.error('저장 실패', err);
+    console.error("저장 실패", err);
   }
 }
 
 function onCancel() {
-  emit('close');
+  emit("close");
 }
 </script>
 
@@ -108,12 +108,12 @@ function onCancel() {
   <div class="modal-overlay">
     <div class="modal-container">
       <img
-        src="@/assets/images/totalassets.png"
+        src="@/assets/images/products/totalassets.png"
         class="top-icon"
         alt="totalassets이미지"
       />
       <h2 class="modal-title">
-        {{ mode === 'edit' ? '재무 정보 수정' : '재무 정보 작성' }}
+        {{ mode === "edit" ? "재무 정보 수정" : "재무 정보 작성" }}
       </h2>
       <div class="form-group" v-for="field in fields" :key="field.name">
         <label :for="field.name">{{ field.label }}</label>

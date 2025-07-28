@@ -19,7 +19,7 @@
           </div>
           <div class="quiz-start-image-container">
             <img
-              src="@/assets/images/kiwiLogo2.png"
+              src="@/assets/images/logos/kiwiLogo2.png"
               alt="Quiz Start Image"
               class="quiz-start-image"
             />
@@ -48,13 +48,13 @@
 </template>
 
 <script setup>
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
-import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
+import FooterComponent from "../../components/allshared/FooterComponent.vue";
+import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
 
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 const router = useRouter();
 const startQuiz = () => {
-  router.push('/quiz');
+  router.push("/quiz");
 };
 </script>
 
@@ -143,7 +143,7 @@ const startQuiz = () => {
 }
 
 .speech-bubble::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: -15px;
