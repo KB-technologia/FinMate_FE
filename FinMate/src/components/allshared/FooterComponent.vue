@@ -46,7 +46,7 @@ import "@/styles/fonts.css";
 <style scoped>
 .footer-container {
   width: 100vw;
-  height: 20vh;
+  height: 18vh;
   background-color: var(--color-primary-green);
   display: flex;
   justify-content: space-between;
@@ -59,18 +59,18 @@ import "@/styles/fonts.css";
 .footer-left {
   display: flex;
   flex-direction: column;
-  gap: 1vh;
-  margin-left: 5vw;
+  gap: 0.5vh;
+  margin-left: 4vw;
 }
 
 .footer-logo-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 4vh;
+  font-size: 3vh;
 }
 .footer-logo {
-  width: 5vw;
+  width: 4vw;
   height: auto;
 }
 .footer-text {
@@ -79,7 +79,7 @@ import "@/styles/fonts.css";
   display: flex;
   flex-direction: row;
   list-style: none;
-  gap: 0.5rem;
+  gap: 0.3rem;
   padding: 0;
   margin: 0;
 }
@@ -90,7 +90,7 @@ import "@/styles/fonts.css";
   transition: all 0.2s ease-in-out;
 }
 .footer-right {
-  margin-right: 2vw;
+  margin-right: 4vw;
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -35,72 +35,72 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import MainProductCard from "./MainProductCard.vue";
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import MainProductCard from './MainProductCard.vue';
 
 const router = useRouter();
 
 const goToProducts = () => {
-  router.push("/products");
+  router.push('/products');
 };
 
 const products = ref([
   {
-    name: "미래성장 적립예금",
-    bank: "KB국민은행",
-    type: "정기예금",
-    risk: "낮음",
-    return: "3.1%",
+    name: '미래성장 적립예금',
+    bank: 'KB국민은행',
+    type: '정기예금',
+    risk: '낮음',
+    return: '3.1%',
   },
   {
-    name: "청년 우대 적금",
-    bank: "신한은행",
-    type: "적금",
-    risk: "중간",
-    return: "3.8%",
+    name: '청년 우대 적금',
+    bank: '신한은행',
+    type: '적금',
+    risk: '중간',
+    return: '3.8%',
   },
   {
-    name: "소득공제 펀드",
-    bank: "NH농협은행",
-    type: "펀드",
-    risk: "높음",
-    return: "6.2%",
+    name: '소득공제 펀드',
+    bank: 'NH농협은행',
+    type: '펀드',
+    risk: '높음',
+    return: '6.2%',
   },
   {
-    name: "안심 채권",
-    bank: "우리은행",
-    type: "채권",
-    risk: "낮음",
-    return: "2.3%",
+    name: '안심 채권',
+    bank: '우리은행',
+    type: '채권',
+    risk: '낮음',
+    return: '2.3%',
   },
   {
-    name: "글로벌 ETF",
-    bank: "하나은행",
-    type: "ETF",
-    risk: "높음",
-    return: "7.5%",
+    name: '글로벌 ETF',
+    bank: '하나은행',
+    type: 'ETF',
+    risk: '높음',
+    return: '7.5%',
   },
   {
-    name: "정기적금 24개월",
-    bank: "카카오뱅크",
-    type: "적금",
-    risk: "중간",
-    return: "3.4%",
+    name: '정기적금 24개월',
+    bank: '카카오뱅크',
+    type: '적금',
+    risk: '중간',
+    return: '3.4%',
   },
   {
-    name: "IT 성장주 펀드",
-    bank: "토스뱅크",
-    type: "펀드",
-    risk: "매우 높음",
-    return: "10.2%",
+    name: 'IT 성장주 펀드',
+    bank: '토스뱅크',
+    type: '펀드',
+    risk: '매우 높음',
+    return: '10.2%',
   },
   {
-    name: "중소기업 채권",
-    bank: "SC제일은행",
-    type: "채권",
-    risk: "중간",
-    return: "4.5%",
+    name: '중소기업 채권',
+    bank: 'SC제일은행',
+    type: '채권',
+    risk: '중간',
+    return: '4.5%',
   },
 ]);
 
@@ -170,13 +170,13 @@ const next = () => {
   background-color: #0086e6;
   color: var(--color-white);
   border: none;
-  margin: 0 auto;
   font-weight: var(--font-weight-medium);
+  transition: all 0.1s ease;
 }
 
 .detail-button:hover {
-  border: 0.4vh solid var(--color-white);
-  transition: all 0.1s ease-in-out;
+  border: 0.2vh solid var(--color-white);
+  transform: translateY(-0.5vh);
 }
 
 .arrow-button {

@@ -28,12 +28,16 @@
       </div>
       <div
         class="top-navigation-menu-right-item hvr-underline-from-center"
+        :class="{
+          active: route.path === '/quizstart' || route.path === '/quiz',
+        }"
         @click="$router.push('/quizstart')"
       >
         투자 성향 테스트
       </div>
       <div
         class="top-navigation-menu-right-item hvr-underline-from-center"
+        :class="{ active: route.path === '/my-stats' }"
         @click="$router.push('/my-stats')"
       >
         내 정보
@@ -43,8 +47,10 @@
 </template>
 
 <script setup>
-import "@/styles/fonts.css";
-import "hover.css/css/hover-min.css";
+import '@/styles/fonts.css';
+import 'hover.css/css/hover-min.css';
+import { useRoute } from 'vue-router';
+const route = useRoute();
 </script>
 
 <style scoped>
@@ -53,7 +59,7 @@ import "hover.css/css/hover-min.css";
   flex-direction: row;
   align-items: center;
   width: 100vw;
-  height: 13vh;
+  height: 10vh;
   background-color: var(--color-primary-green);
   justify-content: space-between;
   font-family: var(--font-wanted);
@@ -64,7 +70,7 @@ import "hover.css/css/hover-min.css";
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 30vw;
+  width: 40vw;
   height: 10vw;
 }
 
@@ -74,7 +80,7 @@ import "hover.css/css/hover-min.css";
 }
 
 .top-navigation-bar-logo-image {
-  width: 8vw;
+  width: 6vw;
   height: 100%;
   object-fit: contain;
 }
@@ -114,6 +120,20 @@ import "hover.css/css/hover-min.css";
 }
 
 .top-navigation-menu-right-item.hvr-underline-from-center::before {
+  background-color: var(--color-white);
+}
+.top-navigation-menu-right-item.active {
+  color: var(--color-white);
+  font-weight: bold;
+  position: relative;
+}
+
+.top-navigation-menu-right-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
   background-color: var(--color-white);
 }
 </style>

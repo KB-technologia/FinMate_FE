@@ -29,13 +29,13 @@ defineProps({
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease;
   font-family: var(--font-wanted);
 }
 
 .card-container:hover {
-  border: 0.7vh solid var(--color-white);
-  transition: all 0.1s ease-in-out;
+  border: 0.5vh solid var(--color-white);
+  transform: translateY(-0.8vh);
 }
 
 .card-content {

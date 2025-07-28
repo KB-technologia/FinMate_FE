@@ -38,10 +38,10 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth/auth";
-import { ref, computed } from "vue";
-import DailyQuizModal from "@/components/dailyquiz/DailyQuizModal.vue";
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth/auth';
+import { ref, computed } from 'vue';
+import DailyQuizModal from '@/components/dailyquiz/DailyQuizModal.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -55,9 +55,9 @@ const fillPercentage = computed(() => (currentXp / maxXp) * 100);
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push("/login");
+    router.push('/login');
   } else {
-    const confirmed = window.confirm("정말 로그아웃하시겠습니까?");
+    const confirmed = window.confirm('정말 로그아웃하시겠습니까?');
     if (confirmed) {
       authStore.logout();
     }
@@ -68,7 +68,7 @@ function handleLoginClick() {
 <style scoped>
 .profile-container {
   width: 23vw;
-  height: 30vh;
+  height: 35vh;
   background-color: var(--color-primary-yellow);
   display: flex;
   flex-direction: column;
@@ -77,6 +77,7 @@ function handleLoginClick() {
   border-radius: 2vh;
   padding: 3vh;
   font-family: var(--font-wanted);
+  font-weight: var(--font-weight-extrabold);
 }
 .profile-header {
   width: 100%;
@@ -108,11 +109,13 @@ function handleLoginClick() {
   cursor: pointer;
   border: none;
   padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
 }
 
 .quiz-button:hover {
-  box-shadow: 0 1vh 1vw rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0.5vh 0.5vw rgba(0, 0, 0, 0.3);
+
+  transform: translateY(-0.5vh);
 }
 
 .logout-button {
@@ -179,11 +182,14 @@ function handleLoginClick() {
   color: var(--color-black);
   font-size: 1rem;
   border-radius: 2vh;
+  transition: all 0.2s ease;
   cursor: pointer;
+  font-family: var(--font-wanted);
+  font-weight: var(--font-weight-extrabold);
 }
 
 .custom-login-button:hover {
-  box-shadow: 0 1vh 1vw rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease-in-out;
+  transform: translateY(-0.6vh);
+  box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
 }
 </style>
