@@ -1,51 +1,54 @@
 <template>
   <div class="my-reviews-page">
     <TopNavigationBar />
-    <div class="main-content">
+    <div class="mypage-container">
       <Sidebar />
-      <RightPanel>
-        <div class="my-reviews-header">
-          <h1 class="title">My Review</h1>
-          <div class="category-tab-bar-container">
-            <div class="category-tab-bar">
-              <button
-                v-for="type in categories"
-                :key="type.value"
-                :class="{ active: selectedCategory === type.value }"
-                @click="selectedCategory = type.value"
-              >
-                {{ type.label }}
-              </button>
+      <RightPanel :scroll="true" class="stats-right-panel">
+        <div class="panel-inner">
+          <div class="my-reviews-header">
+            <h1 class="title">My Review</h1>
+            <div class="category-tab-bar-container">
+              <div class="category-tab-bar">
+                <button
+                  v-for="type in categories"
+                  :key="type.value"
+                  :class="{ active: selectedCategory === type.value }"
+                  @click="selectedCategory = type.value"
+                >
+                  {{ type.label }}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="review-sort-bar">
-          <div class="select-wrapper">
-            <select v-model="selectedSort">
-              <option value="all">전체보기</option>
-              <option value="latest">최신순</option>
-              <option value="high">높은 별점순</option>
-              <option value="low">낮은 별점순</option>
-            </select>
-            <ChevronDown class="select-icon" />
-          </div>
-        </div>
-        <div class="review-list">
-          <ReviewCard
-            v-for="(review, index) in filteredReviews"
-            :key="index"
-            :username="review.username"
-            :rating="review.rating"
-            :date="review.date"
-            :content="review.content"
-            :showDelete="true"
-            @delete="handleDelete(index)"
-            class="card-wrapper"
-          />
 
-          <p v-if="filteredReviews.length === 0" class="no-review-message">
-            작성한 리뷰가 없습니다.
-          </p>
+          <div class="review-sort-bar">
+            <div class="select-wrapper">
+              <select v-model="selectedSort">
+                <option value="all">전체보기</option>
+                <option value="latest">최신순</option>
+                <option value="high">높은 별점순</option>
+                <option value="low">낮은 별점순</option>
+              </select>
+              <ChevronDown class="select-icon" />
+            </div>
+          </div>
+
+          <div class="review-list">
+            <ReviewCard
+              v-for="(review, index) in filteredReviews"
+              :key="index"
+              :username="review.username"
+              :rating="review.rating"
+              :date="review.date"
+              :content="review.content"
+              :showDelete="true"
+              @delete="handleDelete(index)"
+              class="card-wrapper"
+            />
+            <p v-if="filteredReviews.length === 0" class="no-review-message">
+              작성한 리뷰가 없습니다.
+            </p>
+          </div>
         </div>
       </RightPanel>
     </div>
@@ -73,6 +76,14 @@ const categories = [
 
 // TODO: API 연동하기
 const mockReviews = ref([
+  {
+    id: 1,
+    username: "홍길동",
+    rating: 4.8,
+    date: "2025-07-26",
+    content: "금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.",
+    category: "deposit",
+  },
   {
     id: 1,
     username: "홍길동",
@@ -109,11 +120,23 @@ const filteredReviews = computed(() => {
   height: 100vh;
 }
 
-.main-content {
-  flex-grow: 1;
+.mypage-container {
   display: flex;
   gap: 2rem;
+  padding: 2rem 4rem;
+  align-items: flex-start;
+}
+
+.stats-right-panel {
   padding: 2rem;
+}
+
+.panel-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
 }
 
 .my-reviews-header {
@@ -193,7 +216,6 @@ const filteredReviews = computed(() => {
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none;
   width: 1rem;
   height: 1rem;
   color: var(--color-dark-gray);
