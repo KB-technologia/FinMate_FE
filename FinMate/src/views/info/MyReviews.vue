@@ -35,7 +35,7 @@
 
           <div class="review-list">
             <ReviewCard
-              v-for="(review, index) in filteredReviews"
+              v-for="(review, index) in paginatedReviews"
               :key="index"
               :username="review.username"
               :rating="review.rating"
@@ -48,6 +48,13 @@
             <p v-if="filteredReviews.length === 0" class="no-review-message">
               작성한 리뷰가 없습니다.
             </p>
+            <Pagination
+              v-if="filteredReviews.length > pageSize"
+              :current-page="currentPage"
+              :total-items="filteredReviews.length"
+              :page-size="pageSize"
+              @page-change="(page) => (currentPage = page)"
+            />
           </div>
         </div>
       </RightPanel>
@@ -62,6 +69,7 @@ import { ChevronDown } from "lucide-vue-next";
 import Sidebar from "@/components/info/Sidebar.vue";
 import RightPanel from "@/components/info/RightPanel.vue";
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import Pagination from "@/components/allshared/Pagination.vue";
 import ReviewCard from "@/components/review/ReviewCard.vue";
 
 const selectedSort = ref("all");
@@ -74,12 +82,15 @@ const categories = [
   { label: "펀드", value: "fund" },
 ];
 
+const currentPage = ref(1);
+const pageSize = 4;
+
 // TODO: API 연동하기
 const mockReviews = ref([
   {
     id: 1,
     username: "홍길동",
-    rating: 4.8,
+    rating: 4.5,
     date: "2025-07-26",
     content: "금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.",
     category: "deposit",
@@ -87,8 +98,16 @@ const mockReviews = ref([
   {
     id: 1,
     username: "홍길동",
-    rating: 4.8,
-    date: "2025-07-26",
+    rating: 2.0,
+    date: "2025-07-16",
+    content: "금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.",
+    category: "deposit",
+  },
+  {
+    id: 1,
+    username: "홍길동",
+    rating: 4.0,
+    date: "2025-04-26",
     content: "금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.",
     category: "deposit",
   },
@@ -110,6 +129,11 @@ const filteredReviews = computed(() => {
   }
 
   return result;
+});
+
+const paginatedReviews = computed(() => {
+  const start = (currentPage.value - 1) * pageSize;
+  return filteredReviews.value.slice(start, start + pageSize);
 });
 </script>
 
