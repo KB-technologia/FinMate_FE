@@ -51,9 +51,10 @@ const route = useRoute();
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100vw;
+  width: 95vw;
   height: 7vh;
   background-color: var(--color-primary-green);
+  border-radius: 2vh;
   justify-content: space-between;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-bold);
@@ -72,7 +73,7 @@ const route = useRoute();
   height: 10vw;
 }
 .empty-space {
-  width: 80%;
+  width: 85%;
   height: 100%;
 }
 .top-navigation-bar-title {
@@ -98,7 +99,7 @@ const route = useRoute();
 
 .top-navigation-menu-right-item {
   width: 2vw;
-  height: 2vh;
+  height: 3vh;
   transition: all 0.2s ease;
 }
 

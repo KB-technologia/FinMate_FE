@@ -41,40 +41,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
-import { useAuthStore } from "@/stores/auth/auth";
-import { useRouter } from "vue-router";
+import { ref, onMounted, computed } from 'vue';
+import { useAuthStore } from '@/stores/auth/auth';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 
 const goToStatsPage = () => {
-  router.push("/my-stats");
+  router.push('/my-stats');
 };
 
 const statsLeft = [
-  { label: "가치관", percent: 90, color: "red" },
-  { label: "속도", percent: 70, color: "blue" },
-  { label: "운/전략", percent: 85, color: "yellow" },
+  { label: '가치관', percent: 90, color: 'red' },
+  { label: '속도', percent: 70, color: 'blue' },
+  { label: '운/전략', percent: 85, color: 'yellow' },
 ];
 
 const statsRight = [
-  { label: "재정", percent: 75, color: "orange" },
-  { label: "모험 성향", percent: 80, color: "green" },
+  { label: '재정', percent: 75, color: 'orange' },
+  { label: '모험 성향', percent: 80, color: 'green' },
 ];
 
 const images = [
-  new URL("@/assets/images/animals/cat.png", import.meta.url).href,
-  new URL("@/assets/images/animals/capybara.png", import.meta.url).href,
-  new URL("@/assets/images/animals/desertfox.png", import.meta.url).href,
-  new URL("@/assets/images/animals/flyingsquirrel.png", import.meta.url).href,
-  new URL("@/assets/images/animals/kiwibird.png", import.meta.url).href,
-  new URL("@/assets/images/animals/koala.png", import.meta.url).href,
-  new URL("@/assets/images/animals/panda.png", import.meta.url).href,
-  new URL("@/assets/images/animals/penguin.png", import.meta.url).href,
-  new URL("@/assets/images/animals/redpanda.png", import.meta.url).href,
-  new URL("@/assets/images/animals/seaotter.png", import.meta.url).href,
+  new URL('@/assets/images/animals/cat.png', import.meta.url).href,
+  new URL('@/assets/images/animals/capybara.png', import.meta.url).href,
+  new URL('@/assets/images/animals/desertfox.png', import.meta.url).href,
+  new URL('@/assets/images/animals/flyingsquirrel.png', import.meta.url).href,
+  new URL('@/assets/images/animals/kiwibird.png', import.meta.url).href,
+  new URL('@/assets/images/animals/koala.png', import.meta.url).href,
+  new URL('@/assets/images/animals/panda.png', import.meta.url).href,
+  new URL('@/assets/images/animals/penguin.png', import.meta.url).href,
+  new URL('@/assets/images/animals/redpanda.png', import.meta.url).href,
+  new URL('@/assets/images/animals/seaotter.png', import.meta.url).href,
 ];
 
 const currentImages = ref([]);
@@ -101,7 +101,8 @@ onMounted(() => {
 .show-stats-container {
   width: 68vw;
   height: 35vh;
-  background-color: var(--color-primary-yellow);
+  border: 0.2vh solid var(--color-light-gray);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;
   flex-direction: column;

@@ -33,15 +33,22 @@
     >
       로그인 하러 가기
     </button>
+    <div v-if="!isLoggedIn" class="login-options">
+      <p>회원가입</p>
+      <p>|</p>
+      <p>아이디 찾기</p>
+      <p>|</p>
+      <p>비밀번호 찾기</p>
+    </div>
   </div>
   <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth/auth";
-import { ref, computed } from "vue";
-import DailyQuizModal from "@/components/dailyquiz/DailyQuizModal.vue";
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth/auth';
+import { ref, computed } from 'vue';
+import DailyQuizModal from '@/components/dailyquiz/DailyQuizModal.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -55,9 +62,9 @@ const fillPercentage = computed(() => (currentXp / maxXp) * 100);
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push("/login");
+    router.push('/login');
   } else {
-    const confirmed = window.confirm("정말 로그아웃하시겠습니까?");
+    const confirmed = window.confirm('정말 로그아웃하시겠습니까?');
     if (confirmed) {
       authStore.logout();
     }
@@ -69,7 +76,8 @@ function handleLoginClick() {
 .profile-container {
   width: 23vw;
   height: 35vh;
-  background-color: var(--color-primary-yellow);
+  border: 0.2vh solid var(--color-light-gray);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -191,5 +199,18 @@ function handleLoginClick() {
 .custom-login-button:hover {
   transform: translateY(-0.6vh);
   box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
+}
+
+.login-options {
+  width: 100%;
+  height: 5rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--color-primary-bluegray);
 }
 </style>
