@@ -7,10 +7,10 @@ defineProps({
   <div class="modal-container">
     <div class="modal-box">
       <div class="modal-title">
-        <img src="@/assets/images/wrongkiwi.png" class="wrongkiwi-img" />
+        <img src="@/assets/images/logos/wrongkiwi.png" class="wrongkiwi-img" />
         <h2 class="info-text">아쉽지만 오답이에요!</h2>
         <button @click="$emit('close')" class="close-btn">
-          <img src="@/assets/images/modalclose.png" class="close-img" />
+          <img src="@/assets/images/icons/modalclose.png" class="close-img" />
         </button>
       </div>
       <div class="modal-body">

@@ -3,9 +3,9 @@ import UserProductCard from "@/components/info/UserProductCard.vue";
 import Sidebar from "@/components/info/Sidebar.vue";
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
 import RightPanel from "@/components/info/RightPanel.vue";
-import depositIcon from "@/assets/images/deposit.png";
-import savingIcon from "@/assets/images/saving.png";
-import fundIcon from "@/assets/images/fund.png";
+import depositIcon from "@/assets/images/products/deposit.png";
+import savingIcon from "@/assets/images/products/saving.png";
+import fundIcon from "@/assets/images/products/fund.png";
 
 // TODO: api 연동(API 연동 전용 mock 데이터)
 const userProductList = [

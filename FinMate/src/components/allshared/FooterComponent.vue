@@ -4,7 +4,7 @@
       <div class="footer-logo-container">
         <span>FIN MATE</span>
         <img
-          src="@/assets/images/kiwiLogo_Footer.png"
+          src="@/assets/images/logos/kiwiLogo_Footer.png"
           alt="logo"
           class="footer-logo"
         />

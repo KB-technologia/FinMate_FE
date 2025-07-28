@@ -2,7 +2,11 @@
   <div class="stats-panel">
     <h2 class="level-title">Lv.3</h2>
     <div class="character-section">
-      <img src="@/assets/images/penguin.png" alt="캐릭터" class="character" />
+      <img
+        src="@/assets/images/animals/penguin.png"
+        alt="캐릭터"
+        class="character"
+      />
       <div class="speech-bubble" v-if="showSpeech" @click="hideSpeech">
         <span class="speech-text">연속 n일 출석중!</span>
       </div>
