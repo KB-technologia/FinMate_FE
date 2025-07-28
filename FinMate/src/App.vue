@@ -22,6 +22,7 @@ onMounted(() => {
 </script>
 
 <style>
+@import "@/styles/reset.css";
 @import "@/styles/fonts.css";
 
 html,

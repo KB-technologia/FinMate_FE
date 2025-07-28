@@ -25,6 +25,7 @@
   /* 예금/적금 태그 색상 */
   --color-deposit-blue: #2871de;
   --color-saving-orange: #e58500;
+  --color-fund-green: #458437;
 
   /* Toast 배경색 (연한 배경색) */
   --toast-bg-success: #a2e8ab;
