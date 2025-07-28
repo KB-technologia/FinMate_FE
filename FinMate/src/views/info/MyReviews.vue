@@ -38,7 +38,14 @@
             :rating="review.rating"
             :date="review.date"
             :content="review.content"
+            :showDelete="true"
+            @delete="handleDelete(index)"
+            class="card-wrapper"
           />
+
+          <p v-if="filteredReviews.length === 0" class="no-review-message">
+            작성한 리뷰가 없습니다.
+          </p>
         </div>
       </RightPanel>
     </div>
@@ -64,27 +71,15 @@ const categories = [
   { label: "펀드", value: "fund" },
 ];
 
+// TODO: API 연동하기
 const mockReviews = ref([
   {
+    id: 1,
     username: "홍길동",
-    rating: 4.5,
-    date: "2025-07-25",
-    content: "금리가 높아서 만족했어요.",
+    rating: 4.8,
+    date: "2025-07-26",
+    content: "금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.",
     category: "deposit",
-  },
-  {
-    username: "김길동",
-    rating: 2.0,
-    date: "2025-07-20",
-    content: "기대보다 수익률이 낮았어요.",
-    category: "fund",
-  },
-  {
-    username: "이길동",
-    rating: 5.0,
-    date: "2025-07-18",
-    content: "가입도 쉽고 편했어요!",
-    category: "saving",
   },
 ]);
 
@@ -210,5 +205,18 @@ const filteredReviews = computed(() => {
   gap: 1.5rem;
   width: 100%;
   margin-top: 2rem;
+  align-items: center;
+}
+
+.card-wrapper {
+  width: 90%;
+  max-width: 60rem;
+}
+
+.no-review-message {
+  margin-top: 8rem;
+  font-size: 1.5rem;
+  color: var(--color-dark-gray);
+  text-align: center;
 }
 </style>
