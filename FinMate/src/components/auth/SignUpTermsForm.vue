@@ -1,10 +1,11 @@
 <template>
-  <div class="signup-box">
-    <h1 class="signup-title">회원가입</h1>
+  <div class="container">
+    <div class="signup-box">
+      <h1 class="signup-title">회원가입</h1>
 
-    <div class="terms-box">
-      <div class="terms-content-wrapper">
-        <textarea class="terms-content" readonly>
+      <div class="terms-box">
+        <div class="terms-content-wrapper">
+          <textarea class="terms-content" readonly>
 ✅ [필수] 이용약관 동의
 
 제1조(목적)
@@ -78,19 +79,19 @@
 4. 동의를 거부할 권리 및 거부 시 불이익
 귀하는 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있으나, 거부할 경우 회원가입 및 서비스 이용이 제한될 수 있습니다.
 개인정보 수집 및 이용에 동의합니다. (필수)
-          </textarea
-        >
+          </textarea>
 
-        <label class="agree-checkbox">
-          <input type="checkbox" v-model="agree" />
-          [필수] 약관에 동의합니다
-        </label>
+          <label class="agree-checkbox">
+            <input type="checkbox" v-model="agree" />
+            [필수] 약관에 동의합니다
+          </label>
+        </div>
       </div>
-    </div>
 
-    <button class="next-button" :disabled="!agree" @click="goToNext">
-      다음으로
-    </button>
+      <button class="next-button" :disabled="!agree" @click="goToNext">
+        다음으로
+      </button>
+    </div>
   </div>
 </template>
 
@@ -109,9 +110,9 @@ const goToNext = () => {
 <style scoped>
 .signup-box {
   font-family: 'InterVariable', sans-serif;
-  width: 50vw;
-  max-width: 900px;
-  min-width: 500px;
+  width: 70vw;
+  max-width: 1000px;
+  min-width: 700px;
   background-color: white;
   padding: 2rem;
   border-radius: 1rem;
@@ -129,7 +130,7 @@ const goToNext = () => {
 .terms-box {
   border: 1px solid #ccc;
   padding: 1rem;
-  height: 600px;
+  height: 700px;
   overflow-y: auto;
   margin-bottom: 1rem;
   display: flex;
@@ -146,7 +147,7 @@ const goToNext = () => {
 
 .terms-content {
   width: 100%;
-  height: 520px;
+  height: 620px;
   border: none;
   resize: none;
   background-color: transparent;
@@ -166,7 +167,9 @@ const goToNext = () => {
 }
 
 .next-button {
-  width: 100%;
+  display: block;
+  margin: 1rem auto 0;
+  width: 60%;
   height: 45px;
   background-color: #444;
   color: white;

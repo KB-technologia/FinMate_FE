@@ -17,7 +17,7 @@
 <script setup>
 import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
 import FooterComponent from '@/components/allshared/FooterComponent.vue';
-import SignUpTermsForm from '@/components/auth/SignUpTermsForm.vue'; // 약관 컴포넌트
+import SignUpTermsForm from '@/components/auth/SignUpTermsForm.vue';
 </script>
 
 <style scoped>
