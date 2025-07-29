@@ -1,7 +1,7 @@
 <script setup>
-import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
-import Sidebar from '@/components/info/Sidebar.vue';
-import PortfolioContainer from '@/components/portfolio/PortfolioContainer.vue';
+import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
+import Sidebar from "@/components/info/Sidebar.vue";
+import PortfolioContainer from "@/components/info/portfolio/PortfolioContainer.vue";
 </script>
 
 <template>

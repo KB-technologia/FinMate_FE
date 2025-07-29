@@ -15,9 +15,16 @@ const routes = [
     component: () => import('@/views/auth/LoginView.vue'),
   },
   {
-    path: '/auth/kakao/redirect',
+    path: '/auth/kakao/callback',
     name: 'KakaoRedirect',
     component: () => import('@/views/auth/KakaoRedirect.vue'),
+  },
+  // 카카오 로그인 버튼 후, 기존 사용자가 아닌 경우 이동하는 회원가입 설문 페이지
+  {
+    path: '/signup-survey',
+    name: 'signupSurvey',
+    component: () => import('@/views/auth/SignupSurvey.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: '/signup1',
@@ -138,6 +145,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const isLoggedIn = authStore.isLoggedIn;
+
+  console.log('[라우터 진입]', to.path, 'isLoggedIn:', isLoggedIn);
 
   if (to.meta.requiresAuth && !isLoggedIn) {
     alert('로그인이 필요합니다.');

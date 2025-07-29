@@ -23,7 +23,8 @@ defineProps({
 .card-container {
   width: 20vw;
   height: 30vh;
-  background-color: var(--color-light-blue);
+  background-color: var(--color-white);
+  border: 0.2vh solid var(--color-light-gray);
   border-radius: 1vh;
   display: flex;
   justify-content: center;
@@ -34,7 +35,8 @@ defineProps({
 }
 
 .card-container:hover {
-  border: 0.5vh solid var(--color-white);
+  border: 0.2vh solid var(--color-light-blue);
+  cursor: pointer;
   transform: translateY(-0.8vh);
 }
 

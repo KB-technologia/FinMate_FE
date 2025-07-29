@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import { Chart } from "chart.js/auto";
-import PortfolioModal from "@/components/portfolio/PortfolioModal.vue";
+import PortfolioModal from "@/components/info/portfolio/PortfolioModal.vue";
 import { getPortfolio } from "@/api/portfolio/portfolio.js";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -161,7 +161,7 @@ onMounted(async () => {
           class="kiwi"
         />
         <img
-          src="@/assets/images/products/portfolioinfo.png"
+          src="@/assets/images/icons/portfolioinfo.png"
           alt="말풍선"
           class="speech-bubble"
         />

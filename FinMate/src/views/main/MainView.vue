@@ -73,6 +73,15 @@ const closeModal = () => {
   height: 100vh;
 }
 
+.main-view-navigation-bar {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
 .main-view-content {
   padding-top: 1vh;
   width: 100vw;
@@ -91,7 +100,7 @@ const closeModal = () => {
   margin-top: 2vh;
 }
 .empty-space {
-  width: 4vw;
+  width: 2vw;
 }
 
 .main-view-random-product-container {
