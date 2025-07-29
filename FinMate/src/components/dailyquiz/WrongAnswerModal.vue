@@ -62,11 +62,6 @@ defineProps({
   height: 170px;
 }
 
-.close-img {
-  width: 30px;
-  height: 30px;
-}
-
 .info-next {
   margin-top: 4rem;
   font-weight: bold;
