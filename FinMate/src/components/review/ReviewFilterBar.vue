@@ -56,7 +56,6 @@ const emitFilterChange = () => {
   justify-content: space-between;
   align-items: center;
   border-radius: 0.25rem;
-  box-sizing: border-box;
 }
 
 .filter-tabs {
@@ -71,7 +70,6 @@ const emitFilterChange = () => {
   color: var(--color-white);
   font-weight: var(--font-weight-medium);
   font-size: 0.9rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;

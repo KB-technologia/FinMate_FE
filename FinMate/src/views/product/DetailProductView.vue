@@ -223,7 +223,6 @@ const handleSortChange = (value) => {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 .scrollable-content {
@@ -274,7 +273,6 @@ const handleSortChange = (value) => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  box-sizing: border-box;
 }
 
 .rating-detail-wrapper {
@@ -292,7 +290,6 @@ const handleSortChange = (value) => {
   font-weight: var(--font-weight-semibold);
   color: var(--color-black);
   text-decoration: underline;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.4rem;
