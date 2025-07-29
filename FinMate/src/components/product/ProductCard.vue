@@ -226,16 +226,16 @@ const getRiskLevel = (level) => {
 .product-card {
   position: relative;
   width: 100%;
-  max-width: 380px; /* 280px → 380px로 확장 */
+  max-width: 25vw;
   background: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
-  padding: 24px; /* 20px → 24px로 여유 공간 확대 */
+  padding: 3vh 1.5vw;
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   margin: 0 auto;
-  min-height: 280px; /* 최소 높이 설정 */
+  min-height: 35vh;
 }
 
 .product-card:hover {
@@ -254,20 +254,20 @@ const getRiskLevel = (level) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px; /* 16px → 18px */
+  margin-bottom: 1.5vh;
 }
 
 .select-checkbox {
-  width: 22px; /* 20px → 22px */
-  height: 22px;
+  width: 1.5vw;
+  height: 1.5vw;
   cursor: pointer;
   accent-color: #4caf50;
 }
 
 .product-type-badge {
-  padding: 8px 16px; /* 6px 12px → 8px 16px */
-  border-radius: 16px;
-  font-size: 13px; /* 12px → 13px */
+  padding: 0.8vh 1.2vw;
+  border-radius: 1.2vw;
+  font-size: clamp(11px, 0.9vw, 13px);
   font-weight: 600;
   color: white;
 }
@@ -285,20 +285,20 @@ const getRiskLevel = (level) => {
 .bank-section {
   display: flex;
   align-items: center;
-  gap: 16px; /* 12px → 16px */
-  margin-bottom: 18px; /* 16px → 18px */
+  gap: 1vw;
+  margin-bottom: 1.5vh;
 }
 
 .bank-icon {
-  width: 48px; /* 40px → 48px */
-  height: 48px;
+  width: 2.5vw;
+  height: 2.5vw;
   border-radius: 50%;
   background: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 18px; /* 16px → 18px */
+  font-size: 1.2vw;
   color: #666;
   overflow: hidden; /* 이미지가 원형을 벗어나지 않도록 */
 }
@@ -310,16 +310,16 @@ const getRiskLevel = (level) => {
 }
 
 .bank-name {
-  font-size: 16px; /* 14px → 16px */
+  font-size: 1vw;
   font-weight: 500;
   color: #666;
 }
 
 .product-name {
-  font-size: 20px; /* 18px → 20px */
+  font-size: 1vw;
   font-weight: 700;
   color: #333;
-  margin: 0 0 24px 0; /* 20px → 24px */
+  margin: 0 0 2vh 0;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -335,20 +335,20 @@ const getRiskLevel = (level) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px; /* 12px → 16px */
-  padding: 20px; /* 16px → 20px */
+  margin-bottom: 1.5vh;
+  padding: 1.2vw;
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 0.8vw;
 }
 
 .return-label {
-  font-size: 16px; /* 14px → 16px */
+  font-size: 1vw;
   font-weight: 500;
   color: #666;
 }
 
 .return-value {
-  font-size: 28px; /* 24px → 28px */
+  font-size: 1.2vw;
   font-weight: 700;
   color: #e91e63;
 }
@@ -356,16 +356,16 @@ const getRiskLevel = (level) => {
 .detail-info {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* 8px → 12px */
-  padding: 0 8px; /* 4px → 8px */
+  gap: 1vh;
+  padding: 0 0 0.5vw;
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
-  font-size: 14px; /* 13px → 14px */
+  font-size: clamp(12px, 1vw, 16px);
   color: #666;
-  padding: 8px 0; /* 패딩 추가 */
+  padding: 0.8vh 0;
 }
 
 .info-row span:first-child {
@@ -382,25 +382,25 @@ const getRiskLevel = (level) => {
 @media (max-width: 768px) {
   .product-card {
     max-width: 100%;
-    padding: 16px;
+    padding: 2vh 2vw;
   }
 
   .bank-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
+    width: 4.5vw;
+    height: 4.5vw;
+    font-size: clamp(12px, 1.8vw, 16px);
   }
 
   .product-name {
-    font-size: 16px;
+    font-size: clamp(14px, 2vw, 18px);
   }
 
   .return-value {
-    font-size: 20px;
+    font-size: clamp(18px, 2.5vw, 24px);
   }
 
   .main-return {
-    padding: 12px;
+    padding: 1.5vh 1.2vw;
   }
 }
 </style>
