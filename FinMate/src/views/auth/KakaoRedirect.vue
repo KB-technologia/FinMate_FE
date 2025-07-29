@@ -3,12 +3,11 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useToast } from '@/composables/useToast';
-import { nextTick } from 'vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -17,7 +16,7 @@ const { toast } = useToast();
 onMounted(async () => {
   const code = new URLSearchParams(window.location.search).get('code');
   if (!code) {
-    toast('카카오 로그인에 실패했습니다. 인가코드가 없습니다.', 'error');
+    toast('로그인 인증에 실패했어요. 다시 시도해주세요.', 'error');
     router.push('/login');
     return;
   }
@@ -43,7 +42,7 @@ onMounted(async () => {
 
     await nextTick();
 
-    toast('카카오 로그인 성공!', 'success');
+    toast('카카오 로그인 성공!', 'success'); // TODO: 신규 유저랑 기존 유저 토스트 메세지 분리
 
     if (newUser) {
       router.push('/signup-survey'); // 신규 유저면 회원가입 설문 페이지로 이동
