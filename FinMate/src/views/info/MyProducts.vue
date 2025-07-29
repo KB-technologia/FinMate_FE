@@ -5,7 +5,7 @@
     <RightPanel :scroll="true">
       <div class="panel-inner">
         <div class="my-products-header">
-          <h2 class="title">{{ userName }} 님의 보유 상품</h2>
+          <h1 class="title">My Products</h1>
           <CategoryFilterBar
             v-model="selectedCategory"
             :categories="categories"
@@ -43,8 +43,6 @@ import savingIcon from "@/assets/images/products/saving.png";
 import fundIcon from "@/assets/images/products/fund.png";
 
 const selectedCategory = ref("all");
-
-const userName = "홍길동";
 
 const categories = [
   { label: "전체", value: "all" },
@@ -144,39 +142,20 @@ const filteredProducts = computed(() => {
   flex-direction: column;
 }
 
-.title {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-family: var(--font-wanted);
-}
-
-.subtitle {
-  text-align: left;
-  margin-bottom: 1.8rem;
-  font-family: var(--font-wanted);
-  color: var(--color-dark-gray);
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-decoration: underline;
-  font-style: italic;
-}
-
 .subtitle-left {
   text-align: left;
-  font-family: var(--font-wanted);
   color: var(--color-dark-gray);
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-decoration: underline;
   font-style: italic;
   margin-bottom: 2rem;
-  margin-left: 0.5rem; /* 적당한 좌측 정렬 느낌 주기 */
+  margin-left: 0.5rem;
 }
 
 .highlight {
   color: var(--color-orange);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: 1.25rem;
 }
 
