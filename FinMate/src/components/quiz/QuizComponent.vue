@@ -1,6 +1,6 @@
 <template>
   <div class="quiz-wrapper">
-    <div class="indicator">
+    <!-- <div class="indicator">
       <div
         v-for="(answer, idx) in selectedAnswers"
         :key="idx"
@@ -10,22 +10,28 @@
       >
         {{ idx + 1 }}
       </div>
+    </div> -->
+    <div class="model-7 checkboxcontainer">
+      <div class="checkbox">
+        <input type="checkbox" id="toggle" v-model="showExtra" />
+        <label for="toggle"></label>
+      </div>
     </div>
-
     <transition name="slide" mode="out-in">
-      <div v-if="quizData.length" :key="currentQuestion.id" class="quiz-card">
+      <div
+        v-if="quizData.length"
+        :key="currentQuestion.id"
+        class="quiz-card"
+        :class="{ 'show-extra': showExtra }"
+      >
         <div class="quiz-question">
-          Q{{ currentQuestion.id }}. {{ currentQuestion.narration }}
-          <div
-            class="tooltip-wrapper"
-            @mouseenter="showTooltip = true"
-            @mouseleave="showTooltip = false"
-          >
-            <i class="fa-solid fa-circle-info icon-info"></i>
-            <div v-if="showTooltip" class="tooltip-box">
-              {{ currentQuestion.question }}
-            </div>
-          </div>
+          <span v-if="!showExtra">
+            Q{{ currentQuestion.id }}. {{ currentQuestion.narration }}
+          </span>
+
+          <span v-if="showExtra">
+            Q{{ currentQuestion.id }}. {{ currentQuestion.question }}
+          </span>
         </div>
         <ul class="quiz-options">
           <li v-for="(option, idx) in currentQuestion.options" :key="idx">
@@ -38,6 +44,11 @@
               />
               {{ option }}
             </label>
+            <transition name="fade">
+              <span v-if="showExtra" class="base-option">
+                ({{ currentQuestion.baseoptions?.[idx] }})
+              </span>
+            </transition>
           </li>
         </ul>
       </div>
@@ -68,8 +79,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import quizJson from "@/assets/quiz.json";
+import { ref, computed, onMounted } from 'vue';
+import quizJson from '@/assets/quiz.json';
 
 const quizData = ref([]);
 const currentIndex = ref(0);
@@ -83,10 +94,11 @@ const currentQuestion = computed(
 const isComplete = computed(() =>
   selectedAnswers.value.every((answer) => answer !== null)
 );
+const showExtra = ref(false);
 
-const goToQuestion = (idx) => {
-  currentIndex.value = idx;
-};
+// const goToQuestion = (idx) => {
+//   currentIndex.value = idx;
+// };
 
 const prevQuestion = () => {
   if (currentIndex.value > 0) currentIndex.value--;
@@ -99,11 +111,13 @@ onMounted(() => {
   quizData.value = quizJson;
 });
 </script>
-
+<style scoped lang="scss">
+@import '@/styles/checkbox.scss';
+</style>
 <style scoped>
 .quiz-wrapper {
   width: 50vw;
-  height: 45vh;
+  height: 55vh;
   margin: auto;
   font-family: var(--font-wanted);
 }
@@ -139,16 +153,21 @@ onMounted(() => {
 }
 
 .quiz-card {
-  background-color: #f8f9fa;
   border-radius: 2vh;
-  padding: 1.5rem;
-  height: 30vh;
+  height: 40vh;
   width: 50vw;
   align-items: center;
   justify-content: center;
   display: flex;
   flex-direction: column;
+  border: 0.2vh solid var(--color-light-gray);
 }
+.quiz-card.show-extra {
+  border-color: var(--color-primary-green);
+  box-shadow: 0 0 1vh rgba(0, 128, 0, 0.2);
+  transition: all 0.3s ease in-out;
+}
+
 .quiz-narration {
   margin-bottom: 0.5rem;
   color: #555;
@@ -160,6 +179,29 @@ onMounted(() => {
 .quiz-options li {
   list-style: none;
   margin: 0.3rem 0;
+}
+.checkboxcontainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.toggle-text {
+  font-size: 0.9rem;
+  color: var(--color-light-gray);
+}
+
+.base-option {
+  font-size: 0.8rem;
+  color: var(--color-light-gray);
+  margin-left: 0.5rem;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .quiz-navigation {
@@ -220,33 +262,5 @@ onMounted(() => {
 .slide-leave-to {
   opacity: 0;
   transform: translateX(-100px);
-}
-
-.icon-info {
-  color: var(--color-black);
-  margin-left: 0.5rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-.tooltip-wrapper {
-  display: inline-block;
-  position: relative;
-}
-
-.tooltip-box {
-  position: absolute;
-  top: -2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.3rem;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  z-index: 10;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  pointer-events: none;
-  opacity: 0.95;
 }
 </style>
