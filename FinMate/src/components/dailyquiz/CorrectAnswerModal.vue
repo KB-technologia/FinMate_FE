@@ -1,8 +1,10 @@
 <script setup>
+import CloseButton from '@/components/allshared/CloseButton.vue';
+
 defineProps({
   message: String,
 });
-const expnumber = 10;
+const expnumber = 500;
 </script>
 <template>
   <div class="modal-container">
@@ -13,9 +15,7 @@ const expnumber = 10;
           class="correctkiwi-img"
         />
         <h2 class="info-text">정답입니다!</h2>
-        <button class="close-btn" @click="$emit('close')">
-          <img src="@/assets/images/icons/modalclose.png" class="close-img" />
-        </button>
+        <CloseButton @click="$emit('close')" class="close-btn" />
       </div>
       <div class="modal-body">
         <p>{{ message }}</p>
@@ -26,7 +26,7 @@ const expnumber = 10;
       <div class="exp-bar">
         <div class="exp-label">+{{ expnumber }}</div>
         <div class="exp-track">
-          <div class="exp-fill" :style="{ width: 30 + '%' }"></div>
+          <div class="exp-fill" :style="{ width: 50 + '%' }"></div>
         </div>
         <!--TODO : width, expnumber 값 조절 -->
       </div>
@@ -61,7 +61,7 @@ const expnumber = 10;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 3rem;
+  gap: 0.5rem;
   font-weight: bold;
   font-size: 2.7rem;
 }
@@ -88,29 +88,13 @@ const expnumber = 10;
 .correctkiwi-img {
   width: 180px;
   height: 180px;
-}
-
-.close-img {
-  width: 30px;
-  height: 30px;
+  margin-left: 30px;
 }
 
 .close-btn {
-  all: unset;
   position: absolute;
   top: 1rem;
   right: 2.5rem;
-  cursor: pointer;
-}
-
-.exp-info {
-  position: absolute;
-  top: -30px;
-  left: 0;
-  color: var(--color-primary-green);
-  font-size: 1.4rem;
-  font-weight: bold;
-  z-index: 3;
 }
 
 .exp-bar {
@@ -128,7 +112,7 @@ const expnumber = 10;
 }
 
 .exp-track {
-  width: 250px;
+  width: 350px;
   height: 25px;
   background-color: #e6f8ee;
   border-radius: 20px;
