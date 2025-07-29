@@ -58,6 +58,8 @@ const route = useRoute();
   justify-content: space-between;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-bold);
+  margin-top: 1vh;
+  margin-bottom: 1vh;
 }
 
 .top-navigation-bar-logo-container {
