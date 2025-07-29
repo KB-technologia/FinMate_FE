@@ -39,7 +39,7 @@
               <input
                 type="radio"
                 :name="'q' + currentQuestion.id"
-                :value="option"
+                :value="idx"
                 v-model="selectedAnswers[currentIndex]"
               />
               {{ option }}
@@ -66,14 +66,19 @@
       <button
         class="nav-button"
         @click="nextQuestion"
-        :disabled="currentIndex === quizData.length - 1"
+        :disabled="
+          currentIndex === quizData.length - 1 ||
+          selectedAnswers[currentIndex] === null
+        "
       >
         다음 ▶
       </button>
     </div>
 
     <div class="submit-container">
-      <button class="submit-button" :disabled="!isComplete">완료</button>
+      <button class="submit-button" :disabled="!isComplete" @click="onSubmit">
+        완료
+      </button>
     </div>
   </div>
 </template>
@@ -110,7 +115,12 @@ const nextQuestion = () => {
 onMounted(() => {
   quizData.value = quizJson;
 });
+
+const onSubmit = () => {
+  console.log('사용자 답변:', selectedAnswers.value);
+};
 </script>
+
 <style scoped lang="scss">
 @import '@/styles/checkbox.scss';
 </style>
