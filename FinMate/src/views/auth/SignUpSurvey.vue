@@ -1,7 +1,7 @@
 <script setup>
 import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
 import FooterComponent from '@/components/allshared/FooterComponent.vue';
-// import SurveyComponent from '@/components/survey/SurveyComponent.vue';
+import SurveyComponent from '@/components/auth/SurveyComponent.vue';
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import FooterComponent from '@/components/allshared/FooterComponent.vue';
     <TopNavigationBar />
     <div class="survey-view-content">
       <div class="survey">
-        <!-- <SurveyComponent/> -->
+        <SurveyComponent />
       </div>
       <FooterComponent />
     </div>
