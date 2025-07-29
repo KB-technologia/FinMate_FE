@@ -75,6 +75,7 @@ const current = computed(() => {
   if (path.includes("/my-products")) return "products";
   if (path.includes("/my-stat")) return "stat";
   if (path.includes("/my-portfolio")) return "portfolio";
+  if (path.includes("/my-reviews")) return "reviews";
   return "";
 });
 
@@ -82,6 +83,7 @@ const goTo = (target) => {
   if (target === "stat") router.push("/my-stats");
   else if (target === "products") router.push("/my-products");
   else if (target === "portfolio") router.push("/my-portfolio");
+  else if (target === "reviews") router.push("/my-reviews");
 };
 
 const goToMyInfo = () => {
@@ -140,7 +142,6 @@ const goToMyInfo = () => {
   border-radius: 4px;
   background-color: var(--color-primary-bluegray);
   color: var(--color-white);
-  cursor: pointer;
   text-align: center;
 }
 

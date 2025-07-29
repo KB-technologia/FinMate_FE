@@ -8,10 +8,13 @@ const expnumber = 10;
   <div class="modal-container">
     <div class="modal-box">
       <div class="modal-title">
-        <img src="@/assets/images/correctkiwi.png" class="correctkiwi-img" />
+        <img
+          src="@/assets/images/logos/correctkiwi.png"
+          class="correctkiwi-img"
+        />
         <h2 class="info-text">정답입니다!</h2>
         <button class="close-btn" @click="$emit('close')">
-          <img src="@/assets/images/modalclose.png" class="close-img" />
+          <img src="@/assets/images/icons/modalclose.png" class="close-img" />
         </button>
       </div>
       <div class="modal-body">
