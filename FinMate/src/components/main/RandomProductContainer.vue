@@ -29,78 +29,79 @@
       </div>
     </div>
     <button class="detail-button" @click="goToProducts">
-      나의 추천 아이템 보러 가기
+      <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
     </button>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import MainProductCard from "./MainProductCard.vue";
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import MainProductCard from './MainProductCard.vue';
+import { PackageSearch } from 'lucide-vue-next';
 
 const router = useRouter();
 
 const goToProducts = () => {
-  router.push("/products");
+  router.push('/products');
 };
 
 const products = ref([
   {
-    name: "미래성장 적립예금",
-    bank: "KB국민은행",
-    type: "정기예금",
-    risk: "낮음",
-    return: "3.1%",
+    name: '미래성장 적립예금',
+    bank: 'KB국민은행',
+    type: '정기예금',
+    risk: '낮음',
+    return: '3.1%',
   },
   {
-    name: "청년 우대 적금",
-    bank: "신한은행",
-    type: "적금",
-    risk: "중간",
-    return: "3.8%",
+    name: '청년 우대 적금',
+    bank: '신한은행',
+    type: '적금',
+    risk: '중간',
+    return: '3.8%',
   },
   {
-    name: "소득공제 펀드",
-    bank: "NH농협은행",
-    type: "펀드",
-    risk: "높음",
-    return: "6.2%",
+    name: '소득공제 펀드',
+    bank: 'NH농협은행',
+    type: '펀드',
+    risk: '높음',
+    return: '6.2%',
   },
   {
-    name: "안심 채권",
-    bank: "우리은행",
-    type: "채권",
-    risk: "낮음",
-    return: "2.3%",
+    name: '안심 채권',
+    bank: '우리은행',
+    type: '채권',
+    risk: '낮음',
+    return: '2.3%',
   },
   {
-    name: "글로벌 ETF",
-    bank: "하나은행",
-    type: "ETF",
-    risk: "높음",
-    return: "7.5%",
+    name: '글로벌 ETF',
+    bank: '하나은행',
+    type: 'ETF',
+    risk: '높음',
+    return: '7.5%',
   },
   {
-    name: "정기적금 24개월",
-    bank: "카카오뱅크",
-    type: "적금",
-    risk: "중간",
-    return: "3.4%",
+    name: '정기적금 24개월',
+    bank: '카카오뱅크',
+    type: '적금',
+    risk: '중간',
+    return: '3.4%',
   },
   {
-    name: "IT 성장주 펀드",
-    bank: "토스뱅크",
-    type: "펀드",
-    risk: "매우 높음",
-    return: "10.2%",
+    name: 'IT 성장주 펀드',
+    bank: '토스뱅크',
+    type: '펀드',
+    risk: '매우 높음',
+    return: '10.2%',
   },
   {
-    name: "중소기업 채권",
-    bank: "SC제일은행",
-    type: "채권",
-    risk: "중간",
-    return: "4.5%",
+    name: '중소기업 채권',
+    bank: 'SC제일은행',
+    type: '채권',
+    risk: '중간',
+    return: '4.5%',
   },
 ]);
 
@@ -137,7 +138,9 @@ const next = () => {
 .Product-Container {
   width: 95vw;
   height: 50vh;
-  background-color: var(--color-primary-bluegray);
+  border: 0.2vh solid var(--color-light-gray);
+  background-color: var(--color-more-light-blue);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;
   flex-direction: column;
@@ -147,7 +150,7 @@ const next = () => {
 
 .Product-Text {
   margin-top: 2vh;
-  color: var(--color-white);
+  color: var(--color-black);
   font-weight: var(--font-weight-bold);
   font-size: 2rem;
   text-align: center;
@@ -167,20 +170,30 @@ const next = () => {
   width: 15vw;
   height: 5vh;
   border-radius: 2vh;
-  background-color: #0086e6;
-  color: var(--color-white);
-  border: none;
-  margin: 0 auto;
+  border: 0.2vh solid var(--color-light-blue);
+  color: var(--color-black);
+  background-color: var(--color-white);
   font-weight: var(--font-weight-medium);
+  transition: all 0.1s ease;
 }
 
 .detail-button:hover {
-  border: 0.4vh solid var(--color-white);
-  transition: all 0.1s ease-in-out;
+  background-color: var(--color-light-blue);
+  color: var(--color-white);
+  cursor: pointer;
+  box-shadow: 0 0.2vh 0.3vw var(--color-light-blue);
+  transform: translateY(-0.5vh);
+}
+
+.icon-large {
+  width: 2vw;
+  height: 2vh;
+  margin-right: 0.3rem;
 }
 
 .arrow-button {
-  color: var(--color-white);
+  color: var(--color-black);
+  font-size: 2rem;
   border-radius: 1vh;
   cursor: pointer;
   user-select: none;

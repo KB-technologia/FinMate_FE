@@ -4,7 +4,7 @@
       <div class="footer-logo-container">
         <span>FIN MATE</span>
         <img
-          src="@/assets/images/kiwiLogo_Footer.png"
+          src="@/assets/images/logos/kiwiLogo_Footer.png"
           alt="logo"
           class="footer-logo"
         />
@@ -39,15 +39,15 @@
 </template>
 
 <script setup>
-import "hover.css/css/hover-min.css";
-import "@/styles/fonts.css";
+import 'hover.css/css/hover-min.css';
+import '@/styles/fonts.css';
 </script>
 
 <style scoped>
 .footer-container {
   width: 100vw;
   height: 18vh;
-  background-color: var(--color-primary-green);
+  background-color: #cdcecf;
   display: flex;
   justify-content: space-between;
   align-items: center;

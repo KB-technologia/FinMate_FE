@@ -1,15 +1,15 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getDailyQuiz, getAnswerDailyQuiz } from '@/api/dailyquiz/dailyQuiz.js';
-import FalseButton from '@/components/dailyquiz/FalseButton.vue';
-import TrueButton from '@/components/dailyquiz/TrueButton.vue';
-import CorrectAnswerModal from '@/components/dailyquiz/CorrectAnswerModal.vue';
-import WrongAnswerModal from '@/components/dailyquiz/WrongAnswerModal.vue';
+import { ref, onMounted } from "vue";
+import { getDailyQuiz, getAnswerDailyQuiz } from "@/api/dailyquiz/dailyQuiz.js";
+import FalseButton from "@/components/dailyquiz/FalseButton.vue";
+import TrueButton from "@/components/dailyquiz/TrueButton.vue";
+import CorrectAnswerModal from "@/components/dailyquiz/CorrectAnswerModal.vue";
+import WrongAnswerModal from "@/components/dailyquiz/WrongAnswerModal.vue";
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(["close"]);
 
 const quiz = ref(null);
-const isAnswer = ref('');
+const isAnswer = ref("");
 const showCorrectModal = ref(false);
 const showWrongModal = ref(false);
 
@@ -17,26 +17,34 @@ onMounted(async () => {
   try {
     const res = await getDailyQuiz();
     quiz.value = res.data;
+
     console.log(quiz.value);
   } catch (error) {
-    console.error('퀴즈 가져오기 실패', error);
+    console.error("퀴즈 가져오기 실패", error);
   }
 });
 
 async function checkAnswer(userAnswer) {
-  emit('close');
   try {
     const res = await getAnswerDailyQuiz(quiz.value.id, userAnswer);
+    const correctAnswer = res.data.correct;
     isAnswer.value = res.data.message;
 
+    console.log(isAnswer.value);
     if (correctAnswer) {
       showCorrectModal.value = true;
     } else {
       showWrongModal.value = true;
     }
   } catch (error) {
-    console.error('정답 확인 실패', error);
+    console.error("정답 확인 실패", error);
   }
+}
+
+function ModalClose() {
+  showCorrectModal.value = false;
+  showWrongModal.value = false;
+  emit("close");
 }
 </script>
 
@@ -46,14 +54,14 @@ async function checkAnswer(userAnswer) {
       <div class="modal-title">
         <div class="title-left">
           <img
-            src="@/assets/images/quizlet.png"
+            src="@/assets/images/icons/quizlet.png"
             alt="문제 이미지"
             class="quizlet-img"
           />
           <span>오늘의 퀴즈</span>
         </div>
         <button @click="$emit('close')" class="close-btn">
-          <img src="@/assets/images/modalclose.png" class="close-img" />
+          <img src="@/assets/images/icons/modalclose.png" class="close-img" />
         </button>
       </div>
       <div class="modal-body">
@@ -68,12 +76,12 @@ async function checkAnswer(userAnswer) {
   <CorrectAnswerModal
     v-if="showCorrectModal"
     :message="isAnswer"
-    @close="showCorrectModal = false"
+    @close="ModalClose"
   />
   <WrongAnswerModal
     v-if="showWrongModal"
     :message="isAnswer"
-    @close="showWrongModal = false"
+    @close="ModalClose"
   />
 </template>
 <style scoped>

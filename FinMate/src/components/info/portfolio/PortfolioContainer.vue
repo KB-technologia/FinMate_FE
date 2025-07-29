@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
-import { Chart } from 'chart.js/auto';
-import PortfolioModal from '@/components/portfolio/PortfolioModal.vue';
-import { getPortfolio } from '@/api/portfolio/portfolio.js';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { ref, onMounted, nextTick } from "vue";
+import { Chart } from "chart.js/auto";
+import PortfolioModal from "@/components/info/portfolio/PortfolioModal.vue";
+import { getPortfolio } from "@/api/portfolio/portfolio.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 const showWriteModal = ref(false);
@@ -14,14 +14,14 @@ const chartInstance = ref(null);
 const chartCanvasRef = ref(null);
 
 function renderChart() {
-  const ctx = chartCanvasRef.value?.getContext('2d');
+  const ctx = chartCanvasRef.value?.getContext("2d");
   chartInstance.value?.destroy();
   chartInstance.value = null;
 
   chartInstance.value = new Chart(ctx, {
-    type: 'pie',
+    type: "pie",
     data: {
-      labels: ['현금/예금', '채권', '주식/펀드', '기타'],
+      labels: ["현금/예금", "채권", "주식/펀드", "기타"],
       datasets: [
         {
           data: [
@@ -30,7 +30,7 @@ function renderChart() {
             portfolio.value.equityRatio,
             portfolio.value.otherRatio,
           ],
-          backgroundColor: ['#3CC3DF', '#FFAE4C', '#8979FF', '#FF928A'],
+          backgroundColor: ["#3CC3DF", "#FFAE4C", "#8979FF", "#FF928A"],
           hoverOffset: 4,
         },
       ],
@@ -38,9 +38,9 @@ function renderChart() {
     options: {
       plugins: {
         datalabels: {
-          color: 'var(--color-black)',
+          color: "var(--color-black)",
           font: {
-            weight: 'bold',
+            weight: "bold",
             size: 16,
           },
           formatter: (value, context) => {
@@ -62,7 +62,7 @@ async function handleSave(updatedData) {
     await nextTick();
     renderChart();
   } catch (e) {
-    console.error('재조회 실패:', e);
+    console.error("재조회 실패:", e);
   }
   showWriteModal.value = false;
   showModifyModal.value = false;
@@ -72,7 +72,7 @@ onMounted(async () => {
   const res = await getPortfolio(1); //TODO userID 테스트 용도
   const data = res.data;
   if (data == null) {
-    console.log('유저의 데이터가 없습니다');
+    console.log("유저의 데이터가 없습니다");
   } else {
     portfolio.value = data;
     await nextTick();
@@ -83,7 +83,7 @@ onMounted(async () => {
 <template>
   <div v-if="portfolio" class="right-panel-container">
     <h2 class="portfolio-title">
-      {{ portfolio.userName || '홍길동' }}님의 재무 포트폴리오
+      {{ portfolio.userName || "홍길동" }}님의 재무 포트폴리오
     </h2>
     <div class="chart-info-row">
       <div class="chart-wrapper">
@@ -101,7 +101,7 @@ onMounted(async () => {
           <div class="info-title">
             <span>
               <img
-                src="@/assets/images/totalassets.png"
+                src="@/assets/images/products/totalassets.png"
                 alt="총 자산 이미지"
                 class="info-image"
               />
@@ -116,14 +116,14 @@ onMounted(async () => {
           <div class="info-title">
             <span
               ><img
-                src="@/assets/images/annualincome.png"
+                src="@/assets/images/products/annualincome.png"
                 alt="연 소득 이미지"
                 class="info-image"
             /></span>
             <span class="label">연 소득</span>
             <button class="edit-btn" @click="showModifyModal = true">
               <img
-                src="@/assets/images/editpencil.png"
+                src="@/assets/images/icons/editpencil.png"
                 alt="수정 아이콘"
                 class="edit-icon"
               />
@@ -139,21 +139,29 @@ onMounted(async () => {
   <!--portfolio 데이터가 없을 시 보여지는 화면-->
   <div v-else class="right-panel-container">
     <h2 class="portfolio-title">
-      {{ portfolio?.userName || '홍길동' }}님의 재무 포트폴리오
+      {{ portfolio?.userName || "홍길동" }}님의 재무 포트폴리오
     </h2>
     <div class="portfolio-img-container">
       <div class="blurred-chart-wrapper">
         <img
-          src="@/assets/images/blurrychart.png"
+          src="@/assets/images/products/blurrychart.png"
           alt="흐린 차트"
           class="blurred-chart"
         />
-        <img src="@/assets/images/lock.png" alt="자물쇠" class="lock-icon" />
+        <img
+          src="@/assets/images/icons/lock.png"
+          alt="자물쇠"
+          class="lock-icon"
+        />
       </div>
       <div class="kiwi-box">
-        <img src="@/assets/images/infokiwi.png" alt="키위새" class="kiwi" />
         <img
-          src="@/assets/images/portfolioinfo.png"
+          src="@/assets/images/logos/infokiwi.png"
+          alt="키위새"
+          class="kiwi"
+        />
+        <img
+          src="@/assets/images/icons/portfolioinfo.png"
           alt="말풍선"
           class="speech-bubble"
         />

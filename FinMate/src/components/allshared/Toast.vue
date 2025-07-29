@@ -7,14 +7,16 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { CircleCheckBig, Ban, Info, TriangleAlert } from 'lucide-vue-next';
+
+import { computed } from "vue";
+import { CircleCheckBig, Ban, Info, TriangleAlert } from "lucide-vue-next";
+
 
 const props = defineProps({
   message: String,
   type: {
     type: String,
-    default: 'info', // 'success', 'error', 'info', 'warning'
+    default: "info", // 'success', 'error', 'info', 'warning'
   },
 });
 

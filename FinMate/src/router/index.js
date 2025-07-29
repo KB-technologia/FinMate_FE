@@ -56,6 +56,7 @@ const routes = [
     path: '/products',
     name: 'allProducts',
     component: () => import('@/views/product/AllProductView.vue'),
+    meta: { allowScroll: true },
   },
   {
     path: '/product/:id',
@@ -63,12 +64,17 @@ const routes = [
     component: () => import('@/views/product/DetailProductView.vue'),
   },
   {
+    path: '/product/demo/reviews',
+    name: 'productReviewTest',
+    component: () => import('@/views/product/DetailProductView.vue'),
+  },
+  {
     path: '/recommend',
     name: 'recommendProduct',
     component: () => import('@/views/product/RecommendProductView.vue'),
-    meta: { requiresAuth: true }, // 🔐 로그인 필요
+    meta: { requiresAuth: true },
   },
-  // Info (로그인 필요)
+  // Info
   {
     path: '/my-info',
     name: 'myInfo',
@@ -91,6 +97,12 @@ const routes = [
     path: '/my-products',
     name: 'myProducts',
     component: () => import('@/views/info/MyProducts.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/my-reviews',
+    name: 'myReviews',
+    component: () => import('@/views/info/MyReviews.vue'),
     meta: { requiresAuth: true },
   },
   // Board
