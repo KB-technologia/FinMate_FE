@@ -7,18 +7,10 @@
         <div class="panel-inner">
           <div class="my-reviews-header">
             <h1 class="title">My Review</h1>
-            <div class="category-tab-bar-container">
-              <div class="category-tab-bar">
-                <button
-                  v-for="type in categories"
-                  :key="type.value"
-                  :class="{ active: selectedCategory === type.value }"
-                  @click="selectedCategory = type.value"
-                >
-                  {{ type.label }}
-                </button>
-              </div>
-            </div>
+            <CategoryFilterBar
+              v-model="selectedCategory"
+              :categories="categories"
+            />
           </div>
 
           <div class="review-sort-bar">
@@ -70,6 +62,7 @@ import Sidebar from "@/components/info/Sidebar.vue";
 import RightPanel from "@/components/info/RightPanel.vue";
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
 import Pagination from "@/components/allshared/Pagination.vue";
+import CategoryFilterBar from "@/components/info/CategoryFilterBar.vue";
 import ReviewCard from "@/components/review/ReviewCard.vue";
 
 const selectedSort = ref("all");
