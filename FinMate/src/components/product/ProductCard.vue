@@ -273,19 +273,19 @@ const getRiskLevel = (level) => {
 }
 
 .type-deposit {
-  background: #002bff;
+  background: var(--color-deposit-blue);
 }
 .type-savings {
-  background: #ff9800;
+  background: var(--color-saving-orange);
 }
 .type-fund {
-  background: #9c27b0;
+  background: var(--color-fund-green);
 }
 
 .bank-section {
   display: flex;
   align-items: center;
-  gap: 1vw;
+  gap: 0.7vw;
   margin-bottom: 1.5vh;
 }
 
