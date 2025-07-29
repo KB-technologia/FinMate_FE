@@ -1,45 +1,49 @@
 <template>
-  <TopNavigationBar />
   <div class="all-product-view">
-    <!-- 검색 및 필터 컴포넌트 -->
-    <div class="search-section">
-      <SearchByCondition
-        @search="handleSearch"
-        @filter-change="handleFilterChange"
-      />
+    <div class="all-product-navigation-bar">
+      <TopNavigationBar />
     </div>
+    <div class="all-product-content">
+      <!-- 검색 및 필터 컴포넌트 -->
+      <div class="search-section">
+        <SearchByCondition
+          @search="handleSearch"
+          @filter-change="handleFilterChange"
+        />
+      </div>
 
-    <!-- 상품 컨테이너 -->
-    <div class="products-section">
-      <ProductContainer
-        :products="products"
-        :loading="loading"
-        :error="error"
-        :selected-products="selectedProducts"
-        :currentSortOrder="currentSortOrder"
-        @product-select="handleProductSelect"
-        @product-detail="handleProductDetail"
-        @retry-fetch="fetchProducts"
-        @sort-change="handleSortChange"
-      />
+      <!-- 상품 컨테이너 -->
+      <div class="products-section">
+        <ProductContainer
+          :products="products"
+          :loading="loading"
+          :error="error"
+          :selected-products="selectedProducts"
+          :currentSortOrder="currentSortOrder"
+          @product-select="handleProductSelect"
+          @product-detail="handleProductDetail"
+          @retry-fetch="fetchProducts"
+          @sort-change="handleSortChange"
+        />
 
-      <!-- 상품 비교 모달 -->
-      <ProductCompareModal
-        :is-visible="isCompareModalVisible"
+        <!-- 상품 비교 모달 -->
+        <ProductCompareModal
+          :is-visible="isCompareModalVisible"
+          :selected-products="selectedProducts"
+          @close="closeCompareModal"
+          @detailed-compare="handleDetailedCompare"
+        />
+      </div>
+
+      <!-- 선택된 상품 비교 영역 -->
+      <CompareButton
+        v-if="selectedProducts.length > 0"
         :selected-products="selectedProducts"
-        @close="closeCompareModal"
-        @detailed-compare="handleDetailedCompare"
+        @compare="handleCompareProducts"
+        @remove-product="handleRemoveProduct"
       />
+      <FooterComponent />
     </div>
-
-    <!-- 선택된 상품 비교 영역 -->
-    <CompareButton
-      v-if="selectedProducts.length > 0"
-      :selected-products="selectedProducts"
-      @compare="handleCompareProducts"
-      @remove-product="handleRemoveProduct"
-    />
-    <FooterComponent />
   </div>
 </template>
 
@@ -260,13 +264,34 @@ const handleRemoveProduct = (product) => {
 </script>
 
 <style scoped>
-.all-product-view {
-  height: 87vh;
+.all-product-content {
+  padding-top: 1vh;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
+  gap: 2vh;
+}
 
-  /* scrollbar-width: thin;
-  scrollbar-color: #c1c1c1 #f1f1f1; */
+.all-product-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.all-product-navigation-bar {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
 }
 
 .all-product-view::-webkit-scrollbar {
