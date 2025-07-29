@@ -117,7 +117,7 @@ const isDirty = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
 }
 
 .form-group {
@@ -140,7 +140,7 @@ input,
   padding: 0 1rem 0 1.2rem;
   border: 2px solid var(--color-black);
   border-radius: 20px;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
   font-size: 0.8rem;
   color: var(--color-black);
   width: 100%;
@@ -185,7 +185,7 @@ input:focus,
   border-bottom-left-radius: 0;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-wanted);
   font-weight: bold;
   cursor: pointer;
 }
@@ -222,7 +222,7 @@ input:focus,
   font-size: 0.75rem;
   margin-top: 0.3rem;
   margin-left: 0.2rem;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-wanted);
   font-weight: bold;
 }
 </style>

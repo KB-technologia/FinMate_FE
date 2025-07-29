@@ -17,10 +17,14 @@
         <div v-for="day in 7" :key="day" class="day-box">
           <img
             v-if="day <= attendanceDays"
-            src="@/assets/images/stamp-on.png"
+            src="@/assets/images/icons/stamp-on.png"
             alt="출석 완료"
           />
-          <img v-else src="@/assets/images/stamp-off.png" alt="출석 예정" />
+          <img
+            v-else
+            src="@/assets/images/icons/stamp-off.png"
+            alt="출석 예정"
+          />
           <p>{{ day }}일째</p>
         </div>
       </div>
@@ -53,8 +57,8 @@ defineProps({
   background-color: var(--color-modal-bg);
   border-radius: 2vh;
   padding: 3vh;
-  width: 40vw;
-  height: 30vh;
+  width: 60vw;
+  height: 40vh;
   max-width: 90vw;
   text-align: center;
   position: relative;

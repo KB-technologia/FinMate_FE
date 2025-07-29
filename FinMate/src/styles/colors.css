@@ -19,10 +19,30 @@
 
   /* 설문 결과용 색상 */
   --color-survey-blue: #002bff;
-  --color-survey-yellow: #ffff00;
+  --color-survey-yellow: #ffd600;
   --color-survey-green: #307400;
 
   /* 예금/적금 태그 색상 */
   --color-deposit-blue: #2871de;
   --color-saving-orange: #e58500;
+  --color-fund-green: #458437;
+
+  /* Toast 배경색 (연한 배경색) */
+  --toast-bg-success: #a2e8ab;
+  --toast-bg-error: #f9ada5;
+  --toast-bg-info: #b7d3eb;
+  --toast-bg-warning: #f8e0bf;
+
+  /* Toast 아이콘 색상 */
+  --toast-icon-success: #3c8c75;
+  --toast-icon-error: #d32f2f;
+  --toast-icon-info: #1976d2;
+
+  /* Mainpage 색상 모음 */
+  --color-more-light-blue: #ecf6fc;
+  --color-light-yellow: #fffcf4;
+
+  /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
+  --color-delete-bg: #f0cccc;
+
 }

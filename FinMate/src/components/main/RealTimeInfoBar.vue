@@ -53,7 +53,7 @@ const scrollingData = [
   border: 1px solid var(--color-primary-green);
   border-radius: 2vh;
   background-color: #f8fdfb;
-  font-family: var(--font-inter);
+  font-family: var(--font-wanted);
   font-weight: bold;
 }
 

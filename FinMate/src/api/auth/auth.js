@@ -1,25 +1,28 @@
 import axios from 'axios';
 
-// const API_URL = 'http://localhost:3000/api/auth';
+const API_BASE_URL = 'http://localhost:8080';
+
 export const Login = async (id, pw) => {
-  const idex = 'test';
-  const pwex = 'test';
-  if (id === idex && pw === pwex) {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+      username: id,
+      password: pw,
+    });
+
     return {
-      status: 200,
-      data: {
-        token: 'mockToken',
-        message: '로그인 성공',
-        isfirst: true,
-      },
+      status: response.status,
+      data: response.data,
     };
+  } catch (error) {
+    if (error.response) {
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      };
+    } else {
+      throw error;
+    }
   }
-  return {
-    status: 401,
-    data: {
-      message: '로그인 실패: 아이디 또는 비밀번호가 잘못되었습니다.',
-    },
-  };
 };
 
 const BASE_URL = 'http://localhost:8080'; // 또는 실제 서버 주소

@@ -19,13 +19,13 @@
         ></div>
       </div>
     </div>
-    <button class="detail-button">자세히 보기</button>
+    <button class="detail-button" @click="goToStatsPage">자세히 보기</button>
   </div>
 
   <!-- 비로그인 상태일 때: 랜덤 이미지 & 문구 -->
   <div v-if="!isLoggedIn" class="show-stats-container">
     <div class="description">
-      당신의 투자 성향은 어떤 동물일까요? 지금 로그인해서 확인해보세요!
+      당신의 투자 성향은 어떤 동물일까요? 지금 회원가입을 통해 확인해보세요!
     </div>
     <div class="image-wrapper">
       <img
@@ -43,10 +43,15 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
-import '../../assets/fonts/font.css';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
+
+const goToStatsPage = () => {
+  router.push('/my-stats');
+};
 
 const statsLeft = [
   { label: '가치관', percent: 90, color: 'red' },
@@ -60,16 +65,16 @@ const statsRight = [
 ];
 
 const images = [
-  new URL('@/assets/images/cat.png', import.meta.url).href,
-  new URL('@/assets/images/capybara.png', import.meta.url).href,
-  new URL('@/assets/images/desertfox.png', import.meta.url).href,
-  new URL('@/assets/images/flyingsquirrel.png', import.meta.url).href,
-  new URL('@/assets/images/kiwibird.png', import.meta.url).href,
-  new URL('@/assets/images/koala.png', import.meta.url).href,
-  new URL('@/assets/images/panda.png', import.meta.url).href,
-  new URL('@/assets/images/penguin.png', import.meta.url).href,
-  new URL('@/assets/images/redpanda.png', import.meta.url).href,
-  new URL('@/assets/images/seaotter.png', import.meta.url).href,
+  new URL('@/assets/images/animals/cat.png', import.meta.url).href,
+  new URL('@/assets/images/animals/capybara.png', import.meta.url).href,
+  new URL('@/assets/images/animals/desertfox.png', import.meta.url).href,
+  new URL('@/assets/images/animals/flyingsquirrel.png', import.meta.url).href,
+  new URL('@/assets/images/animals/kiwibird.png', import.meta.url).href,
+  new URL('@/assets/images/animals/koala.png', import.meta.url).href,
+  new URL('@/assets/images/animals/panda.png', import.meta.url).href,
+  new URL('@/assets/images/animals/penguin.png', import.meta.url).href,
+  new URL('@/assets/images/animals/redpanda.png', import.meta.url).href,
+  new URL('@/assets/images/animals/seaotter.png', import.meta.url).href,
 ];
 
 const currentImages = ref([]);
@@ -94,9 +99,11 @@ onMounted(() => {
 
 <style scoped>
 .show-stats-container {
-  width: 68vw;
-  height: 30vh;
-  background-color: var(--color-primary-yellow);
+  width: 70vw;
+  height: 35vh;
+  border: 0.2vh solid var(--color-light-gray);
+  background-color: var(--color-light-yellow);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;
   flex-direction: column;
@@ -105,19 +112,22 @@ onMounted(() => {
   gap: 1rem;
   padding: 2vh;
   overflow: hidden;
+  font-family: var(--font-wanted);
+  font-weight: var(--font-weight-extrabold);
 }
 
 .stat-row {
   width: 90%;
   display: flex;
 }
+
 .stat-label {
   width: 10vw;
-  font-weight: bold;
   font-size: 1rem;
   text-align: right;
   margin-right: 1vw;
 }
+
 .stat-bar-outer {
   flex: 1;
   height: 2.5vh;
@@ -125,35 +135,40 @@ onMounted(() => {
   border-radius: 2vh;
   overflow: hidden;
 }
+
 .stat-bar-fill {
   height: 100%;
   border-radius: 2vh;
   transition: width 0.5s ease;
 }
+
 .detail-button {
-  width: 10vw;
+  width: 11vw;
   height: 4vh;
   background-color: var(--color-main-button);
   border: none;
   border-radius: 2vh;
-  font-weight: bold;
+  font-weight: var(--font-weight-extrabold);
   cursor: pointer;
+  transition: all 0.1s ease;
 }
 
 .detail-button:hover {
-  box-shadow: 0 1vh 1vw rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0.5vh 0.5vw rgba(0, 0, 0, 0.3);
+  transform: translateY(-0.5vh);
 }
 
 .description {
   font-size: 2rem;
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
 }
+
 .image-wrapper {
   display: flex;
   gap: 2vw;
 }
+
 .animal-image {
   height: 12vh;
   width: auto;
@@ -161,6 +176,7 @@ onMounted(() => {
   transform: scale(0.9);
   transition: all 0.4s ease;
 }
+
 .animal-image.fade-in {
   opacity: 1;
   transform: scale(1);

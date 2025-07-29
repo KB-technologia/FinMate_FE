@@ -12,9 +12,9 @@
     </div>
 
     <div class="main-view-content">
-      <div class="main-view-real-time-info-bar">
+      <!-- <div class="main-view-real-time-info-bar">
         <RealTimeInfoBar />
-      </div>
+      </div> -->
 
       <div class="main-view-show-stats-and-profile-container">
         <ShowStatsContainer />
@@ -73,6 +73,15 @@ const closeModal = () => {
   height: 100vh;
 }
 
+.main-view-navigation-bar {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
 .main-view-content {
   padding-top: 1vh;
   width: 100vw;
@@ -82,15 +91,16 @@ const closeModal = () => {
   align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
-  gap: 3vh;
+  gap: 2vh;
 }
 
 .main-view-show-stats-and-profile-container {
   display: flex;
   flex-direction: row;
+  margin-top: 2vh;
 }
 .empty-space {
-  width: 5vw;
+  width: 2vw;
 }
 
 .main-view-random-product-container {
@@ -98,6 +108,7 @@ const closeModal = () => {
   flex-direction: row;
   width: 100vw;
   justify-content: center;
+  margin-top: 1vh;
 }
 
 .main-view-footer {

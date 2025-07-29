@@ -4,7 +4,7 @@
       <div class="footer-logo-container">
         <span>FIN MATE</span>
         <img
-          src="@/assets/images/kiwiLogo_Footer.png"
+          src="@/assets/images/logos/kiwiLogo_Footer.png"
           alt="logo"
           class="footer-logo"
         />
@@ -40,37 +40,37 @@
 
 <script setup>
 import 'hover.css/css/hover-min.css';
-import '../../assets/fonts/font.css';
+import '@/styles/fonts.css';
 </script>
 
 <style scoped>
 .footer-container {
   width: 100vw;
-  height: 25vh;
-  background-color: var(--color-primary-green);
+  height: 18vh;
+  background-color: #cdcecf;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
   padding: 3vh;
-  font-family: 'TMONBlack';
+  font-weight: var(--font-weight-medium);
 }
 
 .footer-left {
   display: flex;
   flex-direction: column;
-  gap: 1vh;
-  margin-left: 5vw;
+  gap: 0.5vh;
+  margin-left: 4vw;
 }
 
 .footer-logo-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 4vh;
+  font-size: 3vh;
 }
 .footer-logo {
-  width: 5vw;
+  width: 4vw;
   height: auto;
 }
 .footer-text {
@@ -79,7 +79,7 @@ import '../../assets/fonts/font.css';
   display: flex;
   flex-direction: row;
   list-style: none;
-  gap: 0.5rem;
+  gap: 0.3rem;
   padding: 0;
   margin: 0;
 }
@@ -90,7 +90,7 @@ import '../../assets/fonts/font.css';
   transition: all 0.2s ease-in-out;
 }
 .footer-right {
-  margin-right: 2vw;
+  margin-right: 4vw;
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -28,14 +28,23 @@
         ▶
       </div>
     </div>
-    <button class="detail-button">나의 추천 아이템 보러 가기</button>
+    <button class="detail-button" @click="goToProducts">
+      <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import MainProductCard from './MainProductCard.vue';
-import '../../assets/fonts/font.css';
+import { PackageSearch } from 'lucide-vue-next';
+
+const router = useRouter();
+
+const goToProducts = () => {
+  router.push('/products');
+};
 
 const products = ref([
   {
@@ -117,6 +126,7 @@ const next = () => {
   align-items: center;
   justify-content: center;
 }
+
 .CardContainer {
   display: flex;
   flex-direction: row;
@@ -124,23 +134,28 @@ const next = () => {
   align-items: center;
   padding: 3vh;
 }
+
 .Product-Container {
   width: 95vw;
   height: 50vh;
-  background-color: var(--color-primary-bluegray);
+  border: 0.2vh solid var(--color-light-gray);
+  background-color: var(--color-more-light-blue);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;
   flex-direction: column;
-  font-family: var(--font-tmon);
+  font-family: var(--font-wanted);
   align-items: center;
 }
 
 .Product-Text {
   margin-top: 2vh;
-  color: var(--color-white);
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
   font-size: 2rem;
   text-align: center;
 }
+
 .CardContainer {
   display: flex;
   flex-direction: row;
@@ -155,18 +170,30 @@ const next = () => {
   width: 15vw;
   height: 5vh;
   border-radius: 2vh;
-  background-color: #0086e6;
-  color: var(--color-white);
-  border: none;
+  border: 0.2vh solid var(--color-light-blue);
+  color: var(--color-black);
+  background-color: var(--color-white);
+  font-weight: var(--font-weight-medium);
+  transition: all 0.1s ease;
 }
 
 .detail-button:hover {
-  border: 0.4vh solid var(--color-white);
-  transition: all 0.1s ease-in-out;
+  background-color: var(--color-light-blue);
+  color: var(--color-white);
+  cursor: pointer;
+  box-shadow: 0 0.2vh 0.3vw var(--color-light-blue);
+  transform: translateY(-0.5vh);
+}
+
+.icon-large {
+  width: 2vw;
+  height: 2vh;
+  margin-right: 0.3rem;
 }
 
 .arrow-button {
-  color: var(--color-white);
+  color: var(--color-black);
+  font-size: 2rem;
   border-radius: 1vh;
   cursor: pointer;
   user-select: none;

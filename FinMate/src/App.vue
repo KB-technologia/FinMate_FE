@@ -1,23 +1,30 @@
 <template>
   <div>
     <router-view />
+    <ToastContainer ref="toastRef" />
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import ToastContainer from "@/components/allshared/ToastContainer.vue";
+import { setToastInstance } from "@/composables/toastManager";
 
-export default {
-  name: "App",
-  components: {},
-  setup() {
-    const currentRoute = useRoute();
-    return { currentRoute };
-  },
-};
+const currentRoute = useRoute();
+const toastRef = ref(null);
+
+onMounted(() => {
+  if (toastRef.value) {
+    setToastInstance(toastRef.value);
+  }
+});
 </script>
 
 <style>
+@import "@/styles/reset.css";
+@import "@/styles/fonts.css";
+
 html,
 body,
 #app {
