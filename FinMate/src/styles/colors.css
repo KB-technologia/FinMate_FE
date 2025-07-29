@@ -37,4 +37,7 @@
   --toast-icon-success: #3c8c75;
   --toast-icon-error: #d32f2f;
   --toast-icon-info: #1976d2;
+
+  /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
+  --color-delete-bg: #f0cccc;
 }
