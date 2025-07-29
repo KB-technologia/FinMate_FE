@@ -164,7 +164,6 @@ const sliderStyle = computed(() => {
   border-radius: 2rem;
   padding: 0.8rem 2rem;
   font-size: 1rem;
-  cursor: pointer;
   transition: background-color 0.2s ease;
 }
 

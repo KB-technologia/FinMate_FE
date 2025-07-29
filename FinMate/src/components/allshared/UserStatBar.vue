@@ -83,6 +83,5 @@ const handleClick = () => {
 .bar-track.active {
   border: 2px solid var(--color-survey-blue);
   padding: 2px;
-  box-sizing: border-box;
 }
 </style>

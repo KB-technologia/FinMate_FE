@@ -144,7 +144,8 @@ const hideSpeech = () => {
   right: -230px;
   width: 240px;
   height: 140px;
-  background-image: url('@/assets/images/speech-default.png');
+  background-image: url("@/assets/images/icons/speech-default.png");
+
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

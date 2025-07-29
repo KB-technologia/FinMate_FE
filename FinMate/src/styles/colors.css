@@ -41,4 +41,8 @@
   /* Mainpage 색상 모음 */
   --color-more-light-blue: #ecf6fc;
   --color-light-yellow: #fffcf4;
+
+  /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
+  --color-delete-bg: #f0cccc;
+
 }
