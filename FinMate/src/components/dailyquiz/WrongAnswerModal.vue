@@ -49,11 +49,11 @@ defineProps({
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: 2.7rem;
 }
 .info-text {
-  margin-left: 15px;
+  margin-left: 1rem;
   font-size: 2.5rem;
 }
 
@@ -64,7 +64,7 @@ defineProps({
 
 .info-next {
   margin-top: 4rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .close-btn {

@@ -62,7 +62,7 @@ const expnumber = 500;
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: 2.7rem;
 }
 
@@ -82,13 +82,13 @@ const expnumber = 500;
   font-size: 2.5rem;
 }
 .info-exptext {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .correctkiwi-img {
   width: 180px;
   height: 180px;
-  margin-left: 30px;
+  margin-left: 1.9rem;
 }
 
 .close-btn {
@@ -112,17 +112,16 @@ const expnumber = 500;
 }
 
 .exp-track {
-  width: 350px;
-  height: 25px;
-  background-color: #e6f8ee;
+  width: 20vw;
+  height: 2.5vh;
+  background-color: var(--color-exp-track);
   border-radius: 20px;
   overflow: hidden;
 }
 
 .exp-fill {
   height: 100%;
-  background-color: #3ccb7f;
-  width: 0%;
+  background-color: var(--color-exp-fill);
   border-radius: 10px;
 }
 </style>
