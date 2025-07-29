@@ -142,7 +142,6 @@ const goToMyInfo = () => {
   border-radius: 4px;
   background-color: var(--color-primary-bluegray);
   color: var(--color-white);
-  cursor: pointer;
   text-align: center;
 }
 
