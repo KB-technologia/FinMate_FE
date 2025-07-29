@@ -36,7 +36,7 @@
       {{ statDescription }}
     </p>
 
-    <button class="explore-btn">
+    <button class="explore-btn" @click="$router.push('/quizstart')">
       <PawPrint class="icon-paw" /> 새로운 동물 만나러 가기
     </button>
   </div>
@@ -44,44 +44,44 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { PawPrint, ScanSearch } from "lucide-vue-next";
-import UserStatBar from "@/components/allshared/UserStatBar.vue";
-import ToastContainer from "@/components/allshared/ToastContainer.vue";
+import { ref, computed, onMounted } from 'vue';
+import { PawPrint, ScanSearch } from 'lucide-vue-next';
+import UserStatBar from '@/components/allshared/UserStatBar.vue';
+import ToastContainer from '@/components/allshared/ToastContainer.vue';
 
 const activeStat = ref(null);
 const toastRef = ref(null);
 
 const stats = [
   {
-    name: "가치관",
+    name: '가치관',
     value: 79,
-    color: "var(--color-red)",
-    description: "가치관에 따라 투자 방향을 신중히 결정하는 타입이에요.",
+    color: 'var(--color-red)',
+    description: '가치관에 따라 투자 방향을 신중히 결정하는 타입이에요.',
   },
   {
-    name: "속도",
+    name: '속도',
     value: 95,
-    color: "var(--color-survey-blue)",
-    description: "빠른 의사결정과 실행력을 갖춘 속도 중시형 투자자예요.",
+    color: 'var(--color-survey-blue)',
+    description: '빠른 의사결정과 실행력을 갖춘 속도 중시형 투자자예요.',
   },
   {
-    name: "운/전략",
+    name: '운/전략',
     value: 70,
-    color: "var(--color-survey-yellow)",
-    description: "운도 전략도 중요하게 여기는 균형 잡힌 타입이에요.",
+    color: 'var(--color-survey-yellow)',
+    description: '운도 전략도 중요하게 여기는 균형 잡힌 타입이에요.',
   },
   {
-    name: "재정",
+    name: '재정',
     value: 60,
-    color: "var(--color-orange)",
-    description: "재정 상태를 고려해 신중하게 계획하는 타입이에요.",
+    color: 'var(--color-orange)',
+    description: '재정 상태를 고려해 신중하게 계획하는 타입이에요.',
   },
   {
-    name: "모험 성향",
+    name: '모험 성향',
     value: 40,
-    color: "var(--color-survey-green)",
-    description: "도전을 좋아하지만 적절한 리스크 조절도 아는 타입이에요.",
+    color: 'var(--color-survey-green)',
+    description: '도전을 좋아하지만 적절한 리스크 조절도 아는 타입이에요.',
   },
 ];
 
@@ -91,16 +91,16 @@ const selectStat = (name) => {
 
 const activeStatColor = computed(() => {
   const stat = stats.find((s) => s.name === activeStat.value);
-  return stat ? stat.color : "transparent";
+  return stat ? stat.color : 'transparent';
 });
 
 const statDescription = computed(() => {
   const stat = stats.find((s) => s.name === activeStat.value);
-  return stat ? stat.description : "스탯을 클릭하면 세부 설명을 볼 수 있어요!";
+  return stat ? stat.description : '스탯을 클릭하면 세부 설명을 볼 수 있어요!';
 });
 
 onMounted(() => {
-  toastRef.value?.addToast("구름을 클릭하면 사라져요!", "info");
+  toastRef.value?.addToast('구름을 클릭하면 사라져요!', 'info');
 });
 
 const showSpeech = ref(true);
@@ -144,7 +144,7 @@ const hideSpeech = () => {
   right: -230px;
   width: 240px;
   height: 140px;
-  background-image: url("@/assets/images/speech-default.png");
+  background-image: url('@/assets/images/speech-default.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

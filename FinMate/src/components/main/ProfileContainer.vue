@@ -34,11 +34,11 @@
       로그인 하러 가기
     </button>
     <div v-if="!isLoggedIn" class="login-options">
-      <p>회원가입</p>
+      <p class="login-option">회원가입</p>
       <p>|</p>
-      <p>아이디 찾기</p>
+      <p class="login-option">아이디 찾기</p>
       <p>|</p>
-      <p>비밀번호 찾기</p>
+      <p class="login-option">비밀번호 찾기</p>
     </div>
   </div>
   <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
@@ -184,8 +184,8 @@ function handleLoginClick() {
 }
 
 .custom-login-button {
-  width: 50%;
-  height: 4rem;
+  width: 70%;
+  height: 5rem;
   background-color: var(--color-main-button);
   color: var(--color-black);
   font-size: 1rem;
@@ -198,12 +198,14 @@ function handleLoginClick() {
 
 .custom-login-button:hover {
   transform: translateY(-0.6vh);
+  background-color: var(--color-main-button);
+  color: var(--color-white);
   box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
 }
 
 .login-options {
   width: 100%;
-  height: 5rem;
+  height: 3rem;
   margin-top: 1rem;
   display: flex;
   flex-direction: row;
@@ -211,6 +213,14 @@ function handleLoginClick() {
   align-items: center;
   gap: 1rem;
   font-size: 0.8rem;
-  color: var(--color-primary-bluegray);
+  color: var(--color-light-gray);
+}
+
+.login-option {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.login-option:hover {
+  color: var(--color-black);
 }
 </style>

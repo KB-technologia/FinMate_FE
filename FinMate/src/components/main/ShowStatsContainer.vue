@@ -99,9 +99,10 @@ onMounted(() => {
 
 <style scoped>
 .show-stats-container {
-  width: 68vw;
+  width: 70vw;
   height: 35vh;
   border: 0.2vh solid var(--color-light-gray);
+  background-color: var(--color-light-yellow);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;

@@ -139,7 +139,7 @@ const next = () => {
   width: 95vw;
   height: 50vh;
   border: 0.2vh solid var(--color-light-gray);
-  background-color: #fffcf1;
+  background-color: var(--color-more-light-blue);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;
@@ -170,7 +170,7 @@ const next = () => {
   width: 15vw;
   height: 5vh;
   border-radius: 2vh;
-  border: 0.2vh solid var(--color-primary-yellow);
+  border: 0.2vh solid var(--color-light-blue);
   color: var(--color-black);
   background-color: var(--color-white);
   font-weight: var(--font-weight-medium);
@@ -178,10 +178,10 @@ const next = () => {
 }
 
 .detail-button:hover {
-  background-color: var(--color-primary-yellow);
+  background-color: var(--color-light-blue);
   color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 0.2vh 0.3vw var(--color-primary-yellow);
+  box-shadow: 0 0.2vh 0.3vw var(--color-light-blue);
   transform: translateY(-0.5vh);
 }
 

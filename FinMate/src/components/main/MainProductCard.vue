@@ -35,7 +35,7 @@ defineProps({
 }
 
 .card-container:hover {
-  border: 0.2vh solid var(--color-primary-yellow);
+  border: 0.2vh solid var(--color-light-blue);
   cursor: pointer;
   transform: translateY(-0.8vh);
 }

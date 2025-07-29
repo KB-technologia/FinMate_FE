@@ -37,4 +37,8 @@
   --toast-icon-success: #3c8c75;
   --toast-icon-error: #d32f2f;
   --toast-icon-info: #1976d2;
+
+  /* Mainpage 색상 모음 */
+  --color-more-light-blue: #ecf6fc;
+  --color-light-yellow: #fffcf4;
 }

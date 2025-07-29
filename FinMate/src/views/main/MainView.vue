@@ -100,7 +100,7 @@ const closeModal = () => {
   margin-top: 2vh;
 }
 .empty-space {
-  width: 4vw;
+  width: 2vw;
 }
 
 .main-view-random-product-container {
