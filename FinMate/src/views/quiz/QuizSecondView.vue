@@ -130,12 +130,7 @@ onMounted(() => {
   animation: none;
   transform: none;
 }
-
-.next-button:enabled {
-  opacity: 1;
-  animation: bounce 1.2s infinite;
-}
-button:hover {
+.next-button:hover {
   color: var(--color-white);
   transition: all 0.2s ease-in-out;
   box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.2);

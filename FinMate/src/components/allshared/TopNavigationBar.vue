@@ -9,6 +9,7 @@
     <div class="top-navigation-menu-right">
       <div
         class="top-navigation-menu-right-item"
+        :class="{ active: route.path === '/products' }"
         @click="$router.push('/products')"
       >
         <PackageSearch class="icon-large" />
@@ -107,6 +108,9 @@ const route = useRoute();
 
 .top-navigation-menu-right-item:hover {
   cursor: pointer;
+  color: var(--color-white);
+}
+.top-navigation-menu-right-item.active {
   color: var(--color-white);
 }
 .icon-large {

@@ -54,13 +54,8 @@ import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 const router = useRouter();
-const isClicked = ref(false);
-
 const startQuiz = () => {
-  isClicked.value = true;
-  setTimeout(() => {
-    router.push('/quizsecond');
-  }, 1000);
+  router.push('/quizsecond').finally(() => {});
 };
 </script>
 
