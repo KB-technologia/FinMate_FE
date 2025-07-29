@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api/product';
+const API_BASE_URL = import.meta.env.VITE_BASE_API_URL + '/product';
 
 export const productService = {
   getAllProducts() {
@@ -9,7 +9,7 @@ export const productService = {
   },
 
   getFilteredProducts(filterParams) {
-    console.log('필터링 API 호출 파라미터:', filterParams);
+    // console.log('필터링 API 호출 파라미터:', filterParams);
 
     const params = new URLSearchParams();
 
@@ -38,7 +38,7 @@ export const productService = {
     }
 
     const url = `${API_BASE_URL}/filter?${params.toString()}`;
-    console.log('최종 필터링 API URL:', url);
+    // console.log('최종 필터링 API URL:', url);
 
     return axios.get(url);
   },
