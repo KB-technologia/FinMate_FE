@@ -22,6 +22,14 @@
         @retry-fetch="fetchProducts"
         @sort-change="handleSortChange"
       />
+
+      <!-- 상품 비교 모달 -->
+      <ProductCompareModal
+        :is-visible="isCompareModalVisible"
+        :selected-products="selectedProducts"
+        @close="closeCompareModal"
+        @detailed-compare="handleDetailedCompare"
+      />
     </div>
 
     <!-- 선택된 상품 비교 영역 -->
@@ -43,6 +51,7 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
 import SearchByCondition from '@/components/product/SearchByCondition.vue';
 import ProductContainer from '@/components/product/ProductContainer.vue';
 import CompareButton from '@/components/product/CompareButton.vue';
+import ProductCompareModal from '@/components/product/ProductCompareModal.vue';
 import { productService } from '../../api/product/productService';
 
 // Router
@@ -54,6 +63,9 @@ const loading = ref(false);
 const error = ref(null);
 const selectedProducts = ref([]);
 const currentSortOrder = ref('desc');
+
+// 모달 상태
+const isCompareModalVisible = ref(false);
 
 // 필터링 관련 상태
 const currentFilters = ref({
@@ -116,7 +128,6 @@ const fetchFilteredProducts = async (apiParams) => {
 
 // 검색 처리
 const handleSearch = (searchQuery) => {
-  console.log('검색 실행:', searchQuery);
   currentFilters.value.query = searchQuery;
 
   // 검색 시 즉시 API 호출
@@ -129,7 +140,6 @@ const handleSearch = (searchQuery) => {
 };
 
 const handleFilterChange = (filterData) => {
-  console.log('필터 변경:', filterData);
   currentFilters.value = { ...filterData };
 
   // API 파라미터가 있으면 필터링 API 호출, 없으면 전체 조회
@@ -229,29 +239,16 @@ const handleProductDetail = (product) => {
   router.push(`/product/${product.id}`);
 };
 
-const handleCompareProducts = async ({ product1, product2 }) => {
-  try {
-    const response = await productService.compareProducts(
-      product1.id,
-      product2.id
-    );
-
-    alert(
-      `${product1.name}과 ${product2.name} 비교 결과:\n\n${response.data.comparisonResult}`
-    );
-
-    // 또는 비교 페이지로 이동
-    // router.push({
-    //   name: 'ProductCompare',
-    //   query: {
-    //     id1: product1.id,
-    //     id2: product2.id,
-    //   },
-    // });
-  } catch (err) {
-    console.error('비교 에러:', err);
-    alert('상품 비교에 실패했습니다.');
+// 비교하기 버튼 클릭 시 모달 열기
+const handleCompareProducts = () => {
+  if (selectedProducts.value.length == 2) {
+    isCompareModalVisible.value = true;
   }
+};
+
+// 모달 닫기
+const closeCompareModal = () => {
+  isCompareModalVisible.value = false;
 };
 
 const handleRemoveProduct = (product) => {
