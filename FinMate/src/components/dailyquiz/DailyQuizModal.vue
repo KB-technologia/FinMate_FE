@@ -1,15 +1,16 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { getDailyQuiz, getAnswerDailyQuiz } from "@/api/dailyquiz/dailyQuiz.js";
-import FalseButton from "@/components/dailyquiz/FalseButton.vue";
-import TrueButton from "@/components/dailyquiz/TrueButton.vue";
-import CorrectAnswerModal from "@/components/dailyquiz/CorrectAnswerModal.vue";
-import WrongAnswerModal from "@/components/dailyquiz/WrongAnswerModal.vue";
+import { ref, onMounted } from 'vue';
+import { getDailyQuiz, getAnswerDailyQuiz } from '@/api/dailyquiz/dailyQuiz.js';
+import FalseButton from '@/components/dailyquiz/FalseButton.vue';
+import TrueButton from '@/components/dailyquiz/TrueButton.vue';
+import CloseButton from '@/components/allshared/CloseButton.vue';
+import CorrectAnswerModal from '@/components/dailyquiz/CorrectAnswerModal.vue';
+import WrongAnswerModal from '@/components/dailyquiz/WrongAnswerModal.vue';
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close']);
 
 const quiz = ref(null);
-const isAnswer = ref("");
+const isAnswer = ref('');
 const showCorrectModal = ref(false);
 const showWrongModal = ref(false);
 
@@ -20,7 +21,7 @@ onMounted(async () => {
 
     console.log(quiz.value);
   } catch (error) {
-    console.error("퀴즈 가져오기 실패", error);
+    console.error('퀴즈 가져오기 실패', error);
   }
 });
 
@@ -37,14 +38,14 @@ async function checkAnswer(userAnswer) {
       showWrongModal.value = true;
     }
   } catch (error) {
-    console.error("정답 확인 실패", error);
+    console.error('정답 확인 실패', error);
   }
 }
 
 function ModalClose() {
   showCorrectModal.value = false;
   showWrongModal.value = false;
-  emit("close");
+  emit('close');
 }
 </script>
 
@@ -60,9 +61,7 @@ function ModalClose() {
           />
           <span>오늘의 퀴즈</span>
         </div>
-        <button @click="$emit('close')" class="close-btn">
-          <img src="@/assets/images/icons/modalclose.png" class="close-img" />
-        </button>
+        <CloseButton @click="$emit('close')" class="close-btn" />
       </div>
       <div class="modal-body">
         {{ quiz?.quiz }}
@@ -130,18 +129,12 @@ function ModalClose() {
 
 .close-btn {
   all: unset;
-  cursor: pointer;
-}
-
-.close-img {
-  margin-bottom: 50px;
-  width: 30px;
-  height: 30px;
+  margin-bottom: 3rem;
 }
 
 .modal-body {
   font-size: 1.5rem;
-  margin-top: 30px;
+  margin-top: 1.2rem;
 }
 
 .btn-group {
