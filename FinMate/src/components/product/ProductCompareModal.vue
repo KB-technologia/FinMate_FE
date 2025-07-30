@@ -2,13 +2,12 @@
   <Teleport to="body">
     <div v-if="isVisible" class="modal-overlay" @click="handleOverlayClick">
       <div class="modal-container" @click.stop>
-        <!-- 모달 헤더 -->
         <div class="modal-header">
           <h2 class="modal-title">상품 비교</h2>
           <button @click="closeModal" class="close-button">
             <svg
-              width="24"
-              height="24"
+              width="1.5vw"
+              height="1.5vw"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -20,9 +19,7 @@
           </button>
         </div>
 
-        <!-- 모달 바디 -->
         <div class="modal-body">
-          <!-- CompareButton의 UI 부분 재사용 -->
           <div class="compare-container">
             <div class="vs-compare-card">
               <div class="product-compare-section">
@@ -31,7 +28,6 @@
                   <div class="right-shape"></div>
                 </div>
 
-                <!-- 첫 번째 상품 -->
                 <div class="product-side left-side">
                   <div class="product-icon">
                     <div class="bank-icon">
@@ -51,14 +47,12 @@
                   </div>
                 </div>
 
-                <!-- VS 구분선 -->
                 <div class="vs-divider">
                   <div class="vs-circle">
                     <span class="vs-text">vs</span>
                   </div>
                 </div>
 
-                <!-- 두 번째 상품 -->
                 <div class="product-side right-side">
                   <div class="product-icon">
                     <div class="bank-icon">
@@ -81,15 +75,13 @@
             </div>
           </div>
 
-          <!-- 상세 비교 내용 -->
           <div class="comparison-details">
             <div class="comparison-grid">
-              <!-- AI 분석 결과 -->
               <div class="comparison-section analysis-section">
                 <h3 class="section-title">
                   <svg
-                    width="20"
-                    height="20"
+                    width="1.2vw"
+                    height="1.2vw"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -122,12 +114,10 @@
                       class="analysis-text"
                       v-html="parseMarkdown(analysisResult)"
                     ></div>
-                    <!-- <pre class="analysis-text">{{ analysisResult }}</pre> -->
                   </div>
                 </div>
               </div>
 
-              <!-- 기본 정보 비교 -->
               <div class="comparison-section">
                 <h3 class="section-title">기본 정보</h3>
                 <div class="comparison-table">
@@ -171,11 +161,9 @@
                 </div>
               </div>
 
-              <!-- 상세 정보 비교 -->
               <div class="comparison-section">
                 <h3 class="section-title">상세 정보</h3>
                 <div class="comparison-table">
-                  <!-- 공통 정보 -->
                   <div class="comparison-row">
                     <div class="comparison-label">최소 가입금액</div>
                     <div class="comparison-value left">
@@ -205,7 +193,6 @@
                     </div>
                   </div>
 
-                  <!-- 예적금인 경우 -->
                   <template
                     v-if="
                       selectedProducts[0].productType === 'DEPOSIT' ||
@@ -276,7 +263,6 @@
                     </div>
                   </template>
 
-                  <!-- 펀드인 경우 -->
                   <template
                     v-else-if="selectedProducts[0].productType === 'FUND'"
                   >
@@ -315,7 +301,6 @@
           </div>
         </div>
 
-        <!-- 모달 푸터 -->
         <div class="modal-footer">
           <button @click="closeModal" class="cancel-button">닫기</button>
         </div>
@@ -329,24 +314,16 @@ import { ref, watch, nextTick } from 'vue';
 import { productService } from '../../api/product/productService';
 
 const props = defineProps({
-  isVisible: {
-    type: Boolean,
-    default: false,
-  },
-  selectedProducts: {
-    type: Array,
-    default: () => [],
-  },
+  isVisible: { type: Boolean, default: false },
+  selectedProducts: { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(['close']);
 
-// 분석 관련 상태
 const isLoadingAnalysis = ref(false);
 const analysisError = ref(null);
 const analysisResult = ref(null);
 
-// 모달이 열릴 때 분석 API 호출
 watch(
   () => props.isVisible,
   (newValue) => {
@@ -358,21 +335,17 @@ watch(
   }
 );
 
-// 분석 API 호출 함수
 const fetchComparisonAnalysis = async () => {
   if (props.selectedProducts.length !== 2) return;
-
   isLoadingAnalysis.value = true;
   analysisError.value = null;
   analysisResult.value = null;
-
   try {
     const [product1, product2] = props.selectedProducts;
     const response = await productService.compareProducts(
       product1.id,
       product2.id
     );
-
     analysisResult.value = response.data.comparisonResult;
   } catch (error) {
     console.error('분석 API 호출 실패:', error);
@@ -383,9 +356,7 @@ const fetchComparisonAnalysis = async () => {
   }
 };
 
-// 메서드들
 const closeModal = () => {
-  // 모달 닫을 때 상태 초기화
   analysisResult.value = null;
   analysisError.value = null;
   isLoadingAnalysis.value = false;
@@ -396,7 +367,7 @@ const handleOverlayClick = () => {
   closeModal();
 };
 
-// CompareButton에서 가져온 유틸리티 함수들
+// 유틸리티 함수들
 const getBankImagePath = (bankName) => {
   const bankCode = getBankCodeFromName(bankName);
   try {
@@ -424,11 +395,7 @@ const getBankCodeFromName = (bankName) => {
     BNK부산은행: 'bnk',
     iM뱅크: 'im',
   };
-
-  if (bankNameMap[bankName]) {
-    return bankNameMap[bankName];
-  }
-
+  if (bankNameMap[bankName]) return bankNameMap[bankName];
   for (const [fullName, code] of Object.entries(bankNameMap)) {
     if (
       bankName.includes(fullName.replace('은행', '')) ||
@@ -437,7 +404,6 @@ const getBankCodeFromName = (bankName) => {
       return code;
     }
   }
-
   return bankName.charAt(0).toLowerCase();
 };
 
@@ -448,35 +414,21 @@ const handleImageError = (event, bankName) => {
   bankIcon.textContent = getBankInitial(bankName);
 };
 
-const getBankInitial = (bankName) => {
-  return bankName.charAt(0);
-};
+const getBankInitial = (bankName) => bankName.charAt(0);
 
 const getTypeLabel = (type) => {
-  const labels = {
-    DEPOSIT: '예금',
-    SAVINGS: '적금',
-    FUND: '펀드',
-  };
+  const labels = { DEPOSIT: '예금', SAVINGS: '적금', FUND: '펀드' };
   return labels[type] || type;
 };
 
 const getInterestType = (type) => {
-  const types = {
-    SIMPLE: '단리',
-    COMPOUND: '복리',
-  };
+  const types = { SIMPLE: '단리', COMPOUND: '복리' };
   return types[type] || type || '-';
 };
 
-const formatRate = (rate) => {
-  return rate ? rate.toFixed(2) : '0.00';
-};
-
-const formatAmount = (amount) => {
-  if (!amount) return '-';
-  return new Intl.NumberFormat('ko-KR').format(amount) + '원';
-};
+const formatRate = (rate) => (rate ? rate.toFixed(2) : '0.00');
+const formatAmount = (amount) =>
+  !amount ? '-' : new Intl.NumberFormat('ko-KR').format(amount) + '원';
 
 const formatTerm = (minTerm, maxTerm) => {
   if (!minTerm && !maxTerm) return '-';
@@ -485,48 +437,25 @@ const formatTerm = (minTerm, maxTerm) => {
   return `${minTerm}~${maxTerm}개월`;
 };
 
-// 마크다운 파싱 함수
 const parseMarkdown = (text) => {
   if (!text) return '';
-
-  return (
-    text
-      // 헤딩 처리 (### -> h3, ## -> h2, # -> h1)
-      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-
-      // 볼드 처리 (**text** -> <strong>text</strong>)
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-
-      // 이탤릭 처리 (*text* -> <em>text</em>)
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-
-      // 리스트 처리
-      .replace(/^\d+\.\s+(.*$)/gim, '<li>$1</li>')
-      .replace(/^-\s+(.*$)/gim, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-
-      // 줄바꿈 처리
-      .replace(/\n\n/g, '</p><p>')
-      .replace(/\n/g, '<br>')
-
-      // 전체를 p 태그로 감싸기
-      .replace(/^(.*)$/s, '<p>$1</p>')
-
-      // 빈 p 태그 제거
-      .replace(/<p><\/p>/g, '')
-  );
+  return text
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^\d+\.\s+(.*$)/gim, '<li>$1</li>')
+    .replace(/^-\s+(.*$)/gim, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^(.*)$/s, '<p>$1</p>')
+    .replace(/<p><\/p>/g, '');
 };
 
 const getRiskLevel = (level) => {
-  const levels = {
-    1: '안전',
-    2: '낮음',
-    3: '보통',
-    4: '높음',
-    5: '매우높음',
-  };
+  const levels = { 1: '안전', 2: '낮음', 3: '보통', 4: '높음', 5: '매우높음' };
   return levels[level] || `${level}등급`;
 };
 </script>
@@ -543,17 +472,16 @@ const getRiskLevel = (level) => {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(0.2vw);
 }
 
 .modal-container {
   background: white;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 1000px;
+  border-radius: 1vw;
+  width: 60vw;
   max-height: 90vh;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1.2vw 3.6vw rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
 }
@@ -562,13 +490,13 @@ const getRiskLevel = (level) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 32px;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5vh 2vw;
+  border-bottom: 0.05vw solid #e0e0e0;
   background: #fafafa;
 }
 
 .modal-title {
-  font-size: 24px;
+  font-size: 1.5vw;
   font-weight: 700;
   color: #333;
   margin: 0;
@@ -579,7 +507,7 @@ const getRiskLevel = (level) => {
   border: none;
   color: #666;
   cursor: pointer;
-  padding: 8px;
+  padding: 1vh 1vw;
   border-radius: 50%;
   transition: all 0.2s;
   display: flex;
@@ -595,26 +523,25 @@ const getRiskLevel = (level) => {
 .modal-body {
   flex: 1;
   overflow-y: auto;
-  padding: 32px;
+  padding: 2vh 2vw;
 }
 
 .compare-container {
-  margin-bottom: 32px;
+  margin-bottom: 2vh;
 }
 
-/* CompareButton의 스타일을 그대로 사용 */
 .vs-compare-card {
   background: transparent;
-  border-radius: 16px;
-  box-shadow: 0 10px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 1vw;
+  box-shadow: 0 0.6vw 0.4vw rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
 .product-compare-section {
   position: relative;
-  height: 120px;
+  height: 12vh;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 1vw;
 }
 
 .background-shapes {
@@ -654,7 +581,7 @@ const getRiskLevel = (level) => {
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 16px 24px;
+  padding: 1vh 1.5vw;
   z-index: 2;
 }
 
@@ -679,25 +606,25 @@ const getRiskLevel = (level) => {
 }
 
 .left-side .product-icon {
-  margin-right: 12px;
+  margin-right: 0.8vw;
 }
 
 .right-side .product-icon {
   order: 2;
-  margin-left: 12px;
+  margin-left: 0.8vw;
   margin-right: 0;
 }
 
 .bank-icon {
-  width: 48px;
-  height: 48px;
+  width: 3vw;
+  height: 3vw;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.15);
   color: inherit;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(0.25vw);
   overflow: hidden;
 }
 
@@ -723,7 +650,7 @@ const getRiskLevel = (level) => {
 }
 
 .product-name {
-  font-size: 18px;
+  font-size: 1.1vw;
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
@@ -742,53 +669,53 @@ const getRiskLevel = (level) => {
 }
 
 .vs-circle {
-  width: 60px;
-  height: 60px;
+  width: 3.8vw;
+  height: 3.8vw;
   background: #dddddd;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.25vw 0.75vw rgba(0, 0, 0, 0.15);
 }
 
 .vs-text {
-  font-size: 16px;
+  font-size: 1vw;
   font-weight: 700;
   color: #1f2937;
   text-transform: lowercase;
 }
 
-/* 상세 비교 내용 스타일 */
 .comparison-details {
   background: #f9f9f9;
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 0.75vw;
+  padding: 1.5vh 1.5vw;
 }
 
 .comparison-grid {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.5vh;
 }
 
 .comparison-section {
   background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 0.5vw;
+  padding: 1.2vh 1.2vw;
+  box-shadow: 0 0.1vw 0.5vw rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
-  font-size: 18px;
+  font-size: 1.1vw;
   font-weight: 600;
   color: #333;
-  margin: 0 0 16px 0;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #4caf50;
+  margin: 0 0 1vh 0;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  border-bottom: 0.1vw solid #4caf50;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5vw;
 }
 
 .analysis-section .section-title {
@@ -796,7 +723,7 @@ const getRiskLevel = (level) => {
 }
 
 .analysis-content {
-  min-height: 120px;
+  min-height: 7.5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -806,15 +733,16 @@ const getRiskLevel = (level) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 1vh;
   color: #666;
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #2196f3;
+  width: 2.5vw;
+  height: 2.5vw;
+  margin-top: 2vh;
+  border: 0.25vw solid #f3f3f3;
+  border-top: 0.25vw solid #2196f3;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -833,15 +761,19 @@ const getRiskLevel = (level) => {
   color: #e91e63;
 }
 
+.error-message p {
+  font-size: 0.9vw;
+}
+
 .retry-button {
-  margin-top: 12px;
-  padding: 8px 16px;
+  margin-top: 0.75vh;
+  padding: 0.5vh 1vw;
   background: #2196f3;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 0.4vw;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.9vw;
 }
 
 .retry-button:hover {
@@ -854,31 +786,31 @@ const getRiskLevel = (level) => {
 
 .analysis-text {
   white-space: pre-wrap;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui,
-    Roboto, sans-serif;
-  font-size: 14px;
+  font-family: WantedSans, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    sans-serif;
+  font-size: 0.9vw;
   line-height: 1.6;
   color: #333;
   background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid #2196f3;
+  padding: 1.2vh 1.2vw;
+  border-radius: 0.5vw;
+  border-left: 0.25vw solid #2196f3;
   margin: 0;
 }
 
 .comparison-table {
   display: flex;
   flex-direction: column;
-  gap: 0.8vh;
+  gap: 0.5vh;
 }
 
 .comparison-row {
   display: grid;
-  grid-template-columns: 8.5vw 1fr 1fr;
-  gap: 1vw;
+  grid-template-columns: 8.8vw 1fr 1fr;
+  gap: 0.6vw;
   align-items: center;
-  padding: 0.8vh 0;
-  border-bottom: 0.05vw solid #f0f0f0;
+  padding: 2vh 0.2vw;
+  border-bottom: 0.03vw solid #f0f0f0;
 }
 
 .comparison-row:last-child {
@@ -895,18 +827,18 @@ const getRiskLevel = (level) => {
   font-size: 0.9vw;
   color: #333;
   font-weight: 500;
-  padding: 0.5vh 0.8vw;
+  padding: 0.3vh 0.5vw;
   background: #f8f9fa;
-  border-radius: 0.4vw;
+  border-radius: 0.25vw;
   text-align: center;
 }
 
 .comparison-value.left {
-  border-left: 0.2vw solid #2e404c;
+  border-left: 0.15vw solid #2e404c;
 }
 
 .comparison-value.right {
-  border-left: 0.2vw solid #ffc107;
+  border-left: 0.15vw solid #ffc107;
 }
 
 .comparison-value.highlight {
@@ -919,22 +851,22 @@ const getRiskLevel = (level) => {
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.8vw;
-  padding: 1.5vh 2vw;
-  border-top: 0.1vw solid #e0e0e0;
+  gap: 0.5vw;
+  padding: 2vh 2vw;
+  border-top: 0.05vw solid #e0e0e0;
   background: #fafafa;
 }
 
 .cancel-button {
-  padding: 0.8vh 1.5vw;
-  border-radius: 0.5vw;
+  padding: 1vh 1.5vw;
+  border-radius: 0.3vw;
   font-size: 0.9vw;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   border: none;
-  background: #f5f5f5;
-  color: #666;
+  background: var(--color-primary-green);
+  color: var(--color-modal-bg);
 }
 
 .cancel-button:hover {
@@ -942,390 +874,7 @@ const getRiskLevel = (level) => {
   color: #333;
 }
 
-/* 반응형 */
-@media (max-width: 1200px) {
-  .modal-container {
-    max-width: 70vw;
-  }
-
-  .modal-title {
-    font-size: 1.8vw;
-  }
-
-  .section-title {
-    font-size: 1.3vw;
-  }
-
-  .product-name {
-    font-size: 1.3vw;
-  }
-}
-
-@media (max-width: 768px) {
-  .modal-container {
-    width: 95vw;
-    max-width: 95vw;
-    max-height: 95vh;
-  }
-
-  .modal-header,
-  .modal-footer {
-    padding: 2vh 3vw;
-  }
-
-  .modal-body {
-    padding: 2vh 3vw;
-  }
-
-  .modal-title {
-    font-size: 2.5vw;
-  }
-
-  .close-button {
-    width: 4vw;
-    height: 4vw;
-  }
-
-  .close-button svg {
-    width: 2.5vw;
-    height: 2.5vw;
-  }
-
-  .product-compare-section {
-    height: 10vh;
-  }
-
-  .bank-icon {
-    width: 4.5vw;
-    height: 4.5vw;
-  }
-
-  .product-name {
-    font-size: 1.8vw;
-  }
-
-  .vs-circle {
-    width: 5.5vw;
-    height: 5.5vw;
-  }
-
-  .vs-text {
-    font-size: 1.5vw;
-  }
-
-  .section-title {
-    font-size: 1.8vw;
-  }
-
-  .section-title svg {
-    width: 2vw;
-    height: 2vw;
-  }
-
-  .comparison-row {
-    grid-template-columns: 12vw 1fr 1fr;
-    gap: 2vw;
-  }
-
-  .comparison-label {
-    font-size: 1.3vw;
-  }
-
-  .comparison-value {
-    font-size: 1.3vw;
-    padding: 1vh 1.5vw;
-  }
-
-  .comparison-value.highlight {
-    font-size: 1.5vw;
-  }
-
-  .analysis-text {
-    font-size: 1.3vw;
-    padding: 2vh 2vw;
-  }
-
-  .analysis-text h1 {
-    font-size: 1.8vw;
-  }
-
-  .analysis-text h2 {
-    font-size: 1.6vw;
-  }
-
-  .analysis-text h3 {
-    font-size: 1.4vw;
-  }
-
-  .spinner {
-    width: 4vw;
-    height: 4vw;
-    border-width: 0.4vw;
-  }
-
-  .loading-spinner p,
-  .error-message p {
-    font-size: 1.3vw;
-  }
-
-  .retry-button {
-    font-size: 1.3vw;
-    padding: 1vh 2vw;
-  }
-
-  .cancel-button {
-    font-size: 1.3vw;
-    padding: 1.5vh 2.5vw;
-  }
-}
-
-@media (max-width: 480px) {
-  .modal-container {
-    width: 98vw;
-    max-width: 98vw;
-    max-height: 98vh;
-  }
-
-  .comparison-row {
-    grid-template-columns: 1fr;
-    gap: 1.5vh;
-    text-align: center;
-  }
-
-  .comparison-label {
-    background: #f0f0f0;
-    padding: 1vh 2vw;
-    border-radius: 0.8vw;
-    font-weight: 700;
-    font-size: 2vw;
-  }
-
-  .comparison-value {
-    font-size: 2vw;
-    padding: 1.2vh 2vw;
-  }
-
-  .comparison-value.highlight {
-    font-size: 2.2vw;
-  }
-
-  .modal-footer {
-    flex-direction: column;
-    gap: 1.5vh;
-  }
-
-  .cancel-button {
-    width: 100%;
-    font-size: 2vw;
-    padding: 2vh 3vw;
-  }
-
-  .analysis-text {
-    font-size: 1.8vw;
-    padding: 2vh 3vw;
-  }
-
-  .analysis-text h1 {
-    font-size: 2.5vw;
-  }
-
-  .analysis-text h2 {
-    font-size: 2.2vw;
-  }
-
-  .analysis-text h3 {
-    font-size: 2vw;
-  }
-
-  .modal-title {
-    font-size: 3.5vw;
-  }
-
-  .product-name {
-    font-size: 2.5vw;
-  }
-
-  .section-title {
-    font-size: 2.5vw;
-  }
-
-  .section-title svg {
-    width: 3vw;
-    height: 3vw;
-  }
-
-  .vs-circle {
-    width: 8vw;
-    height: 8vw;
-  }
-
-  .vs-text {
-    font-size: 2.5vw;
-  }
-
-  .bank-icon {
-    width: 6vw;
-    height: 6vw;
-  }
-
-  .spinner {
-    width: 6vw;
-    height: 6vw;
-    border-width: 0.6vw;
-  }
-
-  .loading-spinner p,
-  .error-message p {
-    font-size: 2vw;
-  }
-
-  .retry-button {
-    font-size: 2vw;
-    padding: 1.5vh 3vw;
-  }
-}
-
-.comparison-row {
-  display: grid;
-  grid-template-columns: 140px 1fr 1fr;
-  gap: 16px;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.comparison-row:last-child {
-  border-bottom: none;
-}
-
-.comparison-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #666;
-}
-
-.comparison-value {
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
-  text-align: center;
-}
-
-.comparison-value.left {
-  border-left: 3px solid #2e404c;
-}
-
-.comparison-value.right {
-  border-left: 3px solid #ffc107;
-}
-
-.comparison-value.highlight {
-  font-weight: 700;
-  font-size: 16px;
-  color: #e91e63;
-  background: #fff5f8;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 24px 32px;
-  border-top: 1px solid #e0e0e0;
-  background: #fafafa;
-}
-
-.cancel-button {
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  background: #f5f5f5;
-  color: #666;
-}
-
-.cancel-button:hover {
-  background: #e0e0e0;
-  color: #333;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
-  .modal-container {
-    width: 95%;
-    max-height: 95vh;
-  }
-
-  .modal-header,
-  .modal-footer {
-    padding: 16px 20px;
-  }
-
-  .modal-body {
-    padding: 20px;
-  }
-
-  .modal-title {
-    font-size: 20px;
-  }
-
-  .comparison-row {
-    grid-template-columns: 120px 1fr 1fr;
-    gap: 12px;
-  }
-
-  .comparison-label {
-    font-size: 13px;
-  }
-
-  .comparison-value {
-    font-size: 13px;
-    padding: 6px 8px;
-  }
-
-  .analysis-text {
-    font-size: 13px;
-    padding: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .modal-container {
-    width: 98%;
-    max-height: 98vh;
-  }
-
-  .comparison-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .comparison-label {
-    background: #f0f0f0;
-    padding: 8px;
-    border-radius: 4px;
-    font-weight: 700;
-  }
-
-  .modal-footer {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .cancel-button {
-    width: 100%;
-  }
-
-  .analysis-text {
-    font-size: 12px;
-    padding: 12px;
-  }
+.loading-spinner p {
+  font-size: 0.9vw;
 }
 </style>

@@ -31,7 +31,6 @@
           :is-visible="isCompareModalVisible"
           :selected-products="selectedProducts"
           @close="closeCompareModal"
-          @detailed-compare="handleDetailedCompare"
         />
       </div>
 
