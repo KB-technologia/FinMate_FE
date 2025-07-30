@@ -1,6 +1,6 @@
 // 토큰 유틸 함수 모음 (도구)
 // setAccessToken(), getAccessToken(), removeAccessToken(), isTokenExpired()
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const ACCESS_TOKEN_KEY = "accessToken";
 

@@ -36,7 +36,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth/auth";
+import { useAuthStore } from "@/api/auth/authStore";
 import { useToast } from "@/composables/useToast";
 
 const { toast } = useToast();

@@ -9,7 +9,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-import { setToast, setToastInstance } from "@/composables/toastManager";
+import { setToastInstance } from "@/composables/toastManager";
 import ToastContainer from "@/components/allshared/ToastContainer.vue";
 import { useAuthStore } from "@/api/auth/authStore";
 
@@ -22,10 +22,10 @@ onMounted(() => {
   }
 
   const authStore = useAuthStore();
-  const isValid = authStore.initialize();
+  const isValid = authStore.initialize(); // 유효성 판단
 
   if (!isValid) {
-    setToast(
+    setToastInstance(
       "세션이 만료되어 로그아웃되었습니다. 다시 로그인해주세요",
       "warning"
     );

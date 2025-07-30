@@ -50,6 +50,7 @@ export const useAuthStore = defineStore("auth", {
         return false;
       }
     },
+    // 유효하면 저장, 만료된 경우는 로그아웃 처리
     initialize() {
       const token = getAccessToken();
       if (token && !isTokenExpired(token)) {
