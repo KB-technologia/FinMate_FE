@@ -5,7 +5,7 @@
         <label class="readonly-label">아이디</label>
         <input
           type="text"
-          v-model="accountId"
+          v-model="form.accountId"
           disabled
           class="readonly-input"
         />
@@ -16,7 +16,7 @@
         <input
           type="password"
           placeholder="새 비밀번호를 입력해주세요"
-          v-model="password"
+          v-model="form.password"
         />
       </div>
 
@@ -25,9 +25,9 @@
         <input
           type="password"
           placeholder="비밀번호를 한 번 더 입력해주세요"
-          v-model="passwordCheck"
+          v-model="form.passwordCheck"
         />
-        <p v-if="passwordCheck && !isPasswordMatch" class="error-msg">
+        <p v-if="form.passwordCheck && !isPasswordMatch" class="error-msg">
           비밀번호가 일치하지 않습니다.
         </p>
       </div>
@@ -35,7 +35,7 @@
       <div class="form-group">
         <label>이메일</label>
         <div class="email-group">
-          <input type="email" v-model="email" />
+          <input type="email" v-model="form.email" />
           <button type="button" class="verify-btn" @click="onClickEmailVerify">
             인증
           </button>
@@ -47,7 +47,7 @@
         <input
           type="text"
           placeholder="yyyymmdd"
-          v-model="birthdate"
+          v-model="form.birthdate"
           maxlength="8"
           inputmode="numeric"
           @input="onBirthdateInput"
@@ -71,16 +71,16 @@
       </div>
     </form>
     <EmailCodeModal
-      v-if="isModalOpen"
-      :request-id="emailVerificationUUID"
+      v-if="ui.isModalOpen"
+      :request-id="form.emailVerificationUUID"
       @success="handleEmailVerifySuccess"
-      @close="isModalOpen = false"
+      @close="ui.isModalOpen = false"
     />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import { useToast } from "@/composables/useToast";
 
 import EmailCodeModal from "@/components/info/onClickEmailVerify.vue";
@@ -92,49 +92,53 @@ import {
 
 const { toast } = useToast();
 
-const accountId = ref("");
-const password = ref("");
-const passwordCheck = ref("");
-const email = ref("");
-const birthdate = ref("");
-const emailVerificationUUID = ref("");
-const isModalOpen = ref(false);
-const isComposing = ref(false);
-const isEmailVerified = ref(false);
+const form = reactive({
+  accountId: "",
+  password: "",
+  passwordCheck: "",
+  email: "",
+  birthdate: "",
+  emailVerificationUUID: "",
+});
+
+const ui = reactive({
+  isModalOpen: false,
+  isComposing: false,
+});
 
 const onSubmit = async () => {
   const payload = {};
 
   if (
-    password.value &&
-    passwordCheck.value &&
-    password.value === passwordCheck.value
+    form.password &&
+    form.passwordCheck &&
+    form.password === form.passwordCheck
   ) {
-    payload.password = password.value;
+    payload.password = form.password;
   }
 
-  if (email.value) {
-    payload.email = email.value;
-
-    if (emailVerificationUUID.value) {
-      payload.emailVerificationUUID = emailVerificationUUID.value;
+  if (form.email) {
+    if (!form.emailVerificationUUID) {
+      toast("이메일 인증을 먼저 완료해주세요.", "error");
+      return;
     }
+    payload.email = form.email;
+    payload.emailVerificationUUID = form.emailVerificationUUID;
   }
 
-  if (birthdate.value) {
-    payload.birthdate = birthdate.value;
+  if (form.birthdate) {
+    payload.birthdate = form.birthdate;
   }
 
   try {
     const res = await updateUserInfo(payload);
     if (res.status === 200 || res.status === 204) {
       toast("회원 정보가 성공적으로 수정되었습니다.", "success");
-
-      password.value = "";
-      passwordCheck.value = "";
-      email.value = "";
-      birthdate.value = "";
-      emailVerificationUUID.value = "";
+      form.password = "";
+      form.passwordCheck = "";
+      form.email = "";
+      form.birthdate = "";
+      form.emailVerificationUUID = "";
     } else {
       toast("회원 정보 수정에 실패했습니다.", "error");
     }
@@ -147,25 +151,25 @@ const onSubmit = async () => {
 onMounted(async () => {
   try {
     const user = await getMyInfo();
-    accountId.value = user.accountId;
-    email.value = user.email;
-    birthdate.value = user.birthdate;
+    form.accountId = user.accountId;
+    form.email = user.email;
+    form.birthdate = user.birthdate;
   } catch (e) {
     toast("회원 정보를 불러오는 데 실패했습니다.", "error");
   }
 });
 
 const onClickEmailVerify = async () => {
-  if (!email.value) {
+  if (!form.email) {
     toast("이메일을 입력해주세요.", "error");
     return;
   }
 
   try {
-    const res = await sendEmailVerification(email.value);
-    emailVerificationUUID.value = res.uuid;
+    const res = await sendEmailVerification(form.email);
+    form.emailVerificationUUID = res.uuid;
     toast("이메일 인증 링크가 전송되었습니다!", "success");
-    isModalOpen.value = true;
+    ui.isModalOpen = true;
   } catch (e) {
     toast("이메일 인증 요청에 실패했습니다.", "error");
     console.error(e);
@@ -173,45 +177,44 @@ const onClickEmailVerify = async () => {
 };
 
 const handleEmailVerifySuccess = () => {
-  isEmailVerified.value = true;
   toast("이메일 인증이 완료되었습니다!", "success");
 };
 
 const onCompositionStart = () => {
-  isComposing.value = true;
+  ui.isComposing = true;
 };
 
 const onCompositionEnd = (e) => {
-  isComposing.value = false;
+  ui.isComposing = false;
   const raw = e.target.value;
   const filtered = raw.replace(/[^0-9]/g, "");
-  birthdate.value = filtered;
+  form.birthdate = filtered;
   e.target.value = filtered;
 };
 
 const onBirthdateInput = (e) => {
-  if (isComposing.value) return;
+  if (ui.isComposing) return;
   const raw = e.target.value;
   const filtered = raw.replace(/[^0-9]/g, "");
-  birthdate.value = filtered;
+  form.birthdate = filtered;
   e.target.value = filtered;
 };
 
 const isPasswordMatch = computed(() => {
-  return passwordCheck.value === "" || password.value === passwordCheck.value;
+  return form.passwordCheck === "" || form.password === form.passwordCheck;
 });
 
 const isBirthdateValid = computed(() => {
-  return birthdate.value === "" || /^\d{8}$/.test(birthdate.value);
+  return form.birthdate === "" || /^\d{8}$/.test(form.birthdate);
 });
 
 const isDirty = computed(() => {
   return (
-    (password.value !== "" &&
-      passwordCheck.value !== "" &&
+    (form.password !== "" &&
+      form.passwordCheck !== "" &&
       isPasswordMatch.value) ||
-    email.value !== "" ||
-    birthdate.value !== ""
+    form.email !== "" ||
+    form.birthdate !== ""
   );
 });
 </script>
