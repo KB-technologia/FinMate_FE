@@ -365,7 +365,7 @@ const getRiskLevel = (level) => {
   justify-content: space-between;
   font-size: clamp(12px, 1vw, 16px);
   color: #666;
-  padding: 0.8vh 0;
+  padding: 1vh 0.7vw;
 }
 
 .info-row span:first-child {

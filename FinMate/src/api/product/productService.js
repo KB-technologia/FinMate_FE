@@ -42,4 +42,12 @@ export const productService = {
 
     return axios.get(url);
   },
+
+  compareProducts(id1, id2) {
+    console.log(
+      '상품 비교 API 호출:',
+      `${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`
+    );
+    return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`);
+  },
 };
