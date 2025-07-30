@@ -1,139 +1,3 @@
-<script setup>
-import { ref, computed, onMounted } from "vue";
-import { useToast } from "@/composables/useToast";
-
-import EmailCodeModal from "@/components/info/onClickEmailVerify.vue";
-import {
-  getMyInfo,
-  updateUserInfo,
-  sendEmailVerification,
-} from "@/api/info/userInfoAPI";
-
-const { toast } = useToast();
-
-const password = ref("");
-const passwordCheck = ref("");
-const email = ref("");
-const birthdate = ref("");
-const emailVerificationUUID = ref("");
-const isModalOpen = ref(false);
-const isComposing = ref(false);
-const isEmailVerified = ref(false);
-
-const onSubmit = async () => {
-  const payload = {};
-
-  if (
-    password.value &&
-    passwordCheck.value &&
-    password.value === passwordCheck.value
-  ) {
-    payload.password = password.value;
-  }
-
-  if (email.value) {
-    payload.email = email.value;
-
-    if (emailVerificationUUID.value) {
-      payload.emailVerificationUUID = emailVerificationUUID.value;
-    }
-  }
-
-  if (birthdate.value) {
-    payload.birthdate = birthdate.value;
-  }
-
-  onMounted(async () => {
-    try {
-      const user = await getMyInfo();
-      accountId.value = user.accountId;
-      email.value = user.email;
-      birthdate.value = user.birthdate;
-    } catch (e) {
-      toast("회원 정보를 불러오는 데 실패했습니다.", "error");
-    }
-  });
-
-  try {
-    const res = await updateUserInfo(payload);
-    if (res.status === 200 || res.status === 204) {
-      toast("회원 정보가 성공적으로 수정되었습니다.", "success");
-
-      password.value = "";
-      passwordCheck.value = "";
-      email.value = "";
-      birthdate.value = "";
-      emailVerificationUUID.value = "";
-    } else {
-      toast("회원 정보 수정에 실패했습니다.", "error");
-    }
-  } catch (e) {
-    toast("회원 정보 수정 중 오류가 발생했습니다.", "error");
-    console.error(e);
-  }
-};
-
-const onClickEmailVerify = async () => {
-  if (!email.value) {
-    toast("이메일을 입력해주세요.", "error");
-    return;
-  }
-
-  try {
-    const res = await sendEmailVerification(email.value);
-    emailVerificationUUID.value = res.uuid;
-    toast("이메일 인증 링크가 전송되었습니다!", "success");
-    isModalOpen.value = true;
-  } catch (e) {
-    toast("이메일 인증 요청에 실패했습니다.", "error");
-    console.error(e);
-  }
-};
-
-const handleEmailVerifySuccess = () => {
-  isEmailVerified.value = true;
-  toast("이메일 인증이 완료되었습니다. 계속 진행해주세요!", "success");
-};
-
-const onCompositionStart = () => {
-  isComposing.value = true;
-};
-
-const onCompositionEnd = (e) => {
-  isComposing.value = false;
-  const raw = e.target.value;
-  const filtered = raw.replace(/[^0-9]/g, "");
-  birthdate.value = filtered;
-  e.target.value = filtered;
-};
-
-const onBirthdateInput = (e) => {
-  if (isComposing.value) return;
-  const raw = e.target.value;
-  const filtered = raw.replace(/[^0-9]/g, "");
-  birthdate.value = filtered;
-  e.target.value = filtered;
-};
-
-const isPasswordMatch = computed(() => {
-  return passwordCheck.value === "" || password.value === passwordCheck.value;
-});
-
-const isBirthdateValid = computed(() => {
-  return birthdate.value === "" || /^\d{8}$/.test(birthdate.value);
-});
-
-const isDirty = computed(() => {
-  return (
-    (password.value !== "" &&
-      passwordCheck.value !== "" &&
-      isPasswordMatch.value) ||
-    email.value !== "" ||
-    birthdate.value !== ""
-  );
-});
-</script>
-
 <template>
   <div>
     <form class="user-info-form" @submit.prevent="onSubmit">
@@ -214,6 +78,143 @@ const isDirty = computed(() => {
     />
   </div>
 </template>
+
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useToast } from "@/composables/useToast";
+
+import EmailCodeModal from "@/components/info/onClickEmailVerify.vue";
+import {
+  getMyInfo,
+  updateUserInfo,
+  sendEmailVerification,
+} from "@/api/info/userInfoAPI";
+
+const { toast } = useToast();
+
+const accountId = ref("");
+const password = ref("");
+const passwordCheck = ref("");
+const email = ref("");
+const birthdate = ref("");
+const emailVerificationUUID = ref("");
+const isModalOpen = ref(false);
+const isComposing = ref(false);
+const isEmailVerified = ref(false);
+
+const onSubmit = async () => {
+  const payload = {};
+
+  if (
+    password.value &&
+    passwordCheck.value &&
+    password.value === passwordCheck.value
+  ) {
+    payload.password = password.value;
+  }
+
+  if (email.value) {
+    payload.email = email.value;
+
+    if (emailVerificationUUID.value) {
+      payload.emailVerificationUUID = emailVerificationUUID.value;
+    }
+  }
+
+  if (birthdate.value) {
+    payload.birthdate = birthdate.value;
+  }
+
+  try {
+    const res = await updateUserInfo(payload);
+    if (res.status === 200 || res.status === 204) {
+      toast("회원 정보가 성공적으로 수정되었습니다.", "success");
+
+      password.value = "";
+      passwordCheck.value = "";
+      email.value = "";
+      birthdate.value = "";
+      emailVerificationUUID.value = "";
+    } else {
+      toast("회원 정보 수정에 실패했습니다.", "error");
+    }
+  } catch (e) {
+    toast("회원 정보 수정 중 오류가 발생했습니다.", "error");
+    console.error(e);
+  }
+};
+
+onMounted(async () => {
+  try {
+    const user = await getMyInfo();
+    accountId.value = user.accountId;
+    email.value = user.email;
+    birthdate.value = user.birthdate;
+  } catch (e) {
+    toast("회원 정보를 불러오는 데 실패했습니다.", "error");
+  }
+});
+
+const onClickEmailVerify = async () => {
+  if (!email.value) {
+    toast("이메일을 입력해주세요.", "error");
+    return;
+  }
+
+  try {
+    const res = await sendEmailVerification(email.value);
+    emailVerificationUUID.value = res.uuid;
+    toast("이메일 인증 링크가 전송되었습니다!", "success");
+    isModalOpen.value = true;
+  } catch (e) {
+    toast("이메일 인증 요청에 실패했습니다.", "error");
+    console.error(e);
+  }
+};
+
+const handleEmailVerifySuccess = () => {
+  isEmailVerified.value = true;
+  toast("이메일 인증이 완료되었습니다. 계속 진행해주세요!", "success");
+};
+
+const onCompositionStart = () => {
+  isComposing.value = true;
+};
+
+const onCompositionEnd = (e) => {
+  isComposing.value = false;
+  const raw = e.target.value;
+  const filtered = raw.replace(/[^0-9]/g, "");
+  birthdate.value = filtered;
+  e.target.value = filtered;
+};
+
+const onBirthdateInput = (e) => {
+  if (isComposing.value) return;
+  const raw = e.target.value;
+  const filtered = raw.replace(/[^0-9]/g, "");
+  birthdate.value = filtered;
+  e.target.value = filtered;
+};
+
+const isPasswordMatch = computed(() => {
+  return passwordCheck.value === "" || password.value === passwordCheck.value;
+});
+
+const isBirthdateValid = computed(() => {
+  return birthdate.value === "" || /^\d{8}$/.test(birthdate.value);
+});
+
+const isDirty = computed(() => {
+  return (
+    (password.value !== "" &&
+      passwordCheck.value !== "" &&
+      isPasswordMatch.value) ||
+    email.value !== "" ||
+    birthdate.value !== ""
+  );
+});
+</script>
 
 <style scoped>
 .user-info-form {
