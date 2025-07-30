@@ -43,8 +43,10 @@ import UserInfoForm from "@/components/info/UserInfoForm.vue";
 .mypage-container {
   display: flex;
   gap: 2rem;
-  padding: 2rem 4rem;
+  padding: 2rem 0;
   align-items: flex-start;
+  width: 95vw;
+  margin-left: 4vw;
 }
 
 .panel-inner {
