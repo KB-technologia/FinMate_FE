@@ -4,7 +4,7 @@ import surveyJson from '@/assets/signupSurvey.json'; // 설문 데이터 JSON
 
 const surveyData = ref([]);
 const currentIndex = ref(0);
-const selectedAnswers = ref(Array(10).fill(null));
+const selectedAnswers = ref(Array(9).fill(null));
 
 const currentQuestion = computed(
   () => surveyData.value[currentIndex.value] || {}
