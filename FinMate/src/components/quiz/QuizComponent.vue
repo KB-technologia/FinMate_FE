@@ -133,6 +133,8 @@ const onSubmit = async () => {
 }
 .quiz-card {
   border-radius: 2vh;
+  width: 70vw;
+  height: 60vh;
   padding: 2vh;
   align-items: center;
   justify-content: center;
