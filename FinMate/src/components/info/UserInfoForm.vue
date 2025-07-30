@@ -70,6 +70,7 @@
         </button>
       </div>
     </form>
+    <LoadingOverlay v-if="ui.isLoading" />
     <EmailCodeModal
       v-if="ui.isModalOpen"
       :request-id="form.emailVerificationUUID"
@@ -83,6 +84,7 @@
 import { reactive, computed, onMounted } from "vue";
 import { useToast } from "@/composables/useToast";
 
+import LoadingOverlay from "@/components/allshared/LoadingOverlay.vue";
 import EmailCodeModal from "@/components/info/onClickEmailVerify.vue";
 import {
   getMyInfo,
@@ -104,6 +106,7 @@ const form = reactive({
 const ui = reactive({
   isModalOpen: false,
   isComposing: false,
+  isLoading: false,
 });
 
 const onSubmit = async () => {
@@ -166,13 +169,15 @@ const onClickEmailVerify = async () => {
   }
 
   try {
+    ui.isLoading = true;
     const res = await sendEmailVerification(form.email);
     form.emailVerificationUUID = res.uuid;
-    toast("이메일 인증 링크가 전송되었습니다!", "success");
     ui.isModalOpen = true;
+    toast("이메일 인증 링크가 전송되었습니다!", "success");
   } catch (e) {
     toast("이메일 인증 요청에 실패했습니다.", "error");
-    console.error(e);
+  } finally {
+    ui.isLoading = false;
   }
 };
 
