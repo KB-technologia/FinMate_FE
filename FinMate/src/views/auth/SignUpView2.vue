@@ -1,6 +1,6 @@
 <template>
   <div class="signup-view">
-    <div>
+    <div class="nav">
       <TopNavigationBar />
     </div>
     <div class="signup-view-content">
@@ -28,5 +28,9 @@ import RegisterForm from '@/components/auth/RegisterForm.vue';
   padding: 3rem 1rem;
   min-height: 100vh;
   background-color: #f4f4f4;
+}
+.nav {
+  justify-content: center;
+  align-items: center;
 }
 </style>

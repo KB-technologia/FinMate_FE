@@ -130,7 +130,7 @@ const goToNext = () => {
 .terms-box {
   border: 1px solid #ccc;
   padding: 1rem;
-  height: 700px;
+  height: 47vh;
   overflow-y: auto;
   margin-bottom: 1rem;
   display: flex;
@@ -147,7 +147,7 @@ const goToNext = () => {
 
 .terms-content {
   width: 100%;
-  height: 620px;
+  height: 42vh;
   border: none;
   resize: none;
   background-color: transparent;
@@ -170,8 +170,8 @@ const goToNext = () => {
   display: block;
   margin: 1rem auto 0;
   width: 60%;
-  height: 45px;
-  background-color: #444;
+  height: 4vh;
+  background-color: #636362;
   color: white;
   border: none;
   border-radius: 0.5rem;

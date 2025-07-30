@@ -34,11 +34,17 @@
       로그인 하러 가기
     </button>
     <div v-if="!isLoggedIn" class="login-options">
-      <p class="login-option">회원가입</p>
+      <p class="login-option">
+        <router-link to="/signup1">회원가입</router-link>
+      </p>
       <p>|</p>
-      <p class="login-option">아이디 찾기</p>
+      <p class="login-option">
+        <router-link to="/find-id">아이디 찾기</router-link>
+      </p>
       <p>|</p>
-      <p class="login-option">비밀번호 찾기</p>
+      <p class="login-option">
+        <router-link to="/find-pw">비밀번호 찾기</router-link>
+      </p>
     </div>
   </div>
   <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
@@ -222,5 +228,14 @@ function handleLoginClick() {
 }
 .login-option:hover {
   color: var(--color-black);
+}
+
+.login-option a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.login-option a:hover {
+  text-decoration: underline;
 }
 </style>
