@@ -1,3 +1,23 @@
+<template>
+  <div class="main-view">
+    <div class="main-view-navigation-bar">
+      <TopNavigationBar />
+    </div>
+
+    <div class="main-view-content">
+      <div class="mypage-container">
+        <Sidebar />
+        <RightPanel :scroll="false">
+          <div class="panel-inner">
+            <h2 class="title">회원 정보 수정</h2>
+            <UserInfoForm />
+          </div>
+        </RightPanel>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import Sidebar from "@/components/info/Sidebar.vue";
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
@@ -5,20 +25,21 @@ import RightPanel from "@/components/info/RightPanel.vue";
 import UserInfoForm from "@/components/info/UserInfoForm.vue";
 </script>
 
-<template>
-  <TopNavigationBar />
-  <div class="mypage-container">
-    <Sidebar />
-    <RightPanel :scroll="false">
-      <div class="panel-inner">
-        <h2 class="title">회원 정보 수정</h2>
-        <UserInfoForm />
-      </div>
-    </RightPanel>
-  </div>
-</template>
-
 <style scoped>
+.main-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main-view-content {
+  width: 100%;
+  padding: 2vh 0;
+}
+
 .mypage-container {
   display: flex;
   gap: 2rem;
