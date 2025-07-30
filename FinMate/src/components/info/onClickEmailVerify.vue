@@ -9,6 +9,7 @@
         placeholder="인증번호 6자리"
         maxlength="6"
         class="code-input"
+        @keyup.enter="submitCode"
       />
       <button class="submit-button" @click="submitCode">확인</button>
     </div>
