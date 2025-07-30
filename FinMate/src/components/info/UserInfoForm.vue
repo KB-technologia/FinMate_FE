@@ -1,11 +1,99 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useToast } from "@/composables/useToast";
+
+import EmailCodeModal from "@/components/info/onClickEmailVerify.vue";
+import {
+  getMyInfo,
+  updateUserInfo,
+  sendEmailVerification,
+} from "@/api/info/userInfoAPI";
+
+const { toast } = useToast();
 
 const password = ref("");
 const passwordCheck = ref("");
 const email = ref("");
 const birthdate = ref("");
+const emailVerificationUUID = ref("");
+const isModalOpen = ref(false);
 const isComposing = ref(false);
+const isEmailVerified = ref(false);
+
+const onSubmit = async () => {
+  const payload = {};
+
+  if (
+    password.value &&
+    passwordCheck.value &&
+    password.value === passwordCheck.value
+  ) {
+    payload.password = password.value;
+  }
+
+  if (email.value) {
+    payload.email = email.value;
+
+    if (emailVerificationUUID.value) {
+      payload.emailVerificationUUID = emailVerificationUUID.value;
+    }
+  }
+
+  if (birthdate.value) {
+    payload.birthdate = birthdate.value;
+  }
+
+  onMounted(async () => {
+    try {
+      const user = await getMyInfo();
+      accountId.value = user.accountId;
+      email.value = user.email;
+      birthdate.value = user.birthdate;
+    } catch (e) {
+      toast("회원 정보를 불러오는 데 실패했습니다.", "error");
+    }
+  });
+
+  try {
+    const res = await updateUserInfo(payload);
+    if (res.status === 200 || res.status === 204) {
+      toast("회원 정보가 성공적으로 수정되었습니다.", "success");
+
+      password.value = "";
+      passwordCheck.value = "";
+      email.value = "";
+      birthdate.value = "";
+      emailVerificationUUID.value = "";
+    } else {
+      toast("회원 정보 수정에 실패했습니다.", "error");
+    }
+  } catch (e) {
+    toast("회원 정보 수정 중 오류가 발생했습니다.", "error");
+    console.error(e);
+  }
+};
+
+const onClickEmailVerify = async () => {
+  if (!email.value) {
+    toast("이메일을 입력해주세요.", "error");
+    return;
+  }
+
+  try {
+    const res = await sendEmailVerification(email.value);
+    emailVerificationUUID.value = res.uuid;
+    toast("이메일 인증 링크가 전송되었습니다!", "success");
+    isModalOpen.value = true;
+  } catch (e) {
+    toast("이메일 인증 요청에 실패했습니다.", "error");
+    console.error(e);
+  }
+};
+
+const handleEmailVerifySuccess = () => {
+  isEmailVerified.value = true;
+  toast("이메일 인증이 완료되었습니다. 계속 진행해주세요!", "success");
+};
 
 const onCompositionStart = () => {
   isComposing.value = true;
@@ -47,69 +135,84 @@ const isDirty = computed(() => {
 </script>
 
 <template>
-  <form class="user-info-form">
-    <div class="form-group">
-      <label class="readonly-label">아이디</label>
-      <input type="text" value="abc1234" disabled class="readonly-input" />
-    </div>
-
-    <div class="form-group">
-      <label>비밀번호</label>
-      <input
-        type="password"
-        placeholder="새 비밀번호를 입력해주세요"
-        v-model="password"
-      />
-    </div>
-
-    <div class="form-group">
-      <label>비밀번호 확인*</label>
-      <input
-        type="password"
-        placeholder="비밀번호를 한 번 더 입력해주세요"
-        v-model="passwordCheck"
-      />
-      <p v-if="passwordCheck && !isPasswordMatch" class="error-msg">
-        비밀번호가 일치하지 않습니다.
-      </p>
-    </div>
-
-    <div class="form-group">
-      <label>이메일</label>
-      <div class="email-group">
-        <input type="email" v-model="email" />
-        <button type="button" class="verify-btn">인증</button>
+  <div>
+    <form class="user-info-form" @submit.prevent="onSubmit">
+      <div class="form-group">
+        <label class="readonly-label">아이디</label>
+        <input
+          type="text"
+          v-model="accountId"
+          disabled
+          class="readonly-input"
+        />
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>생년월일</label>
-      <input
-        type="text"
-        placeholder="yyyymmdd"
-        :value="birthdate"
-        maxlength="8"
-        inputmode="numeric"
-        @input="onBirthdateInput"
-        @compositionstart="onCompositionStart"
-        @compositionend="onCompositionEnd"
-      />
-      <p v-if="!isBirthdateValid" class="error-msg">
-        생년월일은 yyyymmdd 형식으로 8자리 입력해주세요.
-      </p>
-    </div>
+      <div class="form-group">
+        <label>비밀번호</label>
+        <input
+          type="password"
+          placeholder="새 비밀번호를 입력해주세요"
+          v-model="password"
+        />
+      </div>
 
-    <div class="btn-group">
-      <button
-        type="submit"
-        class="submit"
-        :class="{ inactive: !isDirty }"
-        :disabled="!isDirty"
-      >
-        변경사항 저장
-      </button>
-    </div>
-  </form>
+      <div class="form-group">
+        <label>비밀번호 확인*</label>
+        <input
+          type="password"
+          placeholder="비밀번호를 한 번 더 입력해주세요"
+          v-model="passwordCheck"
+        />
+        <p v-if="passwordCheck && !isPasswordMatch" class="error-msg">
+          비밀번호가 일치하지 않습니다.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label>이메일</label>
+        <div class="email-group">
+          <input type="email" v-model="email" />
+          <button type="button" class="verify-btn" @click="onClickEmailVerify">
+            인증
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>생년월일</label>
+        <input
+          type="text"
+          placeholder="yyyymmdd"
+          v-model="birthdate"
+          maxlength="8"
+          inputmode="numeric"
+          @input="onBirthdateInput"
+          @compositionstart="onCompositionStart"
+          @compositionend="onCompositionEnd"
+        />
+        <p v-if="!isBirthdateValid" class="error-msg">
+          생년월일은 yyyymmdd 형식으로 8자리 입력해주세요.
+        </p>
+      </div>
+
+      <div class="btn-group">
+        <button
+          type="submit"
+          class="submit"
+          :class="{ inactive: !isDirty }"
+          :disabled="!isDirty"
+        >
+          변경사항 저장
+        </button>
+      </div>
+    </form>
+    <EmailCodeModal
+      v-if="isModalOpen"
+      :request-id="emailVerificationUUID"
+      @success="handleEmailVerifySuccess"
+      @close="isModalOpen = false"
+    />
+  </div>
 </template>
 
 <style scoped>
