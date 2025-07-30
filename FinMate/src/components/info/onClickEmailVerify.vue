@@ -20,10 +20,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useToast } from "@/composables/useToast";
 import { verifyEmailCode } from "@/api/info/userInfoAPI";
-
 import CloseButton from "@/components/allshared/CloseButton.vue";
 
 const props = defineProps({
@@ -49,6 +48,20 @@ const submitCode = async () => {
     console.error(e);
   }
 };
+
+const handleKeydown = (e) => {
+  if (e.key === "Escape") {
+    emit("close");
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeydown);
+});
 </script>
 
 <style scoped>
