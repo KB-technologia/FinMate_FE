@@ -55,6 +55,7 @@ onMounted(() => {
   if (authStore.isFirst === true) {
     showModal.value = true;
   }
+  // localStorage.setItem('token', 'adfadfsdfasdf'); //
 });
 
 const closeModal = () => {

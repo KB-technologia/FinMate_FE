@@ -1,22 +1,12 @@
 <template>
   <div class="quiz-wrapper">
-    <!-- <div class="indicator">
-      <div
-        v-for="(answer, idx) in selectedAnswers"
-        :key="idx"
-        class="indicator-item"
-        :class="{ completed: answer !== null, active: currentIndex === idx }"
-        @click="goToQuestion(idx)"
-      >
-        {{ idx + 1 }}
-      </div>
-    </div> -->
     <div class="model-7 checkboxcontainer">
       <div class="checkbox">
         <input type="checkbox" id="toggle" v-model="showExtra" />
         <label for="toggle"></label>
       </div>
     </div>
+
     <transition name="slide" mode="out-in">
       <div
         v-if="quizData.length"
@@ -33,9 +23,13 @@
             Q{{ currentQuestion.id }}. {{ currentQuestion.question }}
           </span>
         </div>
+
         <ul class="quiz-options">
           <li v-for="(option, idx) in currentQuestion.options" :key="idx">
-            <label>
+            <label
+              class="label"
+              :class="{ selected: selectedAnswers[currentIndex] === idx }"
+            >
               <input
                 type="radio"
                 :name="'q' + currentQuestion.id"
@@ -86,24 +80,19 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import quizJson from '@/assets/quiz.json';
+import { postAssessment } from '@/api/quiz/quiz.js';
 
 const quizData = ref([]);
 const currentIndex = ref(0);
-const selectedAnswers = ref(Array(7).fill(null));
-const showTooltip = ref(false);
+const selectedAnswers = ref(Array(6).fill(null));
 
 const currentQuestion = computed(
   () => quizData.value[currentIndex.value] || {}
 );
-
 const isComplete = computed(() =>
-  selectedAnswers.value.every((answer) => answer !== null)
+  selectedAnswers.value.every((a) => a !== null)
 );
 const showExtra = ref(false);
-
-// const goToQuestion = (idx) => {
-//   currentIndex.value = idx;
-// };
 
 const prevQuestion = () => {
   if (currentIndex.value > 0) currentIndex.value--;
@@ -116,56 +105,35 @@ onMounted(() => {
   quizData.value = quizJson;
 });
 
-const onSubmit = () => {
-  console.log('사용자 답변:', selectedAnswers.value);
+const onSubmit = async () => {
+  try {
+    const result = await postAssessment(selectedAnswers.value);
+    console.log('Assessment 결과:', result);
+  } catch (error) {
+    console.error('Assessment 요청 실패:', error);
+  }
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/checkbox.scss';
+@use '@/styles/checkbox.scss';
 </style>
+
 <style scoped>
 .quiz-wrapper {
-  width: 50vw;
-  height: 55vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2vh;
+  width: 70vw;
+  height: 60vh;
   margin: auto;
   font-family: var(--font-wanted);
 }
-
-.indicator {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-.indicator-item {
-  width: 2rem;
-  height: 2rem;
-  background-color: var(--color-light-gray);
-  color: black;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.indicator-item:hover {
-  transform: scale(1.1);
-}
-.indicator-item.completed {
-  background-color: var(--color-primary-green);
-  color: white;
-}
-.indicator-item.active {
-  outline: 2px solid var(--color-primary-green);
-  font-weight: 700;
-}
-
 .quiz-card {
   border-radius: 2vh;
-  height: 40vh;
-  width: 50vw;
+  padding: 2vh;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -177,48 +145,56 @@ const onSubmit = () => {
   box-shadow: 0 0 1vh rgba(0, 128, 0, 0.2);
   transition: all 0.3s ease in-out;
 }
-
-.quiz-narration {
-  margin-bottom: 0.5rem;
-  color: #555;
-}
 .quiz-question {
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 .quiz-options li {
-  list-style: none;
-  margin: 0.3rem 0;
-}
-.checkboxcontainer {
   display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+  flex-direction: row;
+  align-items: center;
+  list-style: none;
+  margin: 0.8rem 0;
+  font-size: 1.2rem;
 }
-.toggle-text {
-  font-size: 0.9rem;
-  color: var(--color-light-gray);
+.label {
+  cursor: pointer;
+  border: 0.2vh solid var(--color-light-gray);
+  border-radius: 2vh;
+  padding: 1vh;
+  display: flex;
+  flex-direction: row;
+  transition: all 0.2s ease;
+  gap: 0.5rem;
+}
+.label:hover {
+  border: 0.2vh solid var(--color-primary-green);
+  box-shadow: 0 0 1vh var(--color-primary-green);
+}
+.label input[type='radio'] {
+  display: none;
+}
+
+.label.selected {
+  background-color: var(--color-primary-green);
+  color: var(--color-white);
+  box-shadow: 0 0 1vh var(--color-primary-green);
+  font-weight: 600;
+  transform: scale(1.03);
 }
 
 .base-option {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--color-light-gray);
-  margin-left: 0.5rem;
+  margin-left: 1rem;
 }
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
 .quiz-navigation {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 2vh;
+  padding: 5vh;
 }
 .nav-button {
   background-color: var(--color-primary-green);
@@ -236,10 +212,7 @@ const onSubmit = () => {
 .nav-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
-
 .submit-container {
   text-align: center;
 }
@@ -260,7 +233,6 @@ const onSubmit = () => {
 .submit-button:enabled:hover {
   transform: translateY(-2px);
 }
-
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.4s ease;
