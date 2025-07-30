@@ -1,6 +1,9 @@
 <template>
   <div class="modal-backdrop" @click.self="$emit('close')">
     <div class="modal-card">
+      <div class="modal-header">
+        <CloseButton @click="$emit('close')" />
+      </div>
       <h2 class="modal-title">이메일 인증</h2>
       <p class="modal-desc">메일로 전송된 인증번호를 입력해주세요</p>
       <input
@@ -20,6 +23,8 @@
 import { ref } from "vue";
 import { useToast } from "@/composables/useToast";
 import { verifyEmailCode } from "@/api/info/userInfoAPI";
+
+import CloseButton from "@/components/allshared/CloseButton.vue";
 
 const props = defineProps({
   requestId: String,
@@ -57,6 +62,7 @@ const submitCode = async () => {
 }
 
 .modal-card {
+  position: relative;
   background-color: var(--color-primary-yellow);
   border-radius: 1.5rem;
   padding: 2rem;
@@ -66,6 +72,12 @@ const submitCode = async () => {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+}
+
+.modal-header {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 .modal-title {
