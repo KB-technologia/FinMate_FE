@@ -33,7 +33,6 @@ const submitCode = async () => {
   try {
     const result = await verifyEmailCode(props.requestId, authCode.value);
     if (result === true) {
-      toast("이메일 인증이 완료되었습니다!", "success");
       emit("success");
       emit("close");
     } else {
@@ -54,7 +53,6 @@ const submitCode = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
 }
 
 .modal-card {
@@ -93,12 +91,10 @@ const submitCode = async () => {
 .submit-button {
   background-color: var(--color-primary-bluegray);
   color: var(--color-white);
-  font-weight: bold;
-  border: none;
+  font-weight: var(--font-weight-bold);
   border-radius: 2rem;
   padding: 0.8rem 2rem;
   font-size: 1rem;
-  cursor: pointer;
 }
 
 .submit-button:hover {

@@ -174,7 +174,7 @@ const onClickEmailVerify = async () => {
 
 const handleEmailVerifySuccess = () => {
   isEmailVerified.value = true;
-  toast("이메일 인증이 완료되었습니다. 계속 진행해주세요!", "success");
+  toast("이메일 인증이 완료되었습니다!", "success");
 };
 
 const onCompositionStart = () => {
