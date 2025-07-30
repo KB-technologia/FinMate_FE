@@ -114,6 +114,8 @@ import { ref, computed } from 'vue';
 import { useSignupStore } from '@/stores/signup/signupStore';
 import { sendEmailAuth, verifyEmailAuth } from '@/api/auth/auth';
 
+const store = useSignupStore();
+
 const email = ref('');
 const authCode = ref('');
 const uuid = ref('');

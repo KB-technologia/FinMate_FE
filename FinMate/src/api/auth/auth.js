@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080';
-
 export const Login = async (id, pw) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, {
@@ -25,19 +23,18 @@ export const Login = async (id, pw) => {
   }
 };
 
-const BASE_URL = 'http://localhost:8080'; // 또는 실제 서버 주소
-
+const BASE_URL = import.meta.env.VITE_BASE_API_URL;
 export const signup = async (formData) => {
-  const res = await axios.post(`${BASE_URL}/api/member/join`, formData);
+  const res = await axios.post(`${BASE_URL}/member/join`, formData);
   return res.data;
 };
 
 export const sendEmailAuth = (email) => {
-  return axios.post(`${BASE_URL}/api/member/emailauthentication`, { email });
+  return axios.post(`${BASE_URL}/member/emailauthentication`, { email });
 };
 
 export const verifyEmailAuth = (code, uuid) => {
-  return axios.post(`${BASE_URL}/api/member/emailauthentication/verify`, {
+  return axios.post(`${BASE_URL}/member/emailauthentication/verify`, {
     authCode: code,
     requestId: uuid.toString(),
   });
