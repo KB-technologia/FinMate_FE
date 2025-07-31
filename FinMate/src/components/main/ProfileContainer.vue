@@ -44,10 +44,11 @@
   <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
   <ConfirmModal
     v-if="showLogoutConfirm"
-    text="정말 로그아웃하시겠습니까?"
+    :text="'오늘의 금융 탐험은 여기까지!\n동물 친구들이 다음 추천을 준비 중이에요'"
     leftButtonText="취소"
-    rightButtonText="확인"
+    rightButtonText="로그아웃"
     @confirm="handleLogoutConfirm"
+    :images="logoutImage"
   />
 </template>
 
@@ -57,6 +58,7 @@ import { useAuthStore } from '@/stores/auth/auth';
 import { ref, computed } from 'vue';
 import DailyQuizModal from '@/components/dailyquiz/DailyQuizModal.vue';
 import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
+import logoutImage from '@/assets/images/logos/logoutkiwi.png';
 
 const router = useRouter();
 const authStore = useAuthStore();
