@@ -4,7 +4,7 @@
       <TopNavigationBar />
     </div>
     <div class="signup-view-content">
-      <div>
+      <div class="content-area">
         <RegisterForm />
       </div>
       <div>
@@ -21,13 +21,26 @@ import RegisterForm from '@/components/auth/RegisterForm.vue';
 </script>
 
 <style scoped>
-.signup-page {
+.signup-view {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.signup-view-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.content-area {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 3rem 1rem;
-  min-height: 100vh;
-  background-color: #f4f4f4;
+  background-color: var(--color-white);
+  flex-grow: 1;
 }
 .nav {
   justify-content: center;

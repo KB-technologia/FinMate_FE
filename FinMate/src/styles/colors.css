@@ -45,4 +45,6 @@
   /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
   --color-delete-bg: #f0cccc;
 
+  /* 회원가입 글자 색상*/
+  --color-signup-black: #333;
 }
