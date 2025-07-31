@@ -2,7 +2,8 @@
   <div class="modal-overlay">
     <div class="modal-container">
       <img class="modal-image" v-if="images" :src="images" alt="Modal Image" />
-      <p class="modal-text">{{ text }}</p>
+      <p class="modal-text">{{ firsttext }}</p>
+      <p class="modal-text2" v-if="secondtext">{{ secondtext }}</p>
       <div class="modal-buttons">
         <button @click="() => emit('confirm', false)">
           {{ leftButtonText }}
@@ -19,7 +20,8 @@
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-  text: { type: String, required: true },
+  firsttext: { type: String, required: true },
+  secondtext: { type: String, required: false, default: '' },
   leftButtonText: { type: String, required: true },
   rightButtonText: { type: String, required: true },
   images: { type: String, required: false, default: '' },
@@ -39,6 +41,7 @@ const emit = defineEmits(['confirm']);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-container {
@@ -63,8 +66,13 @@ const emit = defineEmits(['confirm']);
 
 .modal-text {
   white-space: pre-line;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
+  font-size: 1.8rem;
+}
+.modal-text2 {
+  white-space: pre-line;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: var(--color-red);
 }
 
 .modal-buttons {
