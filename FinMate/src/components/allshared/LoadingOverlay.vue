@@ -1,6 +1,10 @@
 <template>
   <div class="loading-overlay">
-    <div class="spinner" />
+    <img
+      class="flying-kiwi"
+      src="@/assets/images/logos/flying-kiwi.png"
+      alt="비행기 타고 가는 키위새"
+    />
     <p class="loading-text">인증코드 발송 중...</p>
   </div>
 </template>
@@ -14,15 +18,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.5rem;
 }
 
-.spinner {
-  width: 3rem;
-  height: 3rem;
-  border: 6px solid var(--color-gray-lightest);
-  border-top: 6px solid var(--color-spinner-active);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.flying-kiwi {
+  position: absolute;
+  top: 35%;
+  left: 40%;
+  width: 8rem;
+  height: auto;
+  animation: float-forward 4s ease-in-out infinite;
 }
 
 .loading-text {
@@ -32,9 +37,21 @@
   font-weight: var(--font-weight-bold);
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+@keyframes float-forward {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(5vw, -1vh);
+  }
+  50% {
+    transform: translate(10vw, 0);
+  }
+  75% {
+    transform: translate(15vw, 1vh);
+  }
+  100% {
+    transform: translate(20vw, 0);
   }
 }
 </style>
