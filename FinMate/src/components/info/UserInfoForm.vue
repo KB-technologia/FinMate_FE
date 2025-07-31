@@ -1,116 +1,231 @@
-<script setup>
-import { ref, computed } from "vue";
+<template>
+  <div>
+    <form class="user-info-form" @submit.prevent="onSubmit">
+      <div class="form-group">
+        <label class="readonly-label">아이디</label>
+        <input
+          type="text"
+          v-model="form.accountId"
+          disabled
+          class="readonly-input"
+        />
+      </div>
 
-const password = ref("");
-const passwordCheck = ref("");
-const email = ref("");
-const birthdate = ref("");
-const isComposing = ref(false);
+      <div class="form-group">
+        <label>비밀번호</label>
+        <input
+          type="password"
+          placeholder="새 비밀번호를 입력해주세요"
+          v-model="form.password"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>비밀번호 확인*</label>
+        <input
+          type="password"
+          placeholder="비밀번호를 한 번 더 입력해주세요"
+          v-model="form.passwordCheck"
+        />
+        <p v-if="form.passwordCheck && !isPasswordMatch" class="error-msg">
+          비밀번호가 일치하지 않습니다.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label>이메일</label>
+        <div class="email-group">
+          <input type="email" v-model="form.email" />
+          <button type="button" class="verify-btn" @click="onClickEmailVerify">
+            인증
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>생년월일</label>
+        <input
+          type="text"
+          placeholder="yyyymmdd"
+          v-model="form.birthdate"
+          maxlength="8"
+          inputmode="numeric"
+          @input="onBirthdateInput"
+          @compositionstart="onCompositionStart"
+          @compositionend="onCompositionEnd"
+        />
+        <p v-if="!isBirthdateValid" class="error-msg">
+          생년월일은 yyyymmdd 형식으로 8자리 입력해주세요.
+        </p>
+      </div>
+
+      <div class="btn-group">
+        <button
+          type="submit"
+          class="submit"
+          :class="{ inactive: !isDirty }"
+          :disabled="!isDirty"
+        >
+          변경사항 저장
+        </button>
+      </div>
+    </form>
+    <LoadingOverlay
+      v-if="ui.isLoading"
+      :message="'인증 메일을 전송 중이에요...'"
+    />
+    <EmailCodeModal
+      v-if="ui.isModalOpen"
+      :request-id="form.emailVerificationUUID"
+      @success="handleEmailVerifySuccess"
+      @close="ui.isModalOpen = false"
+    />
+  </div>
+</template>
+
+<script setup>
+import { reactive, computed, onMounted } from "vue";
+import { useToast } from "@/composables/useToast";
+
+import LoadingOverlay from "@/components/allshared/LoadingOverlay.vue";
+import EmailCodeModal from "@/components/info/onClickEmailVerify.vue";
+import {
+  getMyInfo,
+  updateUserInfo,
+  sendEmailVerification,
+} from "@/api/info/userInfoAPI";
+
+const { toast } = useToast();
+
+const form = reactive({
+  accountId: "",
+  password: "",
+  passwordCheck: "",
+  email: "",
+  birthdate: "",
+  emailVerificationUUID: "",
+});
+
+const ui = reactive({
+  isModalOpen: false,
+  isComposing: false,
+  isLoading: false,
+});
+
+const onSubmit = async () => {
+  const payload = {};
+
+  if (
+    form.password &&
+    form.passwordCheck &&
+    form.password === form.passwordCheck
+  ) {
+    payload.password = form.password;
+  }
+
+  if (form.email) {
+    if (!form.emailVerificationUUID) {
+      toast("이메일 인증을 먼저 완료해주세요.", "error");
+      return;
+    }
+    payload.email = form.email;
+    payload.emailVerificationUUID = form.emailVerificationUUID;
+  }
+
+  if (form.birthdate) {
+    payload.birthdate = form.birthdate;
+  }
+
+  try {
+    const res = await updateUserInfo(payload);
+    if (res.status === 200 || res.status === 204) {
+      toast("회원 정보가 성공적으로 수정되었습니다.", "success");
+      form.password = "";
+      form.passwordCheck = "";
+      form.email = "";
+      form.birthdate = "";
+      form.emailVerificationUUID = "";
+    } else {
+      toast("회원 정보 수정에 실패했습니다.", "error");
+    }
+  } catch (e) {
+    toast("회원 정보 수정 중 오류가 발생했습니다.", "error");
+    console.error(e);
+  }
+};
+
+onMounted(async () => {
+  try {
+    const user = await getMyInfo();
+    form.accountId = user.accountId;
+    form.email = user.email;
+    form.birthdate = user.birthdate;
+  } catch (e) {
+    toast("회원 정보를 불러오는 데 실패했습니다.", "error");
+  }
+});
+
+const onClickEmailVerify = async () => {
+  if (!form.email) {
+    toast("이메일을 입력해주세요.", "error");
+    return;
+  }
+
+  try {
+    ui.isLoading = true;
+    const res = await sendEmailVerification(form.email);
+    form.emailVerificationUUID = res.uuid;
+    ui.isModalOpen = true;
+    toast("이메일 인증 링크가 전송되었습니다!", "success");
+  } catch (e) {
+    toast("이메일 인증 요청에 실패했습니다.", "error");
+  } finally {
+    ui.isLoading = false;
+  }
+};
+
+const handleEmailVerifySuccess = () => {
+  toast("이메일 인증이 완료되었습니다!", "success");
+};
 
 const onCompositionStart = () => {
-  isComposing.value = true;
+  ui.isComposing = true;
 };
 
 const onCompositionEnd = (e) => {
-  isComposing.value = false;
+  ui.isComposing = false;
   const raw = e.target.value;
   const filtered = raw.replace(/[^0-9]/g, "");
-  birthdate.value = filtered;
+  form.birthdate = filtered;
   e.target.value = filtered;
 };
 
 const onBirthdateInput = (e) => {
-  if (isComposing.value) return;
+  if (ui.isComposing) return;
   const raw = e.target.value;
   const filtered = raw.replace(/[^0-9]/g, "");
-  birthdate.value = filtered;
+  form.birthdate = filtered;
   e.target.value = filtered;
 };
 
 const isPasswordMatch = computed(() => {
-  return passwordCheck.value === "" || password.value === passwordCheck.value;
+  return form.passwordCheck === "" || form.password === form.passwordCheck;
 });
 
 const isBirthdateValid = computed(() => {
-  return birthdate.value === "" || /^\d{8}$/.test(birthdate.value);
+  return form.birthdate === "" || /^\d{8}$/.test(form.birthdate);
 });
 
 const isDirty = computed(() => {
   return (
-    (password.value !== "" &&
-      passwordCheck.value !== "" &&
+    (form.password !== "" &&
+      form.passwordCheck !== "" &&
       isPasswordMatch.value) ||
-    email.value !== "" ||
-    birthdate.value !== ""
+    form.email !== "" ||
+    form.birthdate !== ""
   );
 });
 </script>
-
-<template>
-  <form class="user-info-form">
-    <div class="form-group">
-      <label class="readonly-label">아이디</label>
-      <input type="text" value="abc1234" disabled class="readonly-input" />
-    </div>
-
-    <div class="form-group">
-      <label>비밀번호</label>
-      <input
-        type="password"
-        placeholder="새 비밀번호를 입력해주세요"
-        v-model="password"
-      />
-    </div>
-
-    <div class="form-group">
-      <label>비밀번호 확인*</label>
-      <input
-        type="password"
-        placeholder="비밀번호를 한 번 더 입력해주세요"
-        v-model="passwordCheck"
-      />
-      <p v-if="passwordCheck && !isPasswordMatch" class="error-msg">
-        비밀번호가 일치하지 않습니다.
-      </p>
-    </div>
-
-    <div class="form-group">
-      <label>이메일</label>
-      <div class="email-group">
-        <input type="email" v-model="email" />
-        <button type="button" class="verify-btn">인증</button>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>생년월일</label>
-      <input
-        type="text"
-        placeholder="yyyymmdd"
-        :value="birthdate"
-        maxlength="8"
-        inputmode="numeric"
-        @input="onBirthdateInput"
-        @compositionstart="onCompositionStart"
-        @compositionend="onCompositionEnd"
-      />
-      <p v-if="!isBirthdateValid" class="error-msg">
-        생년월일은 yyyymmdd 형식으로 8자리 입력해주세요.
-      </p>
-    </div>
-
-    <div class="btn-group">
-      <button
-        type="submit"
-        class="submit"
-        :class="{ inactive: !isDirty }"
-        :disabled="!isDirty"
-      >
-        변경사항 저장
-      </button>
-    </div>
-  </form>
-</template>
 
 <style scoped>
 .user-info-form {
