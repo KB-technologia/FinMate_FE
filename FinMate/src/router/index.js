@@ -124,6 +124,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/quizsecond',
+    name: 'quizSecond',
+    component: () => import('@/views/quiz/QuizSecondView.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/quiz',
     name: 'quiz',
     component: () => import('@/views/quiz/QuizView.vue'),

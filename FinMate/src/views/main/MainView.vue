@@ -55,6 +55,7 @@ onMounted(() => {
   if (authStore.isFirst === true) {
     showModal.value = true;
   }
+  // localStorage.setItem('token', 'adfadfsdfasdf'); //
 });
 
 const closeModal = () => {
@@ -78,8 +79,6 @@ const closeModal = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
 }
 
 .main-view-content {
