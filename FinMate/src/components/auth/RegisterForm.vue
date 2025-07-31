@@ -29,9 +29,6 @@
           <input v-model="authCode" placeholder="인증코드 입력" maxlength="6" />
           <button class="action-btn" @click="verifyAuthCode">확인</button>
         </div>
-        <div v-if="verifyMsg" :class="verifySuccess ? 'success' : 'error'">
-          {{ verifyMsg }}
-        </div>
       </div>
     </div>
 
@@ -113,7 +110,9 @@
 import { ref, computed } from 'vue';
 import { useSignupStore } from '@/stores/signup/signupStore';
 import { sendEmailAuth, verifyEmailAuth } from '@/api/auth/auth';
+import { useToast } from '@/composables/useToast';
 
+const { toast } = useToast();
 const store = useSignupStore();
 
 const email = ref('');
@@ -132,7 +131,6 @@ const isCodeSent = ref(false);
 const isEmailVerified = ref(false);
 const verifySuccess = ref(false);
 const emailError = ref('');
-const verifyMsg = ref('');
 
 const years = computed(() => {
   const currentYear = new Date().getFullYear();
@@ -168,16 +166,17 @@ const sendAuthCode = async () => {
     const response = await sendEmailAuth(email.value);
     uuid.value = response.data;
     isCodeSent.value = true;
-    alert('인증코드가 이메일로 전송되었습니다.');
+    toast('인증코드가 이메일로 전송되었습니다.', 'success');
   } catch (error) {
     emailError.value = '인증코드 전송에 실패했습니다';
+    isCodeSent.value = false;
     console.error('Auth code send error:', error);
   }
 };
 
 const verifyAuthCode = async () => {
   if (!authCode.value) {
-    verifyMsg.value = '인증코드를 입력해주세요';
+    toast('인증코드를 입력해주세요.', 'error');
     verifySuccess.value = false;
     return;
   }
@@ -186,15 +185,15 @@ const verifyAuthCode = async () => {
     const response = await verifyEmailAuth(authCode.value, uuid.value.uuid);
 
     if (response.data === true) {
-      verifyMsg.value = '✅ 이메일 인증이 완료되었습니다';
+      toast('✅ 이메일 인증이 완료되었습니다.', 'success');
       verifySuccess.value = true;
       isEmailVerified.value = true;
     } else {
-      verifyMsg.value = '❌ 인증코드가 올바르지 않습니다';
+      toast('❌ 인증코드가 올바르지 않습니다.', 'error');
       verifySuccess.value = false;
     }
   } catch (error) {
-    verifyMsg.value = '❌ 인증 중 오류가 발생했습니다';
+    toast('❌ 인증 중 오류가 발생했습니다.', 'error');
     verifySuccess.value = false;
   }
 };
@@ -220,21 +219,21 @@ const handleSubmit = () => {
 
 <style scoped>
 .signup-wrapper {
-  max-width: 900px;
+  max-width: 40vw;
   width: 100%;
   margin: 5vh auto;
   padding: 3rem;
-  background: white;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .signup-wrapper h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   text-align: center;
   margin-bottom: 3rem;
-  color: #333;
+  color: var(--color-black);
 }
 
 .form-section {
@@ -247,10 +246,10 @@ const handleSubmit = () => {
 
 .field label {
   display: block;
-  font-weight: 600;
-  color: #333;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-signup-black);
   margin-bottom: 0.8rem;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 
 input,
@@ -260,7 +259,7 @@ select {
   padding: 0 1.2rem;
   border: 2px solid #e1e5e9;
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
 }
@@ -289,13 +288,11 @@ input:disabled {
   height: 6vh;
   width: 4.5vw;
   padding: 0 16px;
-  background: #ffeab4;
-  color: black;
-  border: none;
+  background: var(--color-primary-yellow);
+  color: var(--color-black);
   border-radius: 8px;
   font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
+  font-size: 1.2rem;
   white-space: nowrap;
   transition: background-color 0.2s ease;
 }
@@ -328,12 +325,11 @@ input:disabled {
   flex: none;
   width: 10rem;
   height: 5vh;
-  border: 2px solid #e1e5e9;
-  background: white;
+  border: 2px solid;
+  background: var(--color-white);
   border-radius: 50px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  cursor: pointer;
   transition: all 0.2s ease;
 }
 .gender-btn.male {
@@ -347,13 +343,13 @@ input:disabled {
 .gender-btn.male.active {
   background: #56ccf2;
   border-color: #56ccf2;
-  color: white;
+  color: var(--color-white);
 }
 
 .gender-btn.female.active {
   background: #f06595;
   border-color: #f06595;
-  color: white;
+  color: var(--color-white);
 }
 
 .gender-btn.male:hover {
@@ -366,16 +362,20 @@ input:disabled {
   border-color: #ec2097;
 }
 
+.gender-btn:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: inherit;
+}
+
 .submit-btn {
   width: 100%;
   height: 4vh;
-  background: #636362;
-  color: white;
-  border: none;
+  background: var(--color-dark-gray);
+  color: var(--color-white);
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  cursor: pointer;
   margin-top: 1rem;
   transition: background-color 0.2s ease;
 }
@@ -385,13 +385,13 @@ input:disabled {
 }
 
 .error {
-  color: #e74c3c;
+  color: var(--toast-icon-error);
   font-size: 0.85rem;
   margin-top: 0.5rem;
 }
 
 .success {
-  color: #27ae60;
+  color: var(--toast-icon-success);
   font-size: 0.85rem;
   margin-top: 0.5rem;
 }

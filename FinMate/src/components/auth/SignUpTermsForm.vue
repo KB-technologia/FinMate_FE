@@ -109,10 +109,8 @@ const goToNext = () => {
 
 <style scoped>
 .signup-box {
-  font-family: 'InterVariable', sans-serif;
-  width: 70vw;
-  max-width: 1000px;
-  min-width: 700px;
+  width: 80vw;
+  max-width: 45vw;
   background-color: white;
   padding: 2rem;
   border-radius: 1rem;
@@ -120,7 +118,6 @@ const goToNext = () => {
 }
 
 .signup-title {
-  font-family: 'TMONBlack', sans-serif;
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
@@ -130,7 +127,7 @@ const goToNext = () => {
 .terms-box {
   border: 1px solid #ccc;
   padding: 1rem;
-  height: 47vh;
+  height: 60vh;
   overflow-y: auto;
   margin-bottom: 1rem;
   display: flex;
@@ -147,11 +144,11 @@ const goToNext = () => {
 
 .terms-content {
   width: 100%;
-  height: 42vh;
+  height: 52vh;
   border: none;
   resize: none;
   background-color: transparent;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   line-height: 1.4;
   margin-bottom: 1rem;
 }
@@ -159,7 +156,7 @@ const goToNext = () => {
 .agree-checkbox {
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .agree-checkbox input {
@@ -170,14 +167,15 @@ const goToNext = () => {
   display: block;
   margin: 1rem auto 0;
   width: 60%;
-  height: 4vh;
-  background-color: #636362;
-  color: white;
-  border: none;
+  height: 2.8rem;
+  background-color: var(--color-dark-gray);
+  color: var(--color-white);
   border-radius: 0.5rem;
   font-size: 1rem;
   margin-top: 1rem;
-  cursor: pointer;
+}
+.next-button:hover {
+  background: #555;
 }
 
 .next-button:disabled {
