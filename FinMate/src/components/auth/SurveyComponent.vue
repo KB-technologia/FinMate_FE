@@ -1,10 +1,15 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
-import surveyJson from '@/assets/signupSurvey.json'; // 설문 데이터 JSON
+import { useSignupStore } from '@/stores/signup/signupStore';
+import { useToast } from '@/composables/useToast';
 
+import axios from 'axios';
+import surveyJson from '@/assets/signupSurvey.json';
+
+const { toast } = useToast();
 const router = useRouter();
+const signupStore = useSignupStore();
 
 const surveyData = ref([]);
 const currentIndex = ref(0);
@@ -33,7 +38,6 @@ const nextQuestion = () => {
 // 설문 응답 -> SignupRequestDTO로 변환하는 함수
 function convertAnswersToDto(answers, baseInfo) {
   return {
-    ...baseInfo,
     isMarried: answers[0]?.includes('기혼'),
     hasJob: answers[1]?.includes('직장인'),
     usesPublicTransport: answers[2]?.includes('대중교통'),
@@ -48,24 +52,24 @@ function convertAnswersToDto(answers, baseInfo) {
 
 // 제출 버튼 클릭 시 실행되는 함수
 const submitSurvey = async () => {
-  // :TODO 테스트용 더비 baseInfo (나중에 실제 회원 정보로 교체)
-  const baseInfo = {
-    name: '홍길동',
-    accountId: 'hong123',
-    email: 'hong@example.com',
-    password: '1234abcd',
-    passwordConfirm: '1234abcd',
-    birth: '2000-01-01',
-    gender: 'MALE',
-  };
+  if (!isComplete.value) {
+    toast('모든 질문에 응답해주세요.', 'warning');
+    return;
+  }
 
-  // 응답 변화
-  const dto = convertAnswersToDto(selectedAnswers.value, baseInfo);
+  const surveyResult = convertAnswersToDto(selectedAnswers.value); // 설문 변환
+  signupStore.$patch(surveyResult); // 스토어에 반영
+  const dto = { ...signupStore }; // 서버 전송
 
-  console.log('변환된 SignupRequestDTO : ', dto);
-
-  // 서버 전송 용
-  // await axios.post("/api/auth/signup", dto);
+  try {
+    const res = await axios.post('/api/auth/signup', dto); // 서버 전송
+    console.log('가입 완료 : ', res.data);
+    toast('설문이 저장되었습니다!', 'success');
+    router.push('/signup/complete'); // 회원가입 완료 페이지
+  } catch (err) {
+    console.error('전송 실패 : ', err);
+    toast('회원가입 중 문제가 발생했습니다.', 'warning');
+  }
 };
 
 onMounted(() => {
