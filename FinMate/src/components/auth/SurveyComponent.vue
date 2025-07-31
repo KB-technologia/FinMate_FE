@@ -42,7 +42,7 @@ function convertAnswersToDto(answers, baseInfo) {
     isMarried: answers[0]?.includes('기혼'),
     hasJob: answers[1]?.includes('직장인'),
     usesPublicTransport: answers[2]?.includes('대중교통'),
-    doesExercise: !answers[3]?.includes('운동 안 함'),
+    doesExercises: !answers[3]?.includes('운동 안 함'),
     travelsFrequently: answers[4]?.includes('자주'),
     hasChildren: !answers[5]?.includes('0명'),
     hasHouse: answers[6]?.includes('자가'),
@@ -57,6 +57,7 @@ const submitSurvey = async () => {
   signupStore.$patch(surveyResult); // 스토어에 반영
   const dto = { ...signupStore }; // 서버 전송
 
+  console.log('!!!!!!!최종 전송 DTO : ', dto);
   try {
     const res = await axios.post(`${BASE_URL}/api/member/join`, dto); // 서버 전송
     console.log('가입 완료 : ', res.data);

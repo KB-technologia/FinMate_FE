@@ -13,7 +13,7 @@ export const useSignupStore = defineStore('signup', {
     isMarried: false,
     hasJob: false,
     usesPublicTransport: false,
-    doesExercises: false,
+    doesExercise: false,
     travelsFrequently: false,
     hasChildren: false,
     hasHouse: false,

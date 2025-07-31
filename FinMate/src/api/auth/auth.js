@@ -30,6 +30,7 @@ export const signup = async () => {
   const store = useSignupStore();
 
   const formData = {
+    provider: store.provider,
     name: store.name,
     accountId: store.accountId,
     email: store.email,

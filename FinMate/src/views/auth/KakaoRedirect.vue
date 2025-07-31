@@ -34,9 +34,14 @@ onMounted(async () => {
     // 토큰, 유저 정보 저장
     authStore.setToken(token);
     authStore.setIsFirst(newUser);
+    authStore.setProvider('KAKAO');
+    authStore.userInfo = user;
 
     if (newUser) {
       const signupStore = useSignupStore();
+
+      console.log('[DEBUG] 실제 user 객체', user);
+
       signupStore.$patch({
         accountId: user.accountId,
         name: user.name,
