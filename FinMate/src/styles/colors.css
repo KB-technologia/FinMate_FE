@@ -45,4 +45,7 @@
   /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
   --color-delete-bg: #f0cccc;
 
+  /*exp 바 색상 */
+  --color-exp-track: #e6f8ee;
+  --color-exp-fill: #3ccb7f;
 }
