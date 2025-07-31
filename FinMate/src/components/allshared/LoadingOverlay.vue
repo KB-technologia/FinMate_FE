@@ -5,9 +5,18 @@
       src="@/assets/images/logos/flying-kiwi.png"
       alt="비행기 타고 가는 키위새"
     />
-    <p class="loading-text">인증코드 발송 중...</p>
+    <p class="loading-text">{{ message }}</p>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  message: {
+    type: String,
+    default: "로딩 중...",
+  },
+});
+</script>
 
 <style scoped>
 .loading-overlay {
@@ -18,26 +27,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .flying-kiwi {
-  position: absolute;
-  top: 35%;
-  left: 40%;
   width: 8rem;
   height: auto;
-  animation: float-forward 4s ease-in-out infinite;
+  animation: kiwi-float-forward 4s ease-in-out infinite;
+  margin-bottom: 2rem;
 }
 
 .loading-text {
-  margin-top: 1rem;
   color: var(--color-white);
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: var(--font-weight-bold);
+  transform: translateY(-2rem);
 }
 
-@keyframes float-forward {
+@keyframes kiwi-float-forward {
   0% {
     transform: translate(0, 0);
   }

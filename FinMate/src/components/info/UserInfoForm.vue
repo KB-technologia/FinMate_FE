@@ -70,7 +70,10 @@
         </button>
       </div>
     </form>
-    <LoadingOverlay v-if="ui.isLoading" />
+    <LoadingOverlay
+      v-if="ui.isLoading"
+      :message="'인증 메일을 전송 중이에요...'"
+    />
     <EmailCodeModal
       v-if="ui.isModalOpen"
       :request-id="form.emailVerificationUUID"
