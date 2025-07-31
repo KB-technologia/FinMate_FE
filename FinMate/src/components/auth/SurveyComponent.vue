@@ -1,19 +1,25 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 import surveyJson from '@/assets/signupSurvey.json'; // 설문 데이터 JSON
+
+const router = useRouter();
 
 const surveyData = ref([]);
 const currentIndex = ref(0);
 const selectedAnswers = ref(Array(9).fill(null));
 
+// 현재 질문
 const currentQuestion = computed(
   () => surveyData.value[currentIndex.value] || {}
 );
-
+// 질문 완료 여부
 const isComplete = computed(() =>
   selectedAnswers.value.every((answer) => answer !== null)
 );
 
+// 질문 이동 관련
 const goToQuestion = (idx) => {
   currentIndex.value = idx;
 };
@@ -22,6 +28,44 @@ const prevQuestion = () => {
 };
 const nextQuestion = () => {
   if (currentIndex.value < surveyData.value.length - 1) currentIndex.value++;
+};
+
+// 설문 응답 -> SignupRequestDTO로 변환하는 함수
+function convertAnswersToDto(answers, baseInfo) {
+  return {
+    ...baseInfo,
+    isMarried: answers[0]?.includes('기혼'),
+    hasJob: answers[1]?.includes('직장인'),
+    usesPublicTransport: answers[2]?.includes('대중교통'),
+    doesExercise: !answers[3]?.includes('운동 안 함'),
+    travelsFrequently: answers[4]?.includes('자주'),
+    hasChildren: !answers[5]?.includes('0명'),
+    hasHouse: answers[6]?.includes('자가'),
+    employedAtSme: answers[7]?.includes('중소기업'),
+    usesMicroloan: !answers[8]?.includes('없어요'),
+  };
+}
+
+// 제출 버튼 클릭 시 실행되는 함수
+const submitSurvey = async () => {
+  // :TODO 테스트용 더비 baseInfo (나중에 실제 회원 정보로 교체)
+  const baseInfo = {
+    name: '홍길동',
+    accountId: 'hong123',
+    email: 'hong@example.com',
+    password: '1234abcd',
+    passwordConfirm: '1234abcd',
+    birth: '2000-01-01',
+    gender: 'MALE',
+  };
+
+  // 응답 변화
+  const dto = convertAnswersToDto(selectedAnswers.value, baseInfo);
+
+  console.log('변환된 SignupRequestDTO : ', dto);
+
+  // 서버 전송 용
+  // await axios.post("/api/auth/signup", dto);
 };
 
 onMounted(() => {
@@ -86,7 +130,13 @@ onMounted(() => {
 
     <!-- 제출 버튼 -->
     <div class="submit-container">
-      <button :disabled="!isComplete" class="submit-button">완료</button>
+      <button
+        :disabled="!isComplete"
+        class="submit-button"
+        @click="submitSurvey"
+      >
+        완료
+      </button>
     </div>
   </div>
 </template>
