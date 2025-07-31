@@ -30,7 +30,32 @@
         <button class="detail-button" @click="goToTest">테스트 시작하기</button>
       </div>
     </div>
-    <div v-if="isPortfolio" class="portfolio">포폴있음</div>
+    <div
+      v-if="isPortfolio"
+      class="portfolio"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    >
+      <div
+        class="no-login-content portfolio-animated"
+        :class="{ revealed: portfolioRevealed }"
+      >
+        <p class="nologin-text">📊 나의 자산 현황</p>
+        <div class="portfolio-grid">
+          <p>💰 총 자산: {{ portfolioData.totalAssets.toLocaleString() }}원</p>
+          <p>📈 주식: {{ portfolioData.stock.toLocaleString() }}원</p>
+          <p>📉 채권: {{ portfolioData.bond.toLocaleString() }}원</p>
+          <p>🏦 예금: {{ portfolioData.deposit.toLocaleString() }}원</p>
+          <p>💼 펀드: {{ portfolioData.fund.toLocaleString() }}원</p>
+          <p>💳 현금: {{ portfolioData.cash.toLocaleString() }}원</p>
+          <p>📦 기타: {{ portfolioData.other.toLocaleString() }}원</p>
+          <p>📊 성향: {{ portfolioData.investmentProfile }}</p>
+        </div>
+        <button class="detail-button" @click="goToPortfolio">
+          자세히 보기
+        </button>
+      </div>
+    </div>
     <div v-if="!isPortfolio" class="no-portfolio">
       <div class="no-login-content">
         <p class="nologin-text">
@@ -65,12 +90,14 @@
 import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useRouter } from 'vue-router';
+import { getPortfolio } from '@/api/main/main.js';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 const isstats = ref(false);
 const isPortfolio = ref(false);
+const portfolioData = ref(null);
 
 const goToStatsPage = () => {
   router.push('/my-stats');
@@ -116,7 +143,7 @@ function getRandomImages() {
   return shuffled.slice(0, 8);
 }
 
-onMounted(() => {
+onMounted(async () => {
   currentImages.value = getRandomImages();
   setInterval(() => {
     animate.value = false;
@@ -125,7 +152,35 @@ onMounted(() => {
       animate.value = true;
     }, 400);
   }, 2500);
+
+  if (isLoggedIn.value) {
+    try {
+      const portfolio = await getPortfolio();
+      isPortfolio.value = !!portfolio && Object.keys(portfolio).length > 0;
+      portfolioData.value = portfolio;
+    } catch (e) {
+      if (e.response && e.response.status === 404) {
+        isPortfolio.value = false;
+      } else {
+        // console.warn('📛 포트폴리오 조회 실패: ', e);
+      }
+    }
+  }
 });
+
+const portfolioRevealed = ref(false);
+let hoverTimer = null;
+
+const handleMouseEnter = () => {
+  hoverTimer = setTimeout(() => {
+    portfolioRevealed.value = true;
+  }, 0);
+};
+
+const handleMouseLeave = () => {
+  clearTimeout(hoverTimer);
+  portfolioRevealed.value = false;
+};
 </script>
 
 <style scoped>
@@ -244,6 +299,14 @@ onMounted(() => {
   justify-content: center;
   border-right: 0.2vh solid var(--color-light-gray);
 }
+.portfolio {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 
 .no-portfolio {
   width: 50%;
@@ -257,8 +320,28 @@ onMounted(() => {
 }
 
 .nologin-text {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   text-align: center;
   color: var(--color-gray);
+}
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0.3rem;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.portfolio-animated {
+  opacity: 0.4;
+  filter: blur(4px);
+  transition: all 0.8s ease;
+  pointer-events: none;
+}
+
+.portfolio-animated.revealed {
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
 }
 </style>
