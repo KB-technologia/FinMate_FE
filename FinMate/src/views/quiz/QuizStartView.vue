@@ -48,13 +48,14 @@
 </template>
 
 <script setup>
-import FooterComponent from "../../components/allshared/FooterComponent.vue";
-import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
+import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 const router = useRouter();
 const startQuiz = () => {
-  router.push("/quiz");
+  router.push('/quizsecond').finally(() => {});
 };
 </script>
 
@@ -66,6 +67,8 @@ const startQuiz = () => {
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  font-family: var(--font-wanted);
+  font-weight: var(--font-weight-bold);
 }
 
 .quiz-start-content {
@@ -143,7 +146,7 @@ const startQuiz = () => {
 }
 
 .speech-bubble::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: -15px;
@@ -173,6 +176,7 @@ button:hover {
   color: var(--color-white);
   transition: all 0.2s ease-in-out;
   transform: translateY(-8px);
+  box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 
 @keyframes bounce {

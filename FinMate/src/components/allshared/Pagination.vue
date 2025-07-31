@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue';
 
 const props = defineProps({
   currentPage: {
@@ -103,7 +103,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["page-change", "page-size-change"]);
+const emit = defineEmits(['page-change', 'page-size-change']);
 
 const pageSizeOptions = [6, 9, 12, 18, 24];
 
@@ -149,13 +149,13 @@ const visiblePages = computed(() => {
 // 메서드들
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value && page !== props.currentPage) {
-    emit("page-change", page);
+    emit('page-change', page);
   }
 };
 
 const handlePageSizeChange = (event) => {
   const newSize = parseInt(event.target.value);
-  emit("page-size-change", newSize);
+  emit('page-size-change', newSize);
 };
 </script>
 
@@ -275,7 +275,7 @@ const handlePageSizeChange = (event) => {
 
 .page-size-select:focus {
   outline: none;
-  border-color: #89caa2;
+  border-color: --color-primary-green;
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
