@@ -16,6 +16,7 @@
   --color-dark-gray: #636362;
   --color-light-blue: #a4c8e1;
   --color-light-gray: #c9c9c9;
+  --color-modal-overlay: rgba(0, 0, 0, 0.5);
 
   /* 설문 결과용 색상 */
   --color-survey-blue: #002bff;
@@ -45,6 +46,7 @@
   /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
   --color-delete-bg: #f0cccc;
 
-  /* 회원가입 글자 색상*/
-  --color-signup-black: #333;
+  /*exp 바 색상 */
+  --color-exp-track: #e6f8ee;
+  --color-exp-fill: #3ccb7f;
 }

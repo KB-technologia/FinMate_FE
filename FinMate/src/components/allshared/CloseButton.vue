@@ -2,9 +2,9 @@
 import { X } from 'lucide-vue-next';
 </script>
 <template>
-  <button class="close-button"><X stroke="red" /></button>
+  <button class="close-button"><X stroke="red" :size="35" /></button>
 </template>
-<style scoped>
+<style>
 .close-button {
   all: unset;
 }
