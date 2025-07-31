@@ -43,12 +43,14 @@ onMounted(async () => {
       console.log('[DEBUG] 실제 user 객체', user);
 
       signupStore.$patch({
+        provider: 'KAKAO',
         accountId: user.accountId,
         name: user.name,
         email: user.email,
         birth: user.birth,
         gender: user.gender,
       });
+      sessionStorage.setItem('provider', 'KAKAO');
     }
 
     console.log('[DEBUG] 받은 token:', token);

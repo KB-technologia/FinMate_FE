@@ -30,7 +30,7 @@ export const signup = async () => {
   const store = useSignupStore();
 
   const formData = {
-    provider: store.provider,
+    provider: store.provider || 'KAKAO',
     name: store.name,
     accountId: store.accountId,
     email: store.email,

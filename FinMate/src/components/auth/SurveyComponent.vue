@@ -71,6 +71,13 @@ const submitSurvey = async () => {
 
 onMounted(() => {
   surveyData.value = surveyJson;
+
+  if (!signupStore.provider) {
+    const savedProvider = sessionStorage.getItem('provider');
+    if (savedProvider) {
+      signupStore.provider = savedProvider;
+    }
+  }
 });
 </script>
 
