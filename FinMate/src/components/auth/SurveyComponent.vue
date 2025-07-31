@@ -10,6 +10,7 @@ import surveyJson from '@/assets/signupSurvey.json';
 const { toast } = useToast();
 const router = useRouter();
 const signupStore = useSignupStore();
+const BASE_URL = import.meta.env.VITE_BASE_API_URL;
 
 const surveyData = ref([]);
 const currentIndex = ref(0);
@@ -52,17 +53,12 @@ function convertAnswersToDto(answers, baseInfo) {
 
 // 제출 버튼 클릭 시 실행되는 함수
 const submitSurvey = async () => {
-  if (!isComplete.value) {
-    toast('모든 질문에 응답해주세요.', 'warning');
-    return;
-  }
-
   const surveyResult = convertAnswersToDto(selectedAnswers.value); // 설문 변환
   signupStore.$patch(surveyResult); // 스토어에 반영
   const dto = { ...signupStore }; // 서버 전송
 
   try {
-    const res = await axios.post('/api/auth/signup', dto); // 서버 전송
+    const res = await axios.post(`${BASE_URL}/api/member/join`, dto); // 서버 전송
     console.log('가입 완료 : ', res.data);
     toast('설문이 저장되었습니다!', 'success');
     router.push('/signup/complete'); // 회원가입 완료 페이지

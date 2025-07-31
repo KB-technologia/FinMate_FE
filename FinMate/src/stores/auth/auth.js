@@ -5,6 +5,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token'),
     isFirst: null,
+    userInfo: null,
   }),
   getters: {
     isLoggedIn: (state) => !!state.token,
@@ -31,6 +32,7 @@ export const useAuthStore = defineStore('auth', {
         if (res.status === 200) {
           this.setToken(res.data.token);
           this.setIsFirst(true);
+          this.setUserInfo(res.data.userInfo);
           console.log(res.data);
 
           return true;
