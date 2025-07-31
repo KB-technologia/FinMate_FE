@@ -48,6 +48,14 @@
     </div>
   </div>
   <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
+  <ConfirmModal
+    v-if="showLogoutConfirm"
+    :text="'오늘의 금융 탐험은 여기까지!\n동물 친구들이 다음 추천을 준비 중이에요'"
+    leftButtonText="취소"
+    rightButtonText="로그아웃"
+    @confirm="handleLogoutConfirm"
+    :images="logoutImage"
+  />
 </template>
 
 <script setup>
@@ -55,6 +63,8 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth/auth';
 import { ref, computed } from 'vue';
 import DailyQuizModal from '@/components/dailyquiz/DailyQuizModal.vue';
+import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
+import logoutImage from '@/assets/images/logos/logoutkiwi.png';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -65,15 +75,18 @@ const showQuizModal = ref(false);
 const currentXp = 2000;
 const maxXp = 3000;
 const fillPercentage = computed(() => (currentXp / maxXp) * 100);
-
+const showLogoutConfirm = ref(false);
 function handleLoginClick() {
   if (!isLoggedIn.value) {
     router.push('/login');
   } else {
-    const confirmed = window.confirm('정말 로그아웃하시겠습니까?');
-    if (confirmed) {
-      authStore.logout();
-    }
+    showLogoutConfirm.value = true;
+  }
+}
+function handleLogoutConfirm(confirmed) {
+  showLogoutConfirm.value = false;
+  if (confirmed) {
+    authStore.logout();
   }
 }
 </script>

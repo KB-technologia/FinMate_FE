@@ -10,12 +10,10 @@ export const useSignupStore = defineStore('signup', {
     passwordConfirm: '',
     birth: '',
     gender: '',
-
-    // 설문 응답 항목
     isMarried: false,
     hasJob: false,
     usesPublicTransport: false,
-    doesExercise: false,
+    doesExercises: false,
     travelsFrequently: false,
     hasChildren: false,
     hasHouse: false,
