@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const Login = async (id, pw) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+    const response = await axios.post(`${BASE_URL}/auth/login`, {
       username: id,
       password: pw,
     });

@@ -1,7 +1,7 @@
 <template>
   <!-- 로그인 상태일 때: 통계 그래프 -->
-  <div v-if="isLoggedIn" class="show-stats-container">
-    <div class="stat-row" v-for="(stat, index) in statsLeft" :key="index">
+  <div v-if="isLoggedIn" class="show-stats-container-notlogin">
+    <!-- <div class="stat-row" v-for="(stat, index) in statsLeft" :key="index">
       <span class="stat-label">{{ stat.label }}</span>
       <div class="stat-bar-outer">
         <div
@@ -19,7 +19,28 @@
         ></div>
       </div>
     </div>
-    <button class="detail-button" @click="goToStatsPage">자세히 보기</button>
+    <button class="detail-button" @click="goToStatsPage">자세히 보기</button> -->
+    <div v-if="isstats" class="stats"></div>
+    <div v-if="!isstats" class="no-stats">
+      <div class="no-login-content">
+        <p class="nologin-text">
+          추천 아이템을 받으려면 <br />
+          투자 성향 테스트를 진행해주세요!
+        </p>
+        <button class="detail-button" @click="goToTest">테스트 시작하기</button>
+      </div>
+    </div>
+    <div v-if="isPortfolio" class="portfolio">포폴있음</div>
+    <div v-if="!isPortfolio" class="no-portfolio">
+      <div class="no-login-content">
+        <p class="nologin-text">
+          더 정확한 추천을 위해 <br />포트폴리오를 생성해주세요!
+        </p>
+        <button class="detail-button" @click="goToPortfolio">
+          포트폴리오 생성하기
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- 비로그인 상태일 때: 랜덤 이미지 & 문구 -->
@@ -48,9 +69,19 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
+const isstats = ref(false);
+const isPortfolio = ref(false);
 
 const goToStatsPage = () => {
   router.push('/my-stats');
+};
+
+const goToPortfolio = () => {
+  router.push('/my-portfolio');
+};
+
+const goToTest = () => {
+  router.push('/quizstart');
 };
 
 const statsLeft = [
@@ -145,8 +176,8 @@ onMounted(() => {
 .detail-button {
   width: 11vw;
   height: 4vh;
-  background-color: var(--color-main-button);
-  border: none;
+  background-color: var(--color-white);
+  border: 0.2vh solid var(--color-light-gray);
   border-radius: 2vh;
   font-weight: var(--font-weight-extrabold);
   cursor: pointer;
@@ -154,9 +185,14 @@ onMounted(() => {
 }
 
 .detail-button:hover {
-  box-shadow: 0 0.5vh 0.5vw rgba(0, 0, 0, 0.3);
+  background-color: var(--color-main-button);
+  border: none;
+  color: var(--color-white);
+  box-shadow: 0 0.2vh 0.2vw rgba(0, 0, 0, 0.3);
   transform: translateY(-0.5vh);
 }
+
+/* 비로그인시 */
 
 .description {
   font-size: 2rem;
@@ -180,5 +216,49 @@ onMounted(() => {
 .animal-image.fade-in {
   opacity: 1;
   transform: scale(1);
+}
+
+/* 로그인시 */
+.show-stats-container-notlogin {
+  width: 70vw;
+  height: 35vh;
+  border: 0.2vh solid var(--color-light-gray);
+  background-color: var(--color-light-yellow);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  border-radius: 2vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 2vh;
+  overflow: hidden;
+  font-family: var(--font-wanted);
+  font-weight: var(--font-weight-extrabold);
+}
+
+.no-stats {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 0.2vh solid var(--color-light-gray);
+}
+
+.no-portfolio {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.no-login-content {
+  text-align: center;
+}
+
+.nologin-text {
+  font-size: 1.5rem;
+  text-align: center;
+  color: var(--color-gray);
 }
 </style>
