@@ -1,19 +1,52 @@
 import axios from 'axios';
+import { useAuthStore } from '@/stores/auth/auth.js';
 
 const API_BASE = 'http://localhost:8080/api/member/portfolio';
 
-export const getPortfolio = (userId) => {
-  return axios.get(`${API_BASE}?userId=${userId}`);
+export const getPortfolio = () => {
+  const authStore = useAuthStore();
+  return axios.get(API_BASE, {
+    headers: {
+      Authorization: `Bearer ${authStore.token}`,
+    },
+  });
 };
 
 export const createPortfolio = (data) => {
-  return axios.post(API_BASE, data);
+  const authStore = useAuthStore();
+  return axios.post(API_BASE, data, {
+    headers: {
+      Authorization: `Bearer ${authStore.token}`,
+    },
+  });
 };
 
 export const updatePortfolio = (data) => {
-  return axios.patch(API_BASE, data);
+  const authStore = useAuthStore();
+  return axios.patch(API_BASE, data, {
+    headers: {
+      Authorization: `Bearer ${authStore.token}`,
+    },
+  });
 };
 
-export const deletePortfolio = (userId) => {
-  return axios.delete(`${API_BASE}?userId=${userId}`);
+export const deletePortfolio = () => {
+  const authStore = useAuthStore();
+  return axios.delete(API_BASE, {
+    headers: {
+      Authorization: `Bearer ${authStore.token}`,
+    },
+  });
+};
+
+export const getHistoryPortfolio = (date) => {
+  const authStore = useAuthStore();
+  return axios.get(`${API_BASE}/history`, {
+    headers: {
+      Authorization: `Bearer ${authStore.token}`,
+    },
+    params: {
+      date: date,
+    },
+  });
 };
