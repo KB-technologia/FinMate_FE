@@ -46,7 +46,7 @@
         class="no-login-content portfolio-animated"
         :class="{ revealed: portfolioRevealed }"
       >
-        <p class="nologin-text">📊 나의 자산 현황</p>
+        <p class="nologin-text2">📊 나의 자산 현황</p>
         <div class="portfolio-grid">
           <p>💰 총 자산: {{ portfolioData.totalAssets.toLocaleString() }}원</p>
           <p>📈 주식: {{ portfolioData.stock.toLocaleString() }}원</p>
@@ -332,13 +332,19 @@ const handleMouseLeave = () => {
 }
 
 .nologin-text {
+  width: 15vw;
+  height: 12vh;
   font-size: 1.2rem;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--color-black);
   position: relative;
   background: var(--color-main-button);
   border-radius: 2vh;
   padding: 1vh;
+  font-weight: var(--font-weight-medium);
 }
 .nologin-text:after {
   content: '';
