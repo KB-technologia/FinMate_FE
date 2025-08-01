@@ -32,6 +32,7 @@
           </li>
         </ul>
         <div class="divider"></div>
+
         <ul>
           <li
             class="hover-item"
@@ -55,39 +56,63 @@
         <div class="divider"></div>
       </div>
 
-      <div class="exit hover-item">
+      <div class="exit hover-item" @click="handleWithdrawClick">
         <p>서비스 탈퇴</p>
       </div>
     </div>
+
+    <ConfirmModal
+      v-if="showWithdrawConfirm"
+      :firsttext="'정말 탈퇴하시겠습니까?'"
+      :secondtext="'그동안의 기록은 모두 삭제됩니다.'"
+      leftButtonText="취소"
+      rightButtonText="탈퇴"
+      @confirm="handleWithdrawConfirm"
+      :images="withdrawImage"
+    />
   </aside>
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
+import withdrawImage from '@/assets/images/logos/withdrawkiwi.png';
 
 const route = useRoute();
 const router = useRouter();
 
+const showWithdrawConfirm = ref(false);
+
 const current = computed(() => {
   const path = route.path;
-
-  if (path.includes("/my-products")) return "products";
-  if (path.includes("/my-stat")) return "stat";
-  if (path.includes("/my-portfolio")) return "portfolio";
-  if (path.includes("/my-reviews")) return "reviews";
-  return "";
+  if (path.includes('/my-products')) return 'products';
+  if (path.includes('/my-stat')) return 'stat';
+  if (path.includes('/my-portfolio')) return 'portfolio';
+  if (path.includes('/my-reviews')) return 'reviews';
+  return '';
 });
 
 const goTo = (target) => {
-  if (target === "stat") router.push("/my-stats");
-  else if (target === "products") router.push("/my-products");
-  else if (target === "portfolio") router.push("/my-portfolio");
-  else if (target === "reviews") router.push("/my-reviews");
+  if (target === 'stat') router.push('/my-stats');
+  else if (target === 'products') router.push('/my-products');
+  else if (target === 'portfolio') router.push('/my-portfolio');
+  else if (target === 'reviews') router.push('/my-reviews');
 };
 
 const goToMyInfo = () => {
-  router.push("/my-info");
+  router.push('/my-info');
+};
+
+const handleWithdrawClick = () => {
+  showWithdrawConfirm.value = true;
+};
+
+const handleWithdrawConfirm = (confirmed) => {
+  showWithdrawConfirm.value = false;
+  if (confirmed) {
+    console.log('탈퇴 api 연결해주세용');
+  }
 };
 </script>
 
@@ -96,6 +121,7 @@ const goToMyInfo = () => {
   width: 300px;
   height: 60vh;
   padding: 0;
+  margin-left: -1.2vw;
   border: 3px solid var(--color-primary-bluegray);
   border-radius: 4px;
   display: flex;
