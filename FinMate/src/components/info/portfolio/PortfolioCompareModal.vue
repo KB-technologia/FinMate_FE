@@ -4,7 +4,7 @@ import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import PortfolioPastChart from '@/components/info/portfolio/PortfolioPastChart.vue';
 import Datepicker from '@/components/info/portfolio/ChooseDate.vue';
-import PortfolioAnalyzChart from '@/components/info/portfolio/PortfolioAnalyzChart.vue';
+import PortfolioAnalyzChart from '@/components/info/portfolio/PortfolioAnalyzeChart.vue';
 import CloseButton from '@/components/allshared/CloseButton.vue';
 
 Chart.register(ChartDataLabels);
