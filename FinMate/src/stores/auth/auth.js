@@ -5,6 +5,8 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token'),
     isFirst: null,
+    userInfo: null,
+    provide: null,
   }),
   getters: {
     isLoggedIn: (state) => !!state.token,
@@ -19,9 +21,14 @@ export const useAuthStore = defineStore('auth', {
       this.isFirst = isFirst;
     },
 
+    setProvider(provider) {
+      this.provide = provider;
+    },
+
     logout() {
       this.token = null;
       this.isFirst = null;
+      this.provider = null;
       localStorage.removeItem('token');
     },
 
@@ -31,6 +38,8 @@ export const useAuthStore = defineStore('auth', {
         if (res.status === 200) {
           this.setToken(res.data.token);
           this.setIsFirst(true);
+          this.setUserInfo(res.data.userInfo);
+          this.setProvider('LOCAL');
           console.log(res.data);
 
           return true;

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useSignupStore = defineStore('signup', {
   state: () => ({
+    // 일반 입력 항목
     email: '',
     accountId: '',
     name: '',
@@ -12,7 +13,7 @@ export const useSignupStore = defineStore('signup', {
     isMarried: false,
     hasJob: false,
     usesPublicTransport: false,
-    doesExercises: false,
+    doesExercise: false,
     travelsFrequently: false,
     hasChildren: false,
     hasHouse: false,
