@@ -1,9 +1,11 @@
 <template>
   <div class="stats-panel">
-    <h2 class="level-title">Lv.3</h2>
+    <h2 class="level-title">Lv.3 - {{ characterName || '알 수 없음' }}</h2>
+
     <div class="character-section">
       <img
-        src="@/assets/images/animals/penguin.png"
+        v-if="characterImage"
+        :src="characterImage"
         alt="캐릭터"
         class="character"
       />
@@ -49,6 +51,9 @@ import { PawPrint, ScanSearch } from 'lucide-vue-next';
 import UserStatBar from '@/components/allshared/UserStatBar.vue';
 import ToastContainer from '@/components/allshared/ToastContainer.vue';
 import { getMemberCharacter } from '@/api/info/userStatsAPI.js';
+const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
+const characterImage = ref('');
+const characterName = ref('');
 
 const activeStat = ref(null);
 const toastRef = ref(null);
@@ -111,6 +116,9 @@ onMounted(async () => {
   try {
     const characterData = await getMemberCharacter();
     console.log('✅ 캐릭터 정보:', characterData);
+
+    characterImage.value = `${BASE_API_URL}${characterData.animalImage}`;
+    characterName.value = characterData.animalName;
   } catch (e) {
     console.error('❌ 캐릭터 정보 요청 실패', e);
   }
@@ -152,7 +160,6 @@ onMounted(async () => {
   width: 240px;
   height: 140px;
   background-image: url('@/assets/images/icons/speech-default.png');
-
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
