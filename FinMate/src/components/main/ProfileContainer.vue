@@ -50,7 +50,7 @@
   <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
   <ConfirmModal
     v-if="showLogoutConfirm"
-    :text="'오늘의 금융 탐험은 여기까지!\n동물 친구들이 다음 추천을 준비 중이에요'"
+    :firsttext="'오늘의 금융 탐험은 여기까지!\n동물 친구들이 다음 추천을 준비 중이에요'"
     leftButtonText="취소"
     rightButtonText="로그아웃"
     @confirm="handleLogoutConfirm"
