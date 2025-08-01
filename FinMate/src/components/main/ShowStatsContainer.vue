@@ -22,6 +22,12 @@
     <button class="detail-button" @click="goToStatsPage">자세히 보기</button> -->
     <div v-if="isstats" class="stats"></div>
     <div v-if="!isstats" class="no-stats">
+      <div>
+        <img
+          class="animal-image-logo"
+          src="@/assets/images/animals/penguin.png"
+        />
+      </div>
       <div class="no-login-content">
         <p class="nologin-text">
           추천 아이템을 받으려면 <br />
@@ -57,6 +63,12 @@
       </div>
     </div>
     <div v-if="!isPortfolio" class="no-portfolio">
+      <div>
+        <img
+          class="animal-image-logo"
+          src="@/assets/images/animals/capybara.png"
+        />
+      </div>
       <div class="no-login-content">
         <p class="nologin-text">
           더 정확한 추천을 위해 <br />포트폴리오를 생성해주세요!
@@ -322,12 +334,35 @@ const handleMouseLeave = () => {
 .nologin-text {
   font-size: 1.2rem;
   text-align: center;
-  color: var(--color-gray);
+  color: var(--color-black);
+  position: relative;
+  background: var(--color-main-button);
+  border-radius: 2vh;
+  padding: 1vh;
 }
+.nologin-text:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 0;
+  border: 1em solid transparent;
+  border-right-color: var(--color-main-button);
+  border-left: 0;
+  border-bottom: 0;
+  margin-top: -0.5em;
+  margin-left: -0.8em;
+}
+
+.animal-image-logo {
+  width: 12vw;
+  transform: scaleX(-1);
+}
+
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(2, auto);
-  gap: 0.3rem;
+  gap: 0.4rem 1rem;
   text-align: left;
   font-size: 1rem;
 }
