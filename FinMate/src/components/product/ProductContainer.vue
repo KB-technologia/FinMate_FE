@@ -183,13 +183,13 @@ watch(
 }
 
 .loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid #f0f0f0;
-  border-left: 4px solid #4caf50;
+  width: 3vw;
+  height: 3vw;
+  border: 0.3vw solid #f0f0f0;
+  border-left: 0.3vw solid #4caf50;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  margin-bottom: 1.5vh;
 }
 
 @keyframes spin {
@@ -202,9 +202,9 @@ watch(
 }
 
 .loading-text {
-  font-size: 16px;
+  font-size: clamp(14px, 1.2vw, 18px);
   color: #666;
-  margin: 0;
+  margin: 0 0 2.5vh 0;
 }
 
 /* 에러 상태 */
@@ -218,12 +218,12 @@ watch(
 }
 
 .error-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+  font-size: 3vw;
+  margin-bottom: 1.5vh;
 }
 
 .error-title {
-  font-size: 24px;
+  font-size: clamp(18px, 1.8vw, 26px);
   font-weight: 600;
   color: #333;
   margin: 0 0 8px 0;
@@ -232,17 +232,17 @@ watch(
 .error-message {
   font-size: 16px;
   color: #666;
-  margin: 0 0 24px 0;
+  margin: 0 0 2.5vh 0;
   line-height: 1.5;
 }
 
 .retry-btn {
-  padding: 12px 24px;
+  padding: 1.2vh 2vw;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.8vw;
   background: #4caf50;
   color: white;
-  font-size: 14px;
+  font-size: clamp(12px, 1vw, 15px);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -269,16 +269,16 @@ watch(
 }
 
 .no-results-title {
-  font-size: 24px;
+  font-size: clamp(14px, 1.2vw, 26px);
   font-weight: 600;
   color: #333;
   margin: 0 0 8px 0;
 }
 
 .no-results-message {
-  font-size: 16px;
+  font-size: clamp(14px, 1.2vw, 18px);
   color: #666;
-  margin: 0;
+  margin: 0 0 2.5vh 0;
   line-height: 1.5;
 }
 
@@ -302,14 +302,14 @@ watch(
 }
 
 .products-count {
-  font-size: 24px;
+  font-size: clamp(18px, 1.8vw, 24px);
   font-weight: 600;
   color: #333;
   margin: 0;
 }
 
 .selected-count {
-  font-size: 14px;
+  font-size: clamp(12px, 1vw, 14px);
   color: #4caf50;
   font-weight: 500;
   margin: 0;
@@ -318,7 +318,7 @@ watch(
 .sort-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.8vw;
 }
 
 .sort-label {
@@ -328,14 +328,14 @@ watch(
 }
 
 .sort-select {
-  padding: 8px 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  padding: 0.8vh 1.2vw;
+  border: 0.1vw solid #e0e0e0;
+  border-radius: 0.4vw;
   background: #ffffff;
   color: #333;
-  font-size: 14px;
+  font-size: clamp(12px, 1vw, 14px);
   cursor: pointer;
-  min-width: 140px;
+  min-width: 9vw;
 }
 
 .sort-select:focus {
@@ -347,54 +347,51 @@ watch(
 /* 상품 그리드 */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(380px, 1fr)
-  ); /* 280px → 380px */
-  gap: 24px; /* 20px → 24px로 간격 확대 */
+  grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
+  gap: 2vw;
   justify-items: center;
-  margin-bottom: 40px;
-  max-width: 1400px; /* 1200px → 1400px로 확장 */
+  margin-bottom: 4vh;
+  max-width: 70vw;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 24px; /* 20px → 24px */
+  padding: 0 2vw;
 }
 
 /* 반응형 */
 @media (max-width: 1500px) {
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 22px;
-    padding: 0 20px;
+    gap: 1.4vw;
+    padding: 0 1.8vw;
   }
 }
 
 @media (max-width: 1200px) {
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 20px;
-    padding: 0 18px;
+    gap: 1.3vw;
+    padding: 0 1.6vw;
   }
 }
 
 @media (max-width: 900px) {
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 18px;
-    padding: 0 16px;
+    gap: 1.1vw;
+    padding: 0 1.4vw;
   }
 }
 
 @media (max-width: 768px) {
   .product-container {
-    padding: 0 16px;
+    padding: 0 1.4vw;
   }
 
   .products-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 1vw;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 2vh;
   }
 
   .products-info {
@@ -402,29 +399,29 @@ watch(
   }
 
   .products-count {
-    font-size: 20px;
+    font-size: clamp(18px, 1.8vw, 20px);
   }
 
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-    margin-bottom: 30px;
-    padding: 0 12px;
+    gap: 1vw;
+    margin-bottom: 1.5vw;
+    padding: 0 0.8vw;
   }
 
   .loading-container,
   .error-container,
   .no-results-container {
-    padding: 60px 16px;
+    padding: 8vh 2vw;
   }
 
   .error-title,
   .no-results-title {
-    font-size: 20px;
+    font-size: clamp(18px, 1.8vw, 20px);
   }
 
   .sort-select {
-    min-width: 120px;
+    min-width: 8vw;
     font-size: 13px;
   }
 }
@@ -432,45 +429,45 @@ watch(
 @media (max-width: 600px) {
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px;
+    gap: 0.8vw;
   }
 }
 
 @media (max-width: 480px) {
   .products-header {
-    margin-bottom: 20px;
+    margin-bottom: 1.2vw;
   }
 
   .products-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-    padding: 0 8px;
+    gap: 1vw;
+    margin-bottom: 1.2vw;
+    padding: 0 0.5vw;
   }
 
   .sort-select {
-    min-width: 110px;
+    min-width: 6vw;
   }
 
   .loading-container,
   .error-container,
   .no-results-container {
-    padding: 40px 16px;
+    padding: 4vw 1vw;
   }
 
   .error-icon,
   .no-results-icon {
-    font-size: 40px;
+    font-size: 2.5vw;
   }
 
   .error-title,
   .no-results-title {
-    font-size: 18px;
+    font-size: clamp(18px, 1.8vw, 18px);
   }
 
   .error-message,
   .no-results-message {
-    font-size: 14px;
+    font-size: clamp(14px, 1.2vw, 18px);
   }
 }
 </style>

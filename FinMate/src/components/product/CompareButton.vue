@@ -191,12 +191,12 @@ const handleImageError = (event, bankName) => {
 <style scoped>
 .compare-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 2vh;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  width: calc(100% - 40px);
-  max-width: 800px;
+  width: calc(100% - 4vw);
+  max-width: 42vw;
 }
 
 /* VS 비교 카드 (2개 선택 시) */
@@ -209,7 +209,7 @@ const handleImageError = (event, bankName) => {
 
 .product-compare-section {
   position: relative;
-  height: 120px; /* 세로 간격 줄임 */
+  height: 12vh;
   overflow: hidden;
   border-radius: 16px 16px 0 0;
 }
@@ -337,40 +337,6 @@ const handleImageError = (event, bankName) => {
   overflow: hidden;
 }
 
-.remove-btn {
-  position: absolute;
-  top: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  font-size: 12px;
-  padding: 4px;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  opacity: 0.8;
-  z-index: 4;
-}
-
-.remove-btn.left {
-  right: 8px;
-}
-
-.remove-btn.right {
-  right: 8px;
-}
-
-.remove-btn:hover {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
-}
-
 .vs-divider {
   position: absolute;
   left: 50%;
@@ -380,37 +346,37 @@ const handleImageError = (event, bankName) => {
 }
 
 .vs-circle {
-  width: 60px;
-  height: 60px;
+  width: 3.5vw;
+  height: 3.5vw;
   background: #dddddd;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.4vh 1.2vw rgba(0, 0, 0, 0.15);
 }
 
 .vs-text {
-  font-size: 16px;
+  font-size: clamp(14px, 1.2vw, 18px);
   font-weight: 700;
   color: #1f2937;
   text-transform: lowercase;
 }
 
 .compare-button-section {
-  padding: 12px 24px; /* 세로 간격 줄임 */
+  padding: 1vh 2vw;
   background: #ffffff;
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 1.2vw 1.2vw;
 }
 
 .compare-btn {
   width: 100%;
-  padding: 12px 24px; /* 버튼 높이 줄임 */
+  padding: 1.2vh 2vw;
   border: none;
-  border-radius: 12px;
+  border-radius: 0.8vw;
   background: #147117;
   color: white;
-  font-size: 16px;
+  font-size: clamp(14px, 1.2vw, 18px);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -419,7 +385,7 @@ const handleImageError = (event, bankName) => {
 .compare-btn:hover:not(:disabled) {
   background: #45a049;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 0.6vh 2vw rgba(76, 175, 80, 0.3);
 }
 
 .compare-btn:disabled {
@@ -432,52 +398,31 @@ const handleImageError = (event, bankName) => {
 /* 1개 선택 시 */
 .single-selection {
   background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 16px 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 0.1vw solid #e0e0e0;
+  border-radius: 1.2vw;
+  padding: 3vh 1.2vw;
+  box-shadow: 0 0.4vh 1.6vw rgba(0, 0, 0, 0.1);
 }
 
 .product-info-simple {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 1vh;
+  margin-bottom: 1.2vh;
 }
 
 .bank-icon.small {
-  width: 32px;
-  height: 32px;
+  width: 2.2vw;
+  height: 2.2vw;
   background: #f5f5f5;
   color: #666;
 }
 
 .product-name-simple {
   flex: 1;
-  font-size: 14px;
+  font-size: clamp(12px, 1vw, 16px);
   font-weight: 600;
   color: #333;
-}
-
-.remove-btn-simple {
-  background: none;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 4px;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.remove-btn-simple:hover {
-  background: #ffe5e5;
-  color: #f44336;
 }
 
 .selection-guide {
@@ -486,84 +431,84 @@ const handleImageError = (event, bankName) => {
 
 .selection-guide p {
   margin: 0;
-  font-size: 13px;
+  font-size: clamp(11px, 1vw, 15px);
   color: #666;
 }
 
 /* 반응형 */
 @media (max-width: 768px) {
   .compare-container {
-    bottom: 10px;
-    width: calc(100% - 20px);
+    bottom: 1vh;
+    width: calc(100% - 2.5vw);
     max-width: none;
   }
 
   .product-compare-section {
-    height: 140px;
+    height: 15vh;
   }
 
   .product-side {
-    padding: 16px 20px;
+    padding: 1.5vh 2vw;
   }
 
   .bank-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
+    width: 5vw;
+    height: 5vw;
+    font-size: clamp(16px, 2.3vw, 20px);
   }
 
   .product-name {
-    font-size: 16px;
-    max-width: 180px;
+    font-size: clamp(14px, 2vw, 18px);
+    max-width: 22vw;
   }
 
   .vs-circle {
-    width: 70px;
-    height: 70px;
+    width: 8.5vw;
+    height: 8.5vw;
   }
 
   .vs-text {
-    font-size: 60px;
+    font-size: clamp(14px, 7.5vw, 20px);
   }
 
   .compare-btn {
-    font-size: 14px;
-    padding: 12px 20px;
+    font-size: clamp(12px, 1.8vw, 16px);
+    padding: 1.5vh 2.5vw;
   }
 }
 
 @media (max-width: 480px) {
   .product-compare-section {
-    height: 120px;
+    height: 13vh;
   }
 
   .product-side {
-    padding: 12px 16px;
+    padding: 1.2vh 2vw;
     width: 42%;
   }
 
   .product-name {
-    font-size: 14px;
-    max-width: 140px;
+    font-size: clamp(12px, 3vw, 16px);
+    max-width: 25vw;
   }
 
   .bank-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 3vw;
+    height: 3vw;
+    font-size: 1vw;
   }
 
   .vs-circle {
-    width: 80px;
-    height: 80px;
+    width: 12vw;
+    height: 12vw;
   }
 
   .vs-text {
-    font-size: 16px;
+    font-size: clamp(14px, 3vw, 18px);
   }
 
   .compare-button-section {
-    padding: 12px 16px;
+    padding: 1.2vh 2vw;
   }
 }
 </style>

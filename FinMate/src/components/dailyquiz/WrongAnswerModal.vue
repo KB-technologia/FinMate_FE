@@ -1,4 +1,6 @@
 <script setup>
+import CloseButton from '@/components/allshared/CloseButton.vue';
+
 defineProps({
   message: String,
 });
@@ -9,9 +11,7 @@ defineProps({
       <div class="modal-title">
         <img src="@/assets/images/logos/wrongkiwi.png" class="wrongkiwi-img" />
         <h2 class="info-text">아쉽지만 오답이에요!</h2>
-        <button @click="$emit('close')" class="close-btn">
-          <img src="@/assets/images/icons/modalclose.png" class="close-img" />
-        </button>
+        <CloseButton @click="$emit('close')" class="close-btn" />
       </div>
       <div class="modal-body">
         <p>{{ message }}</p>
@@ -49,11 +49,11 @@ defineProps({
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: 2.7rem;
 }
 .info-text {
-  margin-left: 15px;
+  margin-left: 1rem;
   font-size: 2.5rem;
 }
 
@@ -62,14 +62,9 @@ defineProps({
   height: 170px;
 }
 
-.close-img {
-  width: 30px;
-  height: 30px;
-}
-
 .info-next {
   margin-top: 4rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .close-btn {
