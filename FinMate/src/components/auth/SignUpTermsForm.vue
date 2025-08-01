@@ -110,8 +110,9 @@ const goToNext = () => {
 <style scoped>
 .signup-box {
   width: 80vw;
-  max-width: 45vw;
+  max-width: 80rem;
   background-color: white;
+  margin: 0 auto;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -119,7 +120,7 @@ const goToNext = () => {
 
 .signup-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 2rem;
 }
@@ -144,7 +145,7 @@ const goToNext = () => {
 
 .terms-content {
   width: 100%;
-  height: 52vh;
+  height: 55vh;
   border: none;
   resize: none;
   background-color: transparent;
@@ -167,11 +168,11 @@ const goToNext = () => {
   display: block;
   margin: 1rem auto 0;
   width: 60%;
-  height: 2.8rem;
+  height: 3.2rem;
   background-color: var(--color-dark-gray);
   color: var(--color-white);
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin-top: 1rem;
 }
 .next-button:hover {
