@@ -14,15 +14,17 @@
           </div>
         </RightPanel>
       </div>
+      <FooterComponent />
     </div>
   </div>
 </template>
 
 <script setup>
-import Sidebar from "@/components/info/Sidebar.vue";
-import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
-import RightPanel from "@/components/info/RightPanel.vue";
-import UserInfoForm from "@/components/info/UserInfoForm.vue";
+import Sidebar from '@/components/info/Sidebar.vue';
+import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
+import RightPanel from '@/components/info/RightPanel.vue';
+import UserInfoForm from '@/components/info/UserInfoForm.vue';
+import FooterComponent from '../../components/allshared/FooterComponent.vue';
 </script>
 
 <style scoped>
@@ -36,8 +38,15 @@ import UserInfoForm from "@/components/info/UserInfoForm.vue";
 }
 
 .main-view-content {
-  width: 100%;
-  padding: 2vh 0;
+  padding-top: 1vh;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 2vh;
 }
 
 .mypage-container {
