@@ -48,9 +48,11 @@ import { ref, computed, onMounted } from 'vue';
 import { PawPrint, ScanSearch } from 'lucide-vue-next';
 import UserStatBar from '@/components/allshared/UserStatBar.vue';
 import ToastContainer from '@/components/allshared/ToastContainer.vue';
+import { getMemberCharacter } from '@/api/info/userStatsAPI.js';
 
 const activeStat = ref(null);
 const toastRef = ref(null);
+const showSpeech = ref(true);
 
 const stats = [
   {
@@ -99,15 +101,20 @@ const statDescription = computed(() => {
   return stat ? stat.description : '스탯을 클릭하면 세부 설명을 볼 수 있어요!';
 });
 
-onMounted(() => {
-  toastRef.value?.addToast('구름을 클릭하면 사라져요!', 'info');
-});
-
-const showSpeech = ref(true);
-
 const hideSpeech = () => {
   showSpeech.value = false;
 };
+
+onMounted(async () => {
+  toastRef.value?.addToast('구름을 클릭하면 사라져요!', 'info');
+
+  try {
+    const characterData = await getMemberCharacter();
+    console.log('✅ 캐릭터 정보:', characterData);
+  } catch (e) {
+    console.error('❌ 캐릭터 정보 요청 실패', e);
+  }
+});
 </script>
 
 <style scoped>
@@ -144,7 +151,7 @@ const hideSpeech = () => {
   right: -230px;
   width: 240px;
   height: 140px;
-  background-image: url("@/assets/images/icons/speech-default.png");
+  background-image: url('@/assets/images/icons/speech-default.png');
 
   background-size: contain;
   background-repeat: no-repeat;
