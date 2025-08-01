@@ -110,8 +110,9 @@ const goToNext = () => {
 <style scoped>
 .signup-box {
   width: 80vw;
-  max-width: 45vw;
+  max-width: 80rem;
   background-color: white;
+  margin: 0 auto;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

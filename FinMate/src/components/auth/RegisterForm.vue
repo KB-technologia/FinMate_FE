@@ -104,10 +104,15 @@
       <button class="submit-btn" @click="handleSubmit">완료</button>
     </div>
   </div>
+  <LoadingOverlay
+    v-if="ui.isLoading"
+    :message="'인증 메일을 전송 중이에요...'"
+  />
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import LoadingOverlay from '@/components/allshared/LoadingOverlay.vue';
+import { ref, computed, reactive } from 'vue';
 import { useSignupStore } from '@/stores/signup/signupStore';
 import { sendEmailAuth, verifyEmailAuth } from '@/api/auth/auth';
 import { useToast } from '@/composables/useToast';
@@ -131,6 +136,10 @@ const isCodeSent = ref(false);
 const isEmailVerified = ref(false);
 const verifySuccess = ref(false);
 const emailError = ref('');
+
+const ui = reactive({
+  isLoading: false,
+});
 
 const years = computed(() => {
   const currentYear = new Date().getFullYear();
@@ -163,6 +172,7 @@ const sendAuthCode = async () => {
   }
 
   try {
+    ui.isLoading = true;
     const response = await sendEmailAuth(email.value);
     uuid.value = response.data;
     isCodeSent.value = true;
@@ -171,6 +181,8 @@ const sendAuthCode = async () => {
     emailError.value = '인증코드 전송에 실패했습니다';
     isCodeSent.value = false;
     console.error('Auth code send error:', error);
+  } finally {
+    ui.isLoading = false;
   }
 };
 
@@ -197,7 +209,6 @@ const verifyAuthCode = async () => {
     verifySuccess.value = false;
   }
 };
-
 const handleSubmit = () => {
   store.email = email.value;
   store.name = name.value;
