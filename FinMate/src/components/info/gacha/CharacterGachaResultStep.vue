@@ -128,7 +128,6 @@ onMounted(() => {
   color: var(--color-white);
   animation: fadeIn 0.8s ease;
   animation-delay: 0.3s;
-  animation-fill-mode: both;
   min-height: 3rem;
 }
 

@@ -90,12 +90,6 @@ const startRolling = async () => {
       });
 
       selectedIndex.value = closest;
-      console.log("선택된 알 index:", closest);
-      console.log("선택된 알 정보:", duplicatedEggList[closest]);
-      console.log("🎯 화살표 중앙:", wrapperCenter);
-      console.log("🥚 선택된 알 index:", closest);
-      console.log("✅ 선택된 알:", duplicatedEggList[closest]);
-
       emit("confirm", duplicatedEggList[closest]);
     } else {
       frameId = requestAnimationFrame(animate);
@@ -135,7 +129,6 @@ const startRolling = async () => {
   left: 50%;
   transform: translateX(-50%);
   width: 2rem;
-  z-index: 10;
   pointer-events: none;
 }
 
