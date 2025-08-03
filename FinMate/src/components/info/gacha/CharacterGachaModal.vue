@@ -42,7 +42,7 @@ const handleConfirm = (egg) => {
   selectedEgg.value = egg;
 
   selectedCharacter.value = {
-    name: "소심한 펭귄",
+    name: "PENGUIN",
     image: new URL("@/assets/images/animals/penguin.png", import.meta.url).href,
   };
 

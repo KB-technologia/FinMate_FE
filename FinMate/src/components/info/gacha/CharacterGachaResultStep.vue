@@ -1,23 +1,33 @@
 <template>
   <div class="gacha-modal" @click.self="$emit('close')">
     <div class="modal-content result-step">
-      <h2 class="title">당신의 새로운 친구는 바로...</h2>
+      <h2 class="title">운명처럼 만난 친구는 누구일까요?</h2>
+      <img
+        :src="selectedEgg.url"
+        :class="['egg-img', { 'spinning-egg': !isRevealed }]"
+      />
 
-      <img :src="selectedEgg.url" :key="selectedEgg.url" class="egg-img" />
+      <transition name="fade">
+        <div v-if="isRevealed" class="character-wrapper" key="character">
+          <img :src="character.image" class="character-img" />
+          <p class="character-name">{{ character.name }}</p>
+        </div>
+      </transition>
 
-      <div class="character-wrapper">
-        <img :src="character.image" alt="캐릭터 이미지" class="character-img" />
-        <p class="character-name">{{ character.name }}</p>
-      </div>
-
-      <button class="close-btn" @click="$emit('close')">
-        함께 모험 떠나기 🚀
-      </button>
+      <transition name="fade">
+        <button v-if="isRevealed" class="close-btn" @click="$emit('close')">
+          <Rocket class="icon" />
+          함께 모험 떠나기
+        </button>
+      </transition>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
+import { Rocket } from "lucide-vue-next";
+
 defineProps({
   selectedEgg: {
     type: Object,
@@ -30,29 +40,39 @@ defineProps({
 });
 
 defineEmits(["close"]);
+
+const isRevealed = ref(false);
+
+onMounted(() => {
+  setTimeout(() => {
+    isRevealed.value = true;
+  }, 2000);
+});
 </script>
 
 <style scoped>
 .gacha-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
+  inset: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 999;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
-  background-color: var(--color-bg-light, white);
-  border-radius: 2rem;
-  padding: 3rem 2rem;
-  width: 90%;
-  max-width: 32rem;
-  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
+  width: 90vw;
+  max-width: 50vw;
+  height: 32rem;
+  padding: 1.2rem;
+  border-radius: 1.5rem;
+  background-color: var(--color-modal-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  overflow: hidden;
 }
 
 .result-step {
@@ -63,14 +83,14 @@ defineEmits(["close"]);
 }
 
 .title {
-  margin-bottom: 1.8rem;
+  margin-top: 0.8rem;
   font-size: 1.7rem;
   font-weight: var(--font-weight-bold);
 }
 
 .egg-img {
   width: 8rem;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   animation: pop 1s ease;
 }
 
@@ -78,27 +98,69 @@ defineEmits(["close"]);
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 10rem;
+  justify-content: center;
+  transition: opacity 0.6s ease;
 }
 
 .character-img {
   width: 10rem;
-  animation: fadeIn 1s ease;
+  animation: fadeIn 1s ease, bounce 1.2s ease-in-out 1.2s infinite alternate;
 }
 
 .character-name {
-  margin-top: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: var(--font-weight-semibold);
 }
 
 .close-btn {
-  margin-top: 2.5rem;
-  padding: 0.8rem 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+
+  margin-top: 1.6rem;
+  padding: 0.8rem 7rem;
   font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
   border-radius: 1.5rem;
   background-color: var(--color-primary-bluegray);
-  color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  color: var(--color-white);
+  animation: fadeIn 0.8s ease;
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
+  min-height: 3rem;
+}
+
+.icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.spinning-egg {
+  animation: spin 2s ease-in-out;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(360deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(720deg) scale(1);
+  }
 }
 
 @keyframes pop {
@@ -120,6 +182,18 @@ defineEmits(["close"]);
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    animation-timing-function: ease-in;
+  }
+  50% {
+    transform: translateY(-15px);
+    animation-timing-function: ease-out;
   }
 }
 </style>
