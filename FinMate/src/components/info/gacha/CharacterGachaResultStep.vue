@@ -129,6 +129,7 @@ onMounted(() => {
   animation: fadeIn 0.8s ease;
   animation-delay: 0.3s;
   min-height: 3rem;
+  animation-fill-mode: both;
 }
 
 .icon {
