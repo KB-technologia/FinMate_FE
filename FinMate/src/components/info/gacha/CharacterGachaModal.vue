@@ -35,19 +35,19 @@ import CharacterGachaResultStep from "./CharacterGachaResultStep.vue";
 const emit = defineEmits(["confirm", "close"]);
 const stage = ref("welcome");
 
-const selectedEgg = ref("");
+const selectedEgg = ref({ url: "" });
 const selectedCharacter = ref({});
 
-const handleConfirm = (eggUrl) => {
-  selectedEgg.value = eggUrl;
+const handleConfirm = (egg) => {
+  selectedEgg.value = egg;
 
   selectedCharacter.value = {
-    name: "용감한 펭귄",
+    name: "소심한 펭귄",
     image: new URL("@/assets/images/animals/penguin.png", import.meta.url).href,
   };
 
   stage.value = "result";
 
-  emit("confirm", eggUrl);
+  emit("confirm", egg);
 };
 </script>

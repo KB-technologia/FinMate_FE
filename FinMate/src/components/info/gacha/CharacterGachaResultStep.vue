@@ -3,7 +3,7 @@
     <div class="modal-content result-step">
       <h2 class="title">당신의 새로운 친구는 바로...</h2>
 
-      <img :src="selectedEgg" alt="선택된 알" class="egg-img" />
+      <img :src="selectedEgg.url" :key="selectedEgg.url" class="egg-img" />
 
       <div class="character-wrapper">
         <img :src="character.image" alt="캐릭터 이미지" class="character-img" />
@@ -19,9 +19,16 @@
 
 <script setup>
 defineProps({
-  selectedEgg: String,
-  character: Object,
+  selectedEgg: {
+    type: Object,
+    required: true,
+  },
+  character: {
+    type: Object,
+    required: true,
+  },
 });
+
 defineEmits(["close"]);
 </script>
 

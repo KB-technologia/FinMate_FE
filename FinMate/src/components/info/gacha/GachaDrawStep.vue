@@ -43,7 +43,10 @@ const images = import.meta.glob("@/assets/images/animals/Gacha_egg/*.png", {
 const eggList = Object.keys(images)
   .filter((path) => !path.includes("egg_family.png"))
   .sort()
-  .map((path) => ({ url: images[path] }));
+  .map((path, index) => ({
+    id: index,
+    url: images[path],
+  }));
 
 const duplicatedEggList = Array(100)
   .fill(null)
@@ -72,12 +75,13 @@ const startRolling = async () => {
       isRolling.value = false;
 
       const eggs = inner.querySelectorAll(".egg");
-      const wrapperCenter = inner.parentElement.offsetWidth / 2;
+      const wrapperCenter = window.innerWidth / 2;
       let closest = 0;
       let min = Infinity;
 
       eggs.forEach((el, i) => {
-        const eggCenter = el.offsetLeft + el.offsetWidth / 2 + offsetX.value;
+        const eggRect = el.getBoundingClientRect();
+        const eggCenter = eggRect.left + eggRect.width / 2;
         const dist = Math.abs(wrapperCenter - eggCenter);
         if (dist < min) {
           min = dist;
@@ -86,7 +90,13 @@ const startRolling = async () => {
       });
 
       selectedIndex.value = closest;
-      emit("confirm", duplicatedEggList[closest].url);
+      console.log("선택된 알 index:", closest);
+      console.log("선택된 알 정보:", duplicatedEggList[closest]);
+      console.log("🎯 화살표 중앙:", wrapperCenter);
+      console.log("🥚 선택된 알 index:", closest);
+      console.log("✅ 선택된 알:", duplicatedEggList[closest]);
+
+      emit("confirm", duplicatedEggList[closest]);
     } else {
       frameId = requestAnimationFrame(animate);
     }
