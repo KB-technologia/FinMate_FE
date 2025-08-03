@@ -63,7 +63,7 @@ const props = defineProps({
     default: defaultKiwiImage,
   },
 });
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "next"]);
 
 const visibleText = ref("");
 const selected = ref("next");
@@ -154,7 +154,6 @@ onMounted(() => {
 }
 
 .modal-content > *:not(.modal-bg) {
-  z-index: 1;
   position: relative;
 }
 
@@ -212,7 +211,6 @@ onMounted(() => {
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
-  z-index: 2;
 }
 
 .floating-btn {
@@ -223,17 +221,14 @@ onMounted(() => {
   font-size: 0.8rem;
   padding: 0.4rem 0.8rem;
   border-radius: 1rem;
-  background: none;
-  border: none;
-  cursor: pointer;
   transition: background-color 0.2s;
   min-width: 6rem;
   justify-content: flex-start;
 }
 
-.floating-btn.active {
-  background-color: var(--color-yellow);
-}
+/* .floating-btn.active {
+  background-color: var(--toast-bg-info);
+} */
 
 .icon {
   width: 1rem;
