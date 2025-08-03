@@ -1,6 +1,12 @@
 <template>
+  <CharacterGachaWelcomeModal
+    v-if="stage === 'welcome'"
+    @next="stage = 'intro'"
+    @close="emit('close')"
+  />
+
   <CharacterGachaIntroModal
-    v-if="stage === 'intro'"
+    v-else-if="stage === 'intro'"
     @next="stage = 'draw'"
     @close="emit('close')"
   />
@@ -21,12 +27,13 @@
 
 <script setup>
 import { ref } from "vue";
+import CharacterGachaWelcomeModal from "./CharacterGachaWelcomeModal.vue";
 import CharacterGachaIntroModal from "./CharacterGachaIntroModal.vue";
 import CharacterGachaDrawModal from "./CharacterGachaDrawModal.vue";
 import CharacterGachaResultStep from "./CharacterGachaResultStep.vue";
 
 const emit = defineEmits(["confirm", "close"]);
-const stage = ref("intro");
+const stage = ref("welcome");
 
 const selectedEgg = ref("");
 const selectedCharacter = ref({});
