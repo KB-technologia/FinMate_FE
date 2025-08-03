@@ -4,11 +4,8 @@
     <div class="modal-content">
       <div class="modal-bg" />
 
-      <img
-        src="@/assets/images/logos/kiwi-family2.svg"
-        alt="키위새"
-        class="kiwi"
-      />
+      <img :src="kiwiImage" alt="키위새" class="kiwi" />
+
       <slot name="footer" />
 
       <div class="bubble-container">
@@ -19,7 +16,31 @@
           class="speech-bubble"
         />
         <p class="bubble-text" v-html="visibleText" />
-        <slot name="floating-buttons" />
+        <div class="floating-button-box">
+          <button
+            class="floating-btn"
+            :class="[
+              { active: selected === 'next' },
+              { inactive: selected !== 'next' },
+            ]"
+            @click="handleClick('next')"
+          >
+            <PawPrint :class="['icon', { visible: selected === 'next' }]" />
+            다음으로
+          </button>
+
+          <button
+            class="floating-btn"
+            :class="[
+              { active: selected === 'exit' },
+              { inactive: selected !== 'exit' },
+            ]"
+            @click="handleClick('exit')"
+          >
+            <PawPrint :class="['icon', { visible: selected === 'exit' }]" />
+            나가기
+          </button>
+        </div>
         <slot />
       </div>
     </div>
@@ -27,17 +48,46 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { PawPrint } from "lucide-vue-next";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+
+import defaultKiwiImage from "@/assets/images/logos/kiwi-family2.svg";
 
 const props = defineProps({
   fullText: {
     type: Array,
     required: true,
   },
+  kiwiImage: {
+    type: String,
+    default: defaultKiwiImage,
+  },
 });
 const emit = defineEmits(["close"]);
 
 const visibleText = ref("");
+const selected = ref("next");
+
+const handleKeyDown = (e) => {
+  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+    selected.value = selected.value === "next" ? "exit" : "next";
+  }
+  if (e.key === "Enter") {
+    handleClick(selected.value);
+  }
+};
+
+const handleClick = (type) => {
+  if (type === "next") emit("next");
+  else emit("close");
+};
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
 
 onMounted(() => {
   let lineIndex = 0;
@@ -149,5 +199,53 @@ onMounted(() => {
   font-weight: var(--font-weight-bold);
   color: var(--color-brown);
   transform: rotate(-2deg);
+}
+
+/* 다음으로/나가기 선택 버튼 styles */
+.floating-button-box {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background-color: var(--color-primary-yellow);
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  z-index: 2;
+}
+
+.floating-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: var(--font-weight-bold);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 6rem;
+  justify-content: flex-start;
+}
+
+.floating-btn.active {
+  background-color: var(--color-yellow);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  visibility: hidden;
+}
+
+.icon.visible {
+  visibility: visible;
+}
+
+.floating-btn.inactive {
+  color: #999;
 }
 </style>
