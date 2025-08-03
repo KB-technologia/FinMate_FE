@@ -187,7 +187,7 @@ onMounted(() => {
   white-space: normal;
   text-align: center;
   line-height: 1.5;
-  word-break: keep-all;
+  word-break: break-word;
 }
 
 .bubble-sender-name {

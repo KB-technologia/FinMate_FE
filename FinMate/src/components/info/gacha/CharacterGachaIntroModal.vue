@@ -8,9 +8,6 @@ import CharacterGachaBaseModal from "./CharacterGachaBaseModal.vue";
 const emit = defineEmits(["close"]);
 
 const fullText = [
-  "다시 알을 뽑으면 현재 동물과는 작별하고,",
-  "레벨은 그대로 이어집니다.",
-  "캐릭터 교환권 1장이 ",
-  "소멸돼요!",
+  "새로운 동물을 뽑으면 현재 동물과 작별하게 되며,\n레벨은 그대로 유지돼요. \n캐릭터 교환권 1장이 사용됩니다!",
 ];
 </script>
