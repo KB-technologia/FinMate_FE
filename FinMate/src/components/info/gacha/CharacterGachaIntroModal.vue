@@ -1,41 +1,66 @@
 <template>
   <div class="gacha-modal" @click.self="emit('close')">
     <div class="modal-content">
-      <CloseButton class="top-close" @click="emit('close')" />
+      <div class="modal-bg" />
       <img
-        src="@/assets/images/animals/Gacha_egg/egg_family.png"
+        src="@/assets/images/logos/kiwi-family2.svg"
         alt="키위새"
         class="kiwi"
       />
-      <p class="typing-text">{{ visibleText }}</p>
-      <p class="warning-text">캐릭터 교환권 1장이 소멸돼요!</p>
-      <button class="confirm-btn" @click="emit('next')" :disabled="!showButton">
-        새로운 동물 만나러 가기
-      </button>
+
+      <div class="bubble-container">
+        <p class="bubble-sender-name">FINMATE</p>
+        <img
+          src="@/assets/images/etc/speech.svg"
+          alt="말풍선"
+          class="speech-bubble"
+        />
+        <p class="bubble-text" v-html="visibleText"></p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import CloseButton from "@/components/allshared/CloseButton.vue";
 
 const emit = defineEmits(["next", "close"]);
 
 const visibleText = ref("");
-const showButton = ref(false);
-const fullText = `다시 알을 뽑으면\n현재 동물과는 작별하고,\n레벨은 그대로 이어집니다.`;
+const fullText = [
+  "다시 알을 뽑으면 현재 동물과는 작별하고,",
+  "레벨은 그대로 이어집니다.",
+  "캐릭터 교환권 1장이 ",
+  "소멸돼요!",
+];
 
 onMounted(() => {
-  let i = 0;
-  const interval = setInterval(() => {
-    if (i < fullText.length) {
-      visibleText.value += fullText[i++];
-    } else {
-      clearInterval(interval);
-      showButton.value = true;
+  let lineIndex = 0;
+  let charIndex = 0;
+  let currentLine = "";
+
+  const typeLine = () => {
+    if (lineIndex >= fullText.length) return;
+
+    const line = fullText[lineIndex];
+    currentLine += line[charIndex++];
+    const lines = [...fullText.slice(0, lineIndex), currentLine];
+    visibleText.value =
+      fullText.slice(0, lineIndex).join("<br>") +
+      (lineIndex < fullText.length ? currentLine : "");
+
+    if (charIndex >= line.length) {
+      lineIndex++;
+      charIndex = 0;
+      currentLine = "";
     }
-  }, 60);
+
+    if (lineIndex < fullText.length) {
+      setTimeout(typeLine, 60);
+    }
+  };
+
+  typeLine();
 });
 </script>
 
@@ -47,10 +72,10 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 9999;
 }
 
 .modal-content {
+  position: relative;
   width: 90vw;
   max-width: 50vw;
   min-height: 32rem;
@@ -64,53 +89,60 @@ onMounted(() => {
   overflow: hidden;
 }
 
+.modal-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("@/assets/images/etc/sea_background.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.6;
+}
+
+.modal-content > *:not(.modal-bg) {
+  z-index: 1;
+  position: relative;
+}
+
 .kiwi {
   width: 10rem;
   height: auto;
+  transform: translateY(15vh);
 }
 
-.typing-text {
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-align: center;
-  white-space: pre-line;
-  line-height: 1.6;
-  min-height: 6rem;
-  color: var(--color-black);
-  margin-top: 1rem;
+.bubble-container {
+  position: relative;
+  width: 90%;
+  margin-top: 9vh;
 }
 
-.warning-text {
-  color: var(--color-red-alert);
-  font-weight: 600;
-  font-size: 1.1rem;
-  font-style: italic;
-  margin-top: 1.8rem;
-  margin-bottom: 4.2rem;
-  text-align: center;
-  white-space: pre-line;
+.speech-bubble {
+  width: 100%;
+  display: block;
 }
 
-.confirm-btn {
-  padding: 0.8rem 6rem;
+.bubble-text {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 92%;
+  padding: 0 1rem;
   font-size: 1.1rem;
   font-weight: var(--font-weight-semibold);
-  background-color: var(--color-primary-bluegray);
-  color: var(--color-white);
-  border-radius: 2rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--color-brown);
+  white-space: normal;
+  text-align: center;
+  line-height: 1.5;
+  word-break: keep-all;
 }
 
-.confirm-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-}
-
-.top-close {
+.bubble-sender-name {
   position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
-  cursor: pointer;
+  top: 1.6rem;
+  left: 5.2rem;
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-brown);
+  transform: rotate(-2deg);
 }
 </style>
