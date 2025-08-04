@@ -1,19 +1,17 @@
 <template>
   <div class="modal-backdrop" @click.self="onClose">
     <div class="modal-card">
+      <CloseButton @click="onClose" class="close-button" />
       <div class="product-title-row">
         <img :src="productImageUrl" alt="product" class="product-image" />
         <h2 class="product-name">{{ productName }}</h2>
       </div>
-      <StarRating :rating="rating" size="2.5rem" class="star-display" />
-      <input
-        type="range"
-        min="0"
-        max="5"
-        step="0.5"
-        v-model="rating"
-        class="rating-slider"
-        :style="sliderStyle"
+      <StarRating
+        :rating="Number(rating)"
+        size="2.5rem"
+        class="star-display"
+        :interactive="true"
+        @rating-change="handleRatingChange"
       />
       <textarea
         v-model="reviewText"
@@ -26,10 +24,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue';
 
-import { useToast } from "@/composables/useToast";
-import StarRating from "@/components/allshared/star/StarRating.vue";
+import { useToast } from '@/composables/useToast';
+import StarRating from '@/components/allshared/star/StarRating.vue';
+import CloseButton from '@/components/allshared/CloseButton.vue';
 
 const { toast } = useToast();
 
@@ -38,37 +37,36 @@ const props = defineProps({
   productImageUrl: String,
 });
 
-const emit = defineEmits(["close", "submit"]);
+const emit = defineEmits(['close', 'submit']);
 
 const rating = ref(0);
-const reviewText = ref("");
+const reviewText = ref('');
+
+const handleRatingChange = (newRating) => {
+  rating.value = newRating;
+};
 
 const handleSubmit = () => {
+  const ratingNumber = Number(rating.value);
   if (rating.value === 0) {
-    toast("별점을 선택해주세요.", "warning");
+    toast('별점을 선택해주세요.', 'warning');
     return;
   }
 
   if (!reviewText.value.trim()) {
-    toast("리뷰 내용을 입력해주세요.", "warning");
+    toast('리뷰 내용을 입력해주세요.', 'warning');
     return;
   }
 
-  emit("submit", {
-    rating: rating.value,
+  emit('submit', {
+    rating: ratingNumber,
     content: reviewText.value,
+    ease_of_signup: 0,
   });
-  emit("close");
+  emit('close');
 };
 
-const onClose = () => emit("close");
-
-const sliderStyle = computed(() => {
-  const percentage = (rating.value / 5) * 100;
-  return {
-    background: `linear-gradient(to right, var(--color-orange) 0%, var(--color-orange) ${percentage}%, #dcdcdc ${percentage}%, #dcdcdc 100%)`,
-  };
-});
+const onClose = () => emit('close');
 </script>
 
 <style scoped>
@@ -93,6 +91,7 @@ const sliderStyle = computed(() => {
   text-align: center;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .product-title-row {
@@ -119,29 +118,8 @@ const sliderStyle = computed(() => {
 
 .star-display {
   display: block;
-  margin: 0.7rem auto;
+  margin: 0.7rem auto 2rem auto;
   width: fit-content;
-}
-
-.rating-slider {
-  width: 100%;
-  height: 0.6rem;
-  appearance: none;
-  border-radius: 1rem;
-  transition: background 450ms ease-in;
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.rating-slider::-webkit-slider-thumb {
-  appearance: none;
-  height: 1.2rem;
-  width: 1.2rem;
-  background-color: var(--color-orange);
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-  margin-top: -0.3rem;
 }
 
 .review-textarea {
@@ -169,5 +147,13 @@ const sliderStyle = computed(() => {
 
 .submit-button:hover {
   background-color: var(--color-dark-blue);
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  transform: scale(0.7);
+  z-index: 10;
 }
 </style>

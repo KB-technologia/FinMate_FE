@@ -4,7 +4,9 @@
       v-for="index in maxStars"
       :key="index"
       class="star"
-      :class="getStarClass(index)"
+      :class="[getStarClass(index), { interactive: interactive }]"
+      @click="handleStarClick(index)"
+      @mouseleave="handleMouseLeave"
     >
       ★
     </span>
@@ -12,6 +14,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 const props = defineProps({
   rating: {
     type: Number,
@@ -23,14 +27,46 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: "1.5rem",
+    default: '1.5rem',
+  },
+  interactive: {
+    type: Boolean,
+    default: false,
   },
 });
 
+const emit = defineEmits(['rating-change']);
+
+const hoverRating = ref(0);
+
 const getStarClass = (index) => {
-  if (index <= Math.floor(props.rating)) return "full";
-  else if (index - props.rating < 1 && index - props.rating > 0) return "half";
-  else return "empty";
+  const currentRating =
+    props.interactive && hoverRating.value > 0
+      ? hoverRating.value
+      : props.rating;
+
+  if (index <= Math.floor(currentRating)) return 'full';
+  else if (index - currentRating < 1 && index - currentRating > 0)
+    return 'half';
+  else return 'empty';
+};
+
+const handleStarClick = (index) => {
+  if (props.interactive) {
+    emit('rating-change', index);
+  }
+};
+
+const handleMouseOver = (index) => {
+  if (props.interactive) {
+    hoverRating.value = index;
+  }
+};
+
+const handleMouseLeave = () => {
+  if (props.interactive) {
+    hoverRating.value = 0;
+  }
 };
 </script>
 
@@ -44,6 +80,15 @@ const getStarClass = (index) => {
 .star {
   position: relative;
   display: inline-block;
+  transition: transform 0.1s ease;
+}
+
+.star.interactive {
+  cursor: pointer;
+}
+
+.star.interactive:hover {
+  transform: scale(1.1);
 }
 
 .star.full,
@@ -60,7 +105,7 @@ const getStarClass = (index) => {
 }
 
 .star.half::before {
-  content: "★";
+  content: '★';
   color: var(--color-orange);
   position: absolute;
   left: 0;

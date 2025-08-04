@@ -5,15 +5,19 @@
     <div class="product-page-container">
       <div class="scrollable-content">
         <div class="product-card-wrapper">
-          <ProductDetailCardFund :product="mockProduct" />
+          <component
+            v-if="transformedProduct && transformedProduct.productType"
+            :is="getProductComponent(transformedProduct.productType)"
+            :product="transformedProduct"
+          />
         </div>
         <div class="divider" />
         <div class="rating-row">
           <h1 class="review-title">Product Review</h1>
           <div class="rating-detail-wrapper">
             <StarRatingWithDetail
-              :rating="4.5"
-              :count="9"
+              :rating="averageRating"
+              :count="reviews.length"
               size="3rem"
               @open-detail="openRatingDetailModal"
             />
@@ -24,16 +28,16 @@
           </div>
           <WriteReviewModal
             v-if="isReviewModalOpen"
-            :product-name="mockProduct.name"
+            :product-name="product?.name || ''"
             :product-image-url="logoPath"
             @submit="handleReviewSubmit"
             @close="isReviewModalOpen = false"
           />
           <RatingDetailModal
             v-if="isRatingDetailOpen"
-            :total-score="3.5"
-            :rating-data="[30, 60, 10, 90, 20]"
-            :review-count="4"
+            :total-score="averageRating"
+            :rating-data="ratingDistribution"
+            :review-count="reviews.length"
             @close="isRatingDetailOpen = false"
           />
         </div>
@@ -43,17 +47,17 @@
         />
         <div class="review-list">
           <ReviewCard
-            v-for="(review, index) in filteredAndSortedReviews"
-            :key="index"
-            :username="review.username"
-            :rating="review.rating"
-            :date="review.date"
+            v-for="review in paginatedReviews"
+            :key="review.id"
+            :username="review.writer"
+            :rating="Number(review.rating)"
+            :date="formatDate(review.createdAt)"
             :content="review.content"
           />
         </div>
         <Pagination
           :current-page="currentPage"
-          :total-items="mockReviews.length"
+          :total-items="filteredAndSortedReviews.length"
           :page-size="pageSize"
           @page-change="handlePageChange"
         />
@@ -64,7 +68,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { Pencil } from 'lucide-vue-next';
 
@@ -73,106 +78,105 @@ import { getBankLogoPath } from '@/utils/bank';
 import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
 import FooterComponent from '@/components/allshared/FooterComponent.vue';
 import ProductDetailCardFund from '@/components/product/ProductDetailCardFund.vue';
+import ProductDetailCardDeposit from '@/components/product/ProductDetailCardDeposit.vue';
+import ProductDetailCardSavings from '@/components/product/ProductDetailCardSavings.vue';
 import StarRatingWithDetail from '@/components/allshared/star/StarRatingWithDetail.vue';
 import ReviewFilterBar from '@/components/review/ReviewFilterBar.vue';
 import ReviewCard from '@/components/review/ReviewCard.vue';
 import Pagination from '@/components/allshared/Pagination.vue';
 import WriteReviewModal from '@/components/review/WriteReviewModal.vue';
 import RatingDetailModal from '@/components/review/RatingDetailModal.vue';
+import { productService } from '@/api/product/productService';
+
+const route = useRoute();
+
+const product = ref(null);
+const reviews = ref([]);
 
 // TODO: API 연동(테스트용 mock 데이터)
-
-// const mockProduct = {
-//   id: 1,
-//   name: "국민 퍼스트 예금1",
-//   bankName: "KB국민은행",
-//   productType: "DEPOSIT",
-//   expectedReturn: 1.8,
-//   riskLevel: 1,
-//   detail: {
-//     bonusRate: 1.0,
-//     minTerm: 12,
-//     minAmount: 1000000,
-//     defaultTermMonths: 12,
-//     interestType: "SIMPLE",
-//     compoundingPeriod: "MONTHLY",
-//     earlyWithdrawalPenalty: 0.5,
-//     isFlexible: false,
-//   },
-// };
-
-// const mockProduct = {
-//   id: 2,
-//   name: "하나 자유적금 12개월",
-//   bankName: "하나은행",
-//   productType: "SAVINGS",
-//   expectedReturn: 3.2,
-//   riskLevel: 2,
-//   valueTag: "STABILITY",
-//   speedTag: "SLOW",
-//   strategyTag: "STRATEGY",
-//   description: "매월 자유롭게 납입 가능한 고금리 적금 상품입니다.",
-//   url: "https://example.com/product/savings",
-//   detail: {
-//     bonusRate: 0.8,
-//     minAmount: 10000,
-//     maxAmount: 100000000,
-//     minTerm: 6,
-//     maxTerm: 24,
-//     defaultTermMonths: 12,
-//     interestType: "SIMPLE",
-//     compoundingPeriod: "MONTHLY",
-//     earlyWithdrawalPenalty: 0.4,
-//     isFlexible: true,
-//     paymentCycle: "MONTHLY",
-//     maxMonthlyPayment: 300000,
-//   },
-// };
-
-const mockProduct = {
-  id: 3,
-  name: 'KB 글로벌 성장 펀드',
-  bankName: 'KB국민은행',
-  productType: 'FUND',
-  expectedReturn: 6.8,
-  riskLevel: 4,
-  valueTag: 'GROWTH',
-  speedTag: 'FAST',
-  strategyTag: 'DIVERSIFY',
-  description: '글로벌 시장에 분산 투자하는 중위험 중수익 펀드입니다.',
-  url: 'https://example.com/product/fund',
-  detail: {
-    minAmount: 100000,
-    maxAmount: 100000000,
-  },
-};
-
-const mockReviews = [
-  {
-    username: '홍길동',
-    rating: 5,
-    date: '2025.07.24',
-    content: '금리가 높아서 짧은 기간에도 이자 수익이 꽤 나왔어요!',
-  },
-  {
-    username: '김길동',
-    rating: 4,
-    date: '2025.07.20',
-    content: '가입도 쉽고 모바일로 관리하기도 편했어요.',
-  },
-  {
-    username: '박길동',
-    rating: 1.5,
-    date: '2025.06.20',
-    content: '뭔가 제가 생각한 것보단 별로였어요',
-  },
-];
 
 const filter = ref('all');
 const sort = ref('latest');
 const currentPage = ref(1);
 const pageSize = 5;
-const logoPath = getBankLogoPath(mockProduct.bankName);
+
+const getProductComponent = (productType) => {
+  const componentMap = {
+    DEPOSIT: ProductDetailCardDeposit,
+    SAVINGS: ProductDetailCardSavings,
+    FUND: ProductDetailCardFund,
+  };
+  return componentMap[productType] || ProductDetailCardFund;
+};
+
+const transformedProduct = computed(() => {
+  if (!product.value) return null;
+
+  console.log('상품 상세 정보:', product.value);
+
+  const base = {
+    id: product.value.id,
+    name: product.value.name,
+    bankName: product.value.bankName,
+    productType: product.value.productType,
+    expectedReturn: product.value.expectedReturn,
+    riskLevel: product.value.riskLevel,
+    valueTag: product.value.valueTag,
+    speedTag: product.value.speedTag,
+    strategyTag: product.value.strategyTag,
+    description: product.value.description,
+    url: product.value.url,
+    detail: {
+      minAmount: product.value.minAmount,
+      maxAmount: product.value.maxAmount,
+      minTerm: product.value.minTerm,
+      maxTerm: product.value.maxTerm,
+
+      bonusRate: product.value.detail?.bonusRate || 0,
+      defaultTermMonths:
+        product.value.detail?.defaultTermMonths || product.value.minTerm,
+      interestType: product.value.detail?.interestType || 'SIMPLE',
+      compoundingPeriod: product.value.detail?.compoundingPeriod || 'MONTHLY',
+      earlyWithdrawalPenalty: product.value.detail?.earlyWithdrawalPenalty || 0,
+      isFlexible: product.value.detail?.isFlexible || false,
+    },
+  };
+
+  // 적금의 경우 추가 필드
+  if (product.value.productType === 'SAVINGS') {
+    base.detail.paymentCycle = product.value.detail?.paymentCycle || 'MONTHLY';
+    base.detail.maxMonthlyPayment =
+      product.value.detail?.maxMonthlyPayment || product.value.maxAmount;
+  }
+
+  return base;
+});
+
+const logoPath = computed(() => {
+  return product.value ? getBankLogoPath(product.value.bankName) : '';
+});
+
+// 평균 평점 계산 (데이터베이스 구조에 맞춤)
+const averageRating = computed(() => {
+  if (reviews.value.length === 0) return 0;
+  const total = reviews.value.reduce(
+    (sum, review) => sum + parseFloat(review.rating),
+    0
+  );
+  return Math.round((total / reviews.value.length) * 10) / 10;
+});
+
+// 평점 분포 계산 (1~5점)
+const ratingDistribution = computed(() => {
+  const distribution = [0, 0, 0, 0, 0]; // 1점, 2점, 3점, 4점, 5점
+  reviews.value.forEach((review) => {
+    const rating = Math.floor(parseFloat(review.rating));
+    if (rating >= 1 && rating <= 5) {
+      distribution[rating - 1]++;
+    }
+  });
+  return distribution;
+});
 
 const handlePageChange = (newPage) => {
   currentPage.value = newPage;
@@ -192,22 +196,84 @@ const openRatingDetailModal = () => {
 };
 
 const filteredAndSortedReviews = computed(() => {
-  let reviews = [...mockReviews];
+  let filteredReviews = [...reviews.value];
 
   if (filter.value !== 'all') {
     const ratingFilter = parseInt(filter.value);
-    reviews = reviews.filter((r) => Math.floor(r.rating) === ratingFilter);
+    filteredReviews = filteredReviews.filter(
+      (r) => Math.floor(r.rating) === ratingFilter
+    );
   }
 
   if (sort.value === 'latest') {
-    return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+    return filteredReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
   } else if (sort.value === 'high') {
-    return reviews.sort((a, b) => b.rating - a.rating);
+    return filteredReviews.sort((a, b) => b.rating - a.rating);
   } else if (sort.value === 'low') {
-    return reviews.sort((a, b) => a.rating - b.rating);
+    return filteredReviews.sort((a, b) => a.rating - b.rating);
   }
-  return reviews;
+  return filteredReviews;
 });
+
+// 페이지네이션된 리뷰
+const paginatedReviews = computed(() => {
+  const start = (currentPage.value - 1) * pageSize;
+  const end = start + pageSize;
+  return filteredAndSortedReviews.value.slice(start, end);
+});
+
+// 날짜 포맷 함수 (데이터베이스 DATETIME 형식 처리)
+const formatDate = (dateString) => {
+  try {
+    if (Array.isArray(dateString) && dateString.length >= 3) {
+      // [2025, 7, 28, 22, 0, 28] 형태
+      const [year, month, day] = dateString;
+      return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(
+        2,
+        '0'
+      )}`;
+    }
+
+    if (typeof dateString === 'string') {
+      // ISO 문자열 또는 MySQL DATETIME 형태
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) {
+        return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(
+          2,
+          '0'
+        )}.${String(date.getDate()).padStart(2, '0')}`;
+      }
+    }
+
+    return '날짜 없음';
+  } catch (error) {
+    console.error('Date formatting error:', error);
+    return '날짜 없음';
+  }
+};
+
+// 데이터 로딩 함수
+const loadProductData = async () => {
+  try {
+    const productId = route.params.id;
+    console.log('Loading product data for ID:', productId);
+
+    // 상품 상세 정보와 리뷰를 병렬로 가져오기
+    const [productResponse, reviewsResponse] = await Promise.all([
+      productService.getProductDetails(productId),
+      productService.getProductReviews(productId),
+    ]);
+
+    console.log('Product response:', productResponse.data);
+
+    product.value = productResponse.data;
+    reviews.value = Array.isArray(reviewsResponse.data)
+      ? reviewsResponse.data
+      : [];
+  } catch (err) {
+    console.error('데이터 로딩 중 오류 발생:', err);
+  }
+};
 
 const handleFilterChange = (value) => {
   filter.value = value;
@@ -216,6 +282,31 @@ const handleFilterChange = (value) => {
 const handleSortChange = (value) => {
   sort.value = value;
 };
+
+const handleReviewSubmit = async (reviewData) => {
+  // 리뷰 제출 후 리뷰 목록 새로고침
+  try {
+    // 리뷰 POST API 호출
+    const test = productService.submitReview(route.params.id, reviewData);
+    console.log('리뷰 제출 성공:', test);
+
+    // 리뷰 목록 새로고침
+    const reviewsResponse = await productService.getProductReviews(
+      route.params.id
+    );
+    reviews.value = Array.isArray(reviewsResponse.data)
+      ? reviewsResponse.data
+      : [];
+
+    isReviewModalOpen.value = false;
+  } catch (err) {
+    console.error('리뷰 제출 중 오류 발생:', err);
+  }
+};
+
+onMounted(() => {
+  loadProductData();
+});
 </script>
 
 <style scoped>
