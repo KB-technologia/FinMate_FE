@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useToast } from '@/composables/useToast';
+import { useSignupStore } from '@/stores/signup/signupStore';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -33,6 +34,24 @@ onMounted(async () => {
     // 토큰, 유저 정보 저장
     authStore.setToken(token);
     authStore.setIsFirst(newUser);
+    authStore.setProvider('KAKAO');
+    authStore.userInfo = user;
+
+    if (newUser) {
+      const signupStore = useSignupStore();
+
+      console.log('[DEBUG] 실제 user 객체', user);
+
+      signupStore.$patch({
+        provider: 'KAKAO',
+        accountId: user.accountId,
+        name: user.name,
+        email: user.email,
+        birth: user.birth,
+        gender: user.gender,
+      });
+      sessionStorage.setItem('provider', 'KAKAO');
+    }
 
     console.log('[DEBUG] 받은 token:', token);
     console.log(

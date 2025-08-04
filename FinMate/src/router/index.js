@@ -19,7 +19,6 @@ const routes = [
     name: "KakaoRedirect",
     component: () => import("@/views/auth/KakaoRedirect.vue"),
   },
-  // 카카오 로그인 버튼 후, 기존 사용자가 아닌 경우 이동하는 회원가입 설문 페이지
   {
     path: "/signup-survey",
     name: "signupSurvey",
@@ -30,6 +29,15 @@ const routes = [
     path: "/signup1",
     name: "signup1",
     component: () => import("@/views/auth/SignUpView1.vue"),
+    path: '/signup/complete',
+    name: 'signupComplete',
+    component: () => import('@/views/auth/SignupComplete.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
+    path: '/signup1',
+    name: 'signup1',
+    component: () => import('@/views/auth/SignUpView1.vue'),
   },
   {
     path: "/signup2",

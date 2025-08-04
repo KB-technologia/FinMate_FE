@@ -13,7 +13,7 @@ export const postAssessment = async (choices) => {
     console.log('[postAssessment] 사용자의 토큰:', token);
 
     const response = await axios.post(
-      `${BASE_API_URL}/assessment`,
+      `${BASE_API_URL}/api/assessment`,
       { choices },
       {
         headers: {
