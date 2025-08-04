@@ -1,0 +1,72 @@
+:root {
+  /* 기본색 */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-red: #ff0000;
+  --color-orange: #f99a0f;
+
+  /* 대표색 */
+  --color-primary-yellow: #ffeab4;
+  --color-primary-green: #89caa2;
+  --color-primary-bluegray: #2e404c;
+
+  /* 자주 쓰이는 색 */
+  --color-modal-bg: #fffdf0;
+  --color-main-button: #eaddbb;
+  --color-dark-gray: #636362;
+  --color-light-blue: #a4c8e1;
+  --color-light-gray: #c9c9c9;
+  --color-gray-lightest: #eeeeee;
+  --color-modal-overlay: rgba(0, 0, 0, 0.5);
+
+  /* 설문 결과용 색상 */
+  --color-survey-blue: #002bff;
+  --color-survey-yellow: #ffd600;
+  --color-survey-green: #307400;
+
+  /* 예금/적금 태그 색상 */
+  --color-deposit-blue: #2871de;
+  --color-saving-orange: #e58500;
+  --color-fund-green: #458437;
+
+  /* Toast 배경색 (연한 배경색) */
+  --toast-bg-success: #a2e8ab;
+  --toast-bg-error: #f9ada5;
+  --toast-bg-info: #b7d3eb;
+  --toast-bg-warning: #f8e0bf;
+
+  /* Toast 아이콘 색상 */
+  --toast-icon-success: #3c8c75;
+  --toast-icon-error: #d32f2f;
+  --toast-icon-info: #1976d2;
+
+  /* Mainpage 색상 모음 */
+  --color-more-light-blue: #ecf6fc;
+  --color-light-yellow: #fffcf4;
+
+  /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
+  --color-delete-bg: #f0cccc;
+
+
+  /*재무 포트폴리오 차트 색상 모음 */
+  --color-cash: #9ecad6;
+  --color-deposit: #748dae;
+  --color-savings: #f5cbcb;
+  --color-bond: #ffeaea;
+  --color-fund: #a3dc9a;
+  --color-stock: #dee791;
+  --color-other: #dcd0a8;
+
+  /*차트 안내 색상*/
+  --color-chart-info: #7a7a73;
+
+  /*재무 포트폴리오 right panel 색상*/
+  --color-right-panel: #e9e3df;
+  --color-totalassets: #58a0c8;
+  --color-assets: ;
+
+  /*exp 바 색상 */
+  --color-exp-track: #e6f8ee;
+  --color-exp-fill: #3ccb7f;
+
+}
