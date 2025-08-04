@@ -34,13 +34,6 @@
 
     <div v-else class="form-section">
       <div class="result-section">
-        <div class="success-alert">
-          <!-- <div class="alert-icon">ℹ️</div>
-          <div class="alert-text">
-            이메일 인증이 완료되어 아이디 찾기 결과를 확인하실 수 있습니다.
-          </div> -->
-        </div>
-
         <div class="result-content">
           <div class="result-message">
             <strong>{{ foundName }}</strong
@@ -134,11 +127,8 @@ const verifyAuthCode = async () => {
   try {
     ui.isLoading = true;
     const response = await verifyEmailAuth(authCode.value, uuid.value);
-    console.log('📦 인증 시 보내는 uuid:', uuid.value);
-    console.log('📦 인증코드:', authCode.value);
     if (response.data === true) {
       toast('✅ 이메일 인증이 완료되었습니다.', 'success');
-      // 인증 완료 후 아이디 찾기 API 호출
       await findUserAccountId();
     } else {
       toast('❌ 인증코드가 올바르지 않습니다.', 'error');
@@ -278,19 +268,6 @@ input:disabled {
   text-align: center;
 }
 
-/* .success-alert {
-  background: #2196f3;
-  color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  line-height: 1.4;
-} */
-
 .alert-icon {
   font-size: 1.2rem;
   flex-shrink: 0;
@@ -357,7 +334,7 @@ input:disabled {
 }
 
 .btn-find-password:hover {
-  background: #1976d2;
+  background: var(--toast-icon-info);
 }
 
 .error {
