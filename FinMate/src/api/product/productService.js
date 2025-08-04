@@ -4,13 +4,10 @@ const API_BASE_URL = import.meta.env.VITE_BASE_API_URL + '/product';
 
 export const productService = {
   getAllProducts() {
-    console.log('전체 상품 API 호출:', `${API_BASE_URL}`);
     return axios.get(`${API_BASE_URL}`);
   },
 
   getFilteredProducts(filterParams) {
-    // console.log('필터링 API 호출 파라미터:', filterParams);
-
     const params = new URLSearchParams();
 
     if (filterParams.query?.trim()) {
@@ -49,5 +46,47 @@ export const productService = {
       `${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`
     );
     return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`);
+  },
+
+  getProductDetails(productId) {
+    console.log('상품 상세 정보 API 호출:', `${API_BASE_URL}/${productId}`);
+    return axios.get(`${API_BASE_URL}/${productId}`);
+  },
+
+  getProductReviews(productId) {
+    console.log('상품 리뷰 API 호출:', `${API_BASE_URL}/${productId}/reviews`);
+    return axios.get(`${API_BASE_URL}/${productId}/review`);
+  },
+
+  async submitReview(productId, reviewData) {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return Promise.reject(new Error('로그인이 필요합니다.'));
+    }
+
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/${productId}/review`,
+        reviewData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      if (err.response) {
+        // 서버가 에러코드와 메시지 보낸 경우
+        console.log('status:', err.response.status); // ex) 404
+        console.log('data:', err.response.data); // ex) { message: "해당 리소스를 찾을 수 없습니다." }
+      } else {
+        // 네트워크 에러 등 서버 응답 자체가 없는 경우
+        console.log('error:', err.message);
+      }
+    }
   },
 };
