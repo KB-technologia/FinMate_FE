@@ -1,14 +1,14 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { createPortfolio, updatePortfolio } from "@/api/portfolio/portfolio.js";
+import { ref, onMounted } from 'vue';
+import { createPortfolio, updatePortfolio } from '@/api/portfolio/portfolio.js';
 
-const emit = defineEmits(["close", "save"]);
+const emit = defineEmits(['close', 'save']);
 const error = ref(false);
 
 const props = defineProps({
   mode: {
     type: String,
-    default: "write",
+    default: 'write',
   },
   initialData: {
     type: Object,
@@ -17,44 +17,29 @@ const props = defineProps({
 });
 
 const form = ref({
-  age: null,
-  annualIncome: null,
-  totalAssets: null,
   cash: null,
-  bond: null,
-  equity: null,
   other: null,
 });
 
 onMounted(() => {
   //
-  if (props.mode === "edit" && props.initialData) {
+  if (props.mode === 'edit' && props.initialData) {
     form.value = { ...props.initialData };
   }
 });
 
 const fields = [
-  { name: "age", label: "나이", unit: "세" },
-  { name: "annualIncome", label: "연 소득", unit: "원" },
-  { name: "cash", label: "현금 / 예금", unit: "원" },
-  { name: "bond", label: "채권", unit: "원" },
-  { name: "equity", label: "주식 / 펀드", unit: "원" },
-  { name: "other", label: "기타 자산", unit: "원" },
+  { name: 'cash', label: '현금', unit: '원' },
+  { name: 'other', label: '기타 자산', unit: '원' },
 ];
+
 async function onSubmit() {
-  const requiredFields = [
-    "age",
-    "annualIncome",
-    "cash",
-    "bond",
-    "equity",
-    "other",
-  ];
+  const requiredFields = ['cash', 'other'];
 
   const hasEmpty = requiredFields.some(
     (key) =>
       form.value[key] === null ||
-      form.value[key] === "" ||
+      form.value[key] === '' ||
       isNaN(form.value[key])
   );
 
@@ -64,43 +49,27 @@ async function onSubmit() {
   }
   error.value = false;
 
-  const totalAssets =
-    form.value.cash + form.value.bond + form.value.equity + form.value.other;
-  const cashRatio = (form.value.cash / totalAssets) * 100;
-  const bondRatio = (form.value.bond / totalAssets) * 100;
-  const equityRatio = (form.value.equity / totalAssets) * 100;
-  const otherRatio = (form.value.other / totalAssets) * 100;
-  const annualIncome = form.value.annualIncome;
-  const age = form.value.age;
-
   const fullData = {
-    userId: 1, // TODO: 실제 유저 ID로 대체
-    age,
-    annualIncome,
-    totalAssets,
-    cashRatio,
-    bondRatio,
-    equityRatio,
-    otherRatio,
+    cash: form.value.cash,
+    other: form.value.other,
   };
-  if (props.mode === "edit") {
-    fullData.id = form.value.id;
-  }
 
   try {
-    if (props.mode === "edit") {
+    if (props.mode === 'edit') {
       await updatePortfolio(fullData);
     } else {
       await createPortfolio(fullData);
     }
-    emit("save", fullData);
+    emit('save');
   } catch (err) {
-    console.error("저장 실패", err);
+    console.error('저장 실패', err);
+  } finally {
+    onCancel();
   }
 }
 
 function onCancel() {
-  emit("close");
+  emit('close');
 }
 </script>
 
@@ -113,16 +82,12 @@ function onCancel() {
         alt="totalassets이미지"
       />
       <h2 class="modal-title">
-        {{ mode === "edit" ? "재무 정보 수정" : "재무 정보 작성" }}
+        {{ mode === 'edit' ? '재무 정보 수정' : '재무 정보 작성' }}
       </h2>
       <div class="form-group" v-for="field in fields" :key="field.name">
         <label :for="field.name">{{ field.label }}</label>
         <div class="input-wrapper">
-          <input
-            :id="field.name"
-            v-model.number="form[field.name]"
-            :class="field.name === 'age' ? 'input-short' : 'input-default'"
-          />
+          <input :id="field.name" v-model.number="form[field.name]" />
           <span class="unit-inside">
             {{ field.unit }}
           </span>
@@ -151,22 +116,20 @@ function onCancel() {
 .modal-container {
   background: var(--color-modal-bg);
   border-radius: 20px;
-  padding: 0.5rem 1.5rem;
+  padding: 1.5rem 1.5rem;
   width: 45vw;
-  max-height: 95vh;
-  overflow-y: auto;
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
 }
 
 .top-icon {
-  width: 100px;
+  width: 10%;
   display: block;
   margin: 0 auto 1rem auto;
 }
 
 .modal-title {
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   text-align: center;
-  margin-bottom: 1rem;
 }
 
 .form-group {
@@ -174,8 +137,8 @@ function onCancel() {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #aaaaaa;
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+  margin-top: 3rem;
 }
 
 label {
@@ -195,6 +158,7 @@ input {
   border: 1px solid #abaaaa;
   font-size: 1rem;
   text-align: right;
+  margin-bottom: 0.5rem;
 }
 
 .unit-inside {
@@ -203,13 +167,7 @@ input {
   color: #abaaaa;
   pointer-events: none;
   font-size: 1rem;
-}
-
-.input-short {
-  width: 5vw;
-}
-.input-default {
-  width: 10vw;
+  margin-bottom: 0.5rem;
 }
 
 .error-text {
@@ -244,12 +202,17 @@ input {
   border: none;
   font-size: 1.3rem;
   cursor: pointer;
-  background-color: var(--color-primary-bluegray);
+  background-color: var(--color-dark-gray);
   color: var(--color-white);
   border-radius: 20px;
 }
 
-.submit:hover {
-  background-color: var(--color-dark-gray);
+.btn-submit:hover {
+  background-color: var(--color-primary-bluegray);
+}
+
+.btn-cancel:hover {
+  color: var(--color-white);
+  background-color: var(--color-red);
 }
 </style>
