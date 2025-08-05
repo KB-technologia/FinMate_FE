@@ -49,7 +49,7 @@
 
 <script setup>
 import '@/styles/fonts.css';
-import { CircleUserRound, PackageSearch } from 'lucide-vue-next';
+import { CircleUserRound, PackageSearch, Heart } from 'lucide-vue-next';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 </script>
