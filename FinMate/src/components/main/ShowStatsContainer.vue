@@ -23,7 +23,7 @@
     <div v-if="isstats" class="stats">
       <div v-if="statData" class="stat-bar-wrapper">
         <div class="stat-row">
-          <span class="stat-label">📊 모험 성향 점수</span>
+          <span class="stat-label">모험 성향 점수</span>
           <div class="stat-bar-outer">
             <div
               class="stat-bar-fill"
@@ -39,7 +39,7 @@
         </div>
 
         <div class="stat-row">
-          <span class="stat-label">💰 재정 점수</span>
+          <span class="stat-label">재정 점수</span>
           <div class="stat-bar-outer">
             <div
               class="stat-bar-fill"
@@ -53,10 +53,12 @@
             >{{ statData.financeScore.toFixed(1) }} / 3.0</span
           >
         </div>
-        <div class="portfolio-grid">
-          <p>⚡ 속도 {{ statData.speedTag }}</p>
-          <p>🧠 운/전략 {{ statData.strategyTag }}</p>
-          <p>🏷️ 가치관 {{ statData.valueTag }}</p>
+        <div class="char-stat">
+          <p>속도 {{ statData.speedTag }}</p>
+          <p>|</p>
+          <p>운/전략 {{ statData.strategyTag }}</p>
+          <p>|</p>
+          <p>가치관 {{ statData.valueTag }}</p>
         </div>
 
         <button class="detail-button" @click="goToStatsPage">
@@ -299,8 +301,16 @@ const handleMouseLeave = () => {
   gap: 0.8rem;
 }
 
+.char-stat {
+  display: flex;
+  flex-direction: row;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  gap: 2rem;
+}
+
 .detail-button {
-  width: 11vw;
+  width: 15vw;
   height: 4vh;
   background-color: var(--color-white);
   border: 0.2vh solid var(--color-light-gray);
