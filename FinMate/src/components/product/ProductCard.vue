@@ -47,7 +47,9 @@
         }}</span>
         <span class="return-value"
           >{{
-            formatRate(product.expectedReturn + product.detail.bonusRate)
+            product.productType === 'FUND'
+              ? formatRate(product.expectedReturn)
+              : formatRate(product.expectedReturn + product.detail.bonusRate)
           }}%</span
         >
       </div>
@@ -73,7 +75,6 @@
         <template v-else-if="product.productType === 'FUND'">
           <div class="info-row">
             <span>펀드유형:</span>
-            //TODO: DB 변경된 걸로 바꾸기
             <span>{{ product.detail.fundType }}</span>
           </div>
           <div class="info-row">

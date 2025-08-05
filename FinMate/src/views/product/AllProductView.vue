@@ -91,10 +91,7 @@ const fetchProducts = async () => {
   try {
     const apiParams = buildApiParams(); // { sortOrder: 'desc' } 포함
     const response = await productService.getFilteredProducts(apiParams);
-
-    // const response = await productService.getAllProducts();
     products.value = response.data || [];
-    console.log('상품 데이터 로드 완료:', products.value.length);
   } catch (err) {
     error.value =
       err.response?.data?.message || '상품 데이터를 불러오는데 실패했습니다.';
