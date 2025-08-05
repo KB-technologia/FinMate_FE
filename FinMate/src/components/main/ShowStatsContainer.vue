@@ -1,25 +1,5 @@
 <template>
-  <!-- 로그인 상태일 때: 통계 그래프 -->
   <div v-if="isLoggedIn" class="show-stats-container-notlogin">
-    <!-- <div class="stat-row" v-for="(stat, index) in statsLeft" :key="index">
-      <span class="stat-label">{{ stat.label }}</span>
-      <div class="stat-bar-outer">
-        <div
-          class="stat-bar-fill"
-          :style="{ width: stat.percent + '%', backgroundColor: stat.color }"
-        ></div>
-      </div>
-    </div>
-    <div class="stat-row" v-for="(stat, index) in statsRight" :key="index">
-      <span class="stat-label">{{ stat.label }}</span>
-      <div class="stat-bar-outer">
-        <div
-          class="stat-bar-fill"
-          :style="{ width: stat.percent + '%', backgroundColor: stat.color }"
-        ></div>
-      </div>
-    </div>
-    <button class="detail-button" @click="goToStatsPage">자세히 보기</button> -->
     <div v-if="isstats" class="stats">
       <div v-if="statData" class="stat-bar-wrapper">
         <div class="stat-row">

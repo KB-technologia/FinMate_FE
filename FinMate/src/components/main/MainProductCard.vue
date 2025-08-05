@@ -2,10 +2,9 @@
   <div class="card-container">
     <div class="card-content">
       <h3>{{ product.name }}</h3>
-      <p>은행: {{ product.bank }}</p>
-      <p>유형: {{ product.type }}</p>
-      <p>위험도: {{ product.risk }}</p>
-      <p>예상 수익률: {{ product.return }}</p>
+      <p>은행: {{ product.bankName }}</p>
+      <p>유형: {{ product.productType }}</p>
+      <p>위험도: {{ product.riskLevel }}</p>
     </div>
   </div>
 </template>

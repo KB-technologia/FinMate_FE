@@ -35,75 +35,41 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import MainProductCard from './MainProductCard.vue';
 import { PackageSearch } from 'lucide-vue-next';
+import { useAuthStore } from '@/stores/auth/auth.js';
+import {
+  getAllRecommendations,
+  getRandomRecommendation,
+} from '@/api/main/main.js';
 
 const router = useRouter();
+const authStore = useAuthStore();
+const isLoggedIn = computed(() => authStore.isLoggedIn);
+
+const products = ref([]); // 더미 데이터 제거
+
+onMounted(async () => {
+  try {
+    if (isLoggedIn.value) {
+      const allResult = await getAllRecommendations();
+      console.log('✅ 전체 추천 결과:', allResult);
+      products.value = allResult; // 실제 응답값 사용
+    } else {
+      const randomResult = await getRandomRecommendation();
+      console.log('✅ 랜덤 추천 결과:', randomResult);
+      products.value = randomResult;
+    }
+  } catch (error) {
+    console.error('❌ 추천 상품 요청 실패:', error);
+  }
+});
 
 const goToProducts = () => {
   router.push('/products');
 };
-
-const products = ref([
-  {
-    name: '미래성장 적립예금',
-    bank: 'KB국민은행',
-    type: '정기예금',
-    risk: '낮음',
-    return: '3.1%',
-  },
-  {
-    name: '청년 우대 적금',
-    bank: '신한은행',
-    type: '적금',
-    risk: '중간',
-    return: '3.8%',
-  },
-  {
-    name: '소득공제 펀드',
-    bank: 'NH농협은행',
-    type: '펀드',
-    risk: '높음',
-    return: '6.2%',
-  },
-  {
-    name: '안심 채권',
-    bank: '우리은행',
-    type: '채권',
-    risk: '낮음',
-    return: '2.3%',
-  },
-  {
-    name: '글로벌 ETF',
-    bank: '하나은행',
-    type: 'ETF',
-    risk: '높음',
-    return: '7.5%',
-  },
-  {
-    name: '정기적금 24개월',
-    bank: '카카오뱅크',
-    type: '적금',
-    risk: '중간',
-    return: '3.4%',
-  },
-  {
-    name: 'IT 성장주 펀드',
-    bank: '토스뱅크',
-    type: '펀드',
-    risk: '매우 높음',
-    return: '10.2%',
-  },
-  {
-    name: '중소기업 채권',
-    bank: 'SC제일은행',
-    type: '채권',
-    risk: '중간',
-    return: '4.5%',
-  },
-]);
 
 const currentIndex = ref(0);
 
