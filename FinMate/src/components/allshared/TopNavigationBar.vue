@@ -9,6 +9,13 @@
     <div class="top-navigation-menu-right">
       <div
         class="top-navigation-menu-right-item"
+        :class="{ active: route.path === '/favorites' }"
+        @click="$router.push('/favorites')"
+      >
+        <Heart class="icon-large heart-filled" />
+      </div>
+      <div
+        class="top-navigation-menu-right-item"
         :class="{ active: route.path === '/products' }"
         @click="$router.push('/products')"
       >
@@ -116,5 +123,8 @@ const route = useRoute();
 .icon-large {
   width: 3vw;
   height: 3vh;
+}
+.heart-filled {
+  fill: currentColor;
 }
 </style>
