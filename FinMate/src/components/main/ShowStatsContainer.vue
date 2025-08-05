@@ -20,7 +20,15 @@
       </div>
     </div>
     <button class="detail-button" @click="goToStatsPage">자세히 보기</button> -->
-    <div v-if="isstats" class="stats"></div>
+    <div v-if="isstats" class="stats">
+      <div v-if="statData">
+        <p>📊 모험 성향 점수: {{ statData.adventureScore }}</p>
+        <p>🏷️ 가치관: {{ statData.valueTag }}</p>
+        <p>⚡ 속도 성향: {{ statData.speedTag }}</p>
+        <p>🧠 전략 성향: {{ statData.strategyTag }}</p>
+        <p>💰 재정 점수: {{ statData.financeScore }}</p>
+      </div>
+    </div>
     <div v-if="!isstats" class="no-stats">
       <div>
         <img
@@ -103,6 +111,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useRouter } from 'vue-router';
 import { getPortfolio } from '@/api/main/main.js';
+import { getMemberStat } from '@/api/main/main.js';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -110,6 +119,7 @@ const isLoggedIn = computed(() => authStore.isLoggedIn);
 const isstats = ref(false);
 const isPortfolio = ref(false);
 const portfolioData = ref(null);
+const statData = ref(null);
 
 const goToStatsPage = () => {
   router.push('/my-stats');
@@ -173,9 +183,17 @@ onMounted(async () => {
     } catch (e) {
       if (e.response && e.response.status === 404) {
         isPortfolio.value = false;
-      } else {
-        // console.warn('📛 포트폴리오 조회 실패: ', e);
       }
+    }
+
+    // 🔽 통계 콘솔 출력
+    try {
+      const stat = await getMemberStat();
+      isstats.value = !!stat && Object.keys(stat).length > 0;
+      statData.value = stat;
+      console.log('📊 Member Stat:', stat);
+    } catch (e) {
+      console.warn('📛 통계 조회 실패:', e);
     }
   }
 });
@@ -301,6 +319,14 @@ const handleMouseLeave = () => {
   overflow: hidden;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-extrabold);
+}
+.stats {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 0.2vh solid var(--color-light-gray);
 }
 
 .no-stats {
