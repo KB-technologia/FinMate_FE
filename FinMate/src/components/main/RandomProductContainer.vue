@@ -103,7 +103,7 @@ const next = () => {
 
 .Product-Container {
   width: 95vw;
-  height: 50vh;
+  height: 65vh;
   border: 0.2vh solid var(--color-light-gray);
   background-color: var(--color-more-light-blue);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
