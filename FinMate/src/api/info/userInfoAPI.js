@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_BASE_API_URL;
 
 export const getMyInfo = async () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   try {
-    const res = await axios.get("${API_BASE_URL}/api/member/me", {
+    const res = await axios.get('${API_BASE_URL}/api/member/me', {
       headers: { Authorization: `Bearer ${token}` },
       withCredentials: true,
     });
@@ -16,7 +16,7 @@ export const getMyInfo = async () => {
 };
 
 export const updateUserInfo = async (payload) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   try {
     const response = await axios.patch(
