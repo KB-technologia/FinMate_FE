@@ -25,6 +25,10 @@ export const useAuthStore = defineStore('auth', {
       this.provide = provider;
     },
 
+    setUserInfo(userInfo) {
+      this.userInfo = userInfo;
+    },
+
     logout() {
       this.token = null;
       this.isFirst = null;
