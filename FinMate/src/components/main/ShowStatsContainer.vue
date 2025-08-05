@@ -23,7 +23,9 @@
     <div v-if="isstats" class="stats">
       <div v-if="statData" class="stat-bar-wrapper">
         <div class="stat-row">
-          <span class="stat-label">모험 성향 점수</span>
+          <span class="stat-label"
+            ><span class="icon"><Swords /></span>모험 성향 점수</span
+          >
           <div class="stat-bar-outer">
             <div
               class="stat-bar-fill"
@@ -39,7 +41,9 @@
         </div>
 
         <div class="stat-row">
-          <span class="stat-label">재정 점수</span>
+          <span class="stat-label">
+            <span class="icon"><Coins /></span>재정 점수</span
+          >
           <div class="stat-bar-outer">
             <div
               class="stat-bar-fill"
@@ -54,11 +58,18 @@
           >
         </div>
         <div class="char-stat">
-          <p>속도 {{ statData.speedTag }}</p>
+          <p>
+            <span class="icon"><Gauge /></span>속도 {{ statData.speedTag }}
+          </p>
           <p>|</p>
-          <p>운/전략 {{ statData.strategyTag }}</p>
+          <p>
+            <span class="icon"><Brain /></span>운/전략
+            {{ statData.strategyTag }}
+          </p>
           <p>|</p>
-          <p>가치관 {{ statData.valueTag }}</p>
+          <p>
+            <span class="icon"><Sparkle /></span>가치관 {{ statData.valueTag }}
+          </p>
         </div>
 
         <button class="detail-button" @click="goToStatsPage">
@@ -149,6 +160,11 @@ import { useAuthStore } from '@/stores/auth/auth';
 import { useRouter } from 'vue-router';
 import { getPortfolio } from '@/api/main/main.js';
 import { getMemberStat } from '@/api/main/main.js';
+import { Swords } from 'lucide-vue-next';
+import { Coins } from 'lucide-vue-next';
+import { Gauge } from 'lucide-vue-next';
+import { Brain } from 'lucide-vue-next';
+import { Sparkle } from 'lucide-vue-next';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -304,9 +320,11 @@ const handleMouseLeave = () => {
 .char-stat {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   padding-top: 2vh;
   padding-bottom: 2vh;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .detail-button {
@@ -461,5 +479,9 @@ const handleMouseLeave = () => {
   opacity: 1;
   filter: blur(0);
   pointer-events: auto;
+}
+
+.icon {
+  padding: 1vh;
 }
 </style>
