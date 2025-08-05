@@ -116,7 +116,9 @@ import { ref, computed, reactive } from 'vue';
 import { useSignupStore } from '@/stores/signup/signupStore';
 import { sendEmailAuth, verifyEmailAuth } from '@/api/auth/auth';
 import { useToast } from '@/composables/useToast';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const { toast } = useToast();
 const store = useSignupStore();
 
@@ -223,8 +225,7 @@ const handleSubmit = () => {
           '0'
         )}-${String(birthDay.value).padStart(2, '0')}`
       : '';
-  // 다음 페이지(설문)로 이동
-  // router.push('/signup2');
+  router.push('/signup-survey');
 };
 </script>
 
