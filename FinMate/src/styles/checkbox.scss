@@ -11,8 +11,8 @@
     label {
       background: none;
       border: 0.5vh solid var(--color-light-gray);
-      height: 4vh;
-      width: 4vw;
+      height: 40px;
+      width: 80px;
       display: inline-block;
       border-radius: 2vh;
       position: relative;
@@ -23,10 +23,10 @@
         content: '';
         position: absolute;
         background: var(--color-light-gray);
-        top: 0.25vh;
-        left: 0.2vw;
-        width: 1.3vw;
-        height: 1.3vw;
+        top: 3px;
+        left: 4px;
+        width: 25px;
+        height: 25px;
         border-radius: 50%;
         transition: all 0.3s ease;
       }
@@ -38,7 +38,7 @@
 
     input:checked + label:after {
       background: var(--color-primary-green);
-      left: 2.1vw;
+      left: 42px;
     }
 
     .toggle-text {

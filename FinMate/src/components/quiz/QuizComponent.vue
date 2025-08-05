@@ -71,7 +71,7 @@
 
     <div class="submit-container">
       <button class="submit-button" :disabled="!isComplete" @click="onSubmit">
-        완료
+        제출
       </button>
     </div>
   </div>
@@ -81,10 +81,12 @@
 import { ref, computed, onMounted } from 'vue';
 import quizJson from '@/assets/quiz.json';
 import { postAssessment } from '@/api/quiz/quiz.js';
+import { useToast } from '@/composables/useToast';
 
 const quizData = ref([]);
 const currentIndex = ref(0);
 const selectedAnswers = ref(Array(6).fill(null));
+const { toast } = useToast();
 
 const currentQuestion = computed(
   () => quizData.value[currentIndex.value] || {}
@@ -105,12 +107,21 @@ onMounted(() => {
   quizData.value = quizJson;
 });
 
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const onSubmit = async () => {
   try {
     const result = await postAssessment(selectedAnswers.value);
     console.log('Assessment 결과:', result);
+    if (result?.status === 200) {
+      router.push('/');
+      toast('투자 테스트가 완료되었습니다. 스탯을 확인해주세요.', 'success');
+    }
   } catch (error) {
     console.error('Assessment 요청 실패:', error);
+    toast('투자 테스트 제출에 실패하였습니다. 다시 확인해주세요.', 'error');
   }
 };
 </script>
