@@ -1,3 +1,9 @@
+<script setup>
+import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
+import FooterComponent from '@/components/allshared/FooterComponent.vue';
+import LoginForm from '../../components/auth/LoginForm.vue';
+</script>
+
 <template>
   <div class="login-view">
     <div>
@@ -13,12 +19,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
-import FooterComponent from '@/components/allshared/FooterComponent.vue';
-import LoginForm from '../../components/auth/LoginForm.vue';
-</script>
 
 <style scoped>
 .login-view {
