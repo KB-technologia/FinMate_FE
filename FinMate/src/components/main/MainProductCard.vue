@@ -76,7 +76,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 
-defineProps({
+const props = defineProps({
   product: {
     type: Object,
     required: true,
@@ -86,8 +86,7 @@ defineProps({
 const router = useRouter();
 
 const handleClick = () => {
-  console.log(product.id);
-  router.push(`/product/${product.id}`);
+  router.push(`/product/${props.product.id}`);
 };
 const getTypeClass = (type) => {
   return `type-${type.toLowerCase()}`;
