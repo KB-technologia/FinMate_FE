@@ -42,10 +42,10 @@ export const useAuthStore = defineStore('auth', {
         const res = await Login(id, pw);
         if (res.status === 200) {
           this.setToken(res.data.token);
-          this.setIsFirst(true);
+          this.setIsFirst(!res.data.rewardClaimed);
           this.setUserInfo(res.data.userInfo);
           this.setProvider('LOCAL');
-          console.log(res.data);
+          console.log(res.data.rewardClaimed);
 
           return true;
         } else {
