@@ -45,39 +45,50 @@ function goToLogin() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 20px;
-  gap: 5px;
+  justify-content: center;
+  padding: 3.75rem 1.25rem;
+  gap: 0.3125rem;
+  height: 80vh;
 }
 
 .penguin-image {
-  width: 300px;
   height: auto;
+  width: 20rem;
+  animation: bounce 1.2s ease-in-out 1.2s infinite alternate;
 }
 
 .title {
-  font-size: 30px;
+  font-size: 1.875rem;
   font-weight: bold;
   color: #333;
 }
 
 .subtitle {
-  font-size: 16px;
+  font-size: 1rem;
   color: #666;
 }
 
 .login-button {
-  padding: 12px 24px;
-  font-size: 16px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
   background-color: var(--color-primary-bluegray);
   color: var(--color-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 5px;
+  margin-top: 0.3125rem;
 }
 
-.login-button:hover {
-  background-color: var(--color-dark-gray);
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    animation-timing-function: ease-in;
+  }
+  50% {
+    transform: translateY(-15px);
+    animation-timing-function: ease-out;
+  }
 }
 </style>
