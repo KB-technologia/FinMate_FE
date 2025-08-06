@@ -18,7 +18,11 @@
     <div class="review-content">
       {{ content }}
     </div>
-    <button v-if="showDelete" class="delete-button" @click="$emit('delete')">
+    <button
+      v-if="showDelete"
+      class="delete-button"
+      @click="$emit('delete', { id, productId })"
+    >
       <Trash2 class="icon-trash" />
     </button>
   </div>
@@ -34,6 +38,8 @@ defineProps({
   date: String,
   content: String,
   showDelete: Boolean,
+  id: Number,
+  productId: Number,
 });
 
 defineEmits(["delete"]);

@@ -28,15 +28,16 @@
 
             <div class="review-list">
               <ReviewCard
-                v-for="(review, index) in paginatedReviews"
-                :key="index"
+                v-for="review in paginatedReviews"
+                :key="review.id"
                 :username="review.username"
                 :rating="review.rating"
                 :date="review.date"
                 :content="review.content"
+                :productId="review.productId"
+                :id="review.id"
                 :showDelete="true"
-                @delete="handleDelete(index)"
-                class="card-wrapper"
+                @delete="handleDelete"
               />
               <p v-if="filteredReviews.length === 0" class="no-review-message">
                 작성한 리뷰가 없습니다.
@@ -58,62 +59,80 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { ChevronDown } from 'lucide-vue-next';
+import { ref, computed, onMounted } from "vue";
+import { ChevronDown } from "lucide-vue-next";
 
-import Sidebar from '@/components/info/Sidebar.vue';
-import RightPanel from '@/components/info/RightPanel.vue';
-import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
-import Pagination from '@/components/allshared/Pagination.vue';
-import CategoryFilterBar from '@/components/info/CategoryFilterBar.vue';
-import ReviewCard from '@/components/review/ReviewCard.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import Sidebar from "@/components/info/Sidebar.vue";
+import RightPanel from "@/components/info/RightPanel.vue";
+import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import Pagination from "@/components/allshared/Pagination.vue";
+import CategoryFilterBar from "@/components/info/CategoryFilterBar.vue";
+import ReviewCard from "@/components/review/ReviewCard.vue";
+import FooterComponent from "../../components/allshared/FooterComponent.vue";
 
-const selectedSort = ref('all');
-const selectedCategory = ref('all');
+import { useToast } from "@/composables/useToast";
+import { getMyReviews } from "@/api/info/userReviewAPI";
+import { deleteMyReview } from "@/api/info/userReviewAPI";
+
+const { toast } = useToast();
+
+const selectedSort = ref("all");
+const selectedCategory = ref("all");
 
 const categories = [
-  { label: '전체', value: 'all' },
-  { label: '예금', value: 'deposit' },
-  { label: '적금', value: 'saving' },
-  { label: '펀드', value: 'fund' },
+  { label: "전체", value: "all" },
+  { label: "예금", value: "deposit" },
+  { label: "적금", value: "saving" },
+  { label: "펀드", value: "fund" },
 ];
 
 const currentPage = ref(1);
 const pageSize = 4;
 
-// TODO: API 연동하기
-const mockReviews = ref([
-  {
-    id: 1,
-    username: '홍길동',
-    rating: 4.5,
-    date: '2025-07-26',
-    content: '금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.',
-    category: 'deposit',
-  },
-  {
-    id: 1,
-    username: '홍길동',
-    rating: 2.0,
-    date: '2025-07-16',
-    content: '금리가 생각보다 높고, 가입 절차도 간편해서 좋았어요.',
-    category: 'deposit',
-  },
-]);
+const myReviews = ref([]);
+
+onMounted(async () => {
+  try {
+    const data = await getMyReviews();
+    myReviews.value = data.map((review) => ({
+      id: review.id,
+      productId: review.productId,
+      username: review.writer,
+      rating: review.rating,
+      date: Array.isArray(review.createdAt)
+        ? review.createdAt.slice(0, 3).join("-")
+        : review.createdAt.slice(0, 10),
+      content: review.content,
+      category: review.productType?.toLowerCase() || "etc",
+    }));
+  } catch (error) {
+    console.error("리뷰 불러오기 실패:", error);
+  }
+});
+
+const handleDelete = async (review) => {
+  try {
+    await deleteMyReview(review.productId);
+    myReviews.value = myReviews.value.filter((r) => r.id !== review.id);
+    toast("리뷰가 삭제되었습니다.", "success");
+  } catch (error) {
+    toast("리뷰 삭제에 실패했습니다. 다시 시도해주세요.", "error");
+    console.error("리뷰 삭제 실패:", error);
+  }
+};
 
 const filteredReviews = computed(() => {
-  let result = [...mockReviews.value];
+  let result = [...myReviews.value];
 
-  if (selectedCategory.value !== 'all') {
+  if (selectedCategory.value !== "all") {
     result = result.filter((r) => r.category === selectedCategory.value);
   }
 
-  if (selectedSort.value === 'latest') {
+  if (selectedSort.value === "latest") {
     result.sort((a, b) => new Date(b.date) - new Date(a.date));
-  } else if (selectedSort.value === 'high') {
+  } else if (selectedSort.value === "high") {
     result.sort((a, b) => b.rating - a.rating);
-  } else if (selectedSort.value === 'low') {
+  } else if (selectedSort.value === "low") {
     result.sort((a, b) => a.rating - b.rating);
   }
 
