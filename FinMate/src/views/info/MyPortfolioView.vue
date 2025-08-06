@@ -39,15 +39,16 @@ onMounted(fetchPortfolio);
 .myportfolio-container {
   display: flex;
   gap: 2rem;
-  padding: 2rem 4rem;
-  align-items: flex-start;
+  padding: 2.55rem 4.9rem;
+  width: 100vw;
+  height: 100vh;
 }
 .right-panel {
-  flex-grow: 1;
-  padding: 2rem;
+  padding: 1rem 2rem;
   border: 3px solid var(--color-primary-bluegray);
   border-radius: 4px;
-  min-height: 80vh;
+  max-height: 80vh;
+  max-width: 80vw;
   overflow-y: auto;
 }
 </style>
