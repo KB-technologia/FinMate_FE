@@ -106,7 +106,6 @@ const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
 };
 
-// 은행 이미지 경로 생성
 const getBankImagePath = (bankName) => {
   const bankCode = getBankCodeFromName(bankName);
   try {
@@ -115,12 +114,10 @@ const getBankImagePath = (bankName) => {
       import.meta.url
     ).href;
   } catch {
-    // 이미지 로드 실패 시 대체 경로
     return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
   }
 };
 
-// 은행명을 코드로 변환
 const getBankCodeFromName = (bankName) => {
   const bankNameMap = {
     KB국민은행: 'kb',
@@ -137,12 +134,10 @@ const getBankCodeFromName = (bankName) => {
     iM뱅크: 'im',
   };
 
-  // 정확한 매칭 먼저 시도
   if (bankNameMap[bankName]) {
     return bankNameMap[bankName];
   }
 
-  // 부분 매칭 시도
   for (const [fullName, code] of Object.entries(bankNameMap)) {
     if (
       bankName.includes(fullName.replace('은행', '')) ||
@@ -152,12 +147,10 @@ const getBankCodeFromName = (bankName) => {
     }
   }
 
-  // 매칭되지 않으면 첫 글자 사용
   return bankName.charAt(0).toLowerCase();
 };
 
 const handleImageError = (event) => {
-  // 이미지 로드 실패 시 텍스트로 대체
   const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
   bankIcon.style.backgroundColor = '#f0f0f0';
@@ -298,13 +291,13 @@ const getRiskLevel = (level) => {
   font-weight: 700;
   font-size: 1.2vw;
   color: #666;
-  overflow: hidden; /* 이미지가 원형을 벗어나지 않도록 */
+  overflow: hidden;
 }
 
 .bank-logo {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 이미지가 원형에 맞게 조정 */
+  object-fit: cover;
 }
 
 .bank-name {

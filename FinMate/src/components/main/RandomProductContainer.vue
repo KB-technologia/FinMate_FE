@@ -1,6 +1,9 @@
 <template>
   <div class="Product-Container">
-    <span class="Product-Text">추천 상품</span>
+    <span class="Product-Text">
+      <p v-if="isLoggedIn">사용자 맞춤 추천 상품</p>
+      <p v-if="!isLoggedIn">랜덤 추천 상품</p></span
+    >
 
     <div class="button-container">
       <div
@@ -49,14 +52,14 @@ const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 
-const products = ref([]); // 더미 데이터 제거
+const products = ref([]);
 
 onMounted(async () => {
   try {
     if (isLoggedIn.value) {
       const allResult = await getAllRecommendations();
       console.log('✅ 전체 추천 결과:', allResult);
-      products.value = allResult; // 실제 응답값 사용
+      products.value = allResult;
     } else {
       const randomResult = await getRandomRecommendation();
       console.log('✅ 랜덤 추천 결과:', randomResult);
