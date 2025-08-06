@@ -13,21 +13,21 @@ function goToLogin() {
 <template>
   <div class="signup-complete-view">
     <TopNavigationBar />
+    <div class="scroll-able">
+      <div class="signup-content">
+        <img
+          src="@/assets/images/animals/penguin.png"
+          alt="펭귄 캐릭터"
+          class="penguin-image"
+        />
 
-    <div class="signup-content">
-      <img
-        src="@/assets/images/animals/penguin.png"
-        alt="펭귄 캐릭터"
-        class="penguin-image"
-      />
+        <h2 class="title">회원가입이 완료되었어요!</h2>
+        <p class="subtitle">이제 핀메이트 서비스를 자유롭게 이용해보세요</p>
 
-      <h2 class="title">회원가입이 완료되었어요!</h2>
-      <p class="subtitle">이제 핀메이트 서비스를 자유롭게 이용해보세요</p>
-
-      <button class="login-button" @click="goToLogin">로그인하러 가기</button>
+        <button class="login-button" @click="goToLogin">로그인하러 가기</button>
+      </div>
+      <FooterComponent />
     </div>
-
-    <FooterComponent />
   </div>
 </template>
 
@@ -35,10 +35,19 @@ function goToLogin() {
 .signup-complete-view {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
   width: 100vw;
-  text-align: center;
+  height: 100vh;
+}
+
+.scroll-able {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .signup-content {
@@ -48,7 +57,7 @@ function goToLogin() {
   justify-content: center;
   padding: 3.75rem 1.25rem;
   gap: 0.3125rem;
-  height: 80vh;
+  height: 100vh;
 }
 
 .penguin-image {
