@@ -26,14 +26,14 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
-    path: "/signup1",
-    name: "signup1",
-    component: () => import("@/views/auth/SignUpView1.vue"),
+    path: '/signup1',
+    name: 'signup1',
+    component: () => import('@/views/auth/SignUpView1.vue'),
   },
   {
-    path: "/signup/complete",
-    name: "signupComplete",
-    component: () => import("@/views/auth/SignupComplete.vue"),
+    path: '/signup/complete',
+    name: 'signupComplete',
+    component: () => import('@/views/auth/SignupComplete.vue'),
     meta: { requiresAuth: false },
   },
   {
