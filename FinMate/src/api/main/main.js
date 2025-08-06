@@ -5,7 +5,7 @@ const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 export const getPortfolio = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${BASE_API_URL}/api/member/portfolio`, {
+    const response = await axios.get(`${BASE_API_URL}/api/portfolio`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ export const getPortfolio = async () => {
 export const getMemberStat = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${BASE_API_URL}/api/member/stat`, {
+    const response = await axios.get(`${BASE_API_URL}/api/my-page/stat`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const getAllRecommendations = async () => {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.get(
-      `${BASE_API_URL}/api/product/recommendation/all`,
+      `${BASE_API_URL}/api/product/recommendation`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

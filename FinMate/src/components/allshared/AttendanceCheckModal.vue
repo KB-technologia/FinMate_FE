@@ -28,6 +28,7 @@
           <p>{{ day }}일째</p>
         </div>
       </div>
+      <button class="attend-button">출석하기</button>
     </div>
   </div>
 </template>
@@ -111,5 +112,23 @@ defineProps({
 
 .day-box p {
   font-weight: bold;
+}
+
+.attend-button {
+  margin-top: 3vh;
+  width: 15vw;
+  height: 5vh;
+  border: 0.3vh solid #ccc;
+  border-radius: 2vh;
+  transition: all 0.1s ease;
+}
+
+.attend-button:hover {
+  border: none;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-white);
+  background-color: var(--color-main-button);
+  box-shadow: 0 0.2vh 0.3vw #ccc;
+  transform: translateY(-0.5vh);
 }
 </style>
