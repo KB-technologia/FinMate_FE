@@ -97,7 +97,7 @@ function statusClass(diff) {
     <canvas ref="chartCanvasRef" class="bar-chart"></canvas>
     <div class="button-container">
       <button @click="showExplanation = !showExplanation" class="info-button">
-        {{ showExplanation ? '닫기' : '자세히 보기' }}
+        {{ showExplanation ? '접기' : '자세히 보기' }}
       </button>
     </div>
   </div>
