@@ -223,15 +223,15 @@ const verifyAuthCode = async () => {
     const response = await verifyEmailAuth(authCode.value, uuid.value.uuid);
 
     if (response.data === true) {
-      toast('✅ 이메일 인증이 완료되었습니다.', 'success');
+      toast('이메일 인증이 완료되었습니다.', 'success');
       verifySuccess.value = true;
       isEmailVerified.value = true;
     } else {
-      toast('❌ 인증코드가 올바르지 않습니다.', 'error');
+      toast('인증코드가 올바르지 않습니다.', 'error');
       verifySuccess.value = false;
     }
   } catch (error) {
-    toast('❌ 인증 중 오류가 발생했습니다.', 'error');
+    toast('인증 중 오류가 발생했습니다.', 'error');
     verifySuccess.value = false;
   }
 };
@@ -243,19 +243,16 @@ const checkIdDuplication = async () => {
 
   try {
     const res = await checkAccountId(accountId.value);
-    console.log('✅ 중복확인 응답값:', res.data); // 추가
 
     if (res.data === false) {
-      // 사용 가능
       idAvailable.value = true;
       isIdConfirmed.value = true;
-      toast('사용 가능한 아이디입니다 ✅', 'success');
+      toast('사용 가능한 아이디입니다.', 'success');
     } else {
       idAvailable.value = false;
-      toast('이미 사용 중인 아이디입니다 ❌', 'error');
+      toast('이미 사용 중인 아이디입니다.', 'error');
     }
   } catch (err) {
-    console.error('❌ 중복 확인 오류:', err); // 추가
     idAvailable.value = false;
     toast('중복 확인 중 오류가 발생했습니다.', 'error');
   }
