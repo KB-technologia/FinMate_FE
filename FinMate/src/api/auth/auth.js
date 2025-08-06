@@ -62,3 +62,31 @@ export const verifyEmailAuth = (code, uuid) => {
     requestId: uuid.toString(),
   });
 };
+
+export async function findAccountIdByUuid(uuid) {
+  const res = await axios.post(`${BASE_URL}/api/member/findaccountid`, {
+    uuid,
+  });
+  return res.data; // { name: "오유찬", accountId: "dbcks0861" }
+}
+
+export const verifyUser = async (uuid, accountId) => {
+  return await axios.post(`${BASE_URL}/api/member/changepassword/verify`, {
+    uuid,
+    accountId,
+  });
+};
+
+export const changePassword = async (uuid, accountId, newPassword) => {
+  return await axios.post(`${BASE_URL}/api/member/changepassword`, {
+    uuid,
+    accountId,
+    newPassword,
+  });
+};
+
+export const checkAccountId = async (accountId) => {
+  return await axios.get(`${BASE_URL}/api/member/check-id`, {
+    params: { accountId },
+  });
+};
