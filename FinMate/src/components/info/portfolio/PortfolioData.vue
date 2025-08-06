@@ -1,11 +1,12 @@
 <script setup>
-import { ref, nextTick, watch } from 'vue';
+import { onMounted, ref, nextTick, watch } from 'vue';
 import PortfolioModal from './PortfolioModal.vue';
 import { Chart } from 'chart.js/auto';
 import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartColumnStacked, SquarePen, Info } from 'lucide-vue-next';
 import PortfolioCompareModal from './PortfolioCompareModal.vue';
+import ToastContainer from '@/components/allshared/ToastContainer.vue';
 
 ChartJS.register(ArcElement, Tooltip, ChartDataLabels);
 
@@ -17,6 +18,11 @@ const showModifyModal = ref(false);
 
 const chartInstance = ref(null);
 const chartCanvasRef = ref(null);
+const toastRef = ref(null);
+
+onMounted(() => {
+  toastRef.value?.addToast('마이데이터가 정상적으로 로딩되었어요!');
+});
 
 function handleSave() {
   emit('requestRefresh');
@@ -87,6 +93,7 @@ watch(
 </script>
 
 <template>
+  <ToastContainer ref="toastRef" />
   <div class="right-panel-container">
     <h2 class="portfolio-title">My Portfolio</h2>
     <div class="chart-info-row">
@@ -239,14 +246,14 @@ canvas {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 70%;
+  width: 65%;
   align-items: flex-end;
 }
 
 .asset-cards-row {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 1.5rem;
   justify-content: center;
   margin-top: 1rem;
   flex-wrap: wrap;
