@@ -253,7 +253,7 @@ canvas {
 .asset-cards-row {
   display: flex;
   flex-direction: row;
-  gap: 1.5rem;
+  gap: 1.3rem;
   justify-content: center;
   margin-top: 1rem;
   flex-wrap: wrap;
@@ -274,7 +274,7 @@ canvas {
 
 .asset-row {
   margin-bottom: 0.6rem;
-  padding: 0.5rem;
+  padding: 0.4rem;
 }
 
 .asset-title {
@@ -290,7 +290,7 @@ canvas {
   background-color: var(--color-white);
   border-radius: 12px;
   text-align: center;
-  width: 14rem;
+  width: 12.5rem;
   font-size: 1.1rem;
   font-weight: var(--font-weight-bold);
   padding-bottom: 0.4rem;
