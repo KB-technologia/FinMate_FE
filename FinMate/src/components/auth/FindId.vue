@@ -128,13 +128,13 @@ const verifyAuthCode = async () => {
     ui.isLoading = true;
     const response = await verifyEmailAuth(authCode.value, uuid.value);
     if (response.data === true) {
-      toast('✅ 이메일 인증이 완료되었습니다.', 'success');
+      toast('이메일 인증이 완료되었습니다.', 'success');
       await findUserAccountId();
     } else {
-      toast('❌ 인증코드가 올바르지 않습니다.', 'error');
+      toast('인증코드가 올바르지 않습니다.', 'error');
     }
   } catch (error) {
-    toast('❌ 인증 중 오류가 발생했습니다.', 'error');
+    toast('인증 중 오류가 발생했습니다.', 'error');
   } finally {
     ui.isLoading = false;
   }
@@ -149,9 +149,9 @@ const findUserAccountId = async () => {
     joinDate.value = response.joinDate || '정보 없음';
     isEmailVerified.value = true;
 
-    toast('✅ 아이디를 찾았습니다!', 'success');
+    toast('아이디를 찾았습니다!', 'success');
   } catch (error) {
-    toast('❌ 해당 이메일로 가입된 계정을 찾을 수 없습니다.', 'error');
+    toast('해당 이메일로 가입된 계정을 찾을 수 없습니다.', 'error');
     console.error('Find account ID error:', error);
   } finally {
     ui.isLoading = false;
@@ -295,7 +295,7 @@ input:disabled {
 }
 
 .found-id-display {
-  color: #2196f3;
+  color: var(--color-exp-fill);
   font-size: 1.4rem;
   font-weight: bold;
   letter-spacing: 1px;
@@ -303,7 +303,9 @@ input:disabled {
 
 .action-buttons {
   display: flex;
-  gap: 0;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .btn-login,
@@ -312,29 +314,31 @@ input:disabled {
   height: 3.5rem;
   font-size: 1rem;
   font-weight: 600;
-  border: none;
-  cursor: pointer;
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
 .btn-login {
-  background: var(--color-dark-gray);
-  color: var(--color-white);
-  border-radius: 8px 0 0 8px;
+  background: var(--color-main-button);
+  color: var(--color-black);
 }
-
 .btn-login:hover {
-  background: #555;
+  transform: translateY(-0.6vh);
+  background-color: var(--color-main-button);
+  color: var(--color-white);
+  box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
 }
 
 .btn-find-password {
-  background: #2196f3;
-  color: var(--color-white);
-  border-radius: 0 8px 8px 0;
+  background: var(--color-primary-green);
+  color: var(--color-black);
 }
 
 .btn-find-password:hover {
-  background: var(--toast-icon-info);
+  transform: translateY(-0.6vh);
+  background-color: var(--color-primary-green);
+  color: var(--color-white);
+  box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
 }
 
 .error {
