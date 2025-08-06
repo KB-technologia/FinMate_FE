@@ -271,12 +271,14 @@ const paginatedReviews = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 100%;
-  margin-top: 2rem;
-  align-items: center;
 
+  width: 100%;
+  max-width: 55rem;
+  margin: 2rem auto 0 auto;
+
+  align-items: center;
   min-height: 50vh;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .card-wrapper {

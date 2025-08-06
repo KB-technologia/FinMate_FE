@@ -53,6 +53,8 @@ defineEmits(["delete"]);
   padding: 1rem;
   border: 0.125rem solid var(--color-black);
   gap: 1.5rem;
+
+  width: 100%;
 }
 
 .left-section {
