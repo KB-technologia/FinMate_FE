@@ -125,6 +125,6 @@ const route = useRoute();
   height: 3vh;
 }
 .heart-filled {
-  fill: currentColor;
+  /* fill: currentColor; */
 }
 </style>
