@@ -40,7 +40,22 @@
 
       <div class="field">
         <label>아이디</label>
-        <input v-model="accountId" placeholder="아이디 입력" />
+        <div class="input-group">
+          <input
+            v-model="accountId"
+            placeholder="아이디 입력"
+            :disabled="isIdConfirmed"
+          />
+          <button class="action-btn" @click="checkIdDuplication">
+            중복 확인
+          </button>
+        </div>
+        <p v-if="idAvailable === true" class="success">
+          사용 가능한 아이디입니다 ✅
+        </p>
+        <p v-else-if="idAvailable === false" class="error">
+          이미 사용 중인 아이디입니다 ❌
+        </p>
       </div>
 
       <div class="field">
@@ -55,6 +70,9 @@
           type="password"
           placeholder="비밀번호 확인"
         />
+        <p v-if="confirmPassword && password !== confirmPassword" class="error">
+          비밀번호가 일치하지 않습니다 ❌
+        </p>
       </div>
 
       <div class="field">
@@ -114,7 +132,11 @@
 import LoadingOverlay from '@/components/allshared/LoadingOverlay.vue';
 import { ref, computed, reactive } from 'vue';
 import { useSignupStore } from '@/stores/signup/signupStore';
-import { sendEmailAuth, verifyEmailAuth } from '@/api/auth/auth';
+import {
+  sendEmailAuth,
+  verifyEmailAuth,
+  checkAccountId,
+} from '@/api/auth/auth';
 import { useToast } from '@/composables/useToast';
 import { useRouter } from 'vue-router';
 
@@ -138,6 +160,8 @@ const isCodeSent = ref(false);
 const isEmailVerified = ref(false);
 const verifySuccess = ref(false);
 const emailError = ref('');
+const idAvailable = ref(null);
+const isIdConfirmed = ref(false);
 
 const ui = reactive({
   isLoading: false,
@@ -199,19 +223,51 @@ const verifyAuthCode = async () => {
     const response = await verifyEmailAuth(authCode.value, uuid.value.uuid);
 
     if (response.data === true) {
-      toast('✅ 이메일 인증이 완료되었습니다.', 'success');
+      toast('이메일 인증이 완료되었습니다.', 'success');
       verifySuccess.value = true;
       isEmailVerified.value = true;
     } else {
-      toast('❌ 인증코드가 올바르지 않습니다.', 'error');
+      toast('인증코드가 올바르지 않습니다.', 'error');
       verifySuccess.value = false;
     }
   } catch (error) {
-    toast('❌ 인증 중 오류가 발생했습니다.', 'error');
+    toast('인증 중 오류가 발생했습니다.', 'error');
     verifySuccess.value = false;
   }
 };
+const checkIdDuplication = async () => {
+  if (!accountId.value) {
+    toast('아이디를 입력해주세요.', 'warning');
+    return;
+  }
+
+  try {
+    const res = await checkAccountId(accountId.value);
+
+    if (res.data === false) {
+      idAvailable.value = true;
+      isIdConfirmed.value = true;
+      toast('사용 가능한 아이디입니다.', 'success');
+    } else {
+      idAvailable.value = false;
+      toast('이미 사용 중인 아이디입니다.', 'error');
+    }
+  } catch (err) {
+    idAvailable.value = false;
+    toast('중복 확인 중 오류가 발생했습니다.', 'error');
+  }
+};
 const handleSubmit = () => {
+  if (idAvailable.value !== true) {
+    toast('아이디 중복 확인을 해주세요.', 'error');
+    return;
+  }
+
+  if (password.value !== confirmPassword.value) {
+    toast('비밀번호가 일치하지 않습니다.', 'error');
+    return;
+  }
+  store.provider = 'LOCAL';
   store.email = email.value;
   store.name = name.value;
   store.accountId = accountId.value;

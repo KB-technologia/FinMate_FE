@@ -84,3 +84,9 @@ export const changePassword = async (uuid, accountId, newPassword) => {
     newPassword,
   });
 };
+
+export const checkAccountId = async (accountId) => {
+  return await axios.get(`${BASE_URL}/api/member/check-id`, {
+    params: { accountId },
+  });
+};
