@@ -20,7 +20,63 @@
       </div>
     </div>
     <button class="detail-button" @click="goToStatsPage">자세히 보기</button> -->
-    <div v-if="isstats" class="stats"></div>
+    <div v-if="isstats" class="stats">
+      <div v-if="statData" class="stat-bar-wrapper">
+        <div class="stat-row">
+          <span class="stat-label"
+            ><span class="icon"><Swords /></span>모험 성향 점수</span
+          >
+          <div class="stat-bar-outer">
+            <div
+              class="stat-bar-fill"
+              :style="{
+                width: (statData.adventureScore / 3) * 100 + '%',
+                backgroundColor: '#4CAF50',
+              }"
+            ></div>
+          </div>
+          <span class="stat-value"
+            >{{ statData.adventureScore.toFixed(1) }} / 3.0</span
+          >
+        </div>
+
+        <div class="stat-row">
+          <span class="stat-label">
+            <span class="icon"><Coins /></span>재정 점수</span
+          >
+          <div class="stat-bar-outer">
+            <div
+              class="stat-bar-fill"
+              :style="{
+                width: (statData.financeScore / 3) * 100 + '%',
+                backgroundColor: '#2196F3',
+              }"
+            ></div>
+          </div>
+          <span class="stat-value"
+            >{{ statData.financeScore.toFixed(1) }} / 3.0</span
+          >
+        </div>
+        <div class="char-stat">
+          <p>
+            <span class="icon"><Gauge /></span>속도 {{ statData.speedTag }}
+          </p>
+          <p>|</p>
+          <p>
+            <span class="icon"><Brain /></span>운/전략
+            {{ statData.strategyTag }}
+          </p>
+          <p>|</p>
+          <p>
+            <span class="icon"><Sparkle /></span>가치관 {{ statData.valueTag }}
+          </p>
+        </div>
+
+        <button class="detail-button" @click="goToStatsPage">
+          자세히 보기
+        </button>
+      </div>
+    </div>
     <div v-if="!isstats" class="no-stats">
       <div>
         <img
@@ -103,6 +159,12 @@ import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useRouter } from 'vue-router';
 import { getPortfolio } from '@/api/main/main.js';
+import { getMemberStat } from '@/api/main/main.js';
+import { Swords } from 'lucide-vue-next';
+import { Coins } from 'lucide-vue-next';
+import { Gauge } from 'lucide-vue-next';
+import { Brain } from 'lucide-vue-next';
+import { Sparkle } from 'lucide-vue-next';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -110,6 +172,7 @@ const isLoggedIn = computed(() => authStore.isLoggedIn);
 const isstats = ref(false);
 const isPortfolio = ref(false);
 const portfolioData = ref(null);
+const statData = ref(null);
 
 const goToStatsPage = () => {
   router.push('/my-stats');
@@ -122,17 +185,6 @@ const goToPortfolio = () => {
 const goToTest = () => {
   router.push('/quizstart');
 };
-
-const statsLeft = [
-  { label: '가치관', percent: 90, color: 'red' },
-  { label: '속도', percent: 70, color: 'blue' },
-  { label: '운/전략', percent: 85, color: 'yellow' },
-];
-
-const statsRight = [
-  { label: '재정', percent: 75, color: 'orange' },
-  { label: '모험 성향', percent: 80, color: 'green' },
-];
 
 const images = [
   new URL('@/assets/images/animals/cat.png', import.meta.url).href,
@@ -173,9 +225,19 @@ onMounted(async () => {
     } catch (e) {
       if (e.response && e.response.status === 404) {
         isPortfolio.value = false;
-      } else {
-        // console.warn('📛 포트폴리오 조회 실패: ', e);
       }
+    }
+
+    try {
+      const stat = await getMemberStat();
+      isstats.value = !!stat && Object.keys(stat).length > 0;
+      statData.value = stat;
+      console.log('📊 Member Stat:', stat);
+    } catch (e) {
+      if (e.response && e.response.status === 404) {
+        isstats.value = false;
+      }
+      console.warn('📛 통계 조회 실패:', e);
     }
   }
 });
@@ -239,9 +301,34 @@ const handleMouseLeave = () => {
   border-radius: 2vh;
   transition: width 0.5s ease;
 }
+.stat-value {
+  width: 4vw;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-left: 0.5vw;
+}
+
+.stat-bar-wrapper {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.char-stat {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  gap: 1rem;
+}
 
 .detail-button {
-  width: 11vw;
+  width: 15vw;
   height: 4vh;
   background-color: var(--color-white);
   border: 0.2vh solid var(--color-light-gray);
@@ -301,6 +388,14 @@ const handleMouseLeave = () => {
   overflow: hidden;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-extrabold);
+}
+.stats {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 0.2vh solid var(--color-light-gray);
 }
 
 .no-stats {
@@ -384,5 +479,9 @@ const handleMouseLeave = () => {
   opacity: 1;
   filter: blur(0);
   pointer-events: auto;
+}
+
+.icon {
+  padding: 1vh;
 }
 </style>
