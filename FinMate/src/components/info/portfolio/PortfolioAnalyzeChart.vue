@@ -199,7 +199,6 @@ function statusClass(diff) {
   padding: 1.5rem;
   margin: 2.5rem;
   border-radius: 10px;
-  background: #f9f9f9;
   text-align: center;
   font-size: 1rem;
 }
