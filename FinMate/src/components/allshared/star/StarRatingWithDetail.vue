@@ -50,10 +50,8 @@ const onDetailClick = () => {
 
 .detail-button {
   background: none;
-  border: none;
   color: var(--color-dark-blue);
   font-weight: var(--font-weight-medium);
-  cursor: pointer;
   text-decoration: underline;
   font-size: 1rem;
   padding: 0;
