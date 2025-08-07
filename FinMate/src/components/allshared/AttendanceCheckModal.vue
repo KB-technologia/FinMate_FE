@@ -9,14 +9,14 @@
 
       <p class="streak">
         연속 출석 일수
-        <span class="highlight">{{ attendanceDays }}</span
+        <span class="highlight">{{ currentAttendance }}</span
         >일
       </p>
 
       <div class="attendance-grid">
         <div v-for="day in 7" :key="day" class="day-box">
           <img
-            v-if="day <= attendanceDays"
+            v-if="day <= currentAttendance"
             src="@/assets/images/icons/stamp-on.png"
             alt="출석 완료"
           />
@@ -28,15 +28,36 @@
           <p>{{ day }}일째</p>
         </div>
       </div>
+
+      <button class="attend-button" @click="handleAttendance">출석하기</button>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { ref } from 'vue';
+import { postAttendance } from '@/api/main/main.js';
+
+const props = defineProps({
   userName: String,
   attendanceDays: Number,
 });
+
+const currentAttendance = ref(props.attendanceDays);
+
+const handleAttendance = async () => {
+  try {
+    const result = await postAttendance();
+    console.log('✅ 출석 성공:', result);
+
+    if (result === 200) {
+      console.log('🎯 조건 통과!');
+      currentAttendance.value++;
+    }
+  } catch (error) {
+    console.error('❌ 출석 실패:', error);
+  }
+};
 </script>
 
 <style scoped>
@@ -111,5 +132,23 @@ defineProps({
 
 .day-box p {
   font-weight: bold;
+}
+
+.attend-button {
+  margin-top: 3vh;
+  width: 15vw;
+  height: 5vh;
+  border: 0.3vh solid #ccc;
+  border-radius: 2vh;
+  transition: all 0.1s ease;
+}
+
+.attend-button:hover {
+  border: none;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-white);
+  background-color: var(--color-main-button);
+  box-shadow: 0 0.2vh 0.3vw #ccc;
+  transform: translateY(-0.5vh);
 }
 </style>

@@ -23,7 +23,7 @@
           <span class="bank-name">{{ product.bankName }}</span>
         </div>
       </div>
-      <h3 class="product-name">{{ product.name }}</h3>
+      <h3 class="product-name">{{ truncatedName }}</h3>
 
       <div class="return-section">
         <div class="main-return">
@@ -75,6 +75,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { computed } from 'vue';
 
 const props = defineProps({
   product: {
@@ -179,6 +180,12 @@ const getRiskLevel = (level) => {
   };
   return levels[level] || `${level}등급`;
 };
+
+const truncatedName = computed(() => {
+  return props.product.name.length > 15
+    ? props.product.name.slice(0, 15) + '...'
+    : props.product.name;
+});
 </script>
 
 <style scoped>

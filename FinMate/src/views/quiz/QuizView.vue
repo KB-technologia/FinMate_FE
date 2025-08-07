@@ -7,7 +7,6 @@
       <div class="quiz">
         <QuizComponent />
       </div>
-      <FooterComponent />
     </div>
   </div>
 </template>
