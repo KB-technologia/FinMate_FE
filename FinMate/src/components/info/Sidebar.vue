@@ -77,10 +77,13 @@
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
+import { withdraw } from '@/api/auth/auth.js';
+import { useToast } from '@/composables/useToast';
 import withdrawImage from '@/assets/images/logos/withdrawkiwi.png';
 
 const route = useRoute();
 const router = useRouter();
+const { toast } = useToast();
 
 const showWithdrawConfirm = ref(false);
 
@@ -108,10 +111,18 @@ const handleWithdrawClick = () => {
   showWithdrawConfirm.value = true;
 };
 
-const handleWithdrawConfirm = (confirmed) => {
+const handleWithdrawConfirm = async (confirmed) => {
   showWithdrawConfirm.value = false;
   if (confirmed) {
-    console.log('탈퇴 api 연결해주세용');
+    try {
+      await withdraw();
+      toast('회원 탈퇴가 완료되었습니다.', 'success');
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    } catch (error) {
+      console.error('회원 탈퇴 처리 실패:', error);
+      toast('탈퇴 처리 중 오류가 발생했습니다.', 'error');
+    }
   }
 };
 </script>

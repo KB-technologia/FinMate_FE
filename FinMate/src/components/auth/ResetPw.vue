@@ -1,6 +1,6 @@
 <template>
   <div class="signup-wrapper">
-    <h2>아이디 찾기</h2>
+    <h2>비밀번호 변경</h2>
 
     <div v-if="!isEmailVerified" class="form-section">
       <div class="field">
@@ -9,8 +9,9 @@
           <input
             v-model="email"
             type="email"
-            placeholder="가입 시 사용한 이메일을 입력하세요"
+            placeholder="가입 시 이메일 입력"
             :disabled="isCodeSent"
+            @keyup.enter="sendAuthCode"
           />
           <button
             class="action-btn"
@@ -26,93 +27,101 @@
       <div v-if="isCodeSent" class="field">
         <label>인증코드</label>
         <div class="input-group">
-          <input v-model="authCode" placeholder="인증코드 입력" maxlength="6" />
+          <input
+            v-model="authCode"
+            placeholder="인증코드 입력"
+            maxlength="6"
+            @keyup.enter="verifyAuthCode"
+          />
           <button class="action-btn" @click="verifyAuthCode">확인</button>
         </div>
       </div>
     </div>
 
     <div v-else class="form-section">
-      <div class="result-section">
-        <div class="result-content">
-          <div class="result-message">
-            <strong>{{ foundName }}</strong
-            >님의 아이디는 아래와 같습니다.
-          </div>
+      <div class="field">
+        <label>새 비밀번호</label>
+        <input
+          v-model="newPassword"
+          type="password"
+          placeholder="새 비밀번호 입력"
+        />
+      </div>
 
-          <div class="found-id-display">
-            {{ foundAccountId }}
-          </div>
-        </div>
-
-        <div class="action-buttons">
-          <button class="btn-login" @click="goToLogin">로그인</button>
-          <button class="btn-find-password" @click="goToFindPassword">
-            비밀번호 변경
-          </button>
+      <div class="field">
+        <label>새 비밀번호 확인</label>
+        <input
+          v-model="confirmPassword"
+          type="password"
+          placeholder="비밀번호 재입력"
+          @keyup.enter="handleResetPassword"
+        />
+        <div v-if="passwordMismatch" class="error">
+          비밀번호가 일치하지 않습니다
         </div>
       </div>
+
+      <button class="btn-login" @click="handleResetPassword">확인</button>
     </div>
   </div>
 
-  <LoadingOverlay
-    v-if="ui.isLoading"
-    :message="'인증 메일을 전송 중이에요...'"
-  />
+  <LoadingOverlay v-if="ui.isLoading" :message="'처리 중입니다...'" />
 </template>
 
 <script setup>
-import LoadingOverlay from '@/components/allshared/LoadingOverlay.vue';
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   sendEmailAuth,
   verifyEmailAuth,
   findAccountIdByUuid,
+  resetPasswordByUuid,
 } from '@/api/auth/auth';
 import { useToast } from '@/composables/useToast';
+import LoadingOverlay from '@/components/allshared/LoadingOverlay.vue';
 
-const { toast } = useToast();
 const router = useRouter();
+const { toast } = useToast();
 
 const email = ref('');
 const authCode = ref('');
 const uuid = ref('');
-const foundName = ref('');
-const foundAccountId = ref('');
-const joinDate = ref('');
+const accountId = ref('');
+
+const newPassword = ref('');
+const confirmPassword = ref('');
 
 const isCodeSent = ref(false);
 const isEmailVerified = ref(false);
 const emailError = ref('');
+const ui = reactive({ isLoading: false });
 
-const ui = reactive({
-  isLoading: false,
-});
+const passwordMismatch = computed(
+  () =>
+    newPassword.value &&
+    confirmPassword.value &&
+    newPassword.value !== confirmPassword.value
+);
 
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+// 이메일 인증코드 발송 함수
 const sendAuthCode = async () => {
   emailError.value = '';
-
   if (!isValidEmail(email.value)) {
     emailError.value = '올바른 이메일 형식을 입력해주세요';
     return;
   }
 
+  ui.isLoading = true;
   try {
-    ui.isLoading = true;
     const response = await sendEmailAuth(email.value);
     uuid.value = response.data.uuid;
     isCodeSent.value = true;
-    toast('인증코드가 이메일로 전송되었습니다.', 'success');
-  } catch (error) {
-    emailError.value = '인증코드 전송에 실패했습니다';
+    toast('인증코드를 전송했습니다.', 'success');
+  } catch (err) {
+    emailError.value = '가입되지 않은 이메일이거나, 전송에 실패했습니다.';
     isCodeSent.value = false;
-    console.error('Auth code send error:', error);
   } finally {
     ui.isLoading = false;
   }
@@ -124,46 +133,43 @@ const verifyAuthCode = async () => {
     return;
   }
 
+  ui.isLoading = true;
   try {
-    ui.isLoading = true;
-    const response = await verifyEmailAuth(authCode.value, uuid.value);
-    if (response.data === true) {
-      toast('이메일 인증이 완료되었습니다.', 'success');
-      await findUserAccountId();
+    const verifyRes = await verifyEmailAuth(authCode.value, uuid.value);
+
+    if (verifyRes.data === true) {
+      const accountInfo = await findAccountIdByUuid(uuid.value);
+      accountId.value = accountInfo.accountId;
+
+      isEmailVerified.value = true;
+      toast('인증 완료! 새 비밀번호를 입력하세요.', 'success');
     } else {
       toast('인증코드가 올바르지 않습니다.', 'error');
     }
-  } catch (error) {
+  } catch (err) {
     toast('인증 중 오류가 발생했습니다.', 'error');
   } finally {
     ui.isLoading = false;
   }
 };
 
-const findUserAccountId = async () => {
-  try {
-    ui.isLoading = true;
-    const response = await findAccountIdByUuid(uuid.value);
-    foundName.value = response.name;
-    foundAccountId.value = response.accountId;
-    joinDate.value = response.joinDate || '정보 없음';
-    isEmailVerified.value = true;
+const handleResetPassword = async () => {
+  if (passwordMismatch.value || !newPassword.value) {
+    toast('비밀번호를 확인해주세요.', 'error');
+    return;
+  }
 
-    toast('아이디를 찾았습니다!', 'success');
-  } catch (error) {
-    toast('해당 이메일로 가입된 계정을 찾을 수 없습니다.', 'error');
-    console.error('Find account ID error:', error);
+  ui.isLoading = true;
+  try {
+    await resetPasswordByUuid(uuid.value, accountId.value, newPassword.value);
+
+    toast('비밀번호 변경 완료! 로그인해주세요.', 'success');
+    router.push('/login');
+  } catch (err) {
+    toast('비밀번호 변경에 실패했습니다.', 'error');
   } finally {
     ui.isLoading = false;
   }
-};
-
-const goToLogin = () => {
-  router.push('/login');
-};
-
-const goToFindPassword = () => {
-  router.push('/reset-pw');
 };
 </script>
 
@@ -243,7 +249,8 @@ input:disabled {
 
 .action-btn {
   height: 6vh;
-  width: 4.5vw;
+  width: auto;
+  min-width: 6rem;
   padding: 0 16px;
   background: var(--color-primary-yellow);
   color: var(--color-black);
@@ -260,85 +267,24 @@ input:disabled {
   pointer-events: none;
 }
 
-.action-btn:hover {
+.action-btn:hover:not(:disabled) {
   background-color: #fff0cb;
 }
 
-.result-section {
-  text-align: center;
-}
-
-.alert-icon {
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
-
-.alert-text {
-  font-size: 1.2rem;
-  text-align: left;
-  flex: 1;
-}
-
-.result-content {
-  background: #f8f9fa;
-  padding: 2rem;
-  height: 15vh;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  align-content: center;
-}
-
-.result-message {
-  color: var(--color-dark-gray);
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.found-id-display {
-  color: var(--color-exp-fill);
-  font-size: 1.4rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.btn-login,
-.btn-find-password {
-  flex: 1;
+.btn-login {
+  width: 100%;
   height: 3.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   border-radius: 8px;
   transition: all 0.2s ease;
+  background: var(--color-dark-gray);
+  color: var(--color-white);
+  margin-top: 1rem;
 }
 
-.btn-login {
-  background: var(--color-main-button);
-  color: var(--color-black);
-}
 .btn-login:hover {
-  transform: translateY(-0.6vh);
-  background-color: var(--color-main-button);
-  color: var(--color-white);
-  box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
-}
-
-.btn-find-password {
-  background: var(--color-primary-green);
-  color: var(--color-black);
-}
-
-.btn-find-password:hover {
-  transform: translateY(-0.6vh);
-  background-color: var(--color-primary-green);
-  color: var(--color-white);
-  box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
+  background-color: #555;
 }
 
 .error {

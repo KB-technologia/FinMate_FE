@@ -26,7 +26,7 @@
           <p>|</p>
           <router-link to="/find-id">아이디 찾기</router-link>
           <p>|</p>
-          <router-link to="/find-pw">비밀번호 찾기</router-link>
+          <router-link to="/reset-pw">비밀번호 변경</router-link>
         </div>
       </div>
     </div>
@@ -34,14 +34,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth/auth";
-import { useToast } from "@/composables/useToast";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth/auth';
+import { useToast } from '@/composables/useToast';
 
 const { toast } = useToast();
-const id = ref("");
-const password = ref("");
+const id = ref('');
+const password = ref('');
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -49,10 +49,10 @@ const login = async () => {
   const success = await authStore.login(id.value, password.value);
 
   if (success) {
-    toast("환영합니다! 성공적으로 로그인되었어요.", "success");
-    router.push("/");
+    toast('환영합니다! 성공적으로 로그인되었어요.', 'success');
+    router.push('/');
   } else {
-    toast("로그인에 실패했습니다. 다시 시도해주세요.", "error");
+    toast('로그인에 실패했습니다. 다시 시도해주세요.', 'error');
   }
 };
 
@@ -62,7 +62,7 @@ const kakaoLogin = () => {
   const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
   window.location.href = kakaoAuthUrl;
 
-  console.log("카카오 로그인 URL : ", kakaoAuthUrl);
+  console.log('카카오 로그인 URL : ', kakaoAuthUrl);
 };
 </script>
 
