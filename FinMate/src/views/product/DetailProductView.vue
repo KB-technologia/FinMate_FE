@@ -201,7 +201,7 @@ const filteredAndSortedReviews = computed(() => {
   if (filter.value !== "all") {
     const ratingFilter = parseInt(filter.value);
     filteredReviews = filteredReviews.filter(
-      (r) => Math.floor(r.rating) === ratingFilter
+      (r) => Number(r.rating) === ratingFilter
     );
   }
 
