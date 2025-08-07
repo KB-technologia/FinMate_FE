@@ -100,6 +100,7 @@ import {
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 import FooterComponent from '../../components/allshared/FooterComponent.vue';
 import FavoriteProductCard from '@/components/product/FavoriteProductCard.vue';
+import { productService } from '@/api/product/productService.js';
 
 // 반응형 데이터
 const searchQuery = ref('');
@@ -177,18 +178,23 @@ const toggleType = (typeId) => {
 
 const removeFavorite = async (productId) => {
   try {
-    // TODO: API 호출로 즐겨찾기 제거
-    // await favoriteService.removeFavorite(productId);
+    await productService.removeFavorite(productId);
 
-    // 임시로 로컬에서 제거
+    // 로컬에서도 제거 (UI 즉시 업데이트)
     favoriteProducts.value = favoriteProducts.value.filter(
       (product) => product.id !== productId
     );
 
-    console.log('즐겨찾기 제거:', productId);
+    console.log('즐겨찾기 제거 성공:', productId);
   } catch (error) {
     console.error('즐겨찾기 제거 실패:', error);
-    alert('즐겨찾기 제거에 실패했습니다.');
+
+    // 에러 메시지 처리
+    if (error.message === '로그인이 필요합니다.') {
+      alert('로그인이 필요합니다.');
+    } else {
+      alert('즐겨찾기 제거에 실패했습니다.');
+    }
   }
 };
 
@@ -197,43 +203,17 @@ const fetchFavoriteProducts = async () => {
   error.value = null;
 
   try {
-    // TODO: API 호출로 즐겨찾기 목록 가져오기
-    // const response = await favoriteService.getFavoriteProducts();
-    // favoriteProducts.value = response.data;
-
-    // 임시 샘플 데이터
-    favoriteProducts.value = [
-      {
-        id: 1,
-        productName: 'KB청년도약계좌',
-        bankName: 'KB국민은행',
-        productType: 'DEPOSIT',
-        maxInterestRate: '6.00',
-        baseInterestRate: '5.50',
-        specialCondition: '우대금리 0.5%p',
-      },
-      {
-        id: 2,
-        productName: 'NH 펀드플러스',
-        bankName: 'NH농협은행',
-        productType: 'FUND',
-        maxInterestRate: '5.60',
-        baseInterestRate: '5.10',
-        specialCondition: 'BOND형 펀드',
-      },
-      {
-        id: 3,
-        productName: '토스뱅크 자유 적금',
-        bankName: '토스뱅크',
-        productType: 'DEPOSIT',
-        maxInterestRate: '3.00',
-        baseInterestRate: '2.50',
-        specialCondition: '자유적립식',
-      },
-    ];
+    const response = await productService.getFavoriteProducts();
+    favoriteProducts.value = response.data || [];
+    console.log('즐겨찾기 목록 조회 성공:', favoriteProducts.value);
   } catch (err) {
-    error.value = '즐겨찾기 목록을 불러오는데 실패했습니다.';
     console.error('즐겨찾기 조회 실패:', err);
+
+    if (err.message === '로그인이 필요합니다.') {
+      error.value = '로그인이 필요합니다.';
+    } else {
+      error.value = '즐겨찾기 목록을 불러오는데 실패했습니다.';
+    }
   } finally {
     loading.value = false;
   }

@@ -63,7 +63,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-import { Heart, HeartHandshakeIcon } from 'lucide-vue-next';
+import { Heart } from 'lucide-vue-next';
 
 const props = defineProps({
   product: {
