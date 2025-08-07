@@ -184,8 +184,6 @@ const removeFavorite = async (productId) => {
     favoriteProducts.value = favoriteProducts.value.filter(
       (product) => product.id !== productId
     );
-
-    console.log('즐겨찾기 제거 성공:', productId);
   } catch (error) {
     console.error('즐겨찾기 제거 실패:', error);
 
@@ -216,6 +214,7 @@ const transformFavoriteData = (favoriteItems) => {
           productType: product.productType,
           maxInterestRate:
             product.expectedReturn || product.maxInterestRate || 0, // 예상 수익률을 최고금리로 사용
+          url: product.url || '', // 상품 URL
           baseInterestRate: product.baseInterestRate || 0,
           riskGrade: product.riskLevel || 1, // riskLevel -> riskGrade
           specialCondition: product.description || '', // 설명을 특별조건으로 사용
@@ -227,6 +226,7 @@ const transformFavoriteData = (favoriteItems) => {
           favoriteItemId: favoriteItem.id,
           productId: product.id,
           productName: product.name,
+          url: product.url,
         });
 
         transformedProducts.push(transformedProduct);

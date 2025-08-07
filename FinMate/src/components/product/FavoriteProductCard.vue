@@ -47,10 +47,6 @@
           {{ getRiskName(product.riskGrade) }}
         </span>
       </div>
-
-      <div class="special-condition" v-if="product.specialCondition">
-        {{ product.specialCondition }}
-      </div>
     </div>
 
     <!-- 액션 버튼들 -->
@@ -64,6 +60,9 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 import { Heart } from 'lucide-vue-next';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   product: {
@@ -81,7 +80,7 @@ const handleRemoveFavorite = () => {
 
 const getBankLogo = (bankName) => {
   const bankLogos = {
-    KB국민은행: '/src/assets/images/banks/kb.png',
+    국민은행: '/src/assets/images/banks/kb.png',
     신한은행: '/src/assets/images/banks/shinhan.png',
     하나은행: '/src/assets/images/banks/hana.png',
     우리은행: '/src/assets/images/banks/woori.png',
@@ -139,11 +138,11 @@ const getRiskName = (riskGrade) => {
 };
 
 const viewDetails = () => {
-  // 상세페이지로 이동
+  router.push(`/product/${props.product.id}`);
 };
 
 const applyProduct = () => {
-  // 신청 페이지로 이동
+  window.open(props.product.url, '_blank');
 };
 </script>
 
@@ -232,15 +231,15 @@ const applyProduct = () => {
 }
 
 .type-savings {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: var(--color-saving-orange);
 }
 
 .type-deposit {
-  background: linear-gradient(135deg, #4caf50, #8bc34a);
+  background: var(--color-deposit-blue);
 }
 
 .type-fund {
-  background: linear-gradient(135deg, #2196f3, #03dac6);
+  background: var(--color-fund-green);
 }
 
 .type-default {
@@ -271,7 +270,7 @@ const applyProduct = () => {
 .product-name {
   font-size: 2.5vh;
   font-weight: bold;
-  color: #2e7d32;
+  color: var(--color-primary-bluegray);
   margin-bottom: 2vh;
   margin-left: 0.5vw;
   line-height: 1.4;
@@ -291,13 +290,13 @@ const applyProduct = () => {
 }
 
 .interest-label {
-  font-size: 1.9vh;
+  font-size: 1.7vh;
   color: #666;
   font-weight: 500;
 }
 
 .interest-rate {
-  font-size: 4vh;
+  font-size: 3.2vh;
   font-weight: bold;
   margin-left: 0.2vw;
   color: #4caf50;
@@ -311,13 +310,13 @@ const applyProduct = () => {
 }
 
 .base-label {
-  font-size: 1.5vh;
+  font-size: 1.3vh;
   font-weight: 500;
   color: #777;
 }
 
 .base-rate {
-  font-size: 2.3vh;
+  font-size: 2.1vh;
   font-weight: 600;
   color: #666;
 }
@@ -331,13 +330,13 @@ const applyProduct = () => {
 }
 
 .risk-label {
-  font-size: 1.5vh;
+  font-size: 1.3vh;
   font-weight: 500;
   color: #777;
 }
 
 .risk-grade {
-  font-size: 2.3vh;
+  font-size: 2.1vh;
   font-weight: 600;
 }
 
@@ -363,16 +362,6 @@ const applyProduct = () => {
 
 .risk-grade-6 {
   color: #f44336;
-}
-
-.special-condition {
-  font-size: 1.7vh;
-  color: #666;
-  background: rgba(76, 175, 80, 0.08);
-  padding: 0.8vh 1.2vw;
-  border-radius: 1.2vw;
-  border: 0.1vw solid rgba(76, 175, 80, 0.15);
-  margin-top: 1vh;
 }
 
 /* 액션 버튼들 */
