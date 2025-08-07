@@ -11,7 +11,7 @@
             :product="transformedProduct"
           />
         </div>
-        <div class="divider" />
+        <div class="divider">&nbsp;</div>
         <div class="rating-row">
           <h1 class="review-title">Product Review</h1>
           <div class="rating-detail-wrapper">
@@ -68,25 +68,25 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
-import { Pencil } from 'lucide-vue-next';
+import { Pencil } from "lucide-vue-next";
 
-import { getBankLogoPath } from '@/utils/bank';
+import { getBankLogoPath } from "@/utils/bank";
 
-import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
-import FooterComponent from '@/components/allshared/FooterComponent.vue';
-import ProductDetailCardFund from '@/components/product/ProductDetailCardFund.vue';
-import ProductDetailCardDeposit from '@/components/product/ProductDetailCardDeposit.vue';
-import ProductDetailCardSavings from '@/components/product/ProductDetailCardSavings.vue';
-import StarRatingWithDetail from '@/components/allshared/star/StarRatingWithDetail.vue';
-import ReviewFilterBar from '@/components/review/ReviewFilterBar.vue';
-import ReviewCard from '@/components/review/ReviewCard.vue';
-import Pagination from '@/components/allshared/Pagination.vue';
-import WriteReviewModal from '@/components/review/WriteReviewModal.vue';
-import RatingDetailModal from '@/components/review/RatingDetailModal.vue';
-import { productService } from '@/api/product/productService';
+import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import FooterComponent from "@/components/allshared/FooterComponent.vue";
+import ProductDetailCardFund from "@/components/product/ProductDetailCardFund.vue";
+import ProductDetailCardDeposit from "@/components/product/ProductDetailCardDeposit.vue";
+import ProductDetailCardSavings from "@/components/product/ProductDetailCardSavings.vue";
+import StarRatingWithDetail from "@/components/allshared/star/StarRatingWithDetail.vue";
+import ReviewFilterBar from "@/components/review/ReviewFilterBar.vue";
+import ReviewCard from "@/components/review/ReviewCard.vue";
+import Pagination from "@/components/allshared/Pagination.vue";
+import WriteReviewModal from "@/components/review/WriteReviewModal.vue";
+import RatingDetailModal from "@/components/review/RatingDetailModal.vue";
+import { productService } from "@/api/product/productService";
 
 const route = useRoute();
 
@@ -95,8 +95,8 @@ const reviews = ref([]);
 
 // TODO: API 연동(테스트용 mock 데이터)
 
-const filter = ref('all');
-const sort = ref('latest');
+const filter = ref("all");
+const sort = ref("latest");
 const currentPage = ref(1);
 const pageSize = 5;
 
@@ -112,7 +112,7 @@ const getProductComponent = (productType) => {
 const transformedProduct = computed(() => {
   if (!product.value) return null;
 
-  console.log('상품 상세 정보:', product.value);
+  console.log("상품 상세 정보:", product.value);
 
   const base = {
     id: product.value.id,
@@ -135,16 +135,16 @@ const transformedProduct = computed(() => {
       bonusRate: product.value.detail?.bonusRate || 0,
       defaultTermMonths:
         product.value.detail?.defaultTermMonths || product.value.minTerm,
-      interestType: product.value.detail?.interestType || 'SIMPLE',
-      compoundingPeriod: product.value.detail?.compoundingPeriod || 'MONTHLY',
+      interestType: product.value.detail?.interestType || "SIMPLE",
+      compoundingPeriod: product.value.detail?.compoundingPeriod || "MONTHLY",
       earlyWithdrawalPenalty: product.value.detail?.earlyWithdrawalPenalty || 0,
       isFlexible: product.value.detail?.isFlexible || false,
     },
   };
 
   // 적금의 경우 추가 필드
-  if (product.value.productType === 'SAVINGS') {
-    base.detail.paymentCycle = product.value.detail?.paymentCycle || 'MONTHLY';
+  if (product.value.productType === "SAVINGS") {
+    base.detail.paymentCycle = product.value.detail?.paymentCycle || "MONTHLY";
     base.detail.maxMonthlyPayment =
       product.value.detail?.maxMonthlyPayment || product.value.maxAmount;
   }
@@ -153,7 +153,7 @@ const transformedProduct = computed(() => {
 });
 
 const logoPath = computed(() => {
-  return product.value ? getBankLogoPath(product.value.bankName) : '';
+  return product.value ? getBankLogoPath(product.value.bankName) : "";
 });
 
 // 평균 평점 계산 (데이터베이스 구조에 맞춤)
@@ -198,18 +198,18 @@ const openRatingDetailModal = () => {
 const filteredAndSortedReviews = computed(() => {
   let filteredReviews = [...reviews.value];
 
-  if (filter.value !== 'all') {
+  if (filter.value !== "all") {
     const ratingFilter = parseInt(filter.value);
     filteredReviews = filteredReviews.filter(
-      (r) => Math.floor(r.rating) === ratingFilter
+      (r) => Number(r.rating) === ratingFilter
     );
   }
 
-  if (sort.value === 'latest') {
+  if (sort.value === "latest") {
     return filteredReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
-  } else if (sort.value === 'high') {
+  } else if (sort.value === "high") {
     return filteredReviews.sort((a, b) => b.rating - a.rating);
-  } else if (sort.value === 'low') {
+  } else if (sort.value === "low") {
     return filteredReviews.sort((a, b) => a.rating - b.rating);
   }
   return filteredReviews;
@@ -228,27 +228,27 @@ const formatDate = (dateString) => {
     if (Array.isArray(dateString) && dateString.length >= 3) {
       // [2025, 7, 28, 22, 0, 28] 형태
       const [year, month, day] = dateString;
-      return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(
+      return `${year}.${String(month).padStart(2, "0")}.${String(day).padStart(
         2,
-        '0'
+        "0"
       )}`;
     }
 
-    if (typeof dateString === 'string') {
+    if (typeof dateString === "string") {
       // ISO 문자열 또는 MySQL DATETIME 형태
       const date = new Date(dateString);
       if (!isNaN(date.getTime())) {
         return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(
           2,
-          '0'
-        )}.${String(date.getDate()).padStart(2, '0')}`;
+          "0"
+        )}.${String(date.getDate()).padStart(2, "0")}`;
       }
     }
 
-    return '날짜 없음';
+    return "날짜 없음";
   } catch (error) {
-    console.error('Date formatting error:', error);
-    return '날짜 없음';
+    console.error("Date formatting error:", error);
+    return "날짜 없음";
   }
 };
 
@@ -256,7 +256,7 @@ const formatDate = (dateString) => {
 const loadProductData = async () => {
   try {
     const productId = route.params.id;
-    console.log('Loading product data for ID:', productId);
+    console.log("Loading product data for ID:", productId);
 
     // 상품 상세 정보와 리뷰를 병렬로 가져오기
     const [productResponse, reviewsResponse] = await Promise.all([
@@ -264,14 +264,14 @@ const loadProductData = async () => {
       productService.getProductReviews(productId),
     ]);
 
-    console.log('Product response:', productResponse.data);
+    console.log("Product response:", productResponse.data);
 
     product.value = productResponse.data;
     reviews.value = Array.isArray(reviewsResponse.data)
       ? reviewsResponse.data
       : [];
   } catch (err) {
-    console.error('데이터 로딩 중 오류 발생:', err);
+    console.error("데이터 로딩 중 오류 발생:", err);
   }
 };
 
@@ -288,7 +288,7 @@ const handleReviewSubmit = async (reviewData) => {
   try {
     // 리뷰 POST API 호출
     const test = productService.submitReview(route.params.id, reviewData);
-    console.log('리뷰 제출 성공:', test);
+    console.log("리뷰 제출 성공:", test);
 
     // 리뷰 목록 새로고침
     const reviewsResponse = await productService.getProductReviews(
@@ -300,7 +300,7 @@ const handleReviewSubmit = async (reviewData) => {
 
     isReviewModalOpen.value = false;
   } catch (err) {
-    console.error('리뷰 제출 중 오류 발생:', err);
+    console.error("리뷰 제출 중 오류 발생:", err);
   }
 };
 
@@ -346,9 +346,9 @@ onMounted(() => {
 .divider {
   width: 100%;
   max-width: 62.5rem;
-  height: 0.0625rem;
-  background-color: var(--color-dark-gray);
-  margin: 1rem 0;
+  height: 0.06rem;
+  background-color: black;
+  position: relative;
 }
 
 .rating-row {

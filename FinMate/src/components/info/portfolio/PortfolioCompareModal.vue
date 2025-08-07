@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick, watch } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import PortfolioPastChart from '@/components/info/portfolio/PortfolioPastChart.vue';
@@ -12,7 +12,7 @@ Chart.register(ChartDataLabels);
 const pastPortfolioData = ref(null);
 const selectedDate = ref(null);
 const chartCanvasRefNow = ref(null);
-const chartInstanceNow = null;
+let chartInstanceNow = null;
 
 const emit = defineEmits(['close']);
 const props = defineProps({ initialData: Object });
@@ -24,8 +24,9 @@ onMounted(() => {
 });
 
 function handlePastData(data) {
-  pastPortfolioData.value = data;
+  pastPortfolioData.value = data && Object.keys(data).length ? data : null;
 }
+
 function onCancel() {
   emit('close');
 }
@@ -86,6 +87,7 @@ function renderCurrentChart(data) {
   });
 }
 </script>
+
 <template>
   <div class="modal-overlay" @click.self="emit('close')">
     <div class="modal-container">
@@ -106,6 +108,7 @@ function renderCurrentChart(data) {
             <h3>현재 재무 포트폴리오</h3>
             <canvas ref="chartCanvasRefNow" class="now-chart"></canvas>
           </div>
+          <div class="vertical-line"></div>
           <div class="chart-box">
             <h3>과거 재무 포트폴리오</h3>
             <PortfolioPastChart
@@ -113,9 +116,15 @@ function renderCurrentChart(data) {
               @pastLoaded="handlePastData"
               class="now-chart"
             />
+            <img
+              v-if="pastPortfolioData === null"
+              src="@/assets/images/logos/portfolioempty.png"
+              alt="데이터 없음"
+              class="no-chartimg"
+            />
           </div>
         </div>
-        <div v-if="pastPortfolioData !== null" class="analyze-area">
+        <div v-if="pastPortfolioData" class="analyze-area">
           <h1 class="analyze-title">포트폴리오 비교 분석</h1>
           <portfolio-analyz-chart
             :currentData="props.initialData"
@@ -126,6 +135,7 @@ function renderCurrentChart(data) {
     </div>
   </div>
 </template>
+
 <style scoped>
 .modal-overlay {
   position: fixed;
@@ -144,6 +154,7 @@ function renderCurrentChart(data) {
   height: 90vh;
   overflow: hidden;
 }
+
 .modal-content {
   height: 100%;
   overflow-y: auto;
@@ -178,11 +189,6 @@ function renderCurrentChart(data) {
   margin-top: 1rem;
 }
 
-.datepicker-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
 .compare-chart-area {
   display: flex;
   justify-content: space-between;
@@ -201,14 +207,25 @@ function renderCurrentChart(data) {
   margin-right: 5rem;
 }
 
+.vertical-line {
+  margin-top: 5rem;
+  width: 4px;
+  height: 570px;
+  background-color: var(--color-dark-gray);
+}
+
 .now-chart {
-  width: 50%;
+  width: 0.1%;
+}
+
+.no-chartimg {
+  width: 90%;
 }
 
 .analyze-area {
   margin-top: 5rem;
   padding: 2rem;
-  border: 2px solid black;
+  border: 2px solid var(--color-black);
   border-radius: 10px;
 }
 

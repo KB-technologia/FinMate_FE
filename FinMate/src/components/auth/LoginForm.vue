@@ -71,7 +71,7 @@ const kakaoLogin = () => {
   display: flex;
   flex-direction: column;
   width: 100vw;
-  height: 70vh;
+  height: 80vh;
   align-items: center;
   justify-content: center;
   font-family: var(--font-wanted);

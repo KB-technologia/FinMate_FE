@@ -26,18 +26,15 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
-    path: '/signup1',
-    name: 'signup1',
-    component: () => import('@/views/auth/SignUpView1.vue'),
-    path: '/signup/complete',
-    name: 'signupComplete',
-    component: () => import('@/views/auth/SignupComplete.vue'),
-    meta: { requiresAuth: false },
+    path: "/signup1",
+    name: "signup1",
+    component: () => import("@/views/auth/SignUpView1.vue"),
   },
   {
-    path: '/signup1',
-    name: 'signup1',
-    component: () => import('@/views/auth/SignUpView1.vue'),
+    path: "/signup/complete",
+    name: "signupComplete",
+    component: () => import("@/views/auth/SignupComplete.vue"),
+    meta: { requiresAuth: false },
   },
   {
     path: '/signup2',
@@ -48,6 +45,7 @@ const routes = [
     path: '/find-id',
     name: 'findId',
     component: () => import('@/views/auth/FindIdView.vue'),
+
   },
   {
     path: '/reset-pw',

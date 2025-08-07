@@ -1,30 +1,10 @@
 <template>
-  <!-- 로그인 상태일 때: 통계 그래프 -->
   <div v-if="isLoggedIn" class="show-stats-container-notlogin">
-    <!-- <div class="stat-row" v-for="(stat, index) in statsLeft" :key="index">
-      <span class="stat-label">{{ stat.label }}</span>
-      <div class="stat-bar-outer">
-        <div
-          class="stat-bar-fill"
-          :style="{ width: stat.percent + '%', backgroundColor: stat.color }"
-        ></div>
-      </div>
-    </div>
-    <div class="stat-row" v-for="(stat, index) in statsRight" :key="index">
-      <span class="stat-label">{{ stat.label }}</span>
-      <div class="stat-bar-outer">
-        <div
-          class="stat-bar-fill"
-          :style="{ width: stat.percent + '%', backgroundColor: stat.color }"
-        ></div>
-      </div>
-    </div>
-    <button class="detail-button" @click="goToStatsPage">자세히 보기</button> -->
     <div v-if="isstats" class="stats">
       <div v-if="statData" class="stat-bar-wrapper">
         <div class="stat-row">
           <span class="stat-label"
-            ><span class="icon"><Swords /></span>모험 성향 점수</span
+            ><span class="icon"><Swords /></span>모험 점수</span
           >
           <div class="stat-bar-outer">
             <div
@@ -59,16 +39,18 @@
         </div>
         <div class="char-stat">
           <p>
-            <span class="icon"><Gauge /></span>속도 {{ statData.speedTag }}
+            <span class="icon"><Gauge /></span>
+            {{ getSpeedLabel(statData.speedTag) }}
           </p>
           <p>|</p>
           <p>
-            <span class="icon"><Brain /></span>운/전략
-            {{ statData.strategyTag }}
+            <span class="icon"><Brain /></span>
+            {{ getLuckStrategy(statData.strategyTag) }}
           </p>
           <p>|</p>
           <p>
-            <span class="icon"><Sparkle /></span>가치관 {{ statData.valueTag }}
+            <span class="icon"><Sparkle /></span>
+            {{ getValue(statData.valueTag) }}
           </p>
         </div>
 
@@ -254,6 +236,34 @@ const handleMouseEnter = () => {
 const handleMouseLeave = () => {
   clearTimeout(hoverTimer);
   portfolioRevealed.value = false;
+};
+
+const getSpeedLabel = (speed) => {
+  const map = {
+    FAST: '빠름',
+    MEDIUM: '중간',
+    SLOW: '느림',
+    VERY_SLOW: '매우 느림',
+  };
+  return map[speed] || speed;
+};
+
+const getLuckStrategy = (strategy) => {
+  const map = {
+    LUCK: '운',
+    STRATEGY: '전략',
+  };
+  return map[strategy] || strategy;
+};
+
+const getValue = (value) => {
+  const map = {
+    SURVIVAL: '생존형',
+    STABILITY: '안정형',
+    GROWTH: '성장형',
+    HIGH_RETURN: '고수익형',
+  };
+  return map[value] || value;
 };
 </script>
 

@@ -34,6 +34,7 @@ export const useAuthStore = defineStore('auth', {
       this.isFirst = null;
       this.provider = null;
       localStorage.removeItem('token');
+      window.location.reload();
     },
 
     async login(id, pw) {
