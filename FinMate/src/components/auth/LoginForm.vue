@@ -26,7 +26,7 @@
           <p>|</p>
           <router-link to="/find-id">아이디 찾기</router-link>
           <p>|</p>
-          <router-link to="/find-pw">비밀번호 찾기</router-link>
+          <router-link to="/reset-pw">비밀번호 변경</router-link>
         </div>
       </div>
     </div>
