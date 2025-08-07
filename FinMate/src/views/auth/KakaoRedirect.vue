@@ -32,8 +32,8 @@ onMounted(async () => {
     const { token, user, newUser } = res.data;
 
     // 토큰, 유저 정보 저장
-    authStore.setToken(token);
-    authStore.setIsFirst(newUser);
+    // authStore.setToken(token);
+    // authStore.setIsFirst(newUser);
     authStore.setProvider('KAKAO');
     authStore.userInfo = user;
 
@@ -66,6 +66,7 @@ onMounted(async () => {
     if (newUser) {
       router.push('/signup-survey'); // 신규 유저면 회원가입 설문 페이지로 이동
     } else {
+      authStore.setToken(token);
       router.push('/');
     }
   } catch (error) {

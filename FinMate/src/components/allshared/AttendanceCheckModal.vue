@@ -9,14 +9,14 @@
 
       <p class="streak">
         연속 출석 일수
-        <span class="highlight">{{ attendanceDays }}</span
+        <span class="highlight">{{ currentAttendance }}</span
         >일
       </p>
 
       <div class="attendance-grid">
         <div v-for="day in 7" :key="day" class="day-box">
           <img
-            v-if="day <= attendanceDays"
+            v-if="day <= currentAttendance"
             src="@/assets/images/icons/stamp-on.png"
             alt="출석 완료"
           />
@@ -28,16 +28,37 @@
           <p>{{ day }}일째</p>
         </div>
       </div>
-      <button class="attend-button">출석하기</button>
+
+      <button class="attend-button" @click="handleAttendance">출석하기</button>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { ref } from 'vue';
+import { postAttendance } from '@/api/main/main.js';
+
+const props = defineProps({
   userName: String,
   attendanceDays: Number,
 });
+
+// ✅ props를 반응형 로컬 상태로 복사
+const currentAttendance = ref(props.attendanceDays);
+
+const handleAttendance = async () => {
+  try {
+    const result = await postAttendance();
+    console.log('✅ 출석 성공:', result);
+
+    // ✅ Axios full response 형태 또는 success 응답 객체 대응
+    if (result?.status === 200 || result?.success) {
+      currentAttendance.value++;
+    }
+  } catch (error) {
+    console.error('❌ 출석 실패:', error);
+  }
+};
 </script>
 
 <style scoped>
