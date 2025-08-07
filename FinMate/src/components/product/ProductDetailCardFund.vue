@@ -196,7 +196,7 @@ const getRiskLevelLabel = (level) => {
   grid-template-columns: 1fr auto;
   row-gap: 1.25rem;
   column-gap: 2.5rem;
-  max-width: 40rem;
+  max-width: 50rem;
   margin: 0 auto;
 }
 
