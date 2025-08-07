@@ -9,6 +9,8 @@
             v-if="transformedProduct && transformedProduct.productType"
             :is="getProductComponent(transformedProduct.productType)"
             :product="transformedProduct"
+            :is-favorite="isFavorite"
+            @toggle-favorite="handleToggleFavorite"
           />
         </div>
         <div class="divider" />
@@ -92,8 +94,7 @@ const route = useRoute();
 
 const product = ref(null);
 const reviews = ref([]);
-
-// TODO: API 연동(테스트용 mock 데이터)
+const isFavorite = ref(false);
 
 const filter = ref('all');
 const sort = ref('latest');
@@ -111,8 +112,6 @@ const getProductComponent = (productType) => {
 
 const transformedProduct = computed(() => {
   if (!product.value) return null;
-
-  console.log('상품 상세 정보:', product.value);
 
   const base = {
     id: product.value.id,
@@ -252,11 +251,62 @@ const formatDate = (dateString) => {
   }
 };
 
+// 즐겨찾기 토글 처리 함수
+const handleToggleFavorite = async () => {
+  try {
+    const productId = route.params.id;
+
+    if (isFavorite.value) {
+      // 즐겨찾기 제거
+      await productService.removeFavorite(productId);
+      isFavorite.value = false;
+    } else {
+      // 즐겨찾기 추가
+      await productService.addToFavorite(productId);
+      isFavorite.value = true;
+    }
+  } catch (error) {
+    // 에러 메시지 처리
+    if (error.message === '로그인이 필요합니다.') {
+      alert('로그인이 필요합니다.');
+    } else {
+      alert('즐겨찾기 처리에 실패했습니다.');
+    }
+  }
+};
+
+// 즐겨찾기 상태 확인 함수
+const checkFavoriteStatus = async () => {
+  try {
+    const productId = route.params.id;
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.log('토큰이 없음');
+      isFavorite.value = false;
+      return;
+    }
+
+    const response = await productService.getFavoriteProducts();
+    const favoriteItems = response.data || [];
+
+    const isInFavorites = favoriteItems.some((favoriteItem) =>
+      favoriteItem.productDTOList?.some(
+        (product) => product.id.toString() === productId.toString()
+      )
+    );
+
+    isFavorite.value = isInFavorites;
+  } catch (error) {
+    console.error('에러 발생:', error);
+    isFavorite.value = false;
+  }
+};
+
 // 데이터 로딩 함수
 const loadProductData = async () => {
   try {
     const productId = route.params.id;
-    console.log('Loading product data for ID:', productId);
 
     // 상품 상세 정보와 리뷰를 병렬로 가져오기
     const [productResponse, reviewsResponse] = await Promise.all([
@@ -264,12 +314,13 @@ const loadProductData = async () => {
       productService.getProductReviews(productId),
     ]);
 
-    console.log('Product response:', productResponse.data);
-
     product.value = productResponse.data;
     reviews.value = Array.isArray(reviewsResponse.data)
       ? reviewsResponse.data
       : [];
+
+    // 즐겨찾기 상태 확인
+    await checkFavoriteStatus();
   } catch (err) {
     console.error('데이터 로딩 중 오류 발생:', err);
   }
@@ -288,7 +339,6 @@ const handleReviewSubmit = async (reviewData) => {
   try {
     // 리뷰 POST API 호출
     const test = productService.submitReview(route.params.id, reviewData);
-    console.log('리뷰 제출 성공:', test);
 
     // 리뷰 목록 새로고침
     const reviewsResponse = await productService.getProductReviews(

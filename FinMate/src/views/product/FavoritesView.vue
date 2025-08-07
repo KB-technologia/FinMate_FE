@@ -198,13 +198,63 @@ const removeFavorite = async (productId) => {
   }
 };
 
+// API 응답 구조에 맞게 즐겨찾기 상품 데이터 변환
+const transformFavoriteData = (favoriteItems) => {
+  const transformedProducts = [];
+
+  favoriteItems.forEach((favoriteItem) => {
+    if (
+      favoriteItem.productDTOList &&
+      Array.isArray(favoriteItem.productDTOList)
+    ) {
+      favoriteItem.productDTOList.forEach((product) => {
+        // FavoriteProductCard에서 기대하는 형태로 데이터 변환
+        const transformedProduct = {
+          id: product.id, // 실제 상품 ID 사용 (중요!)
+          productName: product.name, // name -> productName
+          bankName: product.bankName,
+          productType: product.productType,
+          maxInterestRate:
+            product.expectedReturn || product.maxInterestRate || 0, // 예상 수익률을 최고금리로 사용
+          baseInterestRate: product.baseInterestRate || 0,
+          riskGrade: product.riskLevel || 1, // riskLevel -> riskGrade
+          specialCondition: product.description || '', // 설명을 특별조건으로 사용
+          // 디버깅용 정보 추가
+          favoriteItemId: favoriteItem.id, // 즐겨찾기 항목 ID (참고용)
+        };
+
+        console.log('상품 변환:', {
+          favoriteItemId: favoriteItem.id,
+          productId: product.id,
+          productName: product.name,
+        });
+
+        transformedProducts.push(transformedProduct);
+      });
+    }
+  });
+
+  return transformedProducts;
+};
+
 const fetchFavoriteProducts = async () => {
   loading.value = true;
   error.value = null;
 
   try {
+    console.log('즐겨찾기 목록 조회 시작');
     const response = await productService.getFavoriteProducts();
-    favoriteProducts.value = response.data || [];
+    const favoriteItems = response.data || [];
+
+    console.log('원본 즐겨찾기 데이터:', favoriteItems);
+
+    // API 응답 구조에 맞게 데이터 변환
+    const transformedProducts = transformFavoriteData(favoriteItems);
+
+    console.log('변환된 즐겨찾기 상품들:', transformedProducts);
+
+    favoriteProducts.value = transformedProducts;
+
     console.log('즐겨찾기 목록 조회 성공:', favoriteProducts.value);
   } catch (err) {
     console.error('즐겨찾기 조회 실패:', err);
