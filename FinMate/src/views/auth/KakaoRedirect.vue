@@ -29,7 +29,7 @@ onMounted(async () => {
     );
     console.log('[DEBUG] 응답 전체:', res);
     console.log('[DEBUG] 응답 data:', res.data);
-    const { token, user, newUser } = res.data;
+    const { token, user, newUser, rewardClaimed, consecutiveDays } = res.data;
 
     // 토큰, 유저 정보 저장
     // authStore.setToken(token);
@@ -67,6 +67,9 @@ onMounted(async () => {
       router.push('/signup-survey'); // 신규 유저면 회원가입 설문 페이지로 이동
     } else {
       authStore.setToken(token);
+      authStore.setIsFirst(!rewardClaimed);
+      authStore.setUserName(user.name);
+      authStore.setDays(consecutiveDays);
       router.push('/');
     }
   } catch (error) {

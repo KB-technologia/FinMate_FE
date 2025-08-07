@@ -43,7 +43,6 @@ const props = defineProps({
   attendanceDays: Number,
 });
 
-// ✅ props를 반응형 로컬 상태로 복사
 const currentAttendance = ref(props.attendanceDays);
 
 const handleAttendance = async () => {
@@ -51,8 +50,8 @@ const handleAttendance = async () => {
     const result = await postAttendance();
     console.log('✅ 출석 성공:', result);
 
-    // ✅ Axios full response 형태 또는 success 응답 객체 대응
-    if (result?.status === 200 || result?.success) {
+    if (result === 200) {
+      console.log('🎯 조건 통과!');
       currentAttendance.value++;
     }
   } catch (error) {

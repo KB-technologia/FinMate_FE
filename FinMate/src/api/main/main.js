@@ -103,7 +103,7 @@ export const postAttendance = async (payload = {}) => {
         },
       }
     );
-    return response.data;
+    return response.status;
   } catch (error) {
     console.error('❌ Attendance 등록 요청 실패:', error);
     if (error.response) {
