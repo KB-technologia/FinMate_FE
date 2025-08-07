@@ -5,8 +5,9 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token'),
     isFirst: null,
-    userInfo: null,
+    username: null,
     provide: null,
+    days: null,
   }),
   getters: {
     isLoggedIn: (state) => !!state.token,
@@ -25,14 +26,20 @@ export const useAuthStore = defineStore('auth', {
       this.provide = provider;
     },
 
-    setUserInfo(userInfo) {
-      this.userInfo = userInfo;
+    setDays(days) {
+      this.days = days;
+    },
+
+    setUserName(username) {
+      this.username = username;
     },
 
     logout() {
       this.token = null;
       this.isFirst = null;
       this.provider = null;
+      this.days = null;
+      this.username = null;
       localStorage.removeItem('token');
       window.location.reload();
     },
@@ -42,8 +49,9 @@ export const useAuthStore = defineStore('auth', {
         const res = await Login(id, pw);
         if (res.status === 200) {
           this.setToken(res.data.token);
-          this.setIsFirst(true);
-          this.setUserInfo(res.data.userInfo);
+          this.setIsFirst(!res.data.rewardClaimed);
+          this.setUserName(res.data.user.name);
+          this.setDays(res.data.consecutiveDays);
           this.setProvider('LOCAL');
           console.log(res.data);
 

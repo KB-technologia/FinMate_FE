@@ -43,7 +43,7 @@
       </p>
       <p>|</p>
       <p class="login-option">
-        <router-link to="/find-pw">비밀번호 찾기</router-link>
+        <router-link to="/reset-pw">비밀번호 변경</router-link>
       </p>
     </div>
   </div>

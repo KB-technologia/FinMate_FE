@@ -42,7 +42,6 @@
           <span class="word word9">과감한</span>
         </div>
       </div>
-      <FooterComponent />
     </div>
   </div>
 </template>

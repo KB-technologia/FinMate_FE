@@ -45,11 +45,7 @@ const routes = [
     path: '/find-id',
     name: 'findId',
     component: () => import('@/views/auth/FindIdView.vue'),
-  },
-  {
-    path: '/find-pw',
-    name: 'findPw',
-    component: () => import('@/views/auth/FindPwView.vue'),
+
   },
   {
     path: '/reset-pw',
