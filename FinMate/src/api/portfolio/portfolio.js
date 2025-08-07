@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAuthStore } from '@/stores/auth/auth.js';
 
-const API_BASE = import.meta.env.VITE_BASE_API_URL + '/api/member/portfolio';
+const API_BASE = import.meta.env.VITE_BASE_API_URL + '/api/portfolio';
 
 export const getPortfolio = () => {
   const authStore = useAuthStore();
