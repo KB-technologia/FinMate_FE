@@ -40,8 +40,8 @@
             @change="handleSortChange"
             class="sort-select"
           >
-            <option value="desc">수익률 높은순</option>
-            <option value="asc">수익률 낮은순</option>
+            <option value="total">수익률 높은순</option>
+            <option value="basic">기본금리 높은순</option>
           </select>
         </div>
       </div>
@@ -95,7 +95,7 @@ const props = defineProps({
   },
   currentSortOrder: {
     type: String,
-    default: 'desc',
+    default: 'total',
   },
 });
 
@@ -110,13 +110,45 @@ const emit = defineEmits([
 const currentPage = ref(1);
 const pageSize = ref(12);
 
+// 정렬된 상품 목록
+const sortedProducts = computed(() => {
+  let sorted = [...props.products];
+
+  sorted.sort((a, b) => {
+    let rateA, rateB;
+
+    if (props.currentSortOrder === 'total') {
+      // 수익률 높은순 (기본+우대)
+      if (a.productType === 'FUND') {
+        rateA = a.expectedReturn || 0;
+      } else {
+        rateA = (a.expectedReturn || 0) + (a.detail?.bonusRate || 0);
+      }
+
+      if (b.productType === 'FUND') {
+        rateB = b.expectedReturn || 0;
+      } else {
+        rateB = (b.expectedReturn || 0) + (b.detail?.bonusRate || 0);
+      }
+    } else {
+      // 기본금리 높은순
+      rateA = a.expectedReturn || 0;
+      rateB = b.expectedReturn || 0;
+    }
+
+    return rateB - rateA; // 높은순만
+  });
+
+  return sorted;
+});
+
 // Computed 속성들
-const totalProducts = computed(() => props.products.length);
+const totalProducts = computed(() => sortedProducts.value.length);
 
 const paginatedProducts = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
   const end = start + pageSize.value;
-  return props.products.slice(start, end);
+  return sortedProducts.value.slice(start, end);
 });
 
 // 메서드들

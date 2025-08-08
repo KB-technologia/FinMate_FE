@@ -65,7 +65,7 @@ const products = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const selectedProducts = ref([]);
-const currentSortOrder = ref('desc');
+const currentSortOrder = ref('total');
 
 // 모달 상태
 const isCompareModalVisible = ref(false);
@@ -193,6 +193,12 @@ const buildApiParams = () => {
     currentFilters.value.subCategories?.length > 0
   ) {
     params.fundType = currentFilters.value.subCategories;
+  }
+
+  if (currentSortOrder.value === 'total') {
+    params.sortOrder = 'desc'; // 수익률 높은순
+  } else {
+    params.sortOrder = 'desc'; // 기본금리 높은순
   }
 
   params.sortOrder = currentSortOrder.value;
