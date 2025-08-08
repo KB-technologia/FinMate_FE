@@ -84,7 +84,6 @@ import { getMemberLevel } from '@/api/main/main.js';
 import { getMemberCharacter } from '@/api/info/userStatsAPI';
 import { getQuizSolved } from '@/api/dailyquiz/dailyQuizSolved.js';
 
-
 const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const authStore = useAuthStore();
@@ -114,7 +113,6 @@ function handleLogoutConfirm(confirmed) {
   showLogoutConfirm.value = false;
   if (confirmed) authStore.logout();
 }
-
 
 onMounted(async () => {
   try {
@@ -203,16 +201,21 @@ async function openQuizModal() {
 .logout-button {
   display: flex;
   align-items: center;
-  width: 5rem;
+  width: 6rem;
   padding: 0.5rem;
   cursor: pointer;
-  border: var(--color-red) solid 1px;
   font-weight: var(--font-weight-extrabold);
-  font-size: 0.7rem;
-  border-radius: 1vh;
+  background-color: var(--color-logout-button);
+  font-size: 0.9rem;
+  border-radius: 2vh;
+  transition: all 0.2s ease;
+  color: var(--color-white);
 }
 .logout-button:hover {
-  color: var(--color-red);
+  box-shadow: 0 0.5vh 0.5vw rgba(0, 0, 0, 0.3);
+  color: var(--color-white);
+  transform: translateY(-0.5vh);
+  background-color: var(--color-red);
 }
 .image-wrapper {
   width: 12vh;
