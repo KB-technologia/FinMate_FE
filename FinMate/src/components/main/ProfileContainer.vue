@@ -207,8 +207,8 @@ onMounted(async () => {
 .image-spinner {
   width: 12vh;
   height: 12vh;
-  border: 0.6vh solid var(--color-white);
-  border-top: 0.6vh solid var(--color-main-button);
+  border: 0.8vh solid var(--color-white);
+  border-top: 0.8vh solid var(--color-main-button);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

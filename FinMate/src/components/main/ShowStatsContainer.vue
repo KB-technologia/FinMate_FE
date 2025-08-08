@@ -8,7 +8,10 @@
       <div v-else-if="isstats" class="stat-bar-wrapper">
         <div class="stat-row">
           <span class="stat-label"
-            ><span class="icon"><Swords /></span>모험 점수</span
+            ><div class="tooltip-wrapper">
+              <span class="icon"><Swords /></span>
+              <span class="tooltip-text">모험 성향 점수</span>
+            </div></span
           >
           <div class="stat-bar-outer">
             <div
@@ -25,8 +28,11 @@
         </div>
 
         <div class="stat-row">
-          <span class="stat-label"
-            ><span class="icon"><Coins /></span>재정 점수</span
+          <span class="stat-label">
+            <div class="tooltip-wrapper">
+              <span class="icon"><Coins /></span>
+              <span class="tooltip-text">금융 성향 점수</span>
+            </div></span
           >
           <div class="stat-bar-outer">
             <div
@@ -43,20 +49,29 @@
         </div>
 
         <div class="char-stat">
-          <p>
-            <span class="icon"><Gauge /></span
-            >{{ getSpeedLabel(statData.speedTag) }}
-          </p>
-          <p>|</p>
-          <p>
-            <span class="icon"><Brain /></span
-            >{{ getLuckStrategy(statData.strategyTag) }}
-          </p>
-          <p>|</p>
-          <p>
-            <span class="icon"><Sparkle /></span
-            >{{ getValue(statData.valueTag) }}
-          </p>
+          <div>
+            <div class="tooltip-wrapper">
+              <span class="icon"><Gauge /></span>
+              <span class="tooltip-text">투자 속도 성향</span>
+            </div>
+            {{ getSpeedLabel(statData.speedTag) }}
+          </div>
+
+          <div>
+            <div class="tooltip-wrapper">
+              <span class="icon"><Brain /></span>
+              <span class="tooltip-text">운/전략 성향</span>
+            </div>
+            {{ getLuckStrategy(statData.strategyTag) }}
+          </div>
+
+          <div>
+            <div class="tooltip-wrapper">
+              <span class="icon"><Sparkle /></span>
+              <span class="tooltip-text">가치관</span>
+            </div>
+            {{ getValue(statData.valueTag) }}
+          </div>
         </div>
 
         <button class="detail-button" @click="goToStatsPage">
@@ -212,19 +227,26 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 2vh;
+  padding: 1vh;
   overflow: hidden;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-extrabold);
 }
 
 .stat-row {
-  width: 90%;
+  width: 60%;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin-left: 1vw;
 }
 
 .stat-label {
-  width: 10vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1vw;
   font-size: 1rem;
   text-align: right;
   margin-right: 1vw;
@@ -239,6 +261,7 @@ onMounted(async () => {
 }
 
 .stat-bar-fill {
+  width: 50%;
   height: 100%;
   border-radius: 2vh;
   transition: width 0.5s ease;
@@ -251,7 +274,7 @@ onMounted(async () => {
 }
 
 .stat-bar-wrapper {
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -435,8 +458,8 @@ onMounted(async () => {
   width: 100%;
 }
 .loader {
-  border: 0.5vh solid var(--color-white);
-  border-top: 0.5vh solid var(--color-main-button);
+  border: 0.8vh solid var(--color-white);
+  border-top: 0.8vh solid var(--color-main-button);
   border-radius: 50%;
   width: 10vh;
   height: 10vh;
@@ -449,5 +472,30 @@ onMounted(async () => {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.tooltip-text {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0.5vh;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* 위에 표시 */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tooltip-wrapper:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
 </style>
