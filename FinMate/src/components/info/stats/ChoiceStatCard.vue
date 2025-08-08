@@ -19,18 +19,21 @@
       <div v-if="expanded" class="card-detail">
         <p class="detail-summary">{{ summary }}</p>
         <p class="detail-selected">
-          선택: <strong>{{ modelValue }}</strong>
+          <ScanSearch class="result-icon" />
+          <strong class="result-text">{{ resultText }}</strong>
           <span v-if="rangeHint && rangeHint[modelValue]" class="hint">
             ({{ rangeHint[modelValue] }})
           </span>
         </p>
-        <p class="detail-text">{{ descriptions?.[modelValue] }}</p>
       </div>
     </transition>
   </div>
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { ScanSearch } from "lucide-vue-next";
+
 const props = defineProps({
   title: String,
   chips: { type: Array, default: () => [] },
@@ -41,14 +44,15 @@ const props = defineProps({
   expanded: Boolean,
 });
 const emit = defineEmits(["update:modelValue", "toggle"]);
+
+const resultText = computed(
+  () => props.descriptions?.[props.modelValue] ?? props.modelValue
+);
 </script>
 
+<style src="./styles/stat-card.css" scoped></style>
 <style scoped>
 .stat-card {
-  width: 100%;
-  background: var(--color-white);
-  border-radius: 12px;
-  padding: 0.9rem 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
@@ -61,6 +65,7 @@ const emit = defineEmits(["update:modelValue", "toggle"]);
   font-size: 1.1rem;
   font-weight: var(--font-weight-bold);
 }
+
 .choice-chips {
   display: flex;
   flex-wrap: wrap;
@@ -80,40 +85,10 @@ const emit = defineEmits(["update:modelValue", "toggle"]);
   color: var(--color-white);
   border-color: transparent;
 }
-.card-detail {
-  margin-top: 0.6rem;
-  border-top: 1.5px dashed var(--color-light-gray);
-  padding-top: 0.6rem;
-}
-.detail-summary {
-  color: var(--color-dark-gray);
-  font-size: 0.92rem;
-  margin-bottom: 0.25rem;
-}
-.detail-selected {
-  margin: 0.1rem 0 0.3rem;
-}
-.detail-text {
-  line-height: 1.5;
-}
-.hint {
-  color: var(--color-red);
-  margin-left: 6px;
-  font-size: 0.88rem;
-}
 
-.expand-enter-active,
-.expand-leave-active {
-  transition: max-height 0.22s ease, opacity 0.22s ease;
-}
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
-  opacity: 0;
-}
-.expand-enter-to,
-.expand-leave-from {
-  max-height: 12.5rem;
-  opacity: 1;
+.stat-choice .result-icon {
+  position: relative;
+  top: 0.25rem;
+  color: var(--color-primary-bluegray);
 }
 </style>

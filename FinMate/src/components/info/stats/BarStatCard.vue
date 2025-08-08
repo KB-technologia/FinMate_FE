@@ -10,13 +10,14 @@
     <transition name="expand">
       <div v-if="expanded" class="card-detail">
         <p class="detail-summary">{{ summary }}</p>
-        <p class="detail-selected">
-          현재 레벨: <strong>{{ level }}</strong>
-          <span v-if="percentByLevel" class="hint">
-            허용 손실 약 {{ percentByLevel[level] }}%
-          </span>
+        <p class="level-line">
+          현재 레벨: <strong class="level-value">{{ level }}</strong>
         </p>
-        <p class="detail-text">{{ description }}</p>
+        <p class="detail-selected">
+          <ScanSearch class="result-icon" />
+          <strong class="result-text">{{ description }}</strong>
+        </p>
+
         <p v-if="extraHint" class="hint">{{ extraHint }}</p>
       </div>
     </transition>
@@ -25,6 +26,7 @@
 
 <script setup>
 import UserStatBar from "@/components/allshared/UserStatBar.vue";
+import { ScanSearch } from "lucide-vue-next";
 
 const props = defineProps({
   label: String,
@@ -40,14 +42,10 @@ const props = defineProps({
 const emit = defineEmits(["toggle"]);
 </script>
 
+<style src="./styles/stat-card.css" scoped></style>
 <style scoped>
 .stat-card {
-  width: 100%;
-  background: var(--color-white);
-  border-radius: 12px;
-  padding: 0.9rem 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
 }
 .stat-bar :deep(.bar-wrapper) {
   margin: 0;
@@ -59,40 +57,21 @@ const emit = defineEmits(["toggle"]);
 .stat-bar :deep(.bar-track) {
   background-color: var(--color-bar-track);
 }
-.card-detail {
-  margin-top: 0.6rem;
-  border-top: 1.5px dashed var(--color-light-gray);
-  padding-top: 0.6rem;
-}
-.detail-summary {
-  color: var(--color-dark-gray);
-  font-size: 0.92rem;
-  margin-bottom: 0.25rem;
-}
-.detail-selected {
-  margin: 0.1rem 0 0.3rem;
-}
-.detail-text {
-  line-height: 1.5;
-}
-.hint {
-  color: var(--color-red);
-  margin-left: 0.3rem;
+
+.level-line,
+.level-value {
   font-size: 0.8rem;
+  color: var(--color-red);
 }
 
-.expand-enter-active,
-.expand-leave-active {
-  transition: max-height 0.22s ease, opacity 0.22s ease;
+.level-line {
+  font-weight: var(--font-weight-semibold);
+  margin: 0.1rem 0 0.3rem;
 }
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
-  opacity: 0;
-}
-.expand-enter-to,
-.expand-leave-from {
-  max-height: 12.5rem;
-  opacity: 1;
+
+.stat-bar .result-icon {
+  position: relative;
+  top: 0.25rem;
+  color: var(--color-primary-bluegray);
 }
 </style>

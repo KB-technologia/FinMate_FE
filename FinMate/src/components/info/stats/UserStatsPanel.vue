@@ -5,7 +5,7 @@
       @confirm="onGachaConfirmed"
       @close="showGachaModal = false"
     />
-    <div class="actions actions--chips">
+    <div class="actions">
       <button class="action-chip action-chip--ticket" @click="openTicketModal">
         <img
           src="@/assets/images/icons/ticket.png"
@@ -96,7 +96,6 @@
         :summary="descs.adventure.summary"
         :level="adventureLevel"
         :description="adventureDesc"
-        :extraHint="descs.adventure.riskPreferenceHint"
         :expanded="activeCard === 'adventure'"
         @toggle="toggle('adventure')"
       />
@@ -139,12 +138,12 @@ const toggle = (key) => {
   activeCard.value = activeCard.value === key ? null : key;
 };
 
-// TODO: 선택값(임시) — API 연동 시 서버 값으로 세팅하면, 설명은 자동 반영됨
+// TODO: 선택값(임시)
 const selectedValueType = ref("성장형");
 const selectedSpeed = ref("중간");
 const selectedLuckOrStrategy = ref("전략");
 
-// TODO: 바 퍼센트(임시) — 0~100
+// TODO: 바 퍼센트(임시)
 const financePercent = ref(60);
 const adventurePercent = ref(40);
 
@@ -155,6 +154,7 @@ const adventureLevel = computed(() => toLevel(adventurePercent.value));
 const financeDesc = computed(
   () => descs.finance.getDescription(financeLevel.value) || ""
 );
+
 const adventureDesc = computed(
   () => descs.adventure.understandingDescriptions[adventureLevel.value] || ""
 );
