@@ -27,8 +27,9 @@
 
       <p class="level-text">
         <template v-if="!isLoading">
-          <span v-if="memberLevel">Lv.{{ memberLevel }}</span>
-          소심한 <span>{{ animalName }}</span>
+          <span v-if="memberLevel">Lv.{{ memberLevel }}</span
+          >&nbsp; <span>{{ summary }}</span
+          >&nbsp;<span>{{ animalName }}</span>
         </template>
         <template v-else>
           <div class="skeleton-text long"></div>
@@ -100,6 +101,7 @@ const levelexp = ref(0);
 const fillPercentage = computed(() => (levelexp.value / maxXp) * 100);
 const animalName = ref('');
 const animalImage = ref('');
+const summary = ref('');
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
@@ -123,6 +125,9 @@ onMounted(async () => {
       levelexp.value = totalexp.value % 1000;
       animalName.value = character.data.animalName;
       animalImage.value = `${BASE_API_URL}${character.data.animalImage}`;
+      summary.value = levelData.data.profileSummary;
+      console.log(levelData.data);
+      console.log(character.data);
     }
   } catch (err) {
     console.error('⚠️ 사용자 정보 로딩 실패:', err);

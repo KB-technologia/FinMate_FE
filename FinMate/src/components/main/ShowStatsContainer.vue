@@ -52,19 +52,17 @@
           <div>
             <div class="tooltip-wrapper">
               <span class="icon"><Gauge /></span>
-              <span class="tooltip-text">투자 속도 성향</span>
+              <span class="tooltip-text">속도</span>
             </div>
             {{ getSpeedLabel(statData.speedTag) }}
           </div>
-
           <div>
             <div class="tooltip-wrapper">
               <span class="icon"><Brain /></span>
-              <span class="tooltip-text">운/전략 성향</span>
+              <span class="tooltip-text">운/전략</span>
             </div>
             {{ getLuckStrategy(statData.strategyTag) }}
           </div>
-
           <div>
             <div class="tooltip-wrapper">
               <span class="icon"><Sparkle /></span>
@@ -142,6 +140,21 @@
       </div>
     </div>
   </div>
+  <div v-if="!isLoggedIn" class="show-stats-container">
+    <div class="description">
+      당신의 투자 성향은 어떤 동물일까요? 지금 회원가입을 통해 확인해보세요!
+    </div>
+    <div class="image-wrapper">
+      <img
+        v-for="(img, index) in currentImages"
+        :key="index"
+        :src="img"
+        class="animal-image"
+        :class="{ 'fade-in': animate }"
+        alt="animal"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -174,7 +187,25 @@ const handleMouseLeave = () => {
   clearTimeout(hoverTimer);
   portfolioRevealed.value = false;
 };
+const images = [
+  new URL('@/assets/images/animals/cat.png', import.meta.url).href,
+  new URL('@/assets/images/animals/capybara.png', import.meta.url).href,
+  new URL('@/assets/images/animals/desertfox.png', import.meta.url).href,
+  new URL('@/assets/images/animals/flyingsquirrel.png', import.meta.url).href,
+  new URL('@/assets/images/animals/kiwibird.png', import.meta.url).href,
+  new URL('@/assets/images/animals/koala.png', import.meta.url).href,
+  new URL('@/assets/images/animals/panda.png', import.meta.url).href,
+  new URL('@/assets/images/animals/penguin.png', import.meta.url).href,
+  new URL('@/assets/images/animals/redpanda.png', import.meta.url).href,
+  new URL('@/assets/images/animals/seaotter.png', import.meta.url).href,
+];
+const currentImages = ref([]);
+const animate = ref(true);
 
+function getRandomImages() {
+  const shuffled = images.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, 8);
+}
 const getSpeedLabel = (speed) =>
   ({ FAST: '빠름', MEDIUM: '중간', SLOW: '느림', VERY_SLOW: '매우 느림' }[
     speed
@@ -190,6 +221,14 @@ const getValue = (value) =>
   }[value] || value);
 
 onMounted(async () => {
+  currentImages.value = getRandomImages();
+  setInterval(() => {
+    animate.value = false;
+    setTimeout(() => {
+      currentImages.value = getRandomImages();
+      animate.value = true;
+    }, 400);
+  }, 2500);
   if (isLoggedIn.value) {
     try {
       const portfolio = await getPortfolio();
