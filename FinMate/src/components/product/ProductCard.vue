@@ -213,11 +213,12 @@ const formatRate = (rate) => {
 
 const getRiskLevel = (level) => {
   const levels = {
-    1: '안전',
-    2: '낮음',
-    3: '보통',
-    4: '높음',
-    5: '매우높음',
+    2: '매우 낮은 위험',
+    3: '낮은 위험',
+    4: '보통 위험',
+    5: '다소 높은 위험',
+    6: '높은 위험',
+    7: '매우 높은 위험',
   };
   return levels[level] || `${level}등급`;
 };
