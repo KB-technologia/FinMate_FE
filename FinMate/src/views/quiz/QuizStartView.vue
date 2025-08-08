@@ -131,29 +131,44 @@ const startQuiz = () => {
   justify-content: center;
 }
 .speech-bubble {
-  position: relative;
-  background: #fff;
-  border: 0.1vh solid #ccc;
-  border-radius: 2vh;
-  padding: 1rem;
+  width: 12vw;
+  height: 12vh;
   font-size: 1.2rem;
-  max-width: 15vw;
   text-align: center;
-  justify-content: center;
+  display: flex;
   align-items: center;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  color: var(--color-black);
+  position: relative;
+  background: var(--color-main-button);
+  border-radius: 2vh;
+  padding: 1vh;
+  font-weight: var(--font-weight-medium);
+}
+.speech-bubble:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 0;
+  border: 1em solid transparent;
+  border-right-color: var(--color-main-button);
+  border-left: 0;
+  border-bottom: 0;
+  margin-top: -0.5em;
+  margin-left: 0.3em;
 }
 
 .speech-bubble::after {
   content: '';
   position: absolute;
   top: 50%;
-  left: -15px;
+  left: -1.2vw;
   transform: translateY(-50%);
   width: 0;
   height: 0;
-  border: 1vh solid transparent;
-  border-right-color: #ccc;
+  border: 2vh solid transparent;
+  border-right-color: var(--color-main-button);
   border-left: 0;
 }
 
