@@ -5,8 +5,8 @@
       @confirm="onGachaConfirmed"
       @close="showGachaModal = false"
     />
-    <div class="actions">
-      <button class="ticket-badge" @click="openTicketModal">
+    <div class="actions actions--chips">
+      <button class="action-chip action-chip--ticket" @click="openTicketModal">
         <img
           src="@/assets/images/icons/ticket.png"
           alt="티켓"
@@ -16,10 +16,11 @@
       </button>
 
       <button
-        class="explore-btn explore-btn--inline"
+        class="action-chip action-chip--explore"
         @click="$router.push('/quizstart')"
       >
-        <PawPrint class="icon-paw" /> 새로운 동물 만나러 가기
+        <ScrollText class="icon-scroll" />
+        <span>투자 성향 테스트</span>
       </button>
     </div>
 
@@ -107,7 +108,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { PawPrint, Info } from "lucide-vue-next";
+import { ScrollText, Info } from "lucide-vue-next";
 
 import defaultPenguin from "@/assets/images/animals/penguin.png";
 import ToastContainer from "@/components/allshared/ToastContainer.vue";
@@ -195,23 +196,6 @@ onMounted(async () => {
   width: 10rem;
 }
 
-.ticket-badge {
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.5rem 0.8rem;
-  border-radius: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.ticket-icon {
-  width: 30px;
-  height: auto;
-  margin-right: 4px;
-}
 .ticket-count {
   font-weight: var(--font-weight-bold);
   font-size: 0.9rem;
@@ -231,51 +215,43 @@ onMounted(async () => {
   top: 1.5rem;
   right: 2rem;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.6rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-.actions .ticket-badge {
-  position: static;
-  margin: 0;
+.action-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  padding: 0.45rem 0.8rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
-.explore-btn {
-  margin-top: 2rem;
-  padding: 0.8rem 1.2rem;
-  border-radius: 10px;
-  background-color: var(--color-primary-green);
-  color: var(--color-white);
-  font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+.action-chip--ticket .ticket-icon {
+  width: 1.2rem;
+  height: 1.2rem;
 }
-.explore-btn:hover {
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-  transform: translateY(-2px);
+.action-chip--ticket .ticket-count {
+  font-weight: var(--font-weight-bold);
+  font-size: 0.9rem;
 }
 
-.explore-btn--inline {
-  padding: 0.5rem 0.9rem;
-  font-size: 0.95rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  width: max-content;
+.icon-scroll {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
 }
 
-.explore-btn--inline .icon-paw {
-  width: 20px;
-  height: 20px;
-  margin-right: 4px;
-  transform: translate(-1px, -1px);
-}
-
-.icon-paw {
-  width: 24px;
-  height: 24px;
-  margin-right: 3px;
-  transform: translate(-2px, -1px);
+.action-chip:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
+  transform: translateY(-1px);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .stat-info {
