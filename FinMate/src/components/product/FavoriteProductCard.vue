@@ -16,6 +16,7 @@
         <img
           :src="getBankLogo(product.bankName)"
           :alt="product.bankName"
+          @error="handleImageError"
           class="bank-logo"
         />
       </div>
@@ -110,6 +111,29 @@ const getTypeName = (type) => {
     FUND: '펀드',
   };
   return names[type] || type;
+};
+
+const getBankInitial = (bankName) => {
+  return bankName.charAt(0);
+};
+
+const handleImageError = (event) => {
+  // 이미지 로드 실패 시 텍스트로 대체
+  const bankIcon = event.target.parentElement;
+  event.target.style.display = 'none';
+
+  bankIcon.classList.add('image-error');
+  bankIcon.style.backgroundColor = '#f0f0f0';
+  bankIcon.style.color = '#666';
+  bankIcon.style.display = 'flex';
+  bankIcon.style.alignItems = 'center';
+  bankIcon.style.justifyContent = 'center';
+  bankIcon.style.fontSize = '2vh';
+  bankIcon.style.fontWeight = 'bold';
+  bankIcon.style.width = '2.5vw';
+  bankIcon.style.height = '4vh';
+  bankIcon.style.borderRadius = '0.3vw';
+  bankIcon.textContent = getBankInitial(props.product.bankName);
 };
 
 // 위험등급 관련 메서드 (1~6등급)

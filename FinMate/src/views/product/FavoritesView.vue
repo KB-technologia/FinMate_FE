@@ -52,8 +52,7 @@
               @change="handleSortChange"
             >
               <option value="interest">수익률 높은순</option>
-              <option value="name">상품명순</option>
-              <option value="bank">은행명순</option>
+              <option value="recent">최근 추가순</option>
             </select>
           </div>
         </div>
@@ -141,6 +140,8 @@ const filteredProducts = computed(() => {
   // 정렬
   products.sort((a, b) => {
     switch (sortBy.value) {
+      case 'recent':
+        return (b.favoriteItemId || 0) - (a.favoriteItemId || 0);
       case 'interest':
         return (
           parseFloat(b.maxInterestRate || 0) -
@@ -218,16 +219,8 @@ const transformFavoriteData = (favoriteItems) => {
           baseInterestRate: product.baseInterestRate || 0,
           riskGrade: product.riskLevel || 1, // riskLevel -> riskGrade
           specialCondition: product.description || '', // 설명을 특별조건으로 사용
-          // 디버깅용 정보 추가
           favoriteItemId: favoriteItem.id, // 즐겨찾기 항목 ID (참고용)
         };
-
-        console.log('상품 변환:', {
-          favoriteItemId: favoriteItem.id,
-          productId: product.id,
-          productName: product.name,
-          url: product.url,
-        });
 
         transformedProducts.push(transformedProduct);
       });
