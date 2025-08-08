@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const props = defineProps({
   rating: {
@@ -27,7 +27,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: '1.5rem',
+    default: "1.5rem",
   },
   interactive: {
     type: Boolean,
@@ -35,7 +35,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['rating-change']);
+const emit = defineEmits(["rating-change"]);
 
 const hoverRating = ref(0);
 
@@ -45,15 +45,15 @@ const getStarClass = (index) => {
       ? hoverRating.value
       : props.rating;
 
-  if (index <= Math.floor(currentRating)) return 'full';
+  if (index <= Math.floor(currentRating)) return "full";
   else if (index - currentRating < 1 && index - currentRating > 0)
-    return 'half';
-  else return 'empty';
+    return "half";
+  else return "empty";
 };
 
 const handleStarClick = (index) => {
   if (props.interactive) {
-    emit('rating-change', index);
+    emit("rating-change", index);
   }
 };
 
@@ -81,6 +81,7 @@ const handleMouseLeave = () => {
   position: relative;
   display: inline-block;
   transition: transform 0.1s ease;
+  outline: none;
 }
 
 .star.interactive {
@@ -105,7 +106,7 @@ const handleMouseLeave = () => {
 }
 
 .star.half::before {
-  content: '★';
+  content: "★";
   color: var(--color-orange);
   position: absolute;
   left: 0;

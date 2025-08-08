@@ -108,6 +108,7 @@ function renderCurrentChart(data) {
             <h3>현재 재무 포트폴리오</h3>
             <canvas ref="chartCanvasRefNow" class="now-chart"></canvas>
           </div>
+          <div class="vertical-line"></div>
           <div class="chart-box">
             <h3>과거 재무 포트폴리오</h3>
             <PortfolioPastChart
@@ -204,6 +205,13 @@ function renderCurrentChart(data) {
   max-width: 550px;
   margin-left: 5rem;
   margin-right: 5rem;
+}
+
+.vertical-line {
+  margin-top: 5rem;
+  width: 4px;
+  height: 570px;
+  background-color: var(--color-dark-gray);
 }
 
 .now-chart {

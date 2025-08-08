@@ -266,14 +266,18 @@ const getRiskLevelLabel = (level) => {
   grid-template-columns: 1fr auto;
   row-gap: 1.25rem;
   column-gap: 2.5rem;
-  max-width: 40rem;
+  max-width: 50rem;
   margin: 0 auto;
 }
 
 .info-label {
   font-size: 1.125rem;
+  min-width: 8rem;
   color: var(--color-black);
   font-weight: var(--font-weight-medium);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .info-value {
@@ -281,10 +285,11 @@ const getRiskLevelLabel = (level) => {
   font-weight: var(--font-weight-bold);
   text-align: right;
   word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .info-value.description {
-  text-align: left;
+  text-align: right;
   white-space: pre-wrap;
 }
 

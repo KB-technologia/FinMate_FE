@@ -48,14 +48,16 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
 const authStore = useAuthStore();
 
 const showModal = ref(false);
-const userName = ref('김현수'); // 실제 로그인 유저 이름 연동 시 바꿔주세요
-const attendanceDays = ref(5); // 실제 데이터로 교체 가능
+
+const days = authStore.days;
+const username = authStore.username;
+const userName = ref(username);
+const attendanceDays = ref(days);
 
 onMounted(() => {
   if (authStore.isFirst === true) {
     showModal.value = true;
   }
-  // localStorage.setItem('token', 'adfadfsdfasdf'); //
 });
 
 const closeModal = () => {

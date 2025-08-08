@@ -53,32 +53,32 @@ export const signup = async () => {
 };
 
 export const sendEmailAuth = (email) => {
-  return axios.post(`${BASE_URL}/api/member/emailauthentication`, { email });
+  return axios.post(`${BASE_URL}/api/email/authentication`, { email });
 };
 
 export const verifyEmailAuth = (code, uuid) => {
-  return axios.post(`${BASE_URL}/api/member/emailauthentication/verify`, {
+  return axios.post(`${BASE_URL}/api/email/authentication/verify`, {
     authCode: code,
     requestId: uuid.toString(),
   });
 };
 
 export async function findAccountIdByUuid(uuid) {
-  const res = await axios.post(`${BASE_URL}/api/member/findaccountid`, {
+  const res = await axios.post(`${BASE_URL}/api/member/find-accountid`, {
     uuid,
   });
   return res.data; // { name: "오유찬", accountId: "dbcks0861" }
 }
 
 export const verifyUser = async (uuid, accountId) => {
-  return await axios.post(`${BASE_URL}/api/member/changepassword/verify`, {
+  return await axios.post(`${BASE_URL}/api/member/change-password/verify`, {
     uuid,
     accountId,
   });
 };
 
-export const changePassword = async (uuid, accountId, newPassword) => {
-  return await axios.post(`${BASE_URL}/api/member/changepassword`, {
+export const resetPasswordByUuid = async (uuid, accountId, newPassword) => {
+  return await axios.post(`${BASE_URL}/api/member/change-password`, {
     uuid,
     accountId,
     newPassword,
@@ -89,4 +89,23 @@ export const checkAccountId = async (accountId) => {
   return await axios.get(`${BASE_URL}/api/member/check-id`, {
     params: { accountId },
   });
+};
+
+export const withdraw = async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return Promise.reject(new Error('인증 토큰이 없습니다.'));
+  }
+
+  try {
+    const response = await axios.delete(`${BASE_URL}/api/member`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };

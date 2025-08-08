@@ -93,7 +93,6 @@
           <p>💼 펀드: {{ portfolioData.fund.toLocaleString() }}원</p>
           <p>💳 현금: {{ portfolioData.cash.toLocaleString() }}원</p>
           <p>📦 기타: {{ portfolioData.other.toLocaleString() }}원</p>
-          <p>📊 성향: {{ portfolioData.investmentProfile }}</p>
         </div>
         <button class="detail-button" @click="goToPortfolio">
           자세히 보기

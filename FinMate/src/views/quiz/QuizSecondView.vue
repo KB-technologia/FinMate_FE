@@ -21,8 +21,6 @@
         </button>
       </transition>
     </div>
-
-    <FooterComponent />
   </div>
 </template>
 

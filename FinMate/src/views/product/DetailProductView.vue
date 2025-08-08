@@ -13,7 +13,7 @@
             @toggle-favorite="handleToggleFavorite"
           />
         </div>
-        <div class="divider" />
+        <div class="divider">&nbsp;</div>
         <div class="rating-row">
           <h1 class="review-title">Product Review</h1>
           <div class="rating-detail-wrapper">
@@ -200,7 +200,7 @@ const filteredAndSortedReviews = computed(() => {
   if (filter.value !== 'all') {
     const ratingFilter = parseInt(filter.value);
     filteredReviews = filteredReviews.filter(
-      (r) => Math.floor(r.rating) === ratingFilter
+      (r) => Number(r.rating) === ratingFilter
     );
   }
 
@@ -248,6 +248,58 @@ const formatDate = (dateString) => {
   } catch (error) {
     console.error('Date formatting error:', error);
     return '날짜 없음';
+  }
+};
+
+// 즐겨찾기 토글 처리 함수
+const handleToggleFavorite = async () => {
+  try {
+    const productId = route.params.id;
+
+    if (isFavorite.value) {
+      // 즐겨찾기 제거
+      await productService.removeFavorite(productId);
+      isFavorite.value = false;
+    } else {
+      // 즐겨찾기 추가
+      await productService.addToFavorite(productId);
+      isFavorite.value = true;
+    }
+  } catch (error) {
+    // 에러 메시지 처리
+    if (error.message === '로그인이 필요합니다.') {
+      alert('로그인이 필요합니다.');
+    } else {
+      alert('즐겨찾기 처리에 실패했습니다.');
+    }
+  }
+};
+
+// 즐겨찾기 상태 확인 함수
+const checkFavoriteStatus = async () => {
+  try {
+    const productId = route.params.id;
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.log('토큰이 없음');
+      isFavorite.value = false;
+      return;
+    }
+
+    const response = await productService.getFavoriteProducts();
+    const favoriteItems = response.data || [];
+
+    const isInFavorites = favoriteItems.some((favoriteItem) =>
+      favoriteItem.productDTOList?.some(
+        (product) => product.id.toString() === productId.toString()
+      )
+    );
+
+    isFavorite.value = isInFavorites;
+  } catch (error) {
+    console.error('에러 발생:', error);
+    isFavorite.value = false;
   }
 };
 
@@ -396,9 +448,9 @@ onMounted(() => {
 .divider {
   width: 100%;
   max-width: 62.5rem;
-  height: 0.0625rem;
-  background-color: var(--color-dark-gray);
-  margin: 1rem 0;
+  height: 0.06rem;
+  background-color: black;
+  position: relative;
 }
 
 .rating-row {
