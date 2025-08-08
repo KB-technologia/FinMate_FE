@@ -1,5 +1,8 @@
 <template>
   <div class="product-detail-card">
+    <button class="favorite-btn" @click="handleToggleFavorite">
+      <Heart class="heart-icon" :class="{ 'is-favorite': isFavorite }" />
+    </button>
     <div class="top-right-badge">
       <span
         class="product-type-badge"
@@ -55,7 +58,7 @@
 
       <div class="info-label">자유 입출금 가능</div>
       <div class="info-value">
-        {{ product.detail.isFlexible ? "가능" : "불가능" }}
+        {{ product.detail.isFlexible ? '가능' : '불가능' }}
       </div>
       <div class="info-label">상품 보러가기</div>
       <div class="info-value">
@@ -68,20 +71,31 @@
 </template>
 
 <script setup>
-import { getBankCodeFromName } from "@/utils/bank.js";
+import { getBankCodeFromName } from '@/utils/bank.js';
+import { Heart } from 'lucide-vue-next';
 
 const props = defineProps({
   product: {
     type: Object,
     required: true,
   },
+  isFavorite: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const emit = defineEmits(['toggle-favorite']);
+
+const handleToggleFavorite = () => {
+  emit('toggle-favorite');
+};
 
 const getTypeLabel = (type) => {
   const labels = {
-    DEPOSIT: "예금",
-    SAVINGS: "적금",
-    FUND: "펀드",
+    DEPOSIT: '예금',
+    SAVINGS: '적금',
+    FUND: '펀드',
   };
   return labels[type] || type;
 };
@@ -91,11 +105,11 @@ const getTypeClass = (type) => {
 };
 
 const formatRate = (rate) => {
-  return rate ? rate.toFixed(2) : "0.00";
+  return rate ? rate.toFixed(2) : '0.00';
 };
 
 const formatAmount = (amount) => {
-  return amount?.toLocaleString() || "0";
+  return amount?.toLocaleString() || '0';
 };
 
 const getBankImagePath = (bankName) => {
@@ -108,23 +122,23 @@ const getBankImagePath = (bankName) => {
 
 const handleImageError = (event) => {
   const wrapper = event.target.parentElement;
-  event.target.style.display = "none";
-  wrapper.style.backgroundColor = "#eee";
-  wrapper.textContent = product.bankName?.charAt(0) || "?";
+  event.target.style.display = 'none';
+  wrapper.style.backgroundColor = '#eee';
+  wrapper.textContent = product.bankName?.charAt(0) || '?';
 };
 
 const getInterestType = (type) => {
   const map = {
-    SIMPLE: "단리",
-    COMPOUND: "복리",
+    SIMPLE: '단리',
+    COMPOUND: '복리',
   };
   return map[type] || type;
 };
 
 const getCompoundingPeriod = (period) => {
   const map = {
-    MONTHLY: "매월",
-    YEARLY: "매년",
+    MONTHLY: '매월',
+    YEARLY: '매년',
   };
   return map[period] || period;
 };
@@ -140,6 +154,62 @@ const getCompoundingPeriod = (period) => {
   border-radius: 1.25rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   position: relative;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 0.15vw solid #e8f5e8;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.favorite-btn:hover {
+  background: #4caf50;
+  border-color: #4caf50;
+  transform: scale(1.1);
+}
+
+.favorite-btn:hover .heart-icon {
+  color: white;
+}
+
+.heart-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: #4caf50;
+  transition: all 0.3s ease;
+  stroke-width: 2;
+}
+
+.heart-icon.is-favorite {
+  color: #4caf50;
+  fill: #4caf50;
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.3);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .top-right-badge {
