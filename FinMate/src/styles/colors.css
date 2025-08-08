@@ -79,4 +79,7 @@
   --color-bar-track: #eceff3;
   --color-exp-track: #e6f8ee;
   --color-exp-fill: #3ccb7f;
+
+  /* 툴팁 색상 */
+  --color-tooltip-green: #00c73c;
 }
