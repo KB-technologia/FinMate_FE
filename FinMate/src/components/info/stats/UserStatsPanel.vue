@@ -6,25 +6,31 @@
       @close="showGachaModal = false"
     />
     <div class="actions">
-      <button class="action-chip action-chip--ticket" @click="openTicketModal">
-        <img
-          src="@/assets/images/icons/ticket.png"
-          alt="티켓"
-          class="ticket-icon"
-        />
-        <span class="ticket-count">x{{ ticketCount }}</span>
-      </button>
-
-      <button
-        class="action-chip action-chip--explore"
-        @click="$router.push('/quizstart')"
-      >
-        <ScrollText class="icon-scroll" />
-        <span>투자 성향 테스트</span>
-      </button>
+      <Tooltip text="보유한 교환권 확인" placement="bottom">
+        <button
+          class="action-chip action-chip--ticket"
+          @click="openTicketModal"
+        >
+          <img
+            src="@/assets/images/icons/ticket.png"
+            alt="티켓"
+            class="ticket-icon"
+          />
+          <span class="ticket-count">x{{ ticketCount }}</span>
+        </button>
+      </Tooltip>
+      <Tooltip text="다시 테스트 하러 가기" placement="bottom">
+        <button
+          class="action-chip action-chip--explore"
+          @click="$router.push('/quizstart')"
+        >
+          <ScrollText class="icon-scroll" />
+          <span>투자 성향 테스트</span>
+        </button>
+      </Tooltip>
     </div>
 
-    <h2 class="level-title">Lv.3 - {{ characterName || "알 수 없음" }}</h2>
+    <h2 class="level-title">Lv.3 - {{ characterName || "소심한 펭귄" }}</h2>
 
     <div class="character-section">
       <img
@@ -110,6 +116,7 @@ import { ref, computed, onMounted } from "vue";
 import { ScrollText, Info } from "lucide-vue-next";
 
 import defaultPenguin from "@/assets/images/animals/penguin.png";
+import Tooltip from "@/components/allshared/Tooltip.vue";
 import ToastContainer from "@/components/allshared/ToastContainer.vue";
 import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
 import { getMemberCharacter } from "@/api/info/userStatsAPI.js";
@@ -165,11 +172,11 @@ onMounted(async () => {
     characterImage.value = characterData?.animalImage
       ? `${BASE_API_URL}${characterData.animalImage}`
       : defaultPenguin;
-    characterName.value = characterData?.animalName || "알 수 없음";
+    characterName.value = characterData?.animalName || "소심한 펭귄";
   } catch (e) {
     console.error("❌ 캐릭터 정보 요청 실패", e);
     characterImage.value = defaultPenguin;
-    characterName.value = "알 수 없음";
+    characterName.value = "소심한 펭귄";
   }
 });
 </script>
