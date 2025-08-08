@@ -2,7 +2,7 @@
 import Sidebar from "@/components/info/Sidebar.vue";
 import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
 import RightPanel from "@/components/info/RightPanel.vue";
-import UserStatsPanel from "@/components/info/UserStatsPanel.vue";
+import UserStatsPanel from "@/components/info/stats/UserStatsPanel.vue";
 import FooterComponent from "../../components/allshared/FooterComponent.vue";
 </script>
 

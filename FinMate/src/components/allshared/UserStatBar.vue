@@ -23,8 +23,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-
 const props = defineProps({
   label: String,
   percent: Number,
@@ -58,7 +56,7 @@ const handleClick = () => {
 .bar-track {
   flex: 1;
   height: 26px;
-  background-color: var(--color-white);
+  background-color: #e9ecef;
   border-radius: 14px;
   overflow: hidden;
   border: 2px solid transparent;
