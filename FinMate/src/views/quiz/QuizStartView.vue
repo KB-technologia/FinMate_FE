@@ -24,8 +24,8 @@
               class="quiz-start-image"
             />
             <div class="speech-bubble">
-              <p>나와 함께</p>
-              <p>테스트 해볼래?</p>
+              <p class="speech-text">나와 함께</p>
+              <p class="speech-text">테스트 해볼래?</p>
             </div>
           </div>
           <button @click="startQuiz">시작하기</button>
@@ -136,34 +136,21 @@ const startQuiz = () => {
   font-size: 1.2rem;
   text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: var(--color-black);
   position: relative;
   background: var(--color-main-button);
   border-radius: 2vh;
-  padding: 1vh;
   font-weight: var(--font-weight-medium);
-}
-.speech-bubble:after {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 0;
-  height: 0;
-  border: 1em solid transparent;
-  border-right-color: var(--color-main-button);
-  border-left: 0;
-  border-bottom: 0;
-  margin-top: -0.5em;
-  margin-left: 0.3em;
 }
 
 .speech-bubble::after {
   content: '';
   position: absolute;
   top: 50%;
-  left: -1.2vw;
+  left: -1vw;
   transform: translateY(-50%);
   width: 0;
   height: 0;
@@ -172,6 +159,9 @@ const startQuiz = () => {
   border-left: 0;
 }
 
+.speech-text {
+  margin-top: 1vh;
+}
 button {
   background-color: var(--color-main-button);
   width: 15vw;
