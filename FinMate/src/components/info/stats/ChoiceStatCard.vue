@@ -9,6 +9,7 @@
         type="button"
         class="chip"
         :class="{ selected: modelValue === t }"
+        :disabled="readonly"
         @click="emit('update:modelValue', t)"
       >
         {{ t }}
@@ -42,6 +43,7 @@ const props = defineProps({
   descriptions: Object,
   rangeHint: Object,
   expanded: Boolean,
+  readonly: { type: Boolean, default: false },
 });
 const emit = defineEmits(["update:modelValue", "toggle"]);
 

@@ -55,6 +55,7 @@
         :summary="descs.value.summary"
         :descriptions="descs.value.descriptions"
         :expanded="activeCard === 'value'"
+        :readonly="true"
         @toggle="toggle('value')"
       />
 
@@ -67,6 +68,7 @@
         :descriptions="descs.speed.descriptions"
         :rangeHint="descs.speed.rangeHint"
         :expanded="activeCard === 'speed'"
+        :readonly="true"
         @toggle="toggle('speed')"
       />
 
@@ -78,6 +80,7 @@
         :summary="descs.luckStrategy.summary"
         :descriptions="descs.luckStrategy.descriptions"
         :expanded="activeCard === 'luckStrategy'"
+        :readonly="true"
         @toggle="toggle('luckStrategy')"
       />
 
@@ -119,6 +122,7 @@ import defaultPenguin from "@/assets/images/animals/penguin.png";
 import Tooltip from "@/components/allshared/Tooltip.vue";
 import ToastContainer from "@/components/allshared/ToastContainer.vue";
 import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
+import { getMemberStat } from "@/api/main/main.js";
 import { getMemberCharacter } from "@/api/info/userStatsAPI.js";
 
 import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
@@ -146,13 +150,18 @@ const toggle = (key) => {
 };
 
 // TODO: 선택값(임시)
-const selectedValueType = ref("성장형");
-const selectedSpeed = ref("중간");
-const selectedLuckOrStrategy = ref("전략");
+// const selectedValueType = ref("성장형");
+// const selectedSpeed = ref("중간");
+// const selectedLuckOrStrategy = ref("전략");
+const selectedValueType = ref("");
+const selectedSpeed = ref("");
+const selectedLuckOrStrategy = ref("");
 
 // TODO: 바 퍼센트(임시)
-const financePercent = ref(60);
-const adventurePercent = ref(40);
+// const financePercent = ref(60);
+// const adventurePercent = ref(40);
+const financePercent = ref(0);
+const adventurePercent = ref(0);
 
 const toLevel = (p) => (p >= 75 ? 3 : p >= 50 ? 2 : p >= 25 ? 1 : 0);
 const financeLevel = computed(() => toLevel(financePercent.value));
@@ -168,15 +177,22 @@ const adventureDesc = computed(
 
 onMounted(async () => {
   try {
-    const characterData = await getMemberCharacter();
-    characterImage.value = characterData?.animalImage
-      ? `${BASE_API_URL}${characterData.animalImage}`
-      : defaultPenguin;
-    characterName.value = characterData?.animalName || "소심한 펭귄";
+    const stat = await getMemberStat();
+    console.log("☑️ /api/my-page/stat 응답:", stat);
+    financePercent.value = Math.max(
+      0,
+      Math.min(100, (stat.financeScore / 3) * 100)
+    );
+    adventurePercent.value = Math.max(
+      0,
+      Math.min(100, (stat.adventureScore / 3) * 100)
+    );
+    selectedValueType.value = descs.value.enumToLabel?.[stat.valueTag] ?? "";
+    selectedSpeed.value = descs.speed.enumToLabel?.[stat.speedTag] ?? "";
+    selectedLuckOrStrategy.value =
+      descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? "";
   } catch (e) {
-    console.error("❌ 캐릭터 정보 요청 실패", e);
-    characterImage.value = defaultPenguin;
-    characterName.value = "소심한 펭귄";
+    console.warn("사용자 스탯 조회 실패:", e);
   }
 });
 </script>
