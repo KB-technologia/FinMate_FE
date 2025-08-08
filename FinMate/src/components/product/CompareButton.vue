@@ -196,7 +196,7 @@ const handleImageError = (event, bankName) => {
   transform: translateX(-50%);
   z-index: 1000;
   width: calc(100% - 4vw);
-  max-width: 42vw;
+  max-width: 46vw;
 }
 
 /* VS 비교 카드 (2개 선택 시) */
