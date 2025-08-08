@@ -1,39 +1,39 @@
 <template>
   <div class="Product-Container">
-    <span class="Product-Text">
-      <p v-if="isLoggedIn">사용자 맞춤 추천 상품</p>
-      <p v-if="!isLoggedIn">랜덤 추천 상품</p></span
-    >
-
-    <div class="button-container">
-      <div
-        @click="prev"
-        :class="['arrow-button', { disabled: currentIndex === 0 }]"
-      >
-        ◀
-      </div>
-
-      <div class="CardContainer">
-        <MainProductCard
-          v-for="(item, index) in visibleProducts"
-          :key="index"
-          :product="item"
-        />
-      </div>
-
-      <div
-        @click="next"
-        :class="[
-          'arrow-button',
-          { disabled: currentIndex + 4 >= products.length },
-        ]"
-      >
-        ▶
-      </div>
+    <div v-if="isLoading" class="spinner-wrapper">
+      <div class="loader"></div>
     </div>
-    <button class="detail-button" @click="goToProducts">
-      <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
-    </button>
+    <div v-else class="Product-Container">
+      <div class="button-container">
+        <div
+          @click="prev"
+          :class="['arrow-button', { disabled: currentIndex === 0 }]"
+        >
+          ◀
+        </div>
+
+        <div class="CardContainer">
+          <MainProductCard
+            v-for="(item, index) in visibleProducts"
+            :key="index"
+            :product="item"
+          />
+        </div>
+
+        <div
+          @click="next"
+          :class="[
+            'arrow-button',
+            { disabled: currentIndex + 4 >= products.length },
+          ]"
+        >
+          ▶
+        </div>
+      </div>
+      <button class="detail-button" @click="goToProducts">
+        <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
+      </button>
+    </div>
   </div>
 </template>
 
@@ -53,9 +53,10 @@ const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 
 const products = ref([]);
-
+const isLoading = ref(true);
 onMounted(async () => {
   try {
+    isLoading.value = true;
     if (isLoggedIn.value) {
       const allResult = await getAllRecommendations();
       console.log('✅ 전체 추천 결과:', allResult);
@@ -67,6 +68,8 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error('❌ 추천 상품 요청 실패:', error);
+  } finally {
+    isLoading.value = false;
   }
 });
 
@@ -173,5 +176,31 @@ const next = () => {
   pointer-events: none;
   opacity: 0.3;
   cursor: default;
+}
+
+.spinner-wrapper {
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  border: 0.8vh solid var(--color-white);
+  border-top: 0.8vh solid var(--color-main-button);
+  border-radius: 50%;
+  width: 10vh;
+  height: 10vh;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
