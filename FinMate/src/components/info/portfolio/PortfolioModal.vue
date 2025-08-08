@@ -1,6 +1,8 @@
+``
 <script setup>
 import { ref, onMounted } from 'vue';
 import { createPortfolio, updatePortfolio } from '@/api/portfolio/portfolio.js';
+import { Info } from 'lucide-vue-next';
 
 const emit = defineEmits(['close', 'save']);
 const error = ref(false);
@@ -57,6 +59,7 @@ async function onSubmit() {
   try {
     if (props.mode === 'edit') {
       await updatePortfolio(fullData);
+      console.log(fullData);
     } else {
       await createPortfolio(fullData);
     }
@@ -97,6 +100,10 @@ function onCancel() {
       <div class="btn-group">
         <button class="btn-cancel" @click="onCancel">취소</button>
         <button class="btn-submit" @click="onSubmit">저장</button>
+      </div>
+      <div>
+        <info size="3%" class="info-img" /> 기타자산은 예금, 적금, 채권, 펀드,
+        주식을 제외한 금융자산을 의미합니다.
       </div>
     </div>
   </div>
@@ -214,5 +221,9 @@ input {
 .btn-cancel:hover {
   color: var(--color-white);
   background-color: var(--color-red);
+}
+
+.info-img {
+  color: var(--color-dark-gray);
 }
 </style>
