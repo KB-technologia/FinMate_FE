@@ -109,7 +109,6 @@ const emit = defineEmits([
 // 반응형 데이터
 const currentPage = ref(1);
 const pageSize = ref(12);
-// const sortOrder = ref('expectedReturn-desc');
 
 // Computed 속성들
 const totalProducts = computed(() => props.products.length);

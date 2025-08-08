@@ -216,9 +216,10 @@ const subCategoriesMap = {
   FUND: [
     { code: 'STOCK', name: '주식형' },
     { code: 'BOND', name: '채권형' },
-    { code: 'MIXED', name: '혼합형' },
-    { code: 'ETF', name: 'ETF' },
-    { code: 'REIT', name: 'REIT' },
+    { code: 'MIXED_EQUITY_BOND', name: '혼합형' },
+    { code: 'REAL_ESTATE', name: '부동산' },
+    { code: 'SPECIAL_ASSET', name: '특별자산' },
+    { code: 'HYBRID_ASSET', name: '파생상품' },
   ],
 };
 

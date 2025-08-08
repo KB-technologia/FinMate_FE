@@ -43,7 +43,7 @@
 
       <!-- 펀드인 경우 위험등급 표시 -->
       <div class="risk-info" v-if="product.productType === 'FUND'">
-        <span class="risk-label">위험등급</span>
+        <span class="risk-label">위험도</span>
         <span class="risk-grade" :class="getRiskClass(product.riskGrade)">
           {{ getRiskName(product.riskGrade) }}
         </span>
@@ -151,12 +151,12 @@ const getRiskClass = (riskGrade) => {
 
 const getRiskName = (riskGrade) => {
   const names = {
-    1: '매우낮은위험',
-    2: '낮은위험',
-    3: '보통위험',
-    4: '다소높은위험',
-    5: '높은위험',
-    6: '매우높은위험',
+    2: '매우 낮은 위험',
+    3: '낮은 위험',
+    4: '보통 위험',
+    5: '다소 높은 위험',
+    6: '높은 위험',
+    7: '매우 높은 위험',
   };
   return names[riskGrade] || '보통위험';
 };
