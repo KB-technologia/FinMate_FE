@@ -6,6 +6,7 @@ import TrueButton from '@/components/dailyquiz/TrueButton.vue';
 import CloseButton from '@/components/allshared/CloseButton.vue';
 import CorrectAnswerModal from '@/components/dailyquiz/CorrectAnswerModal.vue';
 import WrongAnswerModal from '@/components/dailyquiz/WrongAnswerModal.vue';
+import { updateQuizSolved } from '@/api/dailyquiz/dailyQuizSolved.js';
 
 const emit = defineEmits(['close']);
 
@@ -34,8 +35,10 @@ async function checkAnswer(userAnswer) {
     console.log(isAnswer.value);
     if (correctAnswer) {
       showCorrectModal.value = true;
+      updateQuizSolved();
     } else {
       showWrongModal.value = true;
+      updateQuizSolved();
     }
   } catch (error) {
     console.error('정답 확인 실패', error);
