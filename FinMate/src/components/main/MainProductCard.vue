@@ -204,7 +204,7 @@ const truncatedName = computed(() => {
 }
 
 .card-container:hover {
-  border: 0.2vh solid var(--color-light-blue);
+  border: 0.2vh solid var(--color-black);
   cursor: pointer;
   transform: translateY(-0.8vh);
 }
