@@ -1,9 +1,9 @@
 <script setup>
-import Sidebar from '@/components/info/Sidebar.vue';
-import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
-import RightPanel from '@/components/info/RightPanel.vue';
-import UserStatsPanel from '@/components/info/UserStatsPanel.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import Sidebar from "@/components/info/Sidebar.vue";
+import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import RightPanel from "@/components/info/RightPanel.vue";
+import UserStatsPanel from "@/components/info/UserStatsPanel.vue";
+import FooterComponent from "../../components/allshared/FooterComponent.vue";
 </script>
 
 <template>
@@ -49,7 +49,6 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
 }
 
 .stats-right-panel {
-  background-color: var(--color-primary-yellow);
   padding: 2rem;
 }
 </style>
