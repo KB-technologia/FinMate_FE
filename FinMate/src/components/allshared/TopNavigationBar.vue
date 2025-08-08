@@ -105,7 +105,7 @@ const route = useRoute();
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: 1vw;
+
   width: 100%;
   height: 100%;
 }
@@ -117,7 +117,7 @@ const route = useRoute();
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 1vw;
+  margin-right: 2vw;
 }
 
 .top-navigation-menu-right-item:hover {
