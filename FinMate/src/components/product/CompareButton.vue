@@ -177,6 +177,9 @@ const getBankCodeFromName = (bankName) => {
   // 매칭되지 않으면 첫 글자 사용
   return bankName.charAt(0).toLowerCase();
 };
+const getBankInitial = (bankName) => {
+  return bankName.charAt(0);
+};
 
 // 이미지 로드 실패 시 처리
 const handleImageError = (event, bankName) => {
@@ -184,6 +187,8 @@ const handleImageError = (event, bankName) => {
   const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
   bankIcon.style.color = 'inherit';
+  bankIcon.style.fontSize = '1.2rem';
+  bankIcon.style.fontWeight = '600';
   bankIcon.textContent = getBankInitial(bankName);
 };
 </script>
@@ -327,9 +332,9 @@ const handleImageError = (event, bankName) => {
 }
 
 .product-name {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 700;
-  margin: 0;
+  margin: 0.1rem 0.6rem 0.1rem 0;
   line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
