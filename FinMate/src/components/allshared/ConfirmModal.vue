@@ -17,17 +17,15 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
-
 const props = defineProps({
   firsttext: { type: String, required: true },
-  secondtext: { type: String, required: false, default: '' },
+  secondtext: { type: String, required: false, default: "" },
   leftButtonText: { type: String, required: true },
   rightButtonText: { type: String, required: true },
-  images: { type: String, required: false, default: '' },
+  images: { type: String, required: false, default: "" },
 });
 
-const emit = defineEmits(['confirm']);
+const emit = defineEmits(["confirm"]);
 </script>
 
 <style scoped>
