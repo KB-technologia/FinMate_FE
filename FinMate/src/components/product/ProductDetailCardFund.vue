@@ -68,6 +68,7 @@
 <script setup>
 import { getBankCodeFromName } from '@/utils/bank.js';
 import { Heart } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 const props = defineProps({
   product: {
@@ -107,19 +108,28 @@ const formatAmount = (amount) => {
   return amount?.toLocaleString() || '0';
 };
 
+// 은행 이미지 경로 생성
 const getBankImagePath = (bankName) => {
   const bankCode = getBankCodeFromName(bankName);
-  return new URL(
-    `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-    import.meta.url
-  ).href;
+  try {
+    return new URL(
+      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
+      import.meta.url
+    ).href;
+  } catch {
+    // 이미지 로드 실패 시 대체 경로
+    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
+  }
 };
 
+// 이미지 로드 실패 시 처리
 const handleImageError = (event) => {
-  const wrapper = event.target.parentElement;
+  // 이미지 로드 실패 시 텍스트로 대체
+  const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
-  wrapper.style.backgroundColor = '#eee';
-  wrapper.textContent = product.bankName?.charAt(0) || '?';
+  bankIcon.style.backgroundColor = '#f0f0f0';
+  bankIcon.style.color = '#666';
+  bankIcon.textContent = props.product.bankName.charAt(0);
 };
 
 const getRiskLevelLabel = (level) => {
@@ -140,7 +150,8 @@ const getRiskLevelLabel = (level) => {
   max-width: 62.5rem;
   margin: 0 auto;
   padding: 2.5rem;
-  background-color: var(--color-primary-yellow);
+  background-color: white;
+  border: 1px solid #e0e0e0;
   border-radius: 1.25rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   position: relative;
@@ -237,10 +248,14 @@ const getRiskLevelLabel = (level) => {
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #f5f5f5;
+  font-weight: 700;
+  font-size: 2.4rem;
+  color: #666;
+  overflow: hidden; /* 이미지가 원형을 벗어나지 않도록 */
 }
 
 .bank-logo {
