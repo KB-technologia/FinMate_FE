@@ -115,10 +115,8 @@ const onSubmit = async () => {
   try {
     const result = await postAssessment(selectedAnswers.value);
     console.log('Assessment 결과:', result);
-    if (result?.status === 200) {
-      router.push('/');
-      toast('투자 테스트가 완료되었습니다. 스탯을 확인해주세요.', 'success');
-    }
+    router.push('/');
+    toast('투자 테스트가 완료되었습니다. 스탯을 확인해주세요.', 'success');
   } catch (error) {
     console.error('Assessment 요청 실패:', error);
     toast('투자 테스트 제출에 실패하였습니다. 다시 확인해주세요.', 'error');
