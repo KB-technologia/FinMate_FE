@@ -18,10 +18,10 @@ const showModifyModal = ref(false);
 
 const chartInstance = ref(null);
 const chartCanvasRef = ref(null);
-const toastRef = ref(null);
+const toastRef = ref();
 
 onMounted(() => {
-  toastRef.value?.addToast('마이데이터가 정상적으로 로딩되었어요!');
+  toastRef.value?.addToast('마이데이터가 정상적으로 로딩되었어요!', 'success');
 });
 
 function handleSave() {
