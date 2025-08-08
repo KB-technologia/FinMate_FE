@@ -45,7 +45,6 @@ const routes = [
     path: '/find-id',
     name: 'findId',
     component: () => import('@/views/auth/FindIdView.vue'),
-
   },
   {
     path: '/reset-pw',
@@ -62,11 +61,6 @@ const routes = [
   {
     path: '/product/:id',
     name: 'detailProduct',
-    component: () => import('@/views/product/DetailProductView.vue'),
-  },
-  {
-    path: '/product/demo/reviews',
-    name: 'productReviewTest',
     component: () => import('@/views/product/DetailProductView.vue'),
   },
   {
