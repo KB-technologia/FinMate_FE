@@ -1,7 +1,11 @@
 <template>
   <div v-if="isLoggedIn" class="show-stats-container-notlogin">
-    <div v-if="isstats" class="stats">
-      <div v-if="statData" class="stat-bar-wrapper">
+    <!-- STAT SECTION -->
+    <div class="stats">
+      <div v-if="isLoadingStats" class="spinner-wrapper">
+        <div class="loader"></div>
+      </div>
+      <div v-else-if="isstats" class="stat-bar-wrapper">
         <div class="stat-row">
           <span class="stat-label"
             ><span class="icon"><Swords /></span>모험 점수</span
@@ -21,8 +25,8 @@
         </div>
 
         <div class="stat-row">
-          <span class="stat-label">
-            <span class="icon"><Coins /></span>재정 점수</span
+          <span class="stat-label"
+            ><span class="icon"><Coins /></span>재정 점수</span
           >
           <div class="stat-bar-outer">
             <div
@@ -37,20 +41,21 @@
             >{{ statData.financeScore.toFixed(1) }} / 3.0</span
           >
         </div>
+
         <div class="char-stat">
           <p>
-            <span class="icon"><Gauge /></span>
-            {{ getSpeedLabel(statData.speedTag) }}
+            <span class="icon"><Gauge /></span
+            >{{ getSpeedLabel(statData.speedTag) }}
           </p>
           <p>|</p>
           <p>
-            <span class="icon"><Brain /></span>
-            {{ getLuckStrategy(statData.strategyTag) }}
+            <span class="icon"><Brain /></span
+            >{{ getLuckStrategy(statData.strategyTag) }}
           </p>
           <p>|</p>
           <p>
-            <span class="icon"><Sparkle /></span>
-            {{ getValue(statData.valueTag) }}
+            <span class="icon"><Sparkle /></span
+            >{{ getValue(statData.valueTag) }}
           </p>
         </div>
 
@@ -58,29 +63,35 @@
           자세히 보기
         </button>
       </div>
-    </div>
-    <div v-if="!isstats" class="no-stats">
-      <div>
-        <img
-          class="animal-image-logo"
-          src="@/assets/images/animals/penguin.png"
-        />
+      <div v-else class="no-stats">
+        <div>
+          <img
+            class="animal-image-logo"
+            src="@/assets/images/animals/penguin.png"
+          />
+        </div>
+        <div class="no-login-content">
+          <p class="nologin-text">
+            추천 아이템을 받으려면 <br />투자 성향 테스트를 진행해주세요!
+          </p>
+          <button class="detail-button" @click="goToTest">
+            테스트 시작하기
+          </button>
+        </div>
       </div>
-      <div class="no-login-content">
-        <p class="nologin-text">
-          추천 아이템을 받으려면 <br />
-          투자 성향 테스트를 진행해주세요!
-        </p>
-        <button class="detail-button" @click="goToTest">테스트 시작하기</button>
-      </div>
     </div>
+
+    <!-- PORTFOLIO SECTION -->
     <div
-      v-if="isPortfolio"
       class="portfolio"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
     >
+      <div v-if="isLoadingPortfolio" class="spinner-wrapper">
+        <div class="loader"></div>
+      </div>
       <div
+        v-else-if="isPortfolio"
         class="no-login-content portfolio-animated"
         :class="{ revealed: portfolioRevealed }"
       >
@@ -98,39 +109,22 @@
           자세히 보기
         </button>
       </div>
-    </div>
-    <div v-if="!isPortfolio" class="no-portfolio">
-      <div>
-        <img
-          class="animal-image-logo"
-          src="@/assets/images/animals/capybara.png"
-        />
+      <div v-else class="no-login-content">
+        <div>
+          <img
+            class="animal-image-logo"
+            src="@/assets/images/animals/capybara.png"
+          />
+        </div>
+        <div class="no-login-content">
+          <p class="nologin-text">
+            더 정확한 추천을 위해 <br />포트폴리오를 생성해주세요!
+          </p>
+          <button class="detail-button" @click="goToPortfolio">
+            포트폴리오 생성하기
+          </button>
+        </div>
       </div>
-      <div class="no-login-content">
-        <p class="nologin-text">
-          더 정확한 추천을 위해 <br />포트폴리오를 생성해주세요!
-        </p>
-        <button class="detail-button" @click="goToPortfolio">
-          포트폴리오 생성하기
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 비로그인 상태일 때: 랜덤 이미지 & 문구 -->
-  <div v-if="!isLoggedIn" class="show-stats-container">
-    <div class="description">
-      당신의 투자 성향은 어떤 동물일까요? 지금 회원가입을 통해 확인해보세요!
-    </div>
-    <div class="image-wrapper">
-      <img
-        v-for="(img, index) in currentImages"
-        :key="index"
-        :src="img"
-        class="animal-image"
-        :class="{ 'fade-in': animate }"
-        alt="animal"
-      />
     </div>
   </div>
 </template>
@@ -139,131 +133,70 @@
 import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useRouter } from 'vue-router';
-import { getPortfolio } from '@/api/main/main.js';
-import { getMemberStat } from '@/api/main/main.js';
-import { Swords } from 'lucide-vue-next';
-import { Coins } from 'lucide-vue-next';
-import { Gauge } from 'lucide-vue-next';
-import { Brain } from 'lucide-vue-next';
-import { Sparkle } from 'lucide-vue-next';
+import { getPortfolio, getMemberStat } from '@/api/main/main.js';
+import { Swords, Coins, Gauge, Brain, Sparkle } from 'lucide-vue-next';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 const isstats = ref(false);
 const isPortfolio = ref(false);
+const isLoadingStats = ref(true);
+const isLoadingPortfolio = ref(true);
 const portfolioData = ref(null);
 const statData = ref(null);
+const portfolioRevealed = ref(false);
+let hoverTimer = null;
 
-const goToStatsPage = () => {
-  router.push('/my-stats');
+const goToStatsPage = () => router.push('/my-stats');
+const goToPortfolio = () => router.push('/my-portfolio');
+const goToTest = () => router.push('/quizstart');
+
+const handleMouseEnter = () => {
+  hoverTimer = setTimeout(() => (portfolioRevealed.value = true), 0);
+};
+const handleMouseLeave = () => {
+  clearTimeout(hoverTimer);
+  portfolioRevealed.value = false;
 };
 
-const goToPortfolio = () => {
-  router.push('/my-portfolio');
-};
-
-const goToTest = () => {
-  router.push('/quizstart');
-};
-
-const images = [
-  new URL('@/assets/images/animals/cat.png', import.meta.url).href,
-  new URL('@/assets/images/animals/capybara.png', import.meta.url).href,
-  new URL('@/assets/images/animals/desertfox.png', import.meta.url).href,
-  new URL('@/assets/images/animals/flyingsquirrel.png', import.meta.url).href,
-  new URL('@/assets/images/animals/kiwibird.png', import.meta.url).href,
-  new URL('@/assets/images/animals/koala.png', import.meta.url).href,
-  new URL('@/assets/images/animals/panda.png', import.meta.url).href,
-  new URL('@/assets/images/animals/penguin.png', import.meta.url).href,
-  new URL('@/assets/images/animals/redpanda.png', import.meta.url).href,
-  new URL('@/assets/images/animals/seaotter.png', import.meta.url).href,
-];
-
-const currentImages = ref([]);
-const animate = ref(true);
-
-function getRandomImages() {
-  const shuffled = images.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, 8);
-}
+const getSpeedLabel = (speed) =>
+  ({ FAST: '빠름', MEDIUM: '중간', SLOW: '느림', VERY_SLOW: '매우 느림' }[
+    speed
+  ] || speed);
+const getLuckStrategy = (strategy) =>
+  ({ LUCK: '운', STRATEGY: '전략' }[strategy] || strategy);
+const getValue = (value) =>
+  ({
+    SURVIVAL: '생존형',
+    STABILITY: '안정형',
+    GROWTH: '성장형',
+    HIGH_RETURN: '고수익형',
+  }[value] || value);
 
 onMounted(async () => {
-  currentImages.value = getRandomImages();
-  setInterval(() => {
-    animate.value = false;
-    setTimeout(() => {
-      currentImages.value = getRandomImages();
-      animate.value = true;
-    }, 400);
-  }, 2500);
-
   if (isLoggedIn.value) {
     try {
       const portfolio = await getPortfolio();
       isPortfolio.value = !!portfolio && Object.keys(portfolio).length > 0;
       portfolioData.value = portfolio;
     } catch (e) {
-      if (e.response && e.response.status === 404) {
-        isPortfolio.value = false;
-      }
+      if (e.response?.status === 404) isPortfolio.value = false;
+    } finally {
+      isLoadingPortfolio.value = false;
     }
 
     try {
       const stat = await getMemberStat();
       isstats.value = !!stat && Object.keys(stat).length > 0;
       statData.value = stat;
-      console.log('📊 Member Stat:', stat);
     } catch (e) {
-      if (e.response && e.response.status === 404) {
-        isstats.value = false;
-      }
-      console.warn('📛 통계 조회 실패:', e);
+      if (e.response?.status === 404) isstats.value = false;
+    } finally {
+      isLoadingStats.value = false;
     }
   }
 });
-
-const portfolioRevealed = ref(false);
-let hoverTimer = null;
-
-const handleMouseEnter = () => {
-  hoverTimer = setTimeout(() => {
-    portfolioRevealed.value = true;
-  }, 0);
-};
-
-const handleMouseLeave = () => {
-  clearTimeout(hoverTimer);
-  portfolioRevealed.value = false;
-};
-
-const getSpeedLabel = (speed) => {
-  const map = {
-    FAST: '빠름',
-    MEDIUM: '중간',
-    SLOW: '느림',
-    VERY_SLOW: '매우 느림',
-  };
-  return map[speed] || speed;
-};
-
-const getLuckStrategy = (strategy) => {
-  const map = {
-    LUCK: '운',
-    STRATEGY: '전략',
-  };
-  return map[strategy] || strategy;
-};
-
-const getValue = (value) => {
-  const map = {
-    SURVIVAL: '생존형',
-    STABILITY: '안정형',
-    GROWTH: '성장형',
-    HIGH_RETURN: '고수익형',
-  };
-  return map[value] || value;
-};
 </script>
 
 <style scoped>
@@ -492,5 +425,29 @@ const getValue = (value) => {
 
 .icon {
   padding: 1vh;
+}
+
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.loader {
+  border: 0.5vh solid var(--color-white);
+  border-top: 0.5vh solid var(--color-main-button);
+  border-radius: 50%;
+  width: 10vh;
+  height: 10vh;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
