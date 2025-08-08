@@ -1,9 +1,7 @@
 <template>
   <div class="profile-container">
     <div v-if="isLoggedIn" class="profile-header">
-      <button class="quiz-button" @click="showQuizModal = true">
-        오늘의 퀴즈
-      </button>
+      <button class="quiz-button" @click="openQuizModal">오늘의 퀴즈</button>
       <div class="logout-button" @click="handleLoginClick">
         <img
           src="@/assets/images/icons/LogoutRounded.png"
@@ -65,6 +63,7 @@ import { ref, computed } from 'vue';
 import DailyQuizModal from '@/components/dailyquiz/DailyQuizModal.vue';
 import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
 import logoutImage from '@/assets/images/logos/logoutkiwi.png';
+import { getQuizSolved } from '@/api/dailyquiz/dailyQuizSolved.js';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -87,6 +86,21 @@ function handleLogoutConfirm(confirmed) {
   showLogoutConfirm.value = false;
   if (confirmed) {
     authStore.logout();
+  }
+}
+
+async function openQuizModal() {
+  try {
+    const res = await getQuizSolved();
+    console.log('퀴즈 풀이 상태', res.data.quizSolved);
+    if (res.data.quizSolved == false) {
+      showQuizModal.value = true;
+    } else if (res.data.quizSolved == true) {
+      //Todo : alert 대신 다른 방법
+      alert('오늘은 이미 퀴즈를 푸셨군요?');
+    }
+  } catch (error) {
+    console.error('퀴즈 로딩 실패', error);
   }
 }
 </script>
