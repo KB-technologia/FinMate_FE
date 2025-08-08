@@ -1,5 +1,10 @@
 <template>
   <div class="stats-panel">
+    <CharacterGachaModal
+      v-if="showGachaModal"
+      @confirm="handleGachaConfirm"
+      @close="showGachaModal = false"
+    />
     <button class="ticket-badge" @click="openTicketModal">
       <img
         src="@/assets/images/icons/ticket.png"
@@ -60,6 +65,7 @@ import { PawPrint, ScanSearch } from "lucide-vue-next";
 import defaultPenguin from "@/assets/images/animals/penguin.png";
 import UserStatBar from "@/components/allshared/UserStatBar.vue";
 import ToastContainer from "@/components/allshared/ToastContainer.vue";
+import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
 import { getMemberCharacter } from "@/api/info/userStatsAPI.js";
 
 const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
@@ -67,11 +73,12 @@ const characterImage = ref(defaultPenguin);
 const characterName = ref("");
 
 // TODO: 티켓 개수 (임시 하드코딩, 추후 API 연동 가능)
-const ticketCount = ref(3);
+const ticketCount = ref(2);
 
 const activeStat = ref(null);
 const toastRef = ref(null);
-const showSpeech = ref(true);
+// const showSpeech = ref(true);
+const showGachaModal = ref(false);
 
 const stats = [
   {
@@ -106,6 +113,14 @@ const stats = [
   },
 ];
 
+const openTicketModal = () => {
+  if (ticketCount.value <= 0) {
+    toastRef.value?.addToast("티켓이 없어요 🥲", "warning");
+    return;
+  }
+  showGachaModal.value = true;
+};
+
 const selectStat = (name) => {
   activeStat.value = name === activeStat.value ? null : name;
 };
@@ -120,12 +135,12 @@ const statDescription = computed(() => {
   return stat ? stat.description : "스탯을 클릭하면 세부 설명을 볼 수 있어요!";
 });
 
-const hideSpeech = () => {
-  showSpeech.value = false;
-};
+// const hideSpeech = () => {
+//   showSpeech.value = false;
+// };
 
 onMounted(async () => {
-  toastRef.value?.addToast("구름을 클릭하면 사라져요!", "info");
+  // toastRef.value?.addToast("구름을 클릭하면 사라져요!", "info");
 
   try {
     const characterData = await getMemberCharacter();
@@ -184,6 +199,16 @@ onMounted(async () => {
   padding: 0.5rem 0.8rem;
   border-radius: 20px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.ticket-badge:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.ticket-badge:active {
+  transform: translateY(1px);
+}
+.ticket-badge:focus-visible {
+  outline: 2px solid var(--color-primary-bluegray);
 }
 
 .ticket-icon {
