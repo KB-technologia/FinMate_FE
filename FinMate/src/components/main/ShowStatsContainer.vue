@@ -31,7 +31,7 @@
           <span class="stat-label">
             <div class="tooltip-wrapper">
               <span class="icon"><Coins /></span>
-              <span class="tooltip-text">금융 성향 점수</span>
+              <span class="tooltip-text">재정 체력</span>
             </div></span
           >
           <div class="stat-bar-outer">
