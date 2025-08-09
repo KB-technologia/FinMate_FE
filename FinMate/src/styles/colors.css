@@ -78,4 +78,7 @@
   /*exp 바 색상 */
   --color-exp-track: #e6f8ee;
   --color-exp-fill: #3ccb7f;
+
+  --color-logout-button: #f31111b1;
+  --color-product-color: #f7f7f78b;
 }
