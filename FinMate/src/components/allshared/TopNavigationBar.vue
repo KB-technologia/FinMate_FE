@@ -2,8 +2,12 @@
   <nav class="top-navigation-bar">
     <div class="empty-space"></div>
     <div class="top-navigation-bar-logo-container">
+      <img
+        src="@/assets/images/logos/kiwiLogo4.png"
+        class="top-navigation-bar-logo"
+      />
       <div class="top-navigation-bar-title" @click="$router.push('/')">
-        FIN MATE
+        FinMate
       </div>
     </div>
     <div class="top-navigation-menu-right">
@@ -74,16 +78,16 @@ const route = useRoute();
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 40vw;
+  justify-content: center;
+  width: 100%;
   height: 10vw;
 }
 
 .top-navigation-bar-logo {
-  width: 100vw;
-  height: 10vw;
+  width: 13%;
 }
 .empty-space {
-  width: 85%;
+  width: 100%;
   height: 100%;
 }
 .top-navigation-bar-title {
@@ -101,16 +105,19 @@ const route = useRoute();
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: 2vw;
-  width: 50vw;
+
+  width: 100%;
   height: 100%;
-  margin-right: 5vw;
 }
 
 .top-navigation-menu-right-item {
   width: 2vw;
   height: 3vh;
   transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2vw;
 }
 
 .top-navigation-menu-right-item:hover {
