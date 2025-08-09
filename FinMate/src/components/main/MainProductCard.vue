@@ -150,6 +150,10 @@ const getBankCodeFromName = (bankName) => {
   return bankName.charAt(0).toLowerCase();
 };
 
+const getBankInitial = (bankName) => {
+  return bankName.charAt(0);
+};
+
 const handleImageError = (event) => {
   const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
