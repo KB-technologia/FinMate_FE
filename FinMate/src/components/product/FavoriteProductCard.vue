@@ -130,7 +130,7 @@ const handleImageError = (event) => {
   bankIcon.style.justifyContent = 'center';
   bankIcon.style.fontSize = '2vh';
   bankIcon.style.fontWeight = 'bold';
-  bankIcon.style.width = '2.5vw';
+  bankIcon.style.width = '2vw';
   bankIcon.style.height = '4vh';
   bankIcon.style.borderRadius = '0.3vw';
   bankIcon.textContent = getBankInitial(props.product.bankName);
@@ -275,6 +275,7 @@ const applyProduct = () => {
   display: flex;
   align-items: center;
   gap: 0.5vw;
+  margin-top: 1vh;
   margin-bottom: 1.5vh;
 }
 
