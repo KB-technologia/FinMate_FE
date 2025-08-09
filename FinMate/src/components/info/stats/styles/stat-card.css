@@ -4,6 +4,7 @@
   background: var(--color-white);
   border-radius: 12px;
   padding: 0.9rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* 펼침 섹션 */
