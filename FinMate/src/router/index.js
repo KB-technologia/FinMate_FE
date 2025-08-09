@@ -26,14 +26,14 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
-    path: "/signup1",
-    name: "signup1",
-    component: () => import("@/views/auth/SignUpView1.vue"),
+    path: '/signup1',
+    name: 'signup1',
+    component: () => import('@/views/auth/SignUpView1.vue'),
   },
   {
-    path: "/signup/complete",
-    name: "signupComplete",
-    component: () => import("@/views/auth/SignupComplete.vue"),
+    path: '/signup/complete',
+    name: 'signupComplete',
+    component: () => import('@/views/auth/SignupComplete.vue'),
     meta: { requiresAuth: false },
   },
   {
@@ -64,14 +64,9 @@ const routes = [
     component: () => import("@/views/product/DetailProductView.vue"),
   },
   {
-    path: "/product/demo/reviews",
-    name: "productReviewTest",
-    component: () => import("@/views/product/DetailProductView.vue"),
-  },
-  {
-    path: "/recommend",
-    name: "recommendProduct",
-    component: () => import("@/views/product/RecommendProductView.vue"),
+    path: '/recommend',
+    name: 'recommendProduct',
+    component: () => import('@/views/product/RecommendProductView.vue'),
     meta: { requiresAuth: true },
   },
   // Info
@@ -134,6 +129,12 @@ const routes = [
     name: "quiz",
     component: () => import("@/views/quiz/QuizView.vue"),
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () => import('@/views/product/FavoritesView.vue'),
+    meta: { allowScroll: true, requiresAuth: true },
   },
   // 404
   {

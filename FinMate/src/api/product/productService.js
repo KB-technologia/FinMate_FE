@@ -89,4 +89,102 @@ export const productService = {
       }
     }
   },
+
+  // 즐겨찾기 목록 조회
+  async getFavoriteProducts() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return Promise.reject(new Error('로그인이 필요합니다.'));
+    }
+
+    try {
+      console.log('즐겨찾기 목록 조회 API 호출:', `${API_BASE_URL}/favorite`);
+      const response = await axios.get(`${API_BASE_URL}/favorite`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      console.log('저장된 토큰:', localStorage.getItem('token'));
+      console.error('즐겨찾기 목록 조회 실패:', error);
+      if (error.response) {
+        console.log('status:', error.response.status);
+        console.log('data:', error.response.data);
+      } else {
+        console.log('error:', error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 즐겨찾기 등록
+  async addToFavorite(productId) {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return Promise.reject(new Error('로그인이 필요합니다.'));
+    }
+
+    try {
+      console.log(
+        '즐겨찾기 등록 API 호출:',
+        `${API_BASE_URL}/favorite/${productId}`
+      );
+      const response = await axios.post(
+        `${API_BASE_URL}/favorite/${productId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('즐겨찾기 등록 실패:', error);
+      if (error.response) {
+        console.log('status:', error.response.status);
+        console.log('data:', error.response.data);
+      } else {
+        console.log('error:', error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 즐겨찾기 삭제
+  async removeFavorite(productId) {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return Promise.reject(new Error('로그인이 필요합니다.'));
+    }
+
+    try {
+      console.log(
+        '즐겨찾기 삭제 API 호출:',
+        `${API_BASE_URL}/favorite/${productId}`
+      );
+      const response = await axios.delete(
+        `${API_BASE_URL}/favorite/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('즐겨찾기 삭제 실패:', error);
+      if (error.response) {
+        console.log('status:', error.response.status);
+        console.log('data:', error.response.data);
+      } else {
+        console.log('error:', error.message);
+      }
+      throw error;
+    }
+  },
 };

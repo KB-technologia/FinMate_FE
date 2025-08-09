@@ -9,6 +9,13 @@
     <div class="top-navigation-menu-right">
       <div
         class="top-navigation-menu-right-item"
+        :class="{ active: route.path === '/favorites' }"
+        @click="$router.push('/favorites')"
+      >
+        <Heart class="icon-large heart-filled" />
+      </div>
+      <div
+        class="top-navigation-menu-right-item"
         :class="{ active: route.path === '/products' }"
         @click="$router.push('/products')"
       >
@@ -42,7 +49,7 @@
 
 <script setup>
 import '@/styles/fonts.css';
-import { CircleUserRound, PackageSearch } from 'lucide-vue-next';
+import { CircleUserRound, PackageSearch, Heart } from 'lucide-vue-next';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 </script>
