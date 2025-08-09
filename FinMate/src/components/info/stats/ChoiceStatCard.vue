@@ -1,5 +1,12 @@
 <template>
-  <div class="stat-card stat-choice" @click="emit('toggle')">
+  <div
+    class="stat-card stat-choice"
+    @click="emit('toggle')"
+    :style="{
+      borderLeft: `4px solid var(--infocard-color-${(index ?? 0) + 1})`,
+      '--chip-selected-bg': `var(--infocard-color-${(index ?? 0) + 1})`,
+    }"
+  >
     <div class="choice-label">{{ title }}</div>
 
     <div class="choice-chips" @click.stop>
@@ -36,6 +43,7 @@ import { computed } from "vue";
 import { ScanSearch } from "lucide-vue-next";
 
 const props = defineProps({
+  index: Number,
   title: String,
   chips: { type: Array, default: () => [] },
   modelValue: String,
@@ -54,10 +62,6 @@ const resultText = computed(
 
 <style src="./styles/stat-card.css" scoped></style>
 <style scoped>
-.stat-card {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
 .stat-choice {
   display: flex;
   flex-direction: column;
@@ -76,6 +80,7 @@ const resultText = computed(
 .chip {
   min-width: 5rem;
   border: 1px solid var(--color-gray-lightest);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   color: var(--color-black);
   padding: 0.45rem 0.8rem;
   border-radius: 40rem;
@@ -83,9 +88,10 @@ const resultText = computed(
   font-size: 0.95rem;
 }
 .chip.selected {
-  background: var(--color-primary-bluegray);
-  color: var(--color-white);
+  background: var(--chip-selected-bg);
+  color: var(--chip-selected-color, var(--color-white));
   border-color: transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .stat-choice .result-icon {

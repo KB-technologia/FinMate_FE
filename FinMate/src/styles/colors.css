@@ -82,4 +82,11 @@
 
   /* 툴팁 색상 */
   --color-tooltip-green: #00c73c;
+
+  /* stat 하이라이트 색상 */
+  --infocard-color-1: #faab9f;
+  --infocard-color-2: #80bded;
+  --infocard-color-3: #d38af3;
+  --infocard-color-4: #f99b0fa2;
+  --infocard-color-5: #458437af;
 }

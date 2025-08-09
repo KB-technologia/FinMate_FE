@@ -49,6 +49,7 @@
       </p>
       <!-- 가치관 -->
       <ChoiceStatCard
+        :index="0"
         title="가치관"
         :chips="descs.value.chips"
         v-model="selectedValueType"
@@ -61,6 +62,7 @@
 
       <!-- 속도 -->
       <ChoiceStatCard
+        :index="1"
         title="속도"
         :chips="descs.speed.chips"
         v-model="selectedSpeed"
@@ -74,6 +76,7 @@
 
       <!-- 운/전략 -->
       <ChoiceStatCard
+        :index="2"
         title="운/전략"
         :chips="descs.luckStrategy.chips"
         v-model="selectedLuckOrStrategy"
@@ -86,6 +89,7 @@
 
       <!-- 재정 (바) -->
       <BarStatCard
+        :index="3"
         label="재정"
         :percent="financePercent"
         color="var(--color-orange)"
@@ -99,6 +103,7 @@
 
       <!-- 모험 성향 (바) -->
       <BarStatCard
+        :index="4"
         label="모험 성향"
         :percent="adventurePercent"
         color="var(--color-survey-green)"
@@ -123,7 +128,6 @@ import Tooltip from "@/components/allshared/Tooltip.vue";
 import ToastContainer from "@/components/allshared/ToastContainer.vue";
 import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
 import { getMemberStat } from "@/api/main/main.js";
-import { getMemberCharacter } from "@/api/info/userStatsAPI.js";
 
 import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
 import BarStatCard from "@/components/info/stats/BarStatCard.vue";

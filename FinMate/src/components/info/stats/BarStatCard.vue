@@ -1,5 +1,9 @@
 <template>
-  <div class="stat-card stat-bar" @click="emit('toggle')">
+  <div
+    class="stat-card stat-bar"
+    @click="emit('toggle')"
+    :style="{ borderLeft: `4px solid var(--infocard-color-${index + 1})` }"
+  >
     <UserStatBar
       :label="label"
       :percent="percent"
@@ -29,6 +33,7 @@ import UserStatBar from "@/components/allshared/UserStatBar.vue";
 import { ScanSearch } from "lucide-vue-next";
 
 const props = defineProps({
+  index: Number,
   label: String,
   percent: Number,
   color: String,
@@ -44,9 +49,6 @@ const emit = defineEmits(["toggle"]);
 
 <style src="./styles/stat-card.css" scoped></style>
 <style scoped>
-.stat-card {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
 .stat-bar :deep(.bar-wrapper) {
   margin: 0;
 }
