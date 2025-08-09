@@ -292,7 +292,6 @@ const handleRemoveProduct = (product) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1vh;
   margin-bottom: 1vh;
 }
 

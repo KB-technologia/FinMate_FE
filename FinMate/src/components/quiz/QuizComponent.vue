@@ -1,10 +1,15 @@
 <template>
   <div class="quiz-wrapper">
-    <div class="model-7 checkboxcontainer">
-      <div class="checkbox">
-        <input type="checkbox" id="toggle" v-model="showExtra" />
-        <label for="toggle"></label>
+    <div class="quiz-description">
+      <div class="model-7 checkboxcontainer">
+        <div class="checkbox">
+          <input type="checkbox" id="toggle" v-model="showExtra" />
+          <label for="toggle"></label>
+        </div>
       </div>
+      <p class="description">
+        <Info class="icon" />위 버튼을 누르시면 질문 원본이 표시됩니다.
+      </p>
     </div>
 
     <transition name="slide" mode="out-in">
@@ -82,6 +87,7 @@ import { ref, computed, onMounted } from 'vue';
 import quizJson from '@/assets/quiz.json';
 import { postAssessment } from '@/api/quiz/quiz.js';
 import { useToast } from '@/composables/useToast';
+import { Info } from 'lucide-vue-next';
 
 const quizData = ref([]);
 const currentIndex = ref(0);
@@ -115,10 +121,8 @@ const onSubmit = async () => {
   try {
     const result = await postAssessment(selectedAnswers.value);
     console.log('Assessment 결과:', result);
-    if (result?.status === 200) {
-      router.push('/');
-      toast('투자 테스트가 완료되었습니다. 스탯을 확인해주세요.', 'success');
-    }
+    router.push('/');
+    toast('투자 테스트가 완료되었습니다. 스탯을 확인해주세요.', 'success');
   } catch (error) {
     console.error('Assessment 요청 실패:', error);
     toast('투자 테스트 제출에 실패하였습니다. 다시 확인해주세요.', 'error');
@@ -141,6 +145,26 @@ const onSubmit = async () => {
   height: 60vh;
   margin: auto;
   font-family: var(--font-wanted);
+}
+.quiz-description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5vh;
+}
+
+.description {
+  font-size: 0.8rem;
+  color: var(--color-chart-info);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  width: 1.5vh;
+  margin-right: 0.5vh;
 }
 .quiz-card {
   border-radius: 2vh;

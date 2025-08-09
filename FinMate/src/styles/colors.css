@@ -49,7 +49,7 @@
   /* 마이페이지 리뷰 삭제 버튼 배경 색상 (연한 핑크) */
   --color-delete-bg: #f0cccc;
 
-  /*재무 포트폴리오 차트 색상 모음 */
+  /* 재무 포트폴리오 차트 색상 모음 */
   --color-cash: #9ecad6;
   --color-deposit: #748dae;
   --color-savings: #f5cbcb;
@@ -58,15 +58,15 @@
   --color-stock: #dee791;
   --color-other: #dcd0a8;
 
-  /*차트 안내 색상*/
+  /* 차트 안내 색상 */
   --color-chart-info: #7a7a73;
 
-  /*재무 포트폴리오 right panel 색상*/
+  /* 재무 포트폴리오 right panel 색상 */
   --color-right-panel: #e9e3df;
   --color-totalassets: #58a0c8;
   --color-assets: ;
 
-  /*재무 포트폴리오 분석 페이지 색상*/
+  /* 재무 포트폴리오 분석 페이지 색상 */
   --color-info-button: #98a1bc;
   --infocard-increase: #4caf50;
   --infocard-decrease: #f44336;
@@ -75,7 +75,21 @@
   --infocard-decrease-bg: #ffebee;
   --infocard-nochange-bg: #f5f5f5;
 
-  /*exp 바 색상 */
+  /* 바 색상 */
+  --color-bar-track: #eceff3;
   --color-exp-track: #e6f8ee;
   --color-exp-fill: #3ccb7f;
+
+  /* 툴팁 색상 */
+  --color-tooltip-green: #00c73c;
+
+  /* stat 하이라이트 색상 */
+  --infocard-color-1: #faab9f;
+  --infocard-color-2: #80bded;
+  --infocard-color-3: #d38af3;
+  --infocard-color-4: #f99b0fa2;
+  --infocard-color-5: #458437af;
+
+  --color-logout-button: #f31111b1;
+  --color-product-color: #f7f7f78b;
 }

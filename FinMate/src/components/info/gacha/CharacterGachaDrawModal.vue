@@ -7,7 +7,6 @@
 </template>
 
 <script setup>
-import { defineEmits } from "vue";
 import GachaDrawStep from "./GachaDrawStep.vue";
 const emit = defineEmits(["confirm", "close"]);
 </script>

@@ -4,6 +4,8 @@
       <div class="loader"></div>
     </div>
     <div v-else class="Product-Container">
+      <div v-if="isLoggedIn" class="Product-Text">사용자 맞춤 추천 상품</div>
+      <div v-if="!isLoggedIn" class="Product-Text">랜덤 추천 상품</div>
       <div class="button-container">
         <div
           @click="prev"
@@ -97,6 +99,7 @@ const next = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1vh;
 }
 
 .CardContainer {
@@ -109,9 +112,9 @@ const next = () => {
 
 .Product-Container {
   width: 95vw;
-  height: 65vh;
+  height: 63vh;
   border: 0.2vh solid var(--color-light-gray);
-  background-color: var(--color-more-light-blue);
+  background-color: var(--color-product-color);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;
@@ -142,7 +145,7 @@ const next = () => {
   width: 15vw;
   height: 5vh;
   border-radius: 2vh;
-  border: 0.2vh solid var(--color-light-blue);
+  border: 0.2vh solid var(--color-light-gray);
   color: var(--color-black);
   background-color: var(--color-white);
   font-weight: var(--font-weight-medium);
@@ -150,10 +153,10 @@ const next = () => {
 }
 
 .detail-button:hover {
-  background-color: var(--color-light-blue);
+  background-color: var(--color-black);
   color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 0.2vh 0.3vw var(--color-light-blue);
+  box-shadow: 0 0.2vh 0.3vw var(--color-light-gray);
   transform: translateY(-0.5vh);
 }
 

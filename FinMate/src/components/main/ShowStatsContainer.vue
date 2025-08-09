@@ -294,7 +294,7 @@ onMounted(async () => {
 .stat-bar-outer {
   flex: 1;
   height: 2.5vh;
-  background-color: var(--color-white);
+  background-color: #eceff3;
   border-radius: 2vh;
   overflow: hidden;
 }
