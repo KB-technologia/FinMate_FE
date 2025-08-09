@@ -6,7 +6,7 @@
       @close="showGachaModal = false"
     />
     <div class="actions">
-      <Tooltip text="보유한 교환권 확인" placement="bottom">
+      <Tooltip text="캐릭터 다시 뽑기" placement="bottom">
         <button
           class="action-chip action-chip--ticket"
           @click="openTicketModal"
