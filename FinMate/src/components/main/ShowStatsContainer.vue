@@ -31,7 +31,7 @@
           <span class="stat-label">
             <div class="tooltip-wrapper">
               <span class="icon"><Coins /></span>
-              <span class="tooltip-text">금융 성향 점수</span>
+              <span class="tooltip-text">재정 체력</span>
             </div></span
           >
           <div class="stat-bar-outer">
@@ -108,15 +108,36 @@
         class="no-login-content portfolio-animated"
         :class="{ revealed: portfolioRevealed }"
       >
-        <p class="nologin-text2">📊 나의 자산 현황</p>
-        <div class="portfolio-grid">
-          <p>💰 총 자산: {{ portfolioData.totalAssets.toLocaleString() }}원</p>
-          <p>📈 주식: {{ portfolioData.stock.toLocaleString() }}원</p>
-          <p>📉 채권: {{ portfolioData.bond.toLocaleString() }}원</p>
-          <p>🏦 예금: {{ portfolioData.deposit.toLocaleString() }}원</p>
-          <p>💼 펀드: {{ portfolioData.fund.toLocaleString() }}원</p>
-          <p>💳 현금: {{ portfolioData.cash.toLocaleString() }}원</p>
-          <p>📦 기타: {{ portfolioData.other.toLocaleString() }}원</p>
+        <p class="nologin-text2">
+          <UserRoundCheck class="UserRoundCheck" /><span class="highlight-text"
+            >나의 자산 현황</span
+          >
+          : {{ portfolioData.totalAssets.toLocaleString() }}원
+        </p>
+        <div class="portfolio-info">
+          <div class="portfolio-chart">
+            <canvas ref="chartCanvasRef"></canvas>
+          </div>
+          <div class="portfolio-grid">
+            <div class="portfolio-col">
+              <p>주식: {{ portfolioData.stock.toLocaleString() }}원</p>
+              <p>
+                예적금:
+                {{
+                  (
+                    portfolioData.deposit + portfolioData.savings
+                  ).toLocaleString()
+                }}원
+              </p>
+              <p>현금: {{ portfolioData.cash.toLocaleString() }}원</p>
+            </div>
+
+            <div class="portfolio-col">
+              <p>채권: {{ portfolioData.bond.toLocaleString() }}원</p>
+              <p>펀드: {{ portfolioData.fund.toLocaleString() }}원</p>
+              <p>기타: {{ portfolioData.other.toLocaleString() }}원</p>
+            </div>
+          </div>
         </div>
         <button class="detail-button" @click="goToPortfolio">
           자세히 보기
@@ -158,11 +179,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, nextTick, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useRouter } from 'vue-router';
 import { getPortfolio, getMemberStat } from '@/api/main/main.js';
-import { Swords, Coins, Gauge, Brain, Sparkle } from 'lucide-vue-next';
+import {
+  Swords,
+  Coins,
+  Gauge,
+  Brain,
+  Sparkle,
+  UserRoundCheck,
+} from 'lucide-vue-next';
+import { Chart } from 'chart.js/auto';
+
+const chartCanvasRef = ref(null);
+let chartInstance = null;
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -234,6 +266,11 @@ onMounted(async () => {
       const portfolio = await getPortfolio();
       isPortfolio.value = !!portfolio && Object.keys(portfolio).length > 0;
       portfolioData.value = portfolio;
+
+      if (isPortfolio.value) {
+        await nextTick();
+        renderPortfolioChart();
+      }
     } catch (e) {
       if (e.response?.status === 404) isPortfolio.value = false;
     } finally {
@@ -251,6 +288,61 @@ onMounted(async () => {
     }
   }
 });
+
+watch(isPortfolio, async (v) => {
+  if (v) {
+    await nextTick();
+    requestAnimationFrame(() => {
+      renderPortfolioChart();
+    });
+  }
+});
+
+function renderPortfolioChart() {
+  const canvas = chartCanvasRef.value;
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  if (chartInstance) {
+    chartInstance.destroy();
+    chartInstance = null;
+  }
+
+  chartInstance.value = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['현금', '예금', '적금', '채권', '펀드', '주식', '기타'],
+      datasets: [
+        {
+          data: [
+            portfolioData.value.cash,
+            portfolioData.value.deposit,
+            portfolioData.value.savings,
+            portfolioData.value.bond,
+            portfolioData.value.fund,
+            portfolioData.value.stock,
+            portfolioData.value.other,
+          ],
+          backgroundColor: [
+            '#9ECAD6',
+            '#748DAE',
+            '#F5CBCB',
+            '#FFEAEA',
+            '#A3DC9A',
+            '#DEE791',
+            '#DCD0A8',
+          ],
+          hoverOffset: 7,
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+      },
+    },
+  });
+}
 </script>
 
 <style scoped>
@@ -340,6 +432,7 @@ onMounted(async () => {
   font-weight: var(--font-weight-extrabold);
   cursor: pointer;
   transition: all 0.1s ease;
+  margin: 0 auto;
 }
 
 .detail-button:hover {
@@ -415,7 +508,6 @@ onMounted(async () => {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   cursor: pointer;
 }
 
@@ -465,11 +557,25 @@ onMounted(async () => {
 }
 
 .portfolio-grid {
+  margin-left: auto;
+  margin-right: 2rem;
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  gap: 0.4rem 1rem;
+  grid-template-columns: auto auto;
+  column-gap: 2rem;
+  align-items: start;
   text-align: left;
   font-size: 1rem;
+}
+
+.portfolio-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.portfolio-chart {
+  max-width: 210px;
+  margin-left: 3rem;
 }
 
 .portfolio-animated {
@@ -477,6 +583,26 @@ onMounted(async () => {
   filter: blur(4px);
   transition: all 0.8s ease;
   pointer-events: none;
+  width: 100%;
+}
+
+.nologin-text2 {
+  display: flex;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.highlight-text {
+  background: linear-gradient(transparent 55%, rgba(255, 255, 0, 0.6) 55%);
+}
+
+.UserRoundCheck {
+  margin-right: 0.5rem;
+}
+
+.portfolio-info {
+  display: flex;
+  align-items: center;
 }
 
 .portfolio-animated.revealed {
