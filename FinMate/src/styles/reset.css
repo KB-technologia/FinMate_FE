@@ -25,3 +25,32 @@ button {
   color: var(--color-black);
   text-align: center;
 }
+
+/* 카드 공통 */
+.common-card {
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  background-color: var(--color-white);
+}
+
+/* 버튼 공통 */
+.common-button {
+  font-size: var(--btn-font-size);
+  border-radius: var(--btn-radius);
+  background: var(--btn-gradient);
+  color: var(--color-white);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.common-button:hover {
+  box-shadow: var(--btn-hover-shadow);
+  transform: translateY(var(--btn-hover-translate));
+}
+
+/* 컨테이너 공통 */
+.common-container {
+  background-color: var(--color-product-color);
+  border-radius: var(--card-radius);
+}
