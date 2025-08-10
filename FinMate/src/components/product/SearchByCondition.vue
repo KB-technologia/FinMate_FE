@@ -442,11 +442,11 @@ onMounted(() => {
 <style scoped>
 .search-condition-container {
   background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
+  border: 0.2vh solid var(--color-light-gray);
+  border-radius: 2vh;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
 }
 
 /* 검색바 */
