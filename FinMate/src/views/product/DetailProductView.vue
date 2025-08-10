@@ -112,7 +112,7 @@ const getProductComponent = (productType) => {
 
 const transformedProduct = computed(() => {
   if (!product.value) return null;
-
+  //TODO:펀드 데이터 추가
   const base = {
     id: product.value.id,
     name: product.value.name,
@@ -146,6 +146,10 @@ const transformedProduct = computed(() => {
     base.detail.paymentCycle = product.value.detail?.paymentCycle || 'MONTHLY';
     base.detail.maxMonthlyPayment =
       product.value.detail?.maxMonthlyPayment || product.value.maxAmount;
+  }
+  //펀드일 경우 추가 필드...
+  else if (product.value.productType === 'FUND') {
+    base.detail = {};
   }
 
   return base;
