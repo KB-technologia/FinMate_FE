@@ -16,7 +16,7 @@
       <div
         v-if="quizData.length"
         :key="currentQuestion.id"
-        class="quiz-card"
+        class="survey-card"
         :class="{ 'show-extra': showExtra }"
       >
         <div class="quiz-question">
@@ -40,6 +40,7 @@
                 :name="'q' + currentQuestion.id"
                 :value="idx"
                 v-model="selectedAnswers[currentIndex]"
+                @change="handleOptionSelect"
               />
               {{ option }}
             </label>
@@ -128,6 +129,15 @@ const onSubmit = async () => {
     toast('투자 테스트 제출에 실패하였습니다. 다시 확인해주세요.', 'error');
   }
 };
+
+// 선택지 선택 시 다음페이지로 이동
+const handleOptionSelect = () => {
+  if (currentIndex.value < quizData.value.length - 1) {
+    setTimeout(() => {
+      nextQuestion();
+    }, 150);
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -166,18 +176,8 @@ const onSubmit = async () => {
   width: 1.5vh;
   margin-right: 0.5vh;
 }
-.quiz-card {
-  border-radius: 2vh;
-  width: 70vw;
-  height: 60vh;
-  padding: 2vh;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  border: 0.2vh solid var(--color-light-gray);
-}
-.quiz-card.show-extra {
+
+.survey-card.show-extra {
   border-color: var(--color-primary-green);
   box-shadow: 0 0 1vh rgba(0, 128, 0, 0.2);
   transition: all 0.3s ease in-out;
@@ -186,6 +186,7 @@ const onSubmit = async () => {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  white-space: pre-line;
 }
 .quiz-options li {
   display: flex;
@@ -194,6 +195,7 @@ const onSubmit = async () => {
   list-style: none;
   margin: 0.8rem 0;
   font-size: 1.2rem;
+  width: 100%;
 }
 .label {
   cursor: pointer;
@@ -204,6 +206,8 @@ const onSubmit = async () => {
   flex-direction: row;
   transition: all 0.2s ease;
   gap: 0.5rem;
+  width: 100%;
+  /* width: 32vw; */
 }
 .label:hover {
   border: 0.2vh solid var(--color-primary-green);
@@ -225,6 +229,7 @@ const onSubmit = async () => {
   font-size: 1rem;
   color: var(--color-light-gray);
   margin-left: 1rem;
+  white-space: nowrap;
 }
 .quiz-navigation {
   display: flex;
@@ -238,9 +243,11 @@ const onSubmit = async () => {
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
 }
 .nav-button:hover:enabled {
   transform: translateY(-3px);
@@ -261,7 +268,9 @@ const onSubmit = async () => {
   background-color: var(--color-primary-green);
   color: white;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
 }
 .submit-button:disabled {
   background-color: var(--color-light-gray);

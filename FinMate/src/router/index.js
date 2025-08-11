@@ -95,6 +95,7 @@ const routes = [
     component: () => import('@/views/info/MyReviews.vue'),
     meta: { requiresAuth: true },
   },
+
   // Quiz
   {
     path: '/quizstart',
