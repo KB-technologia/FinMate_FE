@@ -17,10 +17,8 @@ defineProps({
 .right-panel {
   flex-grow: 1;
   padding: 2rem;
-  border: 3px solid var(--color-primary-bluegray);
   border-radius: 4px;
   min-height: 80vh;
-  background-color: var(--color-white);
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
