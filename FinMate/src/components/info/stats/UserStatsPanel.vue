@@ -32,8 +32,8 @@
 
     <h2 class="level-title" v-if="userData && characterData">
       {{
-        userData.profileSummary + ' ' + characterData.animalName ||
-        '소심한 펭귄'
+        userData.profileSummary + " " + characterData.animalName ||
+        "소심한 펭귄"
       }}
     </h2>
 
@@ -129,21 +129,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { ScrollText, Info } from 'lucide-vue-next';
+import { ref, computed, onMounted } from "vue";
+import { ScrollText, Info } from "lucide-vue-next";
 
-import defaultPenguin from '@/assets/images/animals/penguin.png';
-import Tooltip from '@/components/allshared/Tooltip.vue';
-import ToastContainer from '@/components/allshared/ToastContainer.vue';
-import CharacterGachaModal from '@/components/info/gacha/CharacterGachaModal.vue';
-import { getMemberStat } from '@/api/main/main.js';
+import Tooltip from "@/components/allshared/Tooltip.vue";
+import ToastContainer from "@/components/allshared/ToastContainer.vue";
+import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
+import { getMemberStat } from "@/api/main/main.js";
 
-import ChoiceStatCard from '@/components/info/stats/ChoiceStatCard.vue';
-import BarStatCard from '@/components/info/stats/BarStatCard.vue';
-import { userStatDescriptions as descs } from '@/constants/userStatDescriptions';
+import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
+import BarStatCard from "@/components/info/stats/BarStatCard.vue";
+import { userStatDescriptions as descs } from "@/constants/userStatDescriptions";
 
-import { getUserData, FILE_BASE } from '@/api/mypage/level.js';
-import { getCharacter } from '@/api/mypage/character.js';
+import { getUserData, FILE_BASE } from "@/api/mypage/level.js";
+import { getCharacter } from "@/api/mypage/character.js";
 
 const userData = ref(null);
 const characterData = ref(null);
@@ -154,7 +153,7 @@ const openTicketModal = () => {
   const currentTicket = userData.value?.characterTicket ?? 0;
   console.log(currentTicket);
   if (currentTicket <= 0) {
-    toastRef.value?.addToast('보유한 티켓이 없어요 🥲', 'warning');
+    toastRef.value?.addToast("보유한 티켓이 없어요 🥲", "warning");
     return;
   }
   showGachaModal.value = true;
@@ -169,9 +168,9 @@ const toggle = (key) => {
 // const selectedValueType = ref("성장형");
 // const selectedSpeed = ref("중간");
 // const selectedLuckOrStrategy = ref("전략");
-const selectedValueType = ref('');
-const selectedSpeed = ref('');
-const selectedLuckOrStrategy = ref('');
+const selectedValueType = ref("");
+const selectedSpeed = ref("");
+const selectedLuckOrStrategy = ref("");
 
 // TODO: 바 퍼센트(임시)
 // const financePercent = ref(60);
@@ -194,17 +193,17 @@ const financeLevel = computed(() => toLevel(financePercent.value));
 const adventureLevel = computed(() => toLevel(adventurePercent.value));
 
 const financeDesc = computed(
-  () => descs.finance.getDescription(financeLevel.value) || ''
+  () => descs.finance.getDescription(financeLevel.value) || ""
 );
 
 const adventureDesc = computed(
-  () => descs.adventure.understandingDescriptions[adventureLevel.value] || ''
+  () => descs.adventure.understandingDescriptions[adventureLevel.value] || ""
 );
 
 onMounted(async () => {
   try {
     const stat = await getMemberStat();
-    console.log('☑️ /api/my-page/stat 응답:', stat);
+    console.log("☑️ /api/my-page/stat 응답:", stat);
     financePercent.value = Math.max(
       0,
       Math.min(100, (stat.financeScore / 3) * 100)
@@ -213,31 +212,31 @@ onMounted(async () => {
       0,
       Math.min(100, (stat.adventureScore / 3) * 100)
     );
-    selectedValueType.value = descs.value.enumToLabel?.[stat.valueTag] ?? '';
-    selectedSpeed.value = descs.speed.enumToLabel?.[stat.speedTag] ?? '';
+    selectedValueType.value = descs.value.enumToLabel?.[stat.valueTag] ?? "";
+    selectedSpeed.value = descs.speed.enumToLabel?.[stat.speedTag] ?? "";
     selectedLuckOrStrategy.value =
-      descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? '';
+      descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? "";
   } catch (e) {
-    console.warn('사용자 스탯 조회 실패:', e);
+    console.warn("사용자 스탯 조회 실패:", e);
   }
 
   try {
     const data = await getUserData();
-    console.log('level 불러오기 성공', data);
+    console.log("level 불러오기 성공", data);
     //TODO : 콘솔 로그 삭제
     userData.value = data;
   } catch (e) {
-    console.log('레벨 불러오기 실패', e);
+    console.log("레벨 불러오기 실패", e);
     //TODO : 콘솔 로그 삭제
   }
 
   try {
     const data = await getCharacter();
-    console.log('캐릭터 이름 가져오기', data);
+    console.log("캐릭터 이름 가져오기", data);
     //TODO : 콘솔 로그 삭제
     characterData.value = data;
   } catch (e) {
-    console.log('캐릭터 가져오기 실패', e);
+    console.log("캐릭터 가져오기 실패", e);
     //TODO : 콘솔 로그 삭제
   }
 });
