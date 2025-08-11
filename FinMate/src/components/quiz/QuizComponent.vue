@@ -239,6 +239,7 @@ const handleOptionSelect = () => {
   font-size: 1rem;
   color: var(--color-light-gray);
   margin-left: 1rem;
+  white-space: nowrap;
 }
 .quiz-navigation {
   display: flex;
