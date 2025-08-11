@@ -16,7 +16,7 @@
       <div
         v-if="quizData.length"
         :key="currentQuestion.id"
-        class="quiz-card"
+        class="survey-card"
         :class="{ 'show-extra': showExtra }"
       >
         <div class="quiz-question">
@@ -176,19 +176,8 @@ const handleOptionSelect = () => {
   width: 1.5vh;
   margin-right: 0.5vh;
 }
-.quiz-card {
-  border-radius: 2vh;
-  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
-  width: 70vw;
-  height: 60vh;
-  padding: 2vh;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  border: 0.2vh solid var(--color-light-gray);
-}
-.quiz-card.show-extra {
+
+.survey-card.show-extra {
   border-color: var(--color-primary-green);
   box-shadow: 0 0 1vh rgba(0, 128, 0, 0.2);
   transition: all 0.3s ease in-out;
@@ -197,6 +186,7 @@ const handleOptionSelect = () => {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  white-space: pre-line;
 }
 .quiz-options li {
   display: flex;

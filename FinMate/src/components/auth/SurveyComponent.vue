@@ -194,19 +194,6 @@ onMounted(() => {
   font-weight: 700;
 }
 
-/* 질문 카드 */
-.survey-card {
-  border-radius: 2vh;
-  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
-  width: 70vw;
-  height: 60vh;
-  padding: 2vh;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  border: 0.2vh solid var(--color-light-gray);
-}
 .survey-question {
   font-size: 1.5rem;
   font-weight: bold;
