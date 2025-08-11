@@ -93,7 +93,7 @@ onMounted(() => {
 <template>
   <div class="survey-wrapper">
     <!-- 진행 상태 표시 -->
-    <div class="indicator">
+    <!-- <div class="indicator">
       <div
         v-for="(answer, idx) in selectedAnswers"
         :key="idx"
@@ -103,7 +103,7 @@ onMounted(() => {
       >
         {{ idx + 1 }}
       </div>
-    </div>
+    </div> -->
 
     <!-- 질문 카드 -->
     <transition name="slide" mode="out-in">
@@ -217,7 +217,6 @@ onMounted(() => {
   justify-content: center;
   display: flex;
   flex-direction: column;
-  background-color: #f8f9fa;
   border: 0.2vh solid var(--color-light-gray);
 }
 .survey-question {
@@ -252,7 +251,8 @@ onMounted(() => {
   color: white;
   font-weight: 600;
   box-shadow: 0 0 1vh var(--color-primary-green);
-  transform: scale(1.03);
+  /* transform: scale(1.03); */
+  transform: none;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .survey-options label:hover {
@@ -269,7 +269,7 @@ onMounted(() => {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 5vh;
+  padding: 2vh;
 }
 .survey-navigation button {
   background-color: var(--color-primary-green);
