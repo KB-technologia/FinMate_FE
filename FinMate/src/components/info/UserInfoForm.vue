@@ -149,6 +149,9 @@ const onSubmit = async () => {
       form.password = "";
       form.passwordCheck = "";
       form.emailVerificationUUID = "";
+
+      original.email = form.email;
+      original.birthdate = form.birthdate;
     } else {
       toast("회원 정보 수정에 실패했습니다.", "error");
     }
@@ -158,12 +161,20 @@ const onSubmit = async () => {
   }
 };
 
+const original = reactive({
+  email: "",
+  birthdate: "",
+});
+
 onMounted(async () => {
   try {
     const user = await getMyInfo();
     form.accountId = user.accountId;
-    form.email = user.email;
+    form.email = user.email || "";
     form.birthdate = user.birth ? user.birth.replaceAll("-", "") : "";
+
+    original.email = form.email;
+    original.birthdate = form.birthdate;
   } catch (e) {
     toast("회원 정보를 불러오는 데 실패했습니다.", "error");
   }
@@ -221,13 +232,13 @@ const isBirthdateValid = computed(() => {
 });
 
 const isDirty = computed(() => {
-  return (
-    (form.password !== "" &&
-      form.passwordCheck !== "" &&
-      isPasswordMatch.value) ||
-    form.email !== "" ||
-    form.birthdate !== ""
-  );
+  const pwChanged =
+    form.password !== "" && form.passwordCheck !== "" && isPasswordMatch.value;
+
+  const emailChanged = form.email !== original.email;
+  const birthChanged = form.birthdate !== original.birthdate;
+
+  return pwChanged || emailChanged || birthChanged;
 });
 </script>
 
@@ -236,7 +247,6 @@ const isDirty = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  font-family: var(--font-wanted);
 }
 
 .form-group {
@@ -250,7 +260,7 @@ const isDirty = computed(() => {
 }
 
 .readonly-label {
-  color: var(--color-light-gray);
+  color: var(--color-black-gray);
 }
 
 input,
@@ -259,8 +269,7 @@ input,
   padding: 0 1rem 0 1.2rem;
   border: 2px solid var(--color-black);
   border-radius: 20px;
-  font-family: var(--font-wanted);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--color-black);
   width: 100%;
 }
@@ -304,9 +313,7 @@ input:focus,
   border-bottom-left-radius: 0;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  font-family: var(--font-wanted);
   font-weight: bold;
-  cursor: pointer;
 }
 
 .btn-group {
@@ -341,7 +348,6 @@ input:focus,
   font-size: 0.75rem;
   margin-top: 0.3rem;
   margin-left: 0.2rem;
-  font-family: var(--font-wanted);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 </style>
