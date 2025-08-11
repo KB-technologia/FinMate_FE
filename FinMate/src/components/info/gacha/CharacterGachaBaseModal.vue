@@ -1,11 +1,8 @@
-<!-- intro 공통된 부분 분리 -->
 <template>
   <div class="gacha-modal" @click.self="emit('close')">
     <div class="modal-content">
       <div class="modal-bg" />
-
       <img :src="kiwiImage" alt="키위새" class="kiwi" />
-
       <slot name="footer" />
 
       <div class="bubble-container">
@@ -16,8 +13,11 @@
           class="speech-bubble"
         />
         <p class="bubble-text" v-html="visibleText" />
+
         <div class="floating-button-box">
           <button
+            ref="nextBtnRef"
+            type="button"
             class="floating-btn"
             :class="[
               { active: selected === 'next' },
@@ -30,6 +30,8 @@
           </button>
 
           <button
+            ref="exitBtnRef"
+            type="button"
             class="floating-btn"
             :class="[
               { active: selected === 'exit' },
@@ -41,6 +43,7 @@
             나가기
           </button>
         </div>
+
         <slot />
       </div>
     </div>
@@ -49,7 +52,7 @@
 
 <script setup>
 import { PawPrint } from "lucide-vue-next";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
 
 import defaultKiwiImage from "@/assets/images/logos/kiwi-family2.svg";
 
@@ -68,11 +71,16 @@ const emit = defineEmits(["close", "next"]);
 const visibleText = ref("");
 const selected = ref("next");
 
+const nextBtnRef = ref(null);
+const exitBtnRef = ref(null);
+
 const handleKeyDown = (e) => {
   if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+    e.preventDefault();
     selected.value = selected.value === "next" ? "exit" : "next";
   }
-  if (e.key === "Enter") {
+  if (e.key === "Enter" || e.code === "NumpadEnter") {
+    e.preventDefault();
     handleClick(selected.value);
   }
 };
@@ -84,9 +92,20 @@ const handleClick = (type) => {
 
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
+
+  nextTick(() => {
+    nextBtnRef.value?.focus();
+  });
 });
+
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", handleKeyDown);
+});
+
+watch(selected, async (val) => {
+  await nextTick();
+  if (val === "next") nextBtnRef.value?.focus();
+  else exitBtnRef.value?.focus();
 });
 
 onMounted(() => {
@@ -242,5 +261,10 @@ onMounted(() => {
 
 .floating-btn.inactive {
   color: #999;
+}
+
+.floating-btn:focus,
+.floating-btn:focus-visible {
+  outline: none;
 }
 </style>

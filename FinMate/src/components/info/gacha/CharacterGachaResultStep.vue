@@ -1,5 +1,5 @@
 <template>
-  <div class="gacha-modal" @click.self="$emit('close')">
+  <div class="gacha-modal" @click.stop>
     <div class="modal-content result-step">
       <h2 class="title">운명처럼 만난 친구는 누구일까요?</h2>
       <img

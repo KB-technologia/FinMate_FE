@@ -29,6 +29,10 @@ defineProps({
   max-width: 75vw;
 }
 
+.stats-right-panel {
+  position: relative;
+}
+
 .scrollable {
   overflow-y: auto;
 }

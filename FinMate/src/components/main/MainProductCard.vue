@@ -150,6 +150,10 @@ const getBankCodeFromName = (bankName) => {
   return bankName.charAt(0).toLowerCase();
 };
 
+const getBankInitial = (bankName) => {
+  return bankName.charAt(0);
+};
+
 const handleImageError = (event) => {
   const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
@@ -182,8 +186,8 @@ const getRiskLevel = (level) => {
 };
 
 const truncatedName = computed(() => {
-  return props.product.name.length > 15
-    ? props.product.name.slice(0, 15) + '...'
+  return props.product.name.length > 12
+    ? props.product.name.slice(0, 12) + '...'
     : props.product.name;
 });
 </script>
@@ -204,7 +208,7 @@ const truncatedName = computed(() => {
 }
 
 .card-container:hover {
-  border: 0.2vh solid var(--color-light-blue);
+  border: 0.2vh solid var(--color-black);
   cursor: pointer;
   transform: translateY(-0.8vh);
 }
