@@ -178,6 +178,7 @@ const handleOptionSelect = () => {
 }
 .quiz-card {
   border-radius: 2vh;
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   width: 70vw;
   height: 60vh;
   padding: 2vh;
@@ -204,6 +205,7 @@ const handleOptionSelect = () => {
   list-style: none;
   margin: 0.8rem 0;
   font-size: 1.2rem;
+  width: 100%;
 }
 .label {
   cursor: pointer;
@@ -214,6 +216,8 @@ const handleOptionSelect = () => {
   flex-direction: row;
   transition: all 0.2s ease;
   gap: 0.5rem;
+  width: 100%;
+  /* width: 32vw; */
 }
 .label:hover {
   border: 0.2vh solid var(--color-primary-green);
@@ -248,9 +252,11 @@ const handleOptionSelect = () => {
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
 }
 .nav-button:hover:enabled {
   transform: translateY(-3px);
@@ -271,7 +277,9 @@ const handleOptionSelect = () => {
   background-color: var(--color-primary-green);
   color: white;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
 }
 .submit-button:disabled {
   background-color: var(--color-light-gray);

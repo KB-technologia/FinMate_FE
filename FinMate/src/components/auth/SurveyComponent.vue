@@ -197,6 +197,7 @@ onMounted(() => {
 /* 질문 카드 */
 .survey-card {
   border-radius: 2vh;
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   width: 70vw;
   height: 60vh;
   padding: 2vh;
@@ -231,6 +232,7 @@ onMounted(() => {
   transition: all 0.2s ease;
   gap: 0.5rem;
   width: 100%;
+  /* width: 32vw; */
   outline: none;
 }
 .survey-options label.selected {
@@ -238,7 +240,6 @@ onMounted(() => {
   color: white;
   font-weight: 600;
   box-shadow: 0 0 1vh var(--color-primary-green);
-  /* transform: scale(1.03); */
   transform: none;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
@@ -263,9 +264,10 @@ onMounted(() => {
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
 }
 .survey-navigation button:hover:enabled {
   transform: translateY(-3px);
@@ -282,13 +284,13 @@ onMounted(() => {
 }
 .submit-button {
   padding: 0.7rem 1.5rem;
-  font-size: 1rem;
   border: none;
-  border-radius: 0.5rem;
   background-color: var(--color-primary-green);
   color: white;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
 }
 .submit-button:disabled {
   background-color: var(--color-light-gray);

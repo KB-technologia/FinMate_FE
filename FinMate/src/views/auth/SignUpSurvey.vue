@@ -11,7 +11,7 @@ import SurveyComponent from '@/components/auth/SurveyComponent.vue';
       <div class="survey">
         <SurveyComponent />
       </div>
-      <FooterComponent />
+      <!-- <FooterComponent /> -->
     </div>
   </div>
 </template>
