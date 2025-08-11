@@ -155,8 +155,8 @@ async function openQuizModal() {
 .profile-container {
   width: 23vw;
   height: 35vh;
-  border: 0.2vh solid var(--color-light-gray);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  background-color: var(--color-product-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -275,20 +275,22 @@ async function openQuizModal() {
   text-align: center;
   z-index: 1;
 }
+
 .custom-login-button {
   width: 70%;
   height: 5rem;
-  background-color: var(--color-main-button);
-  color: var(--color-black);
+  background-color: var(--color-dark-gray);
+  color: var(--color-white);
   font-size: 1rem;
-  border-radius: 2vh;
+  border-radius: 3.5vh;
   cursor: pointer;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-extrabold);
+  transition: ease 0.2s all;
 }
 .custom-login-button:hover {
   transform: translateY(-0.6vh);
-  background-color: var(--color-main-button);
+  background-color: var(--color-black);
   color: var(--color-white);
   box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
 }
@@ -300,7 +302,7 @@ async function openQuizModal() {
   align-items: center;
   gap: 1rem;
   font-size: 0.8rem;
-  color: var(--color-light-gray);
+  color: var(--color-dark-gray);
 }
 .login-option {
   cursor: pointer;
