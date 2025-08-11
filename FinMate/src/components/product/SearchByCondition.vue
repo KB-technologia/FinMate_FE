@@ -386,7 +386,7 @@ const buildApiParams = () => {
 
   // 상품 타입
   if (selectedProductTypes.value?.length > 0) {
-    params.productType = selectedProductTypes.value[0];
+    params.productType = selectedProductTypes.value;
   }
 
   // 펀드 타입
@@ -397,9 +397,6 @@ const buildApiParams = () => {
     params.fundType = selectedSubCategories.value;
   }
 
-  params.sortOrder = 'desc';
-
-  console.log('SearchByCondition API 파라미터:', params);
   return params;
 };
 

@@ -36,12 +36,13 @@
           <label for="sortOrder" class="sort-label">정렬:</label>
           <select
             id="sortOrder"
-            :value="currentSortOrder"
+            :value="currentSortType"
             @change="handleSortChange"
             class="sort-select"
           >
-            <option value="total">수익률 높은순</option>
-            <option value="basic">기본금리 높은순</option>
+            <option v-if="isLoggedIn" value="RECOMMENDED">추천순</option>
+            <option value="YIELD_DESC">수익률 높은순</option>
+            <option value="BASE_RATE_DESC">기본금리 높은순</option>
           </select>
         </div>
       </div>
@@ -93,9 +94,14 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  currentSortOrder: {
+  currentSortType: {
     type: String,
-    default: 'total',
+    default: 'YIELD_DESC',
+  },
+
+  isLoggedIn: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -112,34 +118,35 @@ const pageSize = ref(12);
 
 // 정렬된 상품 목록
 const sortedProducts = computed(() => {
-  let sorted = [...props.products];
+  // let sorted = [...props.products];
 
-  sorted.sort((a, b) => {
-    let rateA, rateB;
+  // sorted.sort((a, b) => {
+  //   let rateA, rateB;
 
-    if (props.currentSortOrder === 'total') {
-      // 수익률 높은순 (기본+우대)
-      if (a.productType === 'FUND') {
-        rateA = a.expectedReturn || 0;
-      } else {
-        rateA = (a.expectedReturn || 0) + (a.detail?.bonusRate || 0);
-      }
+  //   if (props.currentSortOrder === 'total') {
+  //     // 수익률 높은순 (기본+우대)
+  //     if (a.productType === 'FUND') {
+  //       rateA = a.expectedReturn || 0;
+  //     } else {
+  //       rateA = (a.expectedReturn || 0) + (a.detail?.bonusRate || 0);
+  //     }
 
-      if (b.productType === 'FUND') {
-        rateB = b.expectedReturn || 0;
-      } else {
-        rateB = (b.expectedReturn || 0) + (b.detail?.bonusRate || 0);
-      }
-    } else {
-      // 기본금리 높은순
-      rateA = a.expectedReturn || 0;
-      rateB = b.expectedReturn || 0;
-    }
+  //     if (b.productType === 'FUND') {
+  //       rateB = b.expectedReturn || 0;
+  //     } else {
+  //       rateB = (b.expectedReturn || 0) + (b.detail?.bonusRate || 0);
+  //     }
+  //   } else {
+  //     // 기본금리 높은순
+  //     rateA = a.expectedReturn || 0;
+  //     rateB = b.expectedReturn || 0;
+  //   }
 
-    return rateB - rateA; // 높은순만
-  });
+  //   return rateB - rateA; // 높은순만
+  // });
 
-  return sorted;
+  // return sorted;
+  return [...props.products];
 });
 
 // Computed 속성들
@@ -175,7 +182,6 @@ const handlePageSizeChange = (newPageSize) => {
 };
 
 const handleSortChange = (event) => {
-  sortOrder.value = event.target.value;
   currentPage.value = 1; // 정렬 변경 시 첫 페이지로
 
   // 부모 컴포넌트에 정렬 변경 알림
