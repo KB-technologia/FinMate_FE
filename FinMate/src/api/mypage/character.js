@@ -5,11 +5,12 @@ const API_BASE = import.meta.env.VITE_BASE_API_URL + '/api/character';
 
 export const getCharacter = async () => {
   const authStore = useAuthStore();
-  return axios.get(API_BASE, {
+  const { data } = await axios.get(API_BASE, {
     headers: {
       Authorization: `Bearer ${authStore.token}`,
     },
   });
+  return data;
 };
 
 export const updateCharacter = async (data) => {
