@@ -40,6 +40,7 @@
                 :name="'q' + currentQuestion.id"
                 :value="idx"
                 v-model="selectedAnswers[currentIndex]"
+                @change="handleOptionSelect"
               />
               {{ option }}
             </label>
@@ -126,6 +127,15 @@ const onSubmit = async () => {
   } catch (error) {
     console.error('Assessment 요청 실패:', error);
     toast('투자 테스트 제출에 실패하였습니다. 다시 확인해주세요.', 'error');
+  }
+};
+
+// 선택지 선택 시 다음페이지로 이동
+const handleOptionSelect = () => {
+  if (currentIndex.value < quizData.value.length - 1) {
+    setTimeout(() => {
+      nextQuestion();
+    }, 150);
   }
 };
 </script>
