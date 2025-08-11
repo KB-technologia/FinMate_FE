@@ -51,6 +51,15 @@ function convertAnswersToDto(answers, baseInfo) {
   };
 }
 
+// 선택지 선택 시 다음페이지로 이동
+const handleOptionSelect = () => {
+  if (currentIndex.value < surveyData.value.length - 1) {
+    setTimeout(() => {
+      nextQuestion();
+    }, 150);
+  }
+};
+
 // 제출 버튼 클릭 시 실행되는 함수
 const submitSurvey = async () => {
   const surveyResult = convertAnswersToDto(selectedAnswers.value); // 설문 변환
@@ -83,19 +92,6 @@ onMounted(() => {
 
 <template>
   <div class="survey-wrapper">
-    <!-- 진행 상태 표시 -->
-    <div class="indicator">
-      <div
-        v-for="(answer, idx) in selectedAnswers"
-        :key="idx"
-        class="indicator-item"
-        :class="{ completed: answer !== null, active: currentIndex === idx }"
-        @click="goToQuestion(idx)"
-      >
-        {{ idx + 1 }}
-      </div>
-    </div>
-
     <!-- 질문 카드 -->
     <transition name="slide" mode="out-in">
       <div
@@ -108,12 +104,15 @@ onMounted(() => {
         </div>
         <ul class="survey-options">
           <li v-for="(option, idx) in currentQuestion.options" :key="idx">
-            <label>
+            <label
+              :class="{ selected: selectedAnswers[currentIndex] === option }"
+            >
               <input
                 type="radio"
                 :name="'q' + currentQuestion.id"
                 :value="option"
                 v-model="selectedAnswers[currentIndex]"
+                @change="handleOptionSelect"
               />
               {{ option }}
             </label>
@@ -150,16 +149,24 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* 전체 Wrapper */
 .survey-wrapper {
-  width: 50vw;
-  height: 45vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2vh;
+  width: 70vw;
+  height: 60vh;
   margin: auto;
   font-family: var(--font-wanted);
 }
 
+/* 진행 상태 표시 인디케이터 */
 .indicator {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 .indicator-item {
@@ -187,50 +194,100 @@ onMounted(() => {
   font-weight: 700;
 }
 
-.survey-card {
-  background-color: #f8f9fa;
-  border-radius: 2vh;
-  padding: 1.5rem;
-  height: 30vh;
-  width: 50vw;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-}
 .survey-question {
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
+
+/* 선택지 */
 .survey-options li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   list-style: none;
-  margin: 0.3rem 0;
+  margin: 0.8rem 0;
+  font-size: 1.2rem;
+}
+.survey-options label {
+  cursor: pointer;
+  border: 0.2vh solid var(--color-light-gray);
+  border-radius: 2vh;
+  padding: 1vh;
+  display: flex;
+  flex-direction: row;
+  transition: all 0.2s ease;
+  gap: 0.5rem;
+  width: 100%;
+  /* width: 32vw; */
+  outline: none;
+}
+.survey-options label.selected {
+  background-color: var(--color-primary-green);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 0 1vh var(--color-primary-green);
+  transform: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.survey-options label:hover {
+  border: 0.2vh solid var(--color-primary-green);
+  box-shadow: 0 0 1vh var(--color-primary-green);
+}
+.survey-options input[type='radio'] {
+  display: none;
 }
 
+/* 질문 네비게이션 */
 .survey-navigation {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   padding: 2vh;
 }
+.survey-navigation button {
+  background-color: var(--color-primary-green);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
+}
+.survey-navigation button:hover:enabled {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.survey-navigation button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 제출 버튼 */
 .submit-container {
   text-align: center;
 }
 .submit-button {
   padding: 0.7rem 1.5rem;
-  font-size: 1rem;
   border: none;
-  border-radius: 0.5rem;
   background-color: var(--color-primary-green);
   color: white;
   cursor: pointer;
+  font-size: 1rem;
+  border-radius: 3.5vh;
+  transition: all 0.2s ease;
 }
 .submit-button:disabled {
   background-color: var(--color-light-gray);
   cursor: not-allowed;
 }
+.submit-button:enabled:hover {
+  transform: translateY(-2px);
+}
 
-/* 슬라이드 전환 애니메이션 */
+/* 슬라이드 애니메이션 */
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.4s ease;

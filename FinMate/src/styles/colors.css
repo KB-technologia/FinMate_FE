@@ -36,11 +36,13 @@
   --toast-bg-error: #fdecea;
   --toast-bg-info: #e8f0fe;
   --toast-bg-warning: #fff4e5;
+  --toast-bg-high-risk: #fee2e2;
 
   /* Toast 아이콘 색상 */
   --toast-icon-success: #3c8c75;
   --toast-icon-error: #d32f2f;
   --toast-icon-info: #1976d2;
+  --toast-icon-high-risk: #dc2626;
 
   /* Mainpage 색상 모음 */
   --color-more-light-blue: #ecf6fc;
@@ -91,7 +93,7 @@
   --infocard-color-5: #458437af;
 
   --color-logout-button: #f31111b1;
-  --color-product-color: #f7f7f78b;
+  --color-product-color: #f7f7f763;
 
   --card-radius: 2vh;
   --card-border: 0.2vh solid var(--color-light-gray);

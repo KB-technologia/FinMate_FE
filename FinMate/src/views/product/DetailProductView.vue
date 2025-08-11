@@ -361,11 +361,27 @@ onMounted(() => {
 
 <style scoped>
 .product-page {
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.product-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/images/backgroundImage/background_main.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
 }
 .product-page-container {
   height: 100vh;
