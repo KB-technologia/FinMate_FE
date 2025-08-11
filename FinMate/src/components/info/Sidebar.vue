@@ -2,7 +2,11 @@
   <aside class="sidebar">
     <div class="top-area">
       <div class="user-info">
-        <p class="username">홍길동</p>
+        <p class="username">
+          <span v-if="meLoading">로딩중…</span>
+          <span v-else-if="meError">불러오기 실패</span>
+          <span v-else>{{ displayAccountId }}</span>
+        </p>
         <p class="level">Lv.3 소심한 카피바라</p>
         <div class="edit-icon-wrap">
           <Tooltip text="정보 수정" :offset="10" theme="naver">
@@ -85,19 +89,24 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { UserRoundPen } from "lucide-vue-next";
 
 import Tooltip from "@/components/allshared/Tooltip.vue";
 import ConfirmModal from "@/components/allshared/ConfirmModal.vue";
-import { withdraw } from "@/api/auth/auth.js";
 import { useToast } from "@/composables/useToast";
 import withdrawImage from "@/assets/images/logos/withdrawkiwi.png";
+import { withdraw } from "@/api/auth/auth.js";
+import { getMyInfo } from "@/api/info/userInfoAPI";
 
 const route = useRoute();
 const router = useRouter();
 const { toast } = useToast();
+
+const me = ref(null);
+const meLoading = ref(false);
+const meError = ref(false);
 
 const showWithdrawConfirm = ref(false);
 
@@ -139,6 +148,21 @@ const handleWithdrawConfirm = async (confirmed) => {
     }
   }
 };
+
+onMounted(async () => {
+  try {
+    meLoading.value = true;
+    const data = await getMyInfo();
+    me.value = data;
+  } catch (e) {
+    meError.value = true;
+    toast("사용자 정보를 불러오지 못했어요.", "error");
+  } finally {
+    meLoading.value = false;
+  }
+});
+
+const displayAccountId = computed(() => me.value?.accountId ?? "...");
 </script>
 
 <style scoped>
