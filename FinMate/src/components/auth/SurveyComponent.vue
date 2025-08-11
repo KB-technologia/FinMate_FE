@@ -92,19 +92,6 @@ onMounted(() => {
 
 <template>
   <div class="survey-wrapper">
-    <!-- 진행 상태 표시 -->
-    <!-- <div class="indicator">
-      <div
-        v-for="(answer, idx) in selectedAnswers"
-        :key="idx"
-        class="indicator-item"
-        :class="{ completed: answer !== null, active: currentIndex === idx }"
-        @click="goToQuestion(idx)"
-      >
-        {{ idx + 1 }}
-      </div>
-    </div> -->
-
     <!-- 질문 카드 -->
     <transition name="slide" mode="out-in">
       <div
