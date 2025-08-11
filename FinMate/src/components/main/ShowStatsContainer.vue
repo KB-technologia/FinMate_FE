@@ -5,7 +5,7 @@
       <div v-if="isLoadingStats" class="spinner-wrapper">
         <div class="loader"></div>
       </div>
-      <div v-else-if="isstats" class="stat-bar-wrapper">
+      <div v-if="!isLoadingStats && isstats" class="stat-bar-wrapper">
         <div class="stat-row">
           <span class="stat-label"
             ><div class="tooltip-wrapper">
@@ -76,7 +76,7 @@
           자세히 보기
         </button>
       </div>
-      <div v-else class="no-stats">
+      <div v-if="!isLoadingStats && !isstats" class="no-stats">
         <div>
           <img
             class="animal-image-logo"
@@ -143,7 +143,7 @@
           자세히 보기
         </button>
       </div>
-      <div v-else class="no-login-content">
+      <div v-else class="no-portfolio">
         <div>
           <img
             class="animal-image-logo"
@@ -161,7 +161,7 @@
       </div>
     </div>
   </div>
-  <div v-if="!isLoggedIn" class="show-stats-container">
+  <div v-else class="show-stats-container">
     <div class="description">
       당신의 투자 성향은 어떤 동물일까요? 지금 회원가입을 통해 확인해보세요!
     </div>
@@ -265,24 +265,24 @@ onMounted(async () => {
     try {
       const portfolio = await getPortfolio();
       isPortfolio.value = !!portfolio && Object.keys(portfolio).length > 0;
-      portfolioData.value = portfolio;
-
+      portfolioData.value = portfolio.data;
+      console.log(`포트폴리오 로그 : ${portfolio.data}`);
       if (isPortfolio.value) {
         await nextTick();
         renderPortfolioChart();
       }
     } catch (e) {
-      if (e.response?.status === 404) isPortfolio.value = false;
+      if (e.status === 404) isPortfolio.value = false;
     } finally {
       isLoadingPortfolio.value = false;
     }
-
     try {
       const stat = await getMemberStat();
       isstats.value = !!stat && Object.keys(stat).length > 0;
-      statData.value = stat;
+      statData.value = stat.data;
+      console.log(`스탯 로그 : ${stat.status.toLocaleString()}`);
     } catch (e) {
-      if (e.response?.status === 404) isstats.value = false;
+      if (e.status === 404) isstats.value = false;
     } finally {
       isLoadingStats.value = false;
     }
@@ -501,13 +501,13 @@ function renderPortfolioChart() {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 0.2vh solid var(--color-light-gray);
 }
 .portfolio {
   width: 50%;
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 
@@ -517,8 +517,10 @@ function renderPortfolioChart() {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
 }
 .no-login-content {
+  width: 100%;
   text-align: center;
 }
 

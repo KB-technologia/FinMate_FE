@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth/auth';
+import { useToast } from '@/composables/useToast';
 
 const routes = [
   // Main
@@ -63,12 +64,6 @@ const routes = [
     name: 'detailProduct',
     component: () => import('@/views/product/DetailProductView.vue'),
   },
-  {
-    path: '/recommend',
-    name: 'recommendProduct',
-    component: () => import('@/views/product/RecommendProductView.vue'),
-    meta: { requiresAuth: true },
-  },
   // Info
   {
     path: '/my-info',
@@ -100,17 +95,7 @@ const routes = [
     component: () => import('@/views/info/MyReviews.vue'),
     meta: { requiresAuth: true },
   },
-  // Board
-  {
-    path: '/board',
-    name: 'board',
-    component: () => import('@/views/board/BoardView.vue'),
-  },
-  {
-    path: '/board/:id',
-    name: 'detailBoard',
-    component: () => import('@/views/board/DetailBoardView.vue'),
-  },
+
   // Quiz
   {
     path: '/quizstart',
@@ -152,12 +137,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const isLoggedIn = authStore.isLoggedIn;
-
+  const { toast } = useToast();
   console.log('[라우터 진입]', to.path, 'isLoggedIn:', isLoggedIn);
 
   if (to.meta.requiresAuth && !isLoggedIn) {
-    alert('로그인이 필요합니다.');
     next({ name: 'login' });
+    toast('로그인이 필요합니다.', 'warning');
   } else {
     next();
   }
