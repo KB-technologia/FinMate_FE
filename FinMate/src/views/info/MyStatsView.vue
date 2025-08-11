@@ -1,9 +1,9 @@
 <script setup>
-import Sidebar from "@/components/info/Sidebar.vue";
-import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
-import RightPanel from "@/components/info/RightPanel.vue";
-import UserStatsPanel from "@/components/info/stats/UserStatsPanel.vue";
-import FooterComponent from "../../components/allshared/FooterComponent.vue";
+import Sidebar from '@/components/info/Sidebar.vue';
+import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
+import RightPanel from '@/components/info/RightPanel.vue';
+import UserStatsPanel from '@/components/info/stats/UserStatsPanel.vue';
+import FooterComponent from '../../components/allshared/FooterComponent.vue';
 </script>
 
 <template>
@@ -29,6 +29,21 @@ import FooterComponent from "../../components/allshared/FooterComponent.vue";
   justify-content: center;
   width: 100vw;
   height: 100vh;
+}
+
+.mypage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/images/backgroundImage/background_myinfo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
 }
 .scroll-able {
   padding-top: 1vh;

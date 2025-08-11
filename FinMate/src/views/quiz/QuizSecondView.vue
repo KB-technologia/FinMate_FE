@@ -60,12 +60,28 @@ onMounted(() => {
 
 <style scoped>
 .quiz-view {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100vw;
   height: 100vh;
+}
+
+.quiz-view::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/images/backgroundImage/background_test.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
 }
 
 .quiz-view-content {
@@ -76,7 +92,6 @@ onMounted(() => {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-color: white;
 }
 
 .background-fade-in {

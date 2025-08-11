@@ -23,9 +23,11 @@
               alt="Quiz Start Image"
               class="quiz-start-image"
             />
-            <div class="speech-bubble">
-              <p class="speech-text">나와 함께</p>
-              <p class="speech-text">테스트 해볼래?</p>
+          </div>
+          <div class="speech-bubble">
+            <div class="speech-title">돈 많은 키위새</div>
+            <div class="speech-text">
+              <span>나와 함께 테스트 해볼래?</span>
             </div>
           </div>
           <button @click="startQuiz">시작하기</button>
@@ -47,7 +49,6 @@
 </template>
 
 <script setup>
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 
 import { useRouter } from 'vue-router';
@@ -60,6 +61,7 @@ const startQuiz = () => {
 
 <style scoped>
 .quiz-start-view {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,6 +70,21 @@ const startQuiz = () => {
   height: 100vh;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-bold);
+}
+
+.quiz-start-view::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/images/backgroundImage/background_test.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
 }
 
 .quiz-start-content {
@@ -126,42 +143,41 @@ const startQuiz = () => {
 
 .quiz-start-image-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .speech-bubble {
-  width: 12vw;
-  height: 12vh;
+  width: 20vw;
   font-size: 1.2rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: var(--color-black);
-  position: relative;
-  background: var(--color-main-button);
+  justify-content: space-between;
+  text-align: center;
+  flex-direction: row;
+  color: var(--color-white);
   border-radius: 2vh;
   font-weight: var(--font-weight-medium);
+  background-color: var(--color-black);
 }
 
-.speech-bubble::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: -1vw;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border: 2vh solid transparent;
-  border-right-color: var(--color-main-button);
-  border-left: 0;
+.speech-title {
+  width: 12vw;
+  color: var(--color-black);
+  background-color: var(--color-white);
+  border-radius: 2vh;
 }
 
 .speech-text {
-  margin-top: 1vh;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
+
 button {
   background-color: var(--color-main-button);
   width: 15vw;

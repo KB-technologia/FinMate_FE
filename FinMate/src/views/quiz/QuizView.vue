@@ -13,12 +13,12 @@
 
 <script setup>
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
 import QuizComponent from '../../components/quiz/QuizComponent.vue';
 </script>
 
 <style scoped>
 .quiz-view {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,6 +26,22 @@ import QuizComponent from '../../components/quiz/QuizComponent.vue';
   width: 100vw;
   height: 100vh;
 }
+
+.quiz-view::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/images/backgroundImage/background_test.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
+}
+
 .quiz-view-content {
   display: flex;
   flex-direction: column;
