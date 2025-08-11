@@ -44,7 +44,7 @@
         class="character"
       />
     </div>
-    <div class="level-section">Level {{ userData.currentLevel }}</div>
+    <div class="level-section">Level {{ userData?.currentLevel }}</div>
     <div class="xp-bar">
       <div class="xp-fill" :style="{ width: fillPercentage + '%' }"></div>
       <span class="xp-text">{{ currentXp }}/{{ maxXp }}</span>
