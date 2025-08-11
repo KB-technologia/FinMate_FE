@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar">
+  <aside class="sidebar common-container">
     <div class="top-area">
       <div class="user-info">
         <p class="username">
@@ -167,16 +167,15 @@ const displayAccountId = computed(() => me.value?.accountId ?? "...");
 
 <style scoped>
 .sidebar {
-  width: 300px;
+  width: 18.75rem;
   height: 60vh;
-  padding: 0;
   margin-left: 0.5vw;
-  border: 3px solid var(--color-primary-bluegray);
-  border-radius: 4px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: var(--font-wanted);
+  overflow: visible;
+  background-color: var(--color-white);
+  box-shadow: var(--card-shadow);
 }
 
 .top-area {
@@ -246,7 +245,7 @@ const displayAccountId = computed(() => me.value?.accountId ?? "...");
 }
 
 .menu-area li.active {
-  background-color: var(--color-black);
+  background-color: var(--color-primary-green);
   color: var(--color-white);
 }
 
@@ -256,7 +255,7 @@ const displayAccountId = computed(() => me.value?.accountId ?? "...");
 }
 
 .hover-item:hover {
-  background-color: var(--color-primary-yellow);
+  background-color: rgba(137, 202, 162, 0.4);
   font-weight: bold;
 }
 
