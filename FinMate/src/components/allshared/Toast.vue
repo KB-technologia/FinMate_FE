@@ -7,16 +7,20 @@
 </template>
 
 <script setup>
-
-import { computed } from "vue";
-import { CircleCheckBig, Ban, Info, TriangleAlert } from "lucide-vue-next";
-
+import { computed } from 'vue';
+import {
+  CircleCheckBig,
+  Ban,
+  Info,
+  TriangleAlert,
+  Siren,
+} from 'lucide-vue-next';
 
 const props = defineProps({
   message: String,
   type: {
     type: String,
-    default: "info", // 'success', 'error', 'info', 'warning'
+    default: 'info', // 'success', 'error', 'info', 'warning', 'high-risk'
   },
 });
 
@@ -25,6 +29,7 @@ const iconMap = {
   error: Ban,
   info: Info,
   warning: TriangleAlert,
+  highRisk: Siren,
 };
 
 const IconComponent = computed(() => iconMap[props.type]);
@@ -58,6 +63,10 @@ const IconComponent = computed(() => iconMap[props.type]);
 .toast.warning {
   background-color: var(--toast-bg-warning);
 }
+.toast.highRisk {
+  background-color: var(--toast-bg-high-risk);
+  border-color: var(--toast-icon-error);
+}
 
 .toast.success .toast-icon {
   color: var(--toast-icon-success);
@@ -70,6 +79,9 @@ const IconComponent = computed(() => iconMap[props.type]);
 }
 .toast.warning .toast-icon {
   color: var(--color-orange);
+}
+.toast.highRisk .toast-icon {
+  color: var(--toast-icon-high-risk);
 }
 
 .message {
