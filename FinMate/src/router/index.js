@@ -1,28 +1,29 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { useAuthStore } from "@/stores/auth/auth";
+import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '@/stores/auth/auth';
+import { useToast } from '@/composables/useToast';
 
 const routes = [
   // Main
   {
-    path: "/",
-    name: "main",
-    component: () => import("@/views/main/MainView.vue"),
+    path: '/',
+    name: 'main',
+    component: () => import('@/views/main/MainView.vue'),
   },
   // Auth
   {
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/auth/LoginView.vue"),
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/auth/LoginView.vue'),
   },
   {
-    path: "/auth/kakao/callback",
-    name: "KakaoRedirect",
-    component: () => import("@/views/auth/KakaoRedirect.vue"),
+    path: '/auth/kakao/callback',
+    name: 'KakaoRedirect',
+    component: () => import('@/views/auth/KakaoRedirect.vue'),
   },
   {
-    path: "/signup-survey",
-    name: "signupSurvey",
-    component: () => import("@/views/auth/SignupSurvey.vue"),
+    path: '/signup-survey',
+    name: 'signupSurvey',
+    component: () => import('@/views/auth/SignupSurvey.vue'),
     meta: { requiresAuth: false },
   },
   {
@@ -37,97 +38,80 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
-    path: "/signup2",
-    name: "signup2",
-    component: () => import("@/views/auth/SignUpView2.vue"),
+    path: '/signup2',
+    name: 'signup2',
+    component: () => import('@/views/auth/SignUpView2.vue'),
   },
   {
-    path: "/find-id",
-    name: "findId",
-    component: () => import("@/views/auth/FindIdView.vue"),
+    path: '/find-id',
+    name: 'findId',
+    component: () => import('@/views/auth/FindIdView.vue'),
   },
   {
-    path: "/reset-pw",
-    name: "resetPw",
-    component: () => import("@/views/auth/ResetPwView.vue"),
+    path: '/reset-pw',
+    name: 'resetPw',
+    component: () => import('@/views/auth/ResetPwView.vue'),
   },
   // Product
   {
-    path: "/products",
-    name: "allProducts",
-    component: () => import("@/views/product/AllProductView.vue"),
+    path: '/products',
+    name: 'allProducts',
+    component: () => import('@/views/product/AllProductView.vue'),
     meta: { allowScroll: true },
   },
   {
-    path: "/product/:id",
-    name: "detailProduct",
-    component: () => import("@/views/product/DetailProductView.vue"),
-  },
-  {
-    path: '/recommend',
-    name: 'recommendProduct',
-    component: () => import('@/views/product/RecommendProductView.vue'),
-    meta: { requiresAuth: true },
+    path: '/product/:id',
+    name: 'detailProduct',
+    component: () => import('@/views/product/DetailProductView.vue'),
   },
   // Info
   {
-    path: "/my-info",
-    name: "myInfo",
-    component: () => import("@/views/info/MyInfoView.vue"),
+    path: '/my-info',
+    name: 'myInfo',
+    component: () => import('@/views/info/MyInfoView.vue'),
     meta: { requiresAuth: true },
   },
   {
-    path: "/my-portfolio",
-    name: "myPortfolio",
-    component: () => import("@/views/info/MyPortfolioView.vue"),
+    path: '/my-portfolio',
+    name: 'myPortfolio',
+    component: () => import('@/views/info/MyPortfolioView.vue'),
     meta: { requiresAuth: true },
   },
   {
-    path: "/my-stats",
-    name: "myStats",
-    component: () => import("@/views/info/MyStatsView.vue"),
+    path: '/my-stats',
+    name: 'myStats',
+    component: () => import('@/views/info/MyStatsView.vue'),
     meta: { requiresAuth: true },
   },
   {
-    path: "/my-products",
-    name: "myProducts",
-    component: () => import("@/views/info/MyProducts.vue"),
+    path: '/my-products',
+    name: 'myProducts',
+    component: () => import('@/views/info/MyProducts.vue'),
     meta: { requiresAuth: true },
   },
   {
-    path: "/my-reviews",
-    name: "myReviews",
-    component: () => import("@/views/info/MyReviews.vue"),
+    path: '/my-reviews',
+    name: 'myReviews',
+    component: () => import('@/views/info/MyReviews.vue'),
     meta: { requiresAuth: true },
-  },
-  // Board
-  {
-    path: "/board",
-    name: "board",
-    component: () => import("@/views/board/BoardView.vue"),
-  },
-  {
-    path: "/board/:id",
-    name: "detailBoard",
-    component: () => import("@/views/board/DetailBoardView.vue"),
   },
   // Quiz
   {
-    path: "/quizstart",
-    name: "quizStart",
-    component: () => import("@/views/quiz/QuizStartView.vue"),
+    path: '/quizstart',
+    name: 'quizStart',
+    component: () => import('@/views/quiz/QuizStartView.vue'),
     meta: { requiresAuth: true },
   },
   {
-    path: "/quizsecond",
-    name: "quizSecond",
-    component: () => import("@/views/quiz/QuizSecondView.vue"),
+    path: '/quizsecond',
+    name: 'quizSecond',
+    component: () => import('@/views/quiz/QuizSecondView.vue'),
     meta: { requiresAuth: true },
   },
   {
-    path: "/quiz",
-    name: "quiz",
-    component: () => import("@/views/quiz/QuizView.vue"),
+    path: '/quiz',
+    name: 'quiz',
+    component: () => import('@/views/quiz/QuizView.vue'),
     meta: { requiresAuth: true },
   },
   {
@@ -138,9 +122,9 @@ const routes = [
   },
   // 404
   {
-    path: "/:pathMatch(.*)*",
-    name: "not-found",
-    component: () => import("@/views/NotFoundView.vue"),
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/NotFoundView.vue'),
   },
 ];
 
@@ -152,12 +136,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const isLoggedIn = authStore.isLoggedIn;
-
-  console.log("[라우터 진입]", to.path, "isLoggedIn:", isLoggedIn);
+  const { toast } = useToast();
+  console.log('[라우터 진입]', to.path, 'isLoggedIn:', isLoggedIn);
 
   if (to.meta.requiresAuth && !isLoggedIn) {
-    alert("로그인이 필요합니다.");
-    next({ name: "login" });
+    next({ name: 'login' });
+    toast('로그인이 필요합니다.', 'warning');
   } else {
     next();
   }
