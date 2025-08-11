@@ -25,49 +25,79 @@
       <div class="bank-name">{{ product.bankName }}</div>
     </div>
 
-    <div class="info-grid">
-      <div class="info-label">예상 수익률</div>
-      <div class="info-value">{{ formatRate(product.expectedReturn) }}%</div>
-
-      <div class="info-label">최소 가입 금액</div>
-      <div class="info-value">
-        {{ formatAmount(product.detail.minAmount) }}원
+    <div class="fund-stats">
+      <div class="stat primary">
+        <div class="stat-label">대표 수익률</div>
+        <div class="stat-value">
+          <strong>{{ formatRate(fundHeadline.rate) }}</strong
+          ><span class="unit">%</span>
+        </div>
+        <div class="stat-sub">{{ fundHeadline.label }}</div>
       </div>
 
-      <div class="info-label">최대 가입 금액</div>
-      <div class="info-value">
-        {{ formatAmount(product.detail.maxAmount) }}원
+      <div class="stat emerald">
+        <div class="stat-label">기준가</div>
+        <div class="stat-value">
+          <strong>{{ formatAmount(detail.nav) }}</strong
+          ><span class="unit">{{ navUnit }}</span>
+        </div>
+        <div class="stat-sub">
+          최초가
+          {{
+            detail.initialNav != null
+              ? `${formatAmount(detail.initialNav)}${navUnit}`
+              : '-'
+          }}
+        </div>
       </div>
-
-      <div class="info-label">리스크 수준</div>
-      <div class="info-value">
-        {{ getRiskLevelLabel(product.riskLevel) }}
-      </div>
-
-      <div class="info-label">투자 성향</div>
-      <div class="info-value">
-        {{ product.valueTag }} / {{ product.speedTag }} /
-        {{ product.strategyTag }}
-      </div>
-
-      <div class="info-label">상품 설명</div>
-      <div class="info-value description">
-        {{ product.description }}
-      </div>
-
-      <div class="info-label">상품 보러가기</div>
-      <div class="info-value">
-        <a :href="product.url" target="_blank" class="product-link">
-          링크 열기 🔗
-        </a>
+      <div class="stat alt">
+        <div class="stat-label">순자산(AUM)</div>
+        <div class="stat-value">
+          <strong>{{ formatAum(detail.aum) }}</strong>
+        </div>
+        <div class="stat-sub" v-if="detail.baseDate">
+          기준일 {{ formatDate(detail.baseDate) }}
+        </div>
       </div>
     </div>
   </div>
+  <div class="info-card info-grid">
+    <div>
+      <span :class="`pill pill-risk ${riskTone(detail.riskGrade)}`"
+        >{{ 7 - detail.riskGrade }}등급 ·
+        {{ riskLabel(detail.riskGrade) }}</span
+      >
+    </div>
+    <dl class="kv-list">
+      <div
+        v-for="it in infoItems"
+        :key="it.key"
+        class="kv-row"
+        :class="it.tone && `kv--${it.tone}`"
+      >
+        <dt>{{ it.label }}</dt>
+        <dd v-html="it.value"></dd>
+      </div>
+    </dl>
+    <div class="actions">
+      <a :href="product.url" target="_blank" class="btn solid"
+        >이 상품 보러가기 🔗</a
+      >
+    </div>
+  </div>
+  <ProductRateChart
+    v-if="product.productRate"
+    :product-rate="product.productRate"
+    :title="product.productType === 'FUND' ? '수익률 추이' : '이율 추이'"
+    :show-zero-line="product.productType === 'FUND'"
+  />
 </template>
 
 <script setup>
 import { getBankCodeFromName } from '@/utils/bank.js';
 import { Heart } from 'lucide-vue-next';
+import ProductRateChart from './ProductRateChart.vue';
+import { ref, computed, toRaw } from 'vue';
 
 const props = defineProps({
   product: {
@@ -103,35 +133,214 @@ const formatRate = (rate) => {
   return rate ? rate.toFixed(2) : '0.00';
 };
 
-const formatAmount = (amount) => {
-  return amount?.toLocaleString() || '0';
-};
-
+// 은행 이미지 경로 생성
 const getBankImagePath = (bankName) => {
   const bankCode = getBankCodeFromName(bankName);
-  return new URL(
-    `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-    import.meta.url
-  ).href;
+  try {
+    return new URL(
+      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
+      import.meta.url
+    ).href;
+  } catch {
+    // 이미지 로드 실패 시 대체 경로
+    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
+  }
 };
 
+// 이미지 로드 실패 시 처리
 const handleImageError = (event) => {
-  const wrapper = event.target.parentElement;
+  // 이미지 로드 실패 시 텍스트로 대체
+  const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
-  wrapper.style.backgroundColor = '#eee';
-  wrapper.textContent = product.bankName?.charAt(0) || '?';
+  bankIcon.style.backgroundColor = '#f0f0f0';
+  bankIcon.style.color = '#666';
+  bankIcon.textContent = props.product.bankName.charAt(0);
 };
 
-const getRiskLevelLabel = (level) => {
-  const map = {
-    1: '매우 안정형',
-    2: '안정형',
-    3: '위험중립형',
-    4: '적극투자형',
-    5: '공격투자형',
-  };
-  return map[level] || `${level}단계`;
+const detail = computed(() => props.product.detail ?? {});
+
+// NAV 단위(원/좌로 쓰고 싶으면 '원/좌'로 바꿔)
+const navUnit = '원';
+
+// 숫자 포맷
+const formatAmount = (n) =>
+  n == null ? '-' : Number(n).toLocaleString('ko-KR');
+
+// AUM은 억/조 단위로 축약
+const formatAum = (n) => {
+  if (n == null || !Number.isFinite(+n)) return '-';
+  const v = +n;
+  const abs = Math.abs(v);
+  if (abs >= 1e12) return `${(v / 1e12).toFixed(2).replace(/\\.00$/, '')}조원`;
+  if (abs >= 1e8) return `${(v / 1e8).toFixed(2).replace(/\\.00$/, '')}억원`;
+  return `${v.toLocaleString('ko-KR')}원`;
 };
+
+// 날짜 YYYY.MM.DD
+const formatDate = (d) => {
+  if (!d) return '';
+  const dt = new Date(d);
+  if (Number.isNaN(dt.getTime())) return d;
+  const mm = String(dt.getMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getDate()).padStart(2, '0');
+  return `${dt.getFullYear()}.${mm}.${dd}`;
+};
+
+const pr = computed(() => toRaw(props.product.productRate) ?? {});
+
+const numOrNull = (v) =>
+  v == null || v === '' ? null : Number.isFinite(+v) ? +v : null;
+const R = computed(() => ({
+  '1m': numOrNull(pr.value?.returnRate1m),
+  '3m': numOrNull(pr.value?.returnRate3m),
+  '6m': numOrNull(pr.value?.returnRate6m),
+  '12m': numOrNull(pr.value?.returnRate12m),
+}));
+
+const fundHeadline = computed(() => {
+  const r = R.value;
+  if (Number.isFinite(r['3m'])) return { rate: r['3m'], label: '최근 3개월' };
+  if (Number.isFinite(r['6m'])) return { rate: r['6m'], label: '최근 6개월' };
+  if (Number.isFinite(r['12m']))
+    return { rate: r['12m'], label: '최근 1년(단순)' };
+  if (Number.isFinite(r['1m'])) return { rate: r['1m'], label: '최근 1개월' };
+  return { rate: 0, label: '데이터 없음' };
+});
+
+const fundPills = computed(() => {
+  const r = R.value;
+  const pills = [
+    { key: '1m', label: '1M', value: r['1m'] },
+    { key: '3m', label: '3M', value: r['3m'] },
+    { key: '6m', label: '6M', value: r['6m'] },
+    { key: '12m', label: '1Y', value: r['12m'] },
+  ];
+  return pills.filter((p) => Number.isFinite(p.value));
+});
+
+const fundTypeLabel = (t) =>
+  ({
+    STOCK: '주식형',
+    BOND: '채권형',
+    MIXED_EQUITY_BOND: '혼합형',
+    REAL_ESTATE: '부동산형',
+    SPECIAL_ASSET: '특별자산형',
+    HYBRID_ASSET: '혼합자산형',
+  }[t] || t);
+const riskLabel = (n) =>
+  ({
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
+  }[n] || `${n}`);
+const riskTone = (n) =>
+  ({
+    1: 'risk--verylow', // 초록
+    2: 'risk--low', // 청록
+    3: 'risk--medium', // 하늘/슬레이트
+    4: 'risk--modhigh', // 앰버
+    5: 'risk--high', // 오렌지
+    6: 'risk--veryhigh', // 로즈
+  }[n]);
+
+const infoItems = computed(() => {
+  const d = detail.value;
+  const items = [
+    {
+      key: 'description',
+      label: '상품 소개',
+      value: props.product.description,
+      show: props.product.description != null,
+      tone: '',
+    },
+    {
+      key: 'bankName',
+      label: '판매회사',
+      value: props.product.bankName,
+      show: !!props.product.bankName,
+    },
+    {
+      key: 'fundType',
+      label: '펀드 유형',
+      value: fundTypeLabel(d.fundType),
+      show: !!d.fundType,
+    },
+
+    // 대표 수익률(요건: 3M 기준이라고 했으니 expectedReturn을 3M로 노출)
+    {
+      key: 'headlineReturn',
+      label: '대표 수익률',
+      value: `${formatRate(props.product.expectedReturn)}% (3M)`,
+      show: props.product.expectedReturn != null,
+      tone: 'ok',
+    },
+
+    { key: 'manager', label: '운용사', value: d.manager, show: !!d.manager },
+    {
+      key: 'inceptionDate',
+      label: '최초 설정일',
+      value: formatDate(d.inceptionDate),
+      show: !!d.inceptionDate,
+    },
+
+    {
+      key: 'nav',
+      label: '기준가',
+      value: `${formatAmount(d.nav)} 원/좌`,
+      show: d.nav != null,
+      tone: 'money',
+    },
+    {
+      key: 'initialNav',
+      label: '최초가',
+      value: `${formatAmount(d.initialNav)} 원/좌`,
+      show: d.initialNav != null,
+    },
+    {
+      key: 'baseDate',
+      label: '기준일',
+      value: formatDate(d.baseDate),
+      show: !!d.baseDate,
+    },
+
+    {
+      key: 'aum',
+      label: '순자산(AUM)',
+      value: formatAum(d.aum),
+      show: d.aum != null,
+      tone: 'money',
+    },
+    {
+      key: 'expenseRatio',
+      label: '총비용비율(TER)',
+      value: `${formatRate(d.expenseRatio)}%`,
+      show: d.expenseRatio != null,
+    },
+    {
+      key: 'redemptionPeriod',
+      label: '환매 소요일',
+      value: `${d.redemptionPeriod} 영업일`,
+      show: d.redemptionPeriod != null,
+    },
+    {
+      key: 'productClassCode',
+      label: '분류코드',
+      value: d.productClassCode,
+      show: !!d.productClassCode,
+    },
+    {
+      key: 'associationCode',
+      label: '협회코드',
+      value: d.associationCode,
+      show: !!d.associationCode,
+    },
+  ];
+
+  return items.filter((it) => it.show);
+});
 </script>
 
 <style scoped>
@@ -140,9 +349,10 @@ const getRiskLevelLabel = (level) => {
   max-width: 62.5rem;
   margin: 0 auto;
   padding: 2.5rem;
-  background-color: var(--color-primary-yellow);
-  border-radius: 1.25rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  background-color: var(--color-white);
   position: relative;
 }
 
@@ -237,10 +447,14 @@ const getRiskLevelLabel = (level) => {
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #f5f5f5;
+  font-weight: 700;
+  font-size: 2.4rem;
+  color: #666;
+  overflow: hidden; /* 이미지가 원형을 벗어나지 않도록 */
 }
 
 .bank-logo {
@@ -261,41 +475,193 @@ const getRiskLevelLabel = (level) => {
   color: var(--color-dark-gray);
 }
 
+.fund-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .fund-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat {
+  border-radius: 0.875rem;
+  padding: 1rem 1.25rem;
+}
+.stat.primary {
+  border-color: #dbeafe;
+  background: #f8fbff;
+}
+.stat.emerald {
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+}
+.stat.alt {
+  border-color: #fecdd3;
+  background: #fff1f2;
+}
+
+.stat-label {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+.stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.125rem;
+}
+.stat-value strong {
+  font-size: 1.6rem;
+  color: #111827;
+}
+.unit {
+  font-size: 1rem;
+  color: #6b7280;
+}
+.stat-sub {
+  margin-top: 0.2rem;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.info-card {
+  width: 62.5rem;
+  max-width: 62.5rem;
+  margin: 1rem auto;
+  padding: 2.5rem;
+  position: relative;
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  background-color: var(--color-white);
+}
+
 .info-grid {
   display: grid;
-  grid-template-columns: 1fr auto;
-  row-gap: 1.25rem;
-  column-gap: 2.5rem;
-  max-width: 50rem;
-  margin: 0 auto;
+  gap: 1rem;
 }
 
-.info-label {
-  font-size: 1.125rem;
-  min-width: 8rem;
-  color: var(--color-black);
-  font-weight: var(--font-weight-medium);
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  white-space: normal;
+.pill {
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  color: #111827;
 }
 
-.info-value {
-  font-size: 1.125rem;
-  font-weight: var(--font-weight-bold);
-  text-align: right;
-  word-break: keep-all;
-  overflow-wrap: break-word;
+/* 위험등급 전용 색상 6종 */
+.pill-risk.risk--verylow {
+  background: #ecfdf5;
+  border-color: #bbf7d0;
+  color: #065f46;
+} /* 매우 낮음: 에메랄드 */
+.pill-risk.risk--low {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #0f766e;
+} /* 낮음: 틸 */
+.pill-risk.risk--medium {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+} /* 보통: 스카이/블루 */
+.pill-risk.risk--modhigh {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+} /* 다소 높음: 앰버 */
+.pill-risk.risk--high {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #c2410c;
+} /* 높음: 오렌지 */
+.pill-risk.risk--veryhigh {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+} /* 매우 높음: 로즈 */
+
+.kv-list {
+  display: grid;
+  gap: 0.25rem;
+  border-top: 1px solid #eef2f7;
+  padding-top: 0.75rem;
+}
+.kv-row {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+.kv-row:not(:last-child) {
+  border-bottom: 1px dashed #edf2f7;
+}
+.kv-row dt {
+  color: #6b7280;
+  font-weight: 600;
+}
+.kv-row dd {
+  margin: 0;
+  color: #111827;
+  font-weight: 700;
 }
 
-.info-value.description {
-  text-align: right;
-  white-space: pre-wrap;
+.kv--caution dd {
+  color: #b45309;
+}
+/* 강조 톤 */
+.kv--warn dd {
+  color: #b91c1c;
+} /* 패널티 붉은 기조 */
+.kv--ok dd {
+  color: #166534;
+} /* 유연성 초록 기조 */
+.kv--money dd {
+  color: #0f766e;
+} /* 금액 항목 청록 기조 */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn.solid {
+  font-size: var(--btn-font-size);
+  border-radius: var(--btn-radius);
+  background: var(--btn-gradient);
+  color: var(--color-white);
+  border: none;
+  transition: all 0.2s ease;
+}
+.btn.solid:hover {
+  box-shadow: var(--btn-hover-shadow);
+  transform: translateY(var(--btn-hover-translate));
 }
 
-.product-link {
-  color: var(--color-blue);
-  text-decoration: underline;
-  font-weight: 500;
+.protection-note {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: #f8fafc; /* 연회색 배경 */
+  border: 1px solid #e5e7eb; /* 연회색 테두리 */
+  color: #4b5563; /* 텍스트 회색 */
+  margin-top: 0.5rem;
+}
+.note-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 </style>

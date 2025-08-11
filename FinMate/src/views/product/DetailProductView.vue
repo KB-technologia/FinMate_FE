@@ -104,7 +104,7 @@ const pageSize = 5;
 const getProductComponent = (productType) => {
   const componentMap = {
     DEPOSIT: ProductDetailCardDeposit,
-    SAVINGS: ProductDetailCardSavings,
+    SAVINGS: ProductDetailCardDeposit,
     FUND: ProductDetailCardFund,
   };
   return componentMap[productType] || ProductDetailCardFund;
@@ -112,6 +112,20 @@ const getProductComponent = (productType) => {
 
 const transformedProduct = computed(() => {
   if (!product.value) return null;
+  const detailKeys = [
+    'minAge',
+    'maxAge',
+    'gender',
+    'isMarried',
+    'hasJob',
+    'usesPublicTransport',
+    'travelsFrequently',
+    'doesExercise',
+    'hasChildren',
+    'hasHouse',
+    'employedAtSme',
+    'usesMicroloan',
+  ];
 
   const base = {
     id: product.value.id,
@@ -138,7 +152,11 @@ const transformedProduct = computed(() => {
       compoundingPeriod: product.value.detail?.compoundingPeriod || 'MONTHLY',
       earlyWithdrawalPenalty: product.value.detail?.earlyWithdrawalPenalty || 0,
       isFlexible: product.value.detail?.isFlexible || false,
+      ...Object.fromEntries(
+        detailKeys.map((key) => [key, product.value.detail?.[key] ?? null])
+      ),
     },
+    productRate: product.value.productRate,
   };
 
   // 적금의 경우 추가 필드
@@ -146,6 +164,23 @@ const transformedProduct = computed(() => {
     base.detail.paymentCycle = product.value.detail?.paymentCycle || 'MONTHLY';
     base.detail.maxMonthlyPayment =
       product.value.detail?.maxMonthlyPayment || product.value.maxAmount;
+  }
+  //펀드일 경우 추가 필드...
+  else if (product.value.productType === 'FUND') {
+    base.detail = {
+      fundType: product.value.detail?.fundType || null,
+      manager: product.value.detail?.manager || '',
+      inceptionDate: product.value.detail?.inceptionDate || null,
+      initialNav: product.value.detail?.initialNav || 0,
+      nav: product.value.detail?.nav || 0,
+      aum: product.value.detail?.aum || 0,
+      baseDate: product.value.detail?.baseDate || null,
+      expenseRatio: product.value.detail?.expenseRatio || 0,
+      redemptionPeriod: product.value.detail?.redemptionPeriod || 0,
+      riskGrade: product.value.detail?.riskGrade || 0,
+      productClassCode: product.value.detail?.productClassCode || '',
+      associationCode: product.value.detail?.associationCode || '',
+    };
   }
 
   return base;
@@ -404,8 +439,6 @@ onMounted(() => {
 .product-card-wrapper {
   width: 100%;
   max-width: 62.5rem;
-  padding: 0 1rem;
-  display: flex;
   justify-content: center;
 }
 
@@ -414,7 +447,6 @@ onMounted(() => {
   max-width: 62.5rem;
   height: 0.06rem;
   background-color: black;
-  position: relative;
 }
 
 .rating-row {
