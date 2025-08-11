@@ -22,12 +22,28 @@ import LoginForm from '../../components/auth/LoginForm.vue';
 
 <style scoped>
 .login-view {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100vw;
   height: 100vh;
+}
+
+.login-view::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/images/backgroundImage/background_auth.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
 }
 
 .login-view-content {

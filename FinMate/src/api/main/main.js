@@ -11,7 +11,8 @@ export const getPortfolio = async () => {
         'Content-Type': 'application/json',
       },
     });
-    return response.data;
+    console.log(`왜안나와 : ${response}`);
+    return response;
   } catch (error) {
     console.error('❌ Portfolio 요청 실패:', error);
     if (error.response) {
@@ -32,7 +33,8 @@ export const getMemberStat = async () => {
         'Content-Type': 'application/json',
       },
     });
-    return response.data;
+    console.log(response);
+    return response;
   } catch (error) {
     console.error('❌ Member Stat 요청 실패:', error);
     if (error.response) {
