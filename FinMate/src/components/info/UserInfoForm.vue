@@ -133,7 +133,13 @@ const onSubmit = async () => {
   }
 
   if (form.birthdate) {
-    payload.birthdate = form.birthdate;
+    const b = form.birthdate;
+    if (/^\d{8}$/.test(b)) {
+      payload.birth = `${b.slice(0, 4)}-${b.slice(4, 6)}-${b.slice(6, 8)}`;
+    } else {
+      toast("생년월일 형식이 올바르지 않습니다.", "error");
+      return;
+    }
   }
 
   try {
@@ -142,8 +148,6 @@ const onSubmit = async () => {
       toast("회원 정보가 성공적으로 수정되었습니다.", "success");
       form.password = "";
       form.passwordCheck = "";
-      form.email = "";
-      form.birthdate = "";
       form.emailVerificationUUID = "";
     } else {
       toast("회원 정보 수정에 실패했습니다.", "error");
@@ -159,7 +163,7 @@ onMounted(async () => {
     const user = await getMyInfo();
     form.accountId = user.accountId;
     form.email = user.email;
-    form.birthdate = user.birthdate;
+    form.birthdate = user.birth ? user.birth.replaceAll("-", "") : "";
   } catch (e) {
     toast("회원 정보를 불러오는 데 실패했습니다.", "error");
   }
