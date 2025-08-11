@@ -147,7 +147,8 @@ const characterData = ref(null);
 const toastRef = ref(null);
 const showGachaModal = ref(false);
 const openTicketModal = () => {
-  const currentTicket = userData.value?.characterTicekt ?? 0;
+  const currentTicket = userData.value?.characterTicket ?? 0;
+  console.log(currentTicket);
   if (currentTicket <= 0) {
     toastRef.value?.addToast('보유한 티켓이 없어요 🥲', 'warning');
     return;
