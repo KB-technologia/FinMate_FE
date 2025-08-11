@@ -155,6 +155,21 @@ const paginatedReviews = computed(() => {
   height: 100vh;
 }
 
+.my-reviews-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("@/assets/images/backgroundImage/background_myinfo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
+}
+
 .mypage-container {
   display: flex;
   gap: 2rem;
