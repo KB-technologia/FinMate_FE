@@ -36,93 +36,93 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed } from "vue";
 
-import Sidebar from '@/components/info/Sidebar.vue';
-import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
-import RightPanel from '@/components/info/RightPanel.vue';
-import CategoryFilterBar from '@/components/info/CategoryFilterBar.vue';
-import UserProductCard from '@/components/info/UserProductCard.vue';
-import depositIcon from '@/assets/images/products/deposit.png';
-import savingIcon from '@/assets/images/products/saving.png';
-import fundIcon from '@/assets/images/products/fund.png';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import Sidebar from "@/components/info/Sidebar.vue";
+import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import RightPanel from "@/components/info/RightPanel.vue";
+import CategoryFilterBar from "@/components/info/CategoryFilterBar.vue";
+import UserProductCard from "@/components/info/UserProductCard.vue";
+import depositIcon from "@/assets/images/products/deposit.png";
+import savingIcon from "@/assets/images/products/saving.png";
+import fundIcon from "@/assets/images/products/fund.png";
+import FooterComponent from "../../components/allshared/FooterComponent.vue";
 
-const selectedCategory = ref('all');
+const selectedCategory = ref("all");
 
 const categories = [
-  { label: '전체', value: 'all' },
-  { label: '예금', value: '예금' },
-  { label: '적금', value: '적금' },
-  { label: '펀드', value: '펀드' },
+  { label: "전체", value: "all" },
+  { label: "예금", value: "예금" },
+  { label: "적금", value: "적금" },
+  { label: "펀드", value: "펀드" },
 ];
 
 // TODO: api 연동(API 연동 전용 mock 데이터)
 const userProductList = [
   {
-    type: '예금',
+    type: "예금",
     icon: depositIcon,
     product: {
-      name: '스마트정기예금',
-      bank: 'KB 국민은행',
-      amount: '1,000,000원',
-      rate: '연 2.3%',
-      start: '2025-05-01',
-      end: '2026-05-01',
+      name: "스마트정기예금",
+      bank: "KB 국민은행",
+      amount: "1,000,000원",
+      rate: "연 2.3%",
+      start: "2025-05-01",
+      end: "2026-05-01",
     },
   },
   {
-    type: '적금',
+    type: "적금",
     icon: savingIcon,
     product: {
-      name: '자유적립적금',
-      bank: '우리은행',
-      amount: '500,000원',
-      rate: '연 2.8%',
-      start: '2025-04-10',
-      end: '2026-04-10',
+      name: "자유적립적금",
+      bank: "우리은행",
+      amount: "500,000원",
+      rate: "연 2.8%",
+      start: "2025-04-10",
+      end: "2026-04-10",
     },
   },
   {
-    type: '펀드',
+    type: "펀드",
     icon: fundIcon,
     product: {
-      name: '글로벌테크펀드',
-      bank: 'NH 투자증권',
-      amount: '2,000,000원',
-      rate: '변동수익 (최근 +5.2%)',
-      start: '2025-03-20',
-      end: '제한 없음',
+      name: "글로벌테크펀드",
+      bank: "NH 투자증권",
+      amount: "2,000,000원",
+      rate: "변동수익 (최근 +5.2%)",
+      start: "2025-03-20",
+      end: "제한 없음",
     },
   },
   {
-    type: '예금',
+    type: "예금",
     icon: depositIcon,
     product: {
-      name: '비대면전용예금',
-      bank: '카카오뱅크',
-      amount: '2,000,000원',
-      rate: '연 2.45%',
-      start: '2025-07-01',
-      end: '2026-07-01',
+      name: "비대면전용예금",
+      bank: "카카오뱅크",
+      amount: "2,000,000원",
+      rate: "연 2.45%",
+      start: "2025-07-01",
+      end: "2026-07-01",
     },
   },
   {
-    type: '적금',
+    type: "적금",
     icon: savingIcon,
     product: {
-      name: '매일적금',
-      bank: 'IBK 기업은행',
-      amount: '300,000원',
-      rate: '연 3.0%',
-      start: '2025-06-01',
-      end: '2026-06-01',
+      name: "매일적금",
+      bank: "IBK 기업은행",
+      amount: "300,000원",
+      rate: "연 3.0%",
+      start: "2025-06-01",
+      end: "2026-06-01",
     },
   },
 ];
 
 const filteredProducts = computed(() => {
-  if (selectedCategory.value === 'all') return userProductList;
+  if (selectedCategory.value === "all") return userProductList;
   return userProductList.filter((item) => item.type === selectedCategory.value);
 });
 </script>
@@ -136,6 +136,22 @@ const filteredProducts = computed(() => {
   width: 100vw;
   height: 100vh;
 }
+
+.mypage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("@/assets/images/backgroundImage/background_myinfo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
+}
+
 .mypage-container {
   display: flex;
   gap: 2rem;
