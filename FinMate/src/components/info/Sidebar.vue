@@ -170,7 +170,7 @@ const displayAccountId = computed(() => me.value?.accountId ?? "...");
   width: 300px;
   height: 60vh;
   padding: 0;
-  margin-left: -1.2vw;
+  margin-left: 0.5vw;
   border: 3px solid var(--color-primary-bluegray);
   border-radius: 4px;
   display: flex;

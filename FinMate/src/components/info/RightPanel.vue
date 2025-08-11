@@ -24,9 +24,9 @@ defineProps({
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
-  max-height: 82vh;
   width: 75vw;
   max-width: 75vw;
+  margin-left: 0.5rem;
 }
 
 .stats-right-panel {
