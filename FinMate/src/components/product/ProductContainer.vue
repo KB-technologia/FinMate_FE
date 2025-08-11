@@ -118,34 +118,6 @@ const pageSize = ref(12);
 
 // 정렬된 상품 목록
 const sortedProducts = computed(() => {
-  // let sorted = [...props.products];
-
-  // sorted.sort((a, b) => {
-  //   let rateA, rateB;
-
-  //   if (props.currentSortOrder === 'total') {
-  //     // 수익률 높은순 (기본+우대)
-  //     if (a.productType === 'FUND') {
-  //       rateA = a.expectedReturn || 0;
-  //     } else {
-  //       rateA = (a.expectedReturn || 0) + (a.detail?.bonusRate || 0);
-  //     }
-
-  //     if (b.productType === 'FUND') {
-  //       rateB = b.expectedReturn || 0;
-  //     } else {
-  //       rateB = (b.expectedReturn || 0) + (b.detail?.bonusRate || 0);
-  //     }
-  //   } else {
-  //     // 기본금리 높은순
-  //     rateA = a.expectedReturn || 0;
-  //     rateB = b.expectedReturn || 0;
-  //   }
-
-  //   return rateB - rateA; // 높은순만
-  // });
-
-  // return sorted;
   return [...props.products];
 });
 

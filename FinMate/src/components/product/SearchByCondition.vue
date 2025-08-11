@@ -438,7 +438,7 @@ onMounted(() => {
 
 <style scoped>
 .search-condition-container {
-  background: #ffffff;
+  background: var(--color-product-color);
   border: 0.2vh solid var(--color-light-gray);
   border-radius: 2vh;
   padding: 24px;
