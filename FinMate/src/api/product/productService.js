@@ -14,8 +14,11 @@ export const productService = {
       params.append('query', filterParams.query.trim());
     }
 
-    if (filterParams.productType) {
-      params.append('productType', filterParams.productType);
+    // 다중 상품 타입 지원
+    if (filterParams.productType?.length > 0) {
+      filterParams.productType.forEach((type) => {
+        params.append('productType', type);
+      });
     }
 
     if (filterParams.bankName?.length > 0) {
@@ -30,12 +33,20 @@ export const productService = {
       });
     }
 
-    if (filterParams.sortOrder) {
-      params.append('sortOrder', filterParams.sortOrder);
+    if (filterParams.sortType) {
+      params.append('sortType', filterParams.sortType);
     }
 
     const url = `${API_BASE_URL}/filter?${params.toString()}`;
-    // console.log('최종 필터링 API URL:', url);
+
+    const token = localStorage.getItem('token');
+    const config = {};
+
+    if (token) {
+      config.headers = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
 
     return axios.get(url);
   },
