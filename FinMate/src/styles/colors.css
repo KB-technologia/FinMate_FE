@@ -93,5 +93,15 @@
   --infocard-color-5: #458437af;
 
   --color-logout-button: #f31111b1;
-  --color-product-color: #f7f7f78b;
+  --color-product-color: #f7f7f763;
+
+  --card-radius: 2vh;
+  --card-border: 0.2vh solid var(--color-light-gray);
+  --card-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+
+  --btn-radius: 3.5vh;
+  --btn-font-size: 1rem;
+  --btn-gradient: linear-gradient(135deg, #4caf50, #66bb6a);
+  --btn-hover-shadow: 0 0.2vh 0.3vw var(--color-light-gray);
+  --btn-hover-translate: -0.5vh;
 }
