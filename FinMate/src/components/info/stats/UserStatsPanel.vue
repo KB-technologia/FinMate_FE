@@ -31,7 +31,6 @@
     </div>
 
     <h2 class="level-title" v-if="userData && characterData">
-      Level {{ userData.currentLevel }} -
       {{
         userData.profileSummary + ' ' + characterData.animalName ||
         '소심한 펭귄'
@@ -44,6 +43,11 @@
         alt="캐릭터"
         class="character"
       />
+    </div>
+    <div class="level-section">Level {{ userData.currentLevel }}</div>
+    <div class="xp-bar">
+      <div class="xp-fill" :style="{ width: fillPercentage + '%' }"></div>
+      <span class="xp-text">{{ currentXp }}/{{ maxXp }}</span>
     </div>
     <div class="bars">
       <p class="stat-info">
@@ -175,6 +179,16 @@ const selectedLuckOrStrategy = ref('');
 const financePercent = ref(0);
 const adventurePercent = ref(0);
 
+const maxXp = 1000;
+const currentXp = computed(() => {
+  const total = Number(userData.value?.totalExp ?? 0);
+  return total % maxXp;
+});
+
+const fillPercentage = computed(() => {
+  return Math.min(100, Math.max(0, (currentXp.value / maxXp) * 100));
+});
+
 const toLevel = (p) => (p >= 75 ? 3 : p >= 50 ? 2 : p >= 25 ? 1 : 0);
 const financeLevel = computed(() => toLevel(financePercent.value));
 const adventureLevel = computed(() => toLevel(adventurePercent.value));
@@ -239,6 +253,7 @@ onMounted(async () => {
 .level-title {
   font-size: 2rem;
   margin-bottom: 1rem;
+  font-weight: var(--font-weight-bold);
   padding: 0.5rem 1rem;
   text-align: center;
 }
@@ -323,5 +338,39 @@ onMounted(async () => {
   width: 1.1rem;
   height: 1.1rem;
   flex: 0 0 auto;
+}
+
+.level-section {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.xp-bar {
+  position: relative;
+  width: 240px;
+  height: 30px;
+  background-color: var(--color-light-gray);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.xp-fill {
+  height: 100%;
+  background-color: var(--color-black);
+  transition: width 0.5s ease;
+}
+
+.xp-text {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 13px;
+  color: var(--color-white);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  z-index: 1;
 }
 </style>
