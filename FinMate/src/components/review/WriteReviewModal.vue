@@ -24,11 +24,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue';
 
-import { useToast } from "@/composables/useToast";
-import StarRating from "@/components/allshared/star/StarRating.vue";
-import CloseButton from "@/components/allshared/CloseButton.vue";
+import { useToast } from '@/composables/useToast';
+import StarRating from '@/components/allshared/star/StarRating.vue';
+import CloseButton from '@/components/allshared/CloseButton.vue';
 
 const { toast } = useToast();
 
@@ -37,10 +37,10 @@ const props = defineProps({
   productImageUrl: String,
 });
 
-const emit = defineEmits(["close", "submit"]);
+const emit = defineEmits(['close', 'submit']);
 
 const rating = ref(0);
-const reviewText = ref("");
+const reviewText = ref('');
 
 const handleRatingChange = (newRating) => {
   rating.value = newRating;
@@ -49,24 +49,24 @@ const handleRatingChange = (newRating) => {
 const handleSubmit = () => {
   const ratingNumber = Number(rating.value);
   if (rating.value === 0) {
-    toast("별점을 선택해주세요.", "warning");
+    toast('별점을 선택해주세요.', 'warning');
     return;
   }
 
   if (!reviewText.value.trim()) {
-    toast("리뷰 내용을 입력해주세요.", "warning");
+    toast('리뷰 내용을 입력해주세요.', 'warning');
     return;
   }
 
-  emit("submit", {
+  emit('submit', {
     rating: ratingNumber,
     content: reviewText.value,
     ease_of_signup: 0,
   });
-  emit("close");
+  emit('close');
 };
 
-const onClose = () => emit("close");
+const onClose = () => emit('close');
 </script>
 
 <style scoped>
@@ -81,8 +81,8 @@ const onClose = () => emit("close");
 }
 
 .modal-card {
-  background-color: var(--color-primary-yellow);
-  border-radius: 1.5rem;
+  background-color: var(--color-modal-bg);
+  border-radius: var(--card-radius);
   padding: 2.5rem;
   width: 90vw;
   max-width: 50rem;
@@ -139,14 +139,14 @@ const onClose = () => emit("close");
   color: var(--color-white);
   font-weight: var(--font-weight-bold);
   border: none;
-  border-radius: 2rem;
+  border-radius: var(--btn-radius);
   padding: 0.8rem 2rem;
   font-size: 1rem;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .submit-button:hover {
-  background-color: var(--color-dark-blue);
+  transform: translateY(var(--btn-hover-translate));
 }
 
 .close-button {

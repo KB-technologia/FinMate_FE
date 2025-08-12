@@ -194,7 +194,7 @@ import {
 import { Chart } from 'chart.js/auto';
 
 const chartCanvasRef = ref(null);
-let chartInstance = null;
+const chartInstance = ref(null);
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -303,9 +303,9 @@ function renderPortfolioChart() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
+  if (chartInstance.value) {
+    chartInstance.value.destroy();
+    chartInstance.value = null;
   }
 
   chartInstance.value = new Chart(ctx, {
@@ -349,8 +349,8 @@ function renderPortfolioChart() {
 .show-stats-container {
   width: 70vw;
   height: 35vh;
-  border: 0.2vh solid var(--color-light-gray);
-  background-color: var(--color-light-yellow);
+
+  background-color: var(--color-product-color);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;
@@ -386,7 +386,7 @@ function renderPortfolioChart() {
 .stat-bar-outer {
   flex: 1;
   height: 2.5vh;
-  background-color: #eceff3;
+  background-color: var(--color-white);
   border-radius: 2vh;
   overflow: hidden;
 }
@@ -473,8 +473,7 @@ function renderPortfolioChart() {
 .show-stats-container-notlogin {
   width: 70vw;
   height: 35vh;
-  border: 0.2vh solid var(--color-light-gray);
-  background-color: var(--color-light-yellow);
+  background-color: var(--color-product-color);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
   display: flex;

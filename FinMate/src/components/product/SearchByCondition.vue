@@ -216,9 +216,10 @@ const subCategoriesMap = {
   FUND: [
     { code: 'STOCK', name: '주식형' },
     { code: 'BOND', name: '채권형' },
-    { code: 'MIXED', name: '혼합형' },
-    { code: 'ETF', name: 'ETF' },
-    { code: 'REIT', name: 'REIT' },
+    { code: 'MIXED_EQUITY_BOND', name: '혼합형' },
+    { code: 'REAL_ESTATE', name: '부동산' },
+    { code: 'SPECIAL_ASSET', name: '특별자산' },
+    { code: 'HYBRID_ASSET', name: '파생상품' },
   ],
 };
 
@@ -385,7 +386,7 @@ const buildApiParams = () => {
 
   // 상품 타입
   if (selectedProductTypes.value?.length > 0) {
-    params.productType = selectedProductTypes.value[0];
+    params.productType = selectedProductTypes.value;
   }
 
   // 펀드 타입
@@ -396,9 +397,6 @@ const buildApiParams = () => {
     params.fundType = selectedSubCategories.value;
   }
 
-  params.sortOrder = 'desc';
-
-  console.log('SearchByCondition API 파라미터:', params);
   return params;
 };
 
@@ -440,12 +438,12 @@ onMounted(() => {
 
 <style scoped>
 .search-condition-container {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
+  background: var(--color-product-color);
+  border: 0.2vh solid var(--color-light-gray);
+  border-radius: 2vh;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
 }
 
 /* 검색바 */

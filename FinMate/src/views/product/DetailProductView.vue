@@ -15,7 +15,7 @@
         </div>
         <div class="divider">&nbsp;</div>
         <div class="rating-row">
-          <h1 class="review-title">Product Review</h1>
+          <h1 class="review-title">상품 리뷰</h1>
           <div class="rating-detail-wrapper">
             <StarRatingWithDetail
               :rating="averageRating"
@@ -49,6 +49,7 @@
         />
         <div class="review-list">
           <ReviewCard
+            v-if="reviews.length > 0"
             v-for="review in paginatedReviews"
             :key="review.id"
             :username="review.writer"
@@ -56,6 +57,7 @@
             :date="formatDate(review.createdAt)"
             :content="review.content"
           />
+          <div v-else class="no-review">리뷰가 없습니다.</div>
         </div>
         <Pagination
           :current-page="currentPage"
@@ -89,6 +91,8 @@ import Pagination from '@/components/allshared/Pagination.vue';
 import WriteReviewModal from '@/components/review/WriteReviewModal.vue';
 import RatingDetailModal from '@/components/review/RatingDetailModal.vue';
 import { productService } from '@/api/product/productService';
+import { useToast } from '@/composables/useToast';
+import { useAuthStore } from '@/stores/auth/auth';
 
 const route = useRoute();
 
@@ -100,11 +104,14 @@ const filter = ref('all');
 const sort = ref('latest');
 const currentPage = ref(1);
 const pageSize = 5;
+const { toast } = useToast();
+const authStore = useAuthStore();
+const isLoggedIn = authStore.isLoggedIn;
 
 const getProductComponent = (productType) => {
   const componentMap = {
     DEPOSIT: ProductDetailCardDeposit,
-    SAVINGS: ProductDetailCardSavings,
+    SAVINGS: ProductDetailCardDeposit,
     FUND: ProductDetailCardFund,
   };
   return componentMap[productType] || ProductDetailCardFund;
@@ -112,6 +119,20 @@ const getProductComponent = (productType) => {
 
 const transformedProduct = computed(() => {
   if (!product.value) return null;
+  const detailKeys = [
+    'minAge',
+    'maxAge',
+    'gender',
+    'isMarried',
+    'hasJob',
+    'usesPublicTransport',
+    'travelsFrequently',
+    'doesExercise',
+    'hasChildren',
+    'hasHouse',
+    'employedAtSme',
+    'usesMicroloan',
+  ];
 
   const base = {
     id: product.value.id,
@@ -138,7 +159,11 @@ const transformedProduct = computed(() => {
       compoundingPeriod: product.value.detail?.compoundingPeriod || 'MONTHLY',
       earlyWithdrawalPenalty: product.value.detail?.earlyWithdrawalPenalty || 0,
       isFlexible: product.value.detail?.isFlexible || false,
+      ...Object.fromEntries(
+        detailKeys.map((key) => [key, product.value.detail?.[key] ?? null])
+      ),
     },
+    productRate: product.value.productRate,
   };
 
   // 적금의 경우 추가 필드
@@ -146,6 +171,23 @@ const transformedProduct = computed(() => {
     base.detail.paymentCycle = product.value.detail?.paymentCycle || 'MONTHLY';
     base.detail.maxMonthlyPayment =
       product.value.detail?.maxMonthlyPayment || product.value.maxAmount;
+  }
+  //펀드일 경우 추가 필드...
+  else if (product.value.productType === 'FUND') {
+    base.detail = {
+      fundType: product.value.detail?.fundType || null,
+      manager: product.value.detail?.manager || '',
+      inceptionDate: product.value.detail?.inceptionDate || null,
+      initialNav: product.value.detail?.initialNav || 0,
+      nav: product.value.detail?.nav || 0,
+      aum: product.value.detail?.aum || 0,
+      baseDate: product.value.detail?.baseDate || null,
+      expenseRatio: product.value.detail?.expenseRatio || 0,
+      redemptionPeriod: product.value.detail?.redemptionPeriod || 0,
+      riskGrade: product.value.detail?.riskGrade || 0,
+      productClassCode: product.value.detail?.productClassCode || '',
+      associationCode: product.value.detail?.associationCode || '',
+    };
   }
 
   return base;
@@ -185,6 +227,10 @@ const isReviewModalOpen = ref(false);
 const isRatingDetailOpen = ref(false);
 
 const openReviewModal = () => {
+  if (!isLoggedIn) {
+    toast('로그인이 필요합니다.', 'warning');
+    return;
+  }
   isRatingDetailOpen.value = false;
   isReviewModalOpen.value = true;
 };
@@ -296,9 +342,9 @@ const handleToggleFavorite = async () => {
   } catch (error) {
     // 에러 메시지 처리
     if (error.message === '로그인이 필요합니다.') {
-      alert('로그인이 필요합니다.');
+      toast('로그인이 필요합니다.', 'warning');
     } else {
-      alert('즐겨찾기 처리에 실패했습니다.');
+      toast('즐겨찾기 처리에 실패했습니다.', 'warning');
     }
   }
 };
@@ -320,6 +366,7 @@ const loadProductData = async () => {
       : [];
 
     // 즐겨찾기 상태 확인
+    console.log(reviewsResponse.data);
     await checkFavoriteStatus();
   } catch (err) {
     console.error('데이터 로딩 중 오류 발생:', err);
@@ -404,8 +451,6 @@ onMounted(() => {
 .product-card-wrapper {
   width: 100%;
   max-width: 62.5rem;
-  padding: 0 1rem;
-  display: flex;
   justify-content: center;
 }
 
@@ -414,7 +459,6 @@ onMounted(() => {
   max-width: 62.5rem;
   height: 0.06rem;
   background-color: black;
-  position: relative;
 }
 
 .rating-row {
@@ -477,5 +521,15 @@ onMounted(() => {
 
 :deep(.star-icon) {
   font-size: 3rem;
+}
+
+.no-review {
+  width: 100%;
+  height: 15vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2vh;
+  color: var(--color-dark-gray);
 }
 </style>

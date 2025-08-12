@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-container">
     <div class="login-container">
-      <h1>로그인</h1>
+      <div class="login-text">로그인</div>
       <div class="login-form">
         <input v-model="id" type="text" placeholder="아이디 입력" class="" />
         <input
@@ -84,6 +84,13 @@ const kakaoLogin = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-wanted);
+}
+
+.login-text {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 3vh;
+  font-size: 2.5rem;
 }
 
 .login-form {

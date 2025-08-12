@@ -367,6 +367,9 @@ input:disabled {
   border-radius: 8px;
   font-weight: 600;
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   white-space: nowrap;
   transition: background-color 0.2s ease;
 }

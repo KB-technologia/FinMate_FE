@@ -16,7 +16,7 @@
             alt="티켓"
             class="ticket-icon"
           />
-          <span class="ticket-count">x{{ ticketCount }}</span>
+          <span class="ticket-count">x{{ userData?.characterTicket }}</span>
         </button>
       </Tooltip>
       <Tooltip text="다시 테스트 하러 가기" placement="bottom">
@@ -30,15 +30,24 @@
       </Tooltip>
     </div>
 
-    <h2 class="level-title">Lv.3 - {{ characterName || "소심한 펭귄" }}</h2>
+    <h2 class="level-title" v-if="userData && characterData">
+      {{
+        userData.profileSummary + ' ' + characterData.animalName ||
+        '소심한 펭귄'
+      }}
+    </h2>
 
     <div class="character-section">
       <img
-        v-if="characterImage"
-        :src="characterImage"
+        :src="`${FILE_BASE}${characterData?.animalImage}`"
         alt="캐릭터"
         class="character"
       />
+    </div>
+    <div class="level-section">Level {{ userData?.currentLevel }}</div>
+    <div class="xp-bar">
+      <div class="xp-fill" :style="{ width: fillPercentage + '%' }"></div>
+      <span class="xp-text">{{ currentXp }}/{{ maxXp }}</span>
     </div>
     <div class="bars">
       <p class="stat-info">
@@ -120,29 +129,32 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { ScrollText, Info } from "lucide-vue-next";
+import { ref, computed, onMounted } from 'vue';
+import { ScrollText, Info } from 'lucide-vue-next';
 
-import defaultPenguin from "@/assets/images/animals/penguin.png";
-import Tooltip from "@/components/allshared/Tooltip.vue";
-import ToastContainer from "@/components/allshared/ToastContainer.vue";
-import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
-import { getMemberStat } from "@/api/main/main.js";
+import defaultPenguin from '@/assets/images/animals/penguin.png';
+import Tooltip from '@/components/allshared/Tooltip.vue';
+import ToastContainer from '@/components/allshared/ToastContainer.vue';
+import CharacterGachaModal from '@/components/info/gacha/CharacterGachaModal.vue';
+import { getMemberStat } from '@/api/main/main.js';
 
-import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
-import BarStatCard from "@/components/info/stats/BarStatCard.vue";
+import ChoiceStatCard from '@/components/info/stats/ChoiceStatCard.vue';
+import BarStatCard from '@/components/info/stats/BarStatCard.vue';
+import { userStatDescriptions as descs } from '@/constants/userStatDescriptions';
 
-import { userStatDescriptions as descs } from "@/constants/userStatDescriptions";
+import { getUserData, FILE_BASE } from '@/api/mypage/level.js';
+import { getCharacter } from '@/api/mypage/character.js';
 
-const characterImage = ref(defaultPenguin);
-const characterName = ref("");
+const userData = ref(null);
+const characterData = ref(null);
 
-const ticketCount = ref(2);
 const toastRef = ref(null);
 const showGachaModal = ref(false);
 const openTicketModal = () => {
-  if (ticketCount.value <= 0) {
-    toastRef.value?.addToast("보유한 티켓이 없어요 🥲", "warning");
+  const currentTicket = userData.value?.characterTicket ?? 0;
+  console.log(currentTicket);
+  if (currentTicket <= 0) {
+    toastRef.value?.addToast('보유한 티켓이 없어요 🥲', 'warning');
     return;
   }
   showGachaModal.value = true;
@@ -157,9 +169,9 @@ const toggle = (key) => {
 // const selectedValueType = ref("성장형");
 // const selectedSpeed = ref("중간");
 // const selectedLuckOrStrategy = ref("전략");
-const selectedValueType = ref("");
-const selectedSpeed = ref("");
-const selectedLuckOrStrategy = ref("");
+const selectedValueType = ref('');
+const selectedSpeed = ref('');
+const selectedLuckOrStrategy = ref('');
 
 // TODO: 바 퍼센트(임시)
 // const financePercent = ref(60);
@@ -167,22 +179,32 @@ const selectedLuckOrStrategy = ref("");
 const financePercent = ref(0);
 const adventurePercent = ref(0);
 
+const maxXp = 1000;
+const currentXp = computed(() => {
+  const total = Number(userData.value?.totalExp ?? 0);
+  return total % maxXp;
+});
+
+const fillPercentage = computed(() => {
+  return Math.min(100, Math.max(0, (currentXp.value / maxXp) * 100));
+});
+
 const toLevel = (p) => (p >= 75 ? 3 : p >= 50 ? 2 : p >= 25 ? 1 : 0);
 const financeLevel = computed(() => toLevel(financePercent.value));
 const adventureLevel = computed(() => toLevel(adventurePercent.value));
 
 const financeDesc = computed(
-  () => descs.finance.getDescription(financeLevel.value) || ""
+  () => descs.finance.getDescription(financeLevel.value) || ''
 );
 
 const adventureDesc = computed(
-  () => descs.adventure.understandingDescriptions[adventureLevel.value] || ""
+  () => descs.adventure.understandingDescriptions[adventureLevel.value] || ''
 );
 
 onMounted(async () => {
   try {
     const stat = await getMemberStat();
-    console.log("☑️ /api/my-page/stat 응답:", stat);
+    console.log('☑️ /api/my-page/stat 응답:', stat);
     financePercent.value = Math.max(
       0,
       Math.min(100, (stat.financeScore / 3) * 100)
@@ -191,12 +213,32 @@ onMounted(async () => {
       0,
       Math.min(100, (stat.adventureScore / 3) * 100)
     );
-    selectedValueType.value = descs.value.enumToLabel?.[stat.valueTag] ?? "";
-    selectedSpeed.value = descs.speed.enumToLabel?.[stat.speedTag] ?? "";
+    selectedValueType.value = descs.value.enumToLabel?.[stat.valueTag] ?? '';
+    selectedSpeed.value = descs.speed.enumToLabel?.[stat.speedTag] ?? '';
     selectedLuckOrStrategy.value =
-      descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? "";
+      descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? '';
   } catch (e) {
-    console.warn("사용자 스탯 조회 실패:", e);
+    console.warn('사용자 스탯 조회 실패:', e);
+  }
+
+  try {
+    const data = await getUserData();
+    console.log('level 불러오기 성공', data);
+    //TODO : 콘솔 로그 삭제
+    userData.value = data;
+  } catch (e) {
+    console.log('레벨 불러오기 실패', e);
+    //TODO : 콘솔 로그 삭제
+  }
+
+  try {
+    const data = await getCharacter();
+    console.log('캐릭터 이름 가져오기', data);
+    //TODO : 콘솔 로그 삭제
+    characterData.value = data;
+  } catch (e) {
+    console.log('캐릭터 가져오기 실패', e);
+    //TODO : 콘솔 로그 삭제
   }
 });
 </script>
@@ -211,6 +253,7 @@ onMounted(async () => {
 .level-title {
   font-size: 2rem;
   margin-bottom: 1rem;
+  font-weight: var(--font-weight-bold);
   padding: 0.5rem 1rem;
   text-align: center;
 }
@@ -295,5 +338,39 @@ onMounted(async () => {
   width: 1.1rem;
   height: 1.1rem;
   flex: 0 0 auto;
+}
+
+.level-section {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.xp-bar {
+  position: relative;
+  width: 240px;
+  height: 30px;
+  background-color: var(--color-light-gray);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.xp-fill {
+  height: 100%;
+  background-color: var(--color-black);
+  transition: width 0.5s ease;
+}
+
+.xp-text {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 13px;
+  color: var(--color-white);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  z-index: 1;
 }
 </style>

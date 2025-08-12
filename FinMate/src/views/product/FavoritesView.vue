@@ -100,6 +100,7 @@ import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 import FooterComponent from '../../components/allshared/FooterComponent.vue';
 import FavoriteProductCard from '@/components/product/FavoriteProductCard.vue';
 import { productService } from '@/api/product/productService.js';
+import { useToast } from '@/composables/useToast';
 
 // 반응형 데이터
 const searchQuery = ref('');
@@ -108,6 +109,7 @@ const sortBy = ref('interest');
 const favoriteProducts = ref([]);
 const loading = ref(false);
 const error = ref(null);
+const { toast } = useToast();
 
 // 상품 유형
 const productTypes = ref([
@@ -190,9 +192,9 @@ const removeFavorite = async (productId) => {
 
     // 에러 메시지 처리
     if (error.message === '로그인이 필요합니다.') {
-      alert('로그인이 필요합니다.');
+      toast('로그인이 필요합니다.', 'warning');
     } else {
-      alert('즐겨찾기 제거에 실패했습니다.');
+      toast('즐겨찾기 제거에 실패했습니다.', 'warning');
     }
   }
 };
