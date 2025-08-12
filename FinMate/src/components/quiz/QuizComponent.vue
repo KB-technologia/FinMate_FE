@@ -152,7 +152,7 @@ const handleOptionSelect = () => {
   justify-content: center;
   gap: 2vh;
   width: 70vw;
-  height: 60vh;
+  height: 80vh;
   margin: auto;
   font-family: var(--font-wanted);
 }
@@ -175,6 +175,10 @@ const handleOptionSelect = () => {
 .icon {
   width: 1.5vh;
   margin-right: 0.5vh;
+}
+
+.survey-card {
+  background-color: var(--color-test-color);
 }
 
 .survey-card.show-extra {
