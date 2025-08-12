@@ -5,37 +5,40 @@
       @confirm="onGachaConfirmed"
       @close="showGachaModal = false"
     />
-    <div class="actions">
-      <Tooltip text="캐릭터 다시 뽑기" placement="bottom">
-        <button
-          class="action-chip action-chip--ticket"
-          @click="openTicketModal"
-        >
-          <img
-            src="@/assets/images/icons/ticket.png"
-            alt="티켓"
-            class="ticket-icon"
-          />
-          <span class="ticket-count">x{{ userData?.characterTicket }}</span>
-        </button>
-      </Tooltip>
-      <Tooltip text="다시 테스트 하러 가기" placement="bottom">
-        <button
-          class="action-chip action-chip--explore"
-          @click="$router.push('/quizstart')"
-        >
-          <ScrollText class="icon-scroll" />
-          <span>투자 성향 테스트</span>
-        </button>
-      </Tooltip>
-    </div>
+    <div class="header" v-if="userData && characterData">
+      <h2 class="level-title">
+        {{
+          userData.profileSummary + " " + characterData.animalName ||
+          "소심한 펭귄"
+        }}
+      </h2>
 
-    <h2 class="level-title" v-if="userData && characterData">
-      {{
-        userData.profileSummary + " " + characterData.animalName ||
-        "소심한 펭귄"
-      }}
-    </h2>
+      <div class="actions">
+        <Tooltip text="캐릭터 다시 뽑기" placement="bottom">
+          <button
+            class="action-chip action-chip--ticket"
+            @click="openTicketModal"
+          >
+            <img
+              src="@/assets/images/icons/ticket.png"
+              alt="티켓"
+              class="ticket-icon"
+            />
+            <span class="ticket-count">x{{ userData?.characterTicket }}</span>
+          </button>
+        </Tooltip>
+
+        <Tooltip text="다시 테스트 하러 가기" placement="bottom">
+          <button
+            class="action-chip action-chip--explore"
+            @click="$router.push('/quizstart')"
+          >
+            <ScrollText class="icon-scroll" />
+            <span>투자 성향 테스트</span>
+          </button>
+        </Tooltip>
+      </div>
+    </div>
 
     <div class="character-section">
       <img
@@ -135,12 +138,12 @@ import { ScrollText, Info } from "lucide-vue-next";
 import Tooltip from "@/components/allshared/Tooltip.vue";
 import ToastContainer from "@/components/allshared/ToastContainer.vue";
 import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
-import { getMemberStat } from "@/api/main/main.js";
 
 import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
 import BarStatCard from "@/components/info/stats/BarStatCard.vue";
 import { userStatDescriptions as descs } from "@/constants/userStatDescriptions";
 
+import { getMemberStat } from "@/api/main/main.js";
 import { getUserData, FILE_BASE } from "@/api/mypage/level.js";
 import { getCharacter } from "@/api/mypage/character.js";
 
@@ -164,17 +167,10 @@ const toggle = (key) => {
   activeCard.value = activeCard.value === key ? null : key;
 };
 
-// TODO: 선택값(임시)
-// const selectedValueType = ref("성장형");
-// const selectedSpeed = ref("중간");
-// const selectedLuckOrStrategy = ref("전략");
 const selectedValueType = ref("");
 const selectedSpeed = ref("");
 const selectedLuckOrStrategy = ref("");
 
-// TODO: 바 퍼센트(임시)
-// const financePercent = ref(60);
-// const adventurePercent = ref(40);
 const financePercent = ref(0);
 const adventurePercent = ref(0);
 
@@ -202,7 +198,7 @@ const adventureDesc = computed(
 
 onMounted(async () => {
   try {
-    const stat = await getMemberStat();
+    const { data: stat } = await getMemberStat();
     console.log("☑️ /api/my-page/stat 응답:", stat);
     financePercent.value = Math.max(
       0,
@@ -249,12 +245,24 @@ onMounted(async () => {
   align-items: center;
 }
 
+.header {
+  width: 100%;
+  max-width: 70rem;
+  margin: 0 auto 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 0.75rem;
+}
+
 .level-title {
+  grid-column: 2;
+  justify-self: center;
+  text-align: center;
+  margin: 0;
   font-size: 2rem;
-  margin-bottom: 1rem;
   font-weight: var(--font-weight-bold);
   padding: 0.5rem 1rem;
-  text-align: center;
 }
 
 .character-section {
@@ -280,13 +288,11 @@ onMounted(async () => {
 }
 
 .actions {
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
+  grid-column: 3;
+  justify-self: end;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.6rem;
 }
 
 .action-chip {
