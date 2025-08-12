@@ -1,15 +1,16 @@
 <template>
-  <section class="right-panel" :class="{ scrollable: scroll }">
+  <section
+    class="right-panel"
+    :class="{ scrollable: scroll, 'no-padding': noPadding }"
+  >
     <slot />
   </section>
 </template>
 
 <script setup>
 defineProps({
-  scroll: {
-    type: Boolean,
-    default: true,
-  },
+  scroll: { type: Boolean, default: true },
+  noPadding: { type: Boolean, default: false },
 });
 </script>
 
@@ -27,8 +28,8 @@ defineProps({
   margin-left: 0.5rem;
 }
 
-.stats-right-panel {
-  position: relative;
+.right-panel.no-padding {
+  padding: 0;
 }
 
 .scrollable {
