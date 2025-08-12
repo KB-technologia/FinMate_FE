@@ -261,7 +261,7 @@ const displayAccountId = computed(() => me.value?.accountId ?? "...");
 
 .divider {
   height: 1px;
-  background-color: var(--color-primary-bluegray);
+  background-color: var(--color-light-gray);
   width: 100%;
   margin: 0;
   padding: 0;
