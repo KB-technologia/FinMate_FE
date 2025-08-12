@@ -169,9 +169,10 @@ const next = () => {
 
 .detail-button:hover {
   background-color: var(--color-black);
+  border: 0.2vh solid var(--color-black);
   color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 0.2vh 0.3vw var(--color-light-gray);
+  box-shadow: 0 0.2vh 0.3vw var(--color-black);
   transform: translateY(-0.5vh);
 }
 
@@ -183,7 +184,7 @@ const next = () => {
 
 .arrow-button {
   color: var(--color-black);
-  font-size: 5rem;
+  font-size: 3.5rem;
   border-radius: 1vh;
   cursor: pointer;
   user-select: none;
