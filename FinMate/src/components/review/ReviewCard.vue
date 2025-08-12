@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import StarRating from "@/components/allshared/star/StarRating.vue";
-import { Trash2 } from "lucide-vue-next";
+import StarRating from '@/components/allshared/star/StarRating.vue';
+import { Trash2 } from 'lucide-vue-next';
 
 defineProps({
   username: String,
@@ -42,7 +42,7 @@ defineProps({
   productId: Number,
 });
 
-defineEmits(["delete"]);
+defineEmits(['delete']);
 </script>
 
 <style scoped>
@@ -55,8 +55,8 @@ defineEmits(["delete"]);
   background-color: var(--color-mypage-card);
   gap: 1.5rem;
   --delete-w: 3.5rem;
-
   width: 100%;
+  border-radius: 2vh;
 }
 
 .left-section {

@@ -60,7 +60,7 @@ button {
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   width: 70vw;
-  height: 60vh;
+  height: 80vh;
   padding: 2vh;
   align-items: center;
   justify-content: center;

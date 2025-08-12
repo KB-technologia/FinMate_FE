@@ -7,7 +7,7 @@
       <div class="content-area">
         <RegisterForm />
       </div>
-      <div>
+      <div class="footer-container">
         <FooterComponent />
       </div>
     </div>
@@ -27,12 +27,13 @@ import RegisterForm from '@/components/auth/RegisterForm.vue';
   flex-direction: column;
   width: 100vw;
   min-height: 100vh;
-  overflow-y: auto;
+  max-height: none !important;
+  height: auto !important;
 }
 
 .signup-view::before {
   content: '';
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -45,23 +46,46 @@ import RegisterForm from '@/components/auth/RegisterForm.vue';
   z-index: -1;
 }
 
-.signup-view-content {
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: space-between;
-  overflow-y: auto;
-}
-.content-area {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 3rem 1rem;
-  flex-grow: 1;
-}
 .nav {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
+}
+
+.signup-view-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 200px);
+  max-height: none;
+  height: auto;
+}
+
+.content-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: fit-content;
+  height: auto;
+}
+
+.footer-container {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+:global(html, body) {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 }
 </style>
