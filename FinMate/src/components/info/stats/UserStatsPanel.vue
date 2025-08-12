@@ -293,7 +293,7 @@ onMounted(async () => {
   gap: 0.35rem;
   background: var(--color-white);
   border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 20px;
+  border-radius: 2.5rem;
   padding: 0.45rem 0.8rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   font-size: 0.9rem;
@@ -348,7 +348,7 @@ onMounted(async () => {
   width: 240px;
   height: 30px;
   background-color: var(--color-light-gray);
-  border-radius: 20px;
+  border-radius: 2.5rem;
   overflow: hidden;
   margin-bottom: 1rem;
 }
