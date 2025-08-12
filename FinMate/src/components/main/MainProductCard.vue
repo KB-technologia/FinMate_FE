@@ -193,7 +193,7 @@ const truncatedName = computed(() => {
 </script>
 
 <style scoped>
-.card-container {
+/* .card-container {
   width: 20vw;
   height: 40vh;
   background-color: var(--color-white);
@@ -205,21 +205,54 @@ const truncatedName = computed(() => {
   align-items: center;
   transition: all 0.1s ease;
   font-family: var(--font-wanted);
+} */
+.card-container {
+  background: url('@/assets/images/etc/과일박스.png');
+  width: 20vw;
+  height: 40vh;
+  background-size: contain; /* 또는 cover */
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 2vh;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.1s ease;
+  font-family: var(--font-wanted);
 }
 
-.card-container:hover {
+/* .card-container:hover {
   border: 0.2vh solid var(--color-black);
+  cursor: pointer;
+  transform: translateY(-0.8vh);
+} */
+.card-container:hover {
   cursor: pointer;
   transform: translateY(-0.8vh);
 }
 
-.card-content {
+/* .card-content {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.6px;
   text-align: left;
   align-items: flex-start;
+} */
+.card-content {
+  width: 100%; /* 부모 대비 가로 크기 줄이기 */
+  margin: auto; /* 가운데 정렬 */
+  margin-top: 12vh;
+  margin-left: 2.5vh;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  gap: 0.6px;
+  text-align: left;
+  align-items: flex-start;
+  transform: scale(0.7);
+  transform-origin: center;
 }
 
 .card-content p {
@@ -262,15 +295,17 @@ const truncatedName = computed(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5vh;
-  margin-top: 0.5vh;
+  margin-top: 4vh;
 }
 
 .product-type-badge {
-  padding: 0.8vh 1.2vw;
+  padding: 0.5vh 1vw;
   border-radius: 1.2vw;
-  font-size: clamp(11px, 0.9vw, 13px);
+  font-size: clamp(15px, 0.9vw, 18px);
   font-weight: 600;
+  margin-right: 5vh;
   color: white;
+  transform: scale(1.1);
 }
 
 .type-deposit {
@@ -287,7 +322,7 @@ const truncatedName = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.7vw;
-  margin-bottom: 1.5vh;
+  margin-top: -4vh;
 }
 
 .bank-icon {
@@ -302,6 +337,7 @@ const truncatedName = computed(() => {
   font-size: 1.2vw;
   color: #666;
   overflow: hidden;
+  transform: scale(0.9);
 }
 
 .bank-logo {
@@ -313,6 +349,7 @@ const truncatedName = computed(() => {
 .bank-name {
   font-size: 1vw;
   font-weight: 500;
+  margin-left: -0.5vh;
   color: #666;
 }
 
@@ -337,7 +374,7 @@ const truncatedName = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5vh;
+  margin-bottom: 0.3vh;
   padding: 1.2vw;
   background: #f8f9fa;
   border-radius: 0.8vw;
@@ -346,7 +383,7 @@ const truncatedName = computed(() => {
 
 .return-label {
   font-size: 1vw;
-  font-weight: 500;
+  font-weight: 600;
   color: #666;
 }
 
@@ -359,7 +396,7 @@ const truncatedName = computed(() => {
 .detail-info {
   display: flex;
   flex-direction: column;
-  gap: 1vh;
+  gap: 0.6vh;
   padding: 0 0 0.5vw;
 }
 

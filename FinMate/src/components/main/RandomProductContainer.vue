@@ -3,38 +3,40 @@
     <div v-if="isLoading" class="spinner-wrapper">
       <div class="loader"></div>
     </div>
-    <div v-else class="Product-Container">
+    <div v-else>
       <div v-if="isLoggedIn" class="Product-Text">사용자 맞춤 추천 상품</div>
       <div v-if="!isLoggedIn" class="Product-Text">랜덤 추천 상품</div>
-      <div class="button-container">
-        <div
-          @click="prev"
-          :class="['arrow-button', { disabled: currentIndex === 0 }]"
-        >
-          ◀
+      <div class="foodstuffs">
+        <div class="button-container">
+          <div
+            @click="prev"
+            :class="['arrow-button', { disabled: currentIndex === 0 }]"
+          >
+            ◀
+          </div>
+          <div class="mainbody">
+            <div class="CardContainer">
+              <MainProductCard
+                v-for="(item, index) in visibleProducts"
+                :key="index"
+                :product="item"
+              />
+            </div>
+          </div>
+          <div
+            @click="next"
+            :class="[
+              'arrow-button',
+              { disabled: currentIndex + 4 >= products.length },
+            ]"
+          >
+            ▶
+          </div>
         </div>
-
-        <div class="CardContainer">
-          <MainProductCard
-            v-for="(item, index) in visibleProducts"
-            :key="index"
-            :product="item"
-          />
-        </div>
-
-        <div
-          @click="next"
-          :class="[
-            'arrow-button',
-            { disabled: currentIndex + 4 >= products.length },
-          ]"
-        >
-          ▶
-        </div>
+        <button class="detail-button" @click="goToProducts">
+          <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
+        </button>
       </div>
-      <button class="detail-button" @click="goToProducts">
-        <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
-      </button>
     </div>
   </div>
 </template>
@@ -107,16 +109,13 @@ const next = () => {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-top: 5vh;
   padding: 3vh;
 }
 
 .Product-Container {
-  width: 95vw;
-  height: 63vh;
-  border: 0.2vh solid var(--color-light-gray);
-  background-color: var(--color-product-color);
-  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
-  border-radius: 2vh;
+  width: 200vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   font-family: var(--font-wanted);
@@ -127,17 +126,31 @@ const next = () => {
   margin-top: 2vh;
   color: var(--color-black);
   font-weight: var(--font-weight-bold);
-  font-size: 2rem;
+  font-size: 3rem;
   text-align: center;
 }
 
+.foodstuffs {
+  background: url('@/assets/images/etc/동물상회.png') no-repeat center;
+  background-size: 100% 100%;
+  width: 200vh;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-wanted);
+  align-items: center;
+  margin-top: 1vh;
+}
+.mainbody {
+  margin-top: 6vh;
+}
 .CardContainer {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80%;
+  height: 95%;
   gap: 2vw;
 }
 
@@ -150,6 +163,7 @@ const next = () => {
   background-color: var(--color-white);
   font-weight: var(--font-weight-medium);
   transition: all 0.1s ease;
+  margin-top: 1.5vh;
 }
 
 .detail-button:hover {
@@ -167,11 +181,12 @@ const next = () => {
 }
 
 .arrow-button {
-  color: var(--color-black);
-  font-size: 2rem;
+  color: var(--color-white);
+  font-size: 3rem;
   border-radius: 1vh;
   cursor: pointer;
   user-select: none;
+  margin-top: 17vh;
   transition: background-color 0.2s ease;
 }
 
