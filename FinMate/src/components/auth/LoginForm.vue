@@ -88,8 +88,9 @@ const kakaoLogin = () => {
 }
 
 .login-text {
-  font-size: 5vh;
   font-weight: var(--font-weight-semibold);
+  margin-bottom: 3vh;
+  font-size: 2.5rem;
 }
 
 .login-form {

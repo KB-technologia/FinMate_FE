@@ -15,7 +15,7 @@
         </div>
         <div class="divider">&nbsp;</div>
         <div class="rating-row">
-          <h1 class="review-title">Product Review</h1>
+          <h1 class="review-title">상품 리뷰</h1>
           <div class="rating-detail-wrapper">
             <StarRatingWithDetail
               :rating="averageRating"
@@ -89,6 +89,8 @@ import Pagination from '@/components/allshared/Pagination.vue';
 import WriteReviewModal from '@/components/review/WriteReviewModal.vue';
 import RatingDetailModal from '@/components/review/RatingDetailModal.vue';
 import { productService } from '@/api/product/productService';
+import { useToast } from '@/composables/useToast';
+import { useAuthStore } from '@/stores/auth/auth';
 
 const route = useRoute();
 
@@ -100,6 +102,9 @@ const filter = ref('all');
 const sort = ref('latest');
 const currentPage = ref(1);
 const pageSize = 5;
+const { toast } = useToast();
+const authStore = useAuthStore();
+const isLoggedIn = authStore.isLoggedIn;
 
 const getProductComponent = (productType) => {
   const componentMap = {
@@ -220,6 +225,10 @@ const isReviewModalOpen = ref(false);
 const isRatingDetailOpen = ref(false);
 
 const openReviewModal = () => {
+  if (!isLoggedIn) {
+    toast('로그인이 필요합니다.', 'warning');
+    return;
+  }
   isRatingDetailOpen.value = false;
   isReviewModalOpen.value = true;
 };
@@ -331,9 +340,9 @@ const handleToggleFavorite = async () => {
   } catch (error) {
     // 에러 메시지 처리
     if (error.message === '로그인이 필요합니다.') {
-      alert('로그인이 필요합니다.');
+      toast('로그인이 필요합니다.', 'warning');
     } else {
-      alert('즐겨찾기 처리에 실패했습니다.');
+      toast('즐겨찾기 처리에 실패했습니다.', 'warning');
     }
   }
 };

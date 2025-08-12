@@ -473,7 +473,6 @@ function renderPortfolioChart() {
 .show-stats-container-notlogin {
   width: 70vw;
   height: 35vh;
-  border: 0.2vh solid var(--color-light-gray);
   background-color: var(--color-product-color);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
