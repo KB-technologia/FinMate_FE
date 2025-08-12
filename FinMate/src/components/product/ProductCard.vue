@@ -75,7 +75,7 @@
         <template v-else-if="product.productType === 'FUND'">
           <div class="info-row">
             <span>펀드유형:</span>
-            <span>{{ product.detail.fundType }}</span>
+            <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
           </div>
           <div class="info-row">
             <span>위험도:</span>
@@ -155,7 +155,7 @@ const getBankImagePath = (bankName) => {
 // 은행명을 코드로 변환
 const getBankCodeFromName = (bankName) => {
   const bankNameMap = {
-    KB국민은행: 'kb',
+    국민은행: 'kb',
     신한은행: 'shinhan',
     하나은행: 'hana',
     우리은행: 'woori',
@@ -211,13 +211,27 @@ const formatRate = (rate) => {
   return rate ? rate.toFixed(2) : '0.00';
 };
 
+const subCategoriesMap = (fundType) => {
+  const fundChange = {
+    STOCK: '주식형',
+    BOND: '채권형',
+    MIXED_EQUITY_BOND: '혼합형',
+    REAL_ESTATE: '부동산',
+    SPECIAL_ASSET: '특별자산',
+    HYBRID_ASSET: '파생상품',
+  };
+
+  return fundChange[fundType] || fundType;
+};
+
 const getRiskLevel = (level) => {
   const levels = {
-    1: '안전',
-    2: '낮음',
-    3: '보통',
-    4: '높음',
-    5: '매우높음',
+    2: '매우 낮은 위험',
+    3: '낮은 위험',
+    4: '보통 위험',
+    5: '다소 높은 위험',
+    6: '높은 위험',
+    7: '매우 높은 위험',
   };
   return levels[level] || `${level}등급`;
 };
