@@ -265,6 +265,7 @@ const paginatedReviews = computed(() => {
   border: 0.0625rem solid var(--color-dark-gray);
   color: var(--color-black);
   background-color: var(--color-white);
+  border: none;
   appearance: none;
   text-align: center;
 
