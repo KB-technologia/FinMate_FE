@@ -103,13 +103,9 @@ function changeProductCard(apiData) {
 }
 
 onMounted(async () => {
-  try {
-    const data = await getMyProducts();
-    products.value = data.registered_list;
-    userProductList.value = changeProductCard(products.value);
-  } catch (e) {
-    console.error('상품 조회 실패', e);
-  }
+  const data = await getMyProducts();
+  products.value = data.registered_list;
+  userProductList.value = changeProductCard(products.value);
 });
 
 const categories = [
