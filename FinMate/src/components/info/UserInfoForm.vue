@@ -60,12 +60,7 @@
       </div>
 
       <div class="btn-group">
-        <button
-          type="submit"
-          class="submit"
-          :class="{ inactive: !isDirty }"
-          :disabled="!isDirty"
-        >
+        <button type="submit" class="common-button submit" :disabled="!isDirty">
           변경사항 저장
         </button>
       </div>
@@ -313,34 +308,28 @@ input:focus,
   border-bottom-left-radius: 0;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
+}
+
+.submit {
+  padding: 0.8rem 3.5rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.submit:disabled {
+  background: var(--color-light-gray) !important;
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
 }
 
 .btn-group {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: auto;
-}
-
-.submit {
-  background-color: var(--color-primary-green);
-  border: none;
-  padding: 0.8rem 2.5rem;
-  border-radius: 10px;
-  cursor: pointer;
-
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: box-shadow 0.2s ease;
-}
-
-.submit:hover {
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
-}
-
-.submit.inactive {
-  background-color: #cfcfcf;
-  cursor: not-allowed;
+  margin-top: 2.5rem;
+  width: var(--form-width);
+  align-self: center;
 }
 
 .error-msg {
@@ -349,5 +338,15 @@ input:focus,
   margin-top: 0.3rem;
   margin-left: 0.2rem;
   font-weight: var(--font-weight-bold);
+}
+
+.user-info-form {
+  --form-width: clamp(28rem, 70vw, 44rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
 }
 </style>
