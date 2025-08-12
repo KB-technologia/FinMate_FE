@@ -7,9 +7,9 @@
       <div>
         <FindIdView />
       </div>
-      <div>
-        <FooterComponent />
-      </div>
+    </div>
+    <div>
+      <FooterComponent />
     </div>
   </div>
 </template>
@@ -47,12 +47,13 @@ import FindIdView from '@/components/auth/FindId.vue';
 }
 
 .FindId-content {
+  flex: 1;
   padding-top: 1vh;
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   overflow-y: auto;
   overflow-x: hidden;

@@ -292,7 +292,7 @@ const handleSubmit = () => {
   margin: 5vh auto;
   padding: 3rem;
   background: var(--color-white);
-  border-radius: 12px;
+  border-radius: var(--card-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -354,7 +354,7 @@ input:disabled {
 
 .action-btn {
   height: 6vh;
-  width: 4.5vw;
+  width: 5.5vw;
   padding: 0 16px;
   background: var(--color-primary-yellow);
   color: var(--color-black);
