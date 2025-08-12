@@ -49,7 +49,6 @@
         />
         <div class="review-list">
           <ReviewCard
-            ㄹ
             v-if="reviews.length > 0"
             v-for="review in paginatedReviews"
             :key="review.id"
