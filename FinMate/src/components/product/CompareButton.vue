@@ -74,7 +74,7 @@
             :class="getBankClass(selectedProducts[0].bankName)"
           >
             <img
-              :src="getBankImagePath(selectedProducts[0].bankName)"
+              :src="getBankLogo(selectedProducts[0].bankName)"
               :alt="selectedProducts[0].bankName"
               @error="(e) => handleImageError(e, selectedProducts[0].bankName)"
               class="bank-logo small-logo"
@@ -176,8 +176,8 @@ const handleImageError = (event, bankName) => {
   bankIcon.style.display = 'flex';
   bankIcon.style.alignItems = 'center';
   bankIcon.style.justifyContent = 'center';
-  bankIcon.style.fontSize = '1.1vw';
-  bankIcon.style.fontWeight = 600;
+  bankIcon.style.fontSize = '1.2vw';
+  bankIcon.style.fontWeight = 700;
   bankIcon.textContent = bankName.charAt(0);
 };
 </script>
@@ -281,8 +281,8 @@ const handleImageError = (event, bankName) => {
 }
 
 .bank-icon {
-  width: 48px;
-  height: 48px;
+  width: 3vw;
+  height: 3vw;
   border-radius: 50%;
   display: flex;
   align-items: center;
