@@ -14,7 +14,7 @@
               />
             </div>
             <p class="subtitle-left">
-              총 <span class="highlight">{{ userProductList.length }}</span
+              총 <span class="highlight">{{ filteredProducts.length }}</span
               >개의 상품을 보유 중이에요!
             </p>
 
@@ -36,19 +36,77 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-
+import { ref, computed, onMounted } from 'vue';
 import Sidebar from '@/components/info/Sidebar.vue';
 import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
 import RightPanel from '@/components/info/RightPanel.vue';
 import CategoryFilterBar from '@/components/info/CategoryFilterBar.vue';
 import UserProductCard from '@/components/info/UserProductCard.vue';
+import FooterComponent from '@/components/allshared/FooterComponent.vue';
 import depositIcon from '@/assets/images/products/deposit.png';
 import savingIcon from '@/assets/images/products/saving.png';
 import fundIcon from '@/assets/images/products/fund.png';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
+
+import { getMyProducts } from '@/api/info/userReviewAPI.js';
 
 const selectedCategory = ref('all');
+const products = ref([]);
+const userProductList = ref([]);
+
+function formatDate(ms) {
+  if (!ms) return '-';
+  const d = new Date(ms);
+  return isNaN(d.getTime()) ? '-' : d.toISOString().split('T')[0];
+}
+function formatAmount(amt) {
+  return amt ? `${amt.toLocaleString()}원` : '-';
+}
+function getTypeLabel(type) {
+  return type === 'DEPOSIT'
+    ? '예금'
+    : type === 'SAVINGS'
+    ? '적금'
+    : type === 'FUND'
+    ? '펀드'
+    : '기타';
+}
+function getIcon(type) {
+  if (type === 'DEPOSIT') return depositIcon;
+  if (type === 'SAVINGS') return savingIcon;
+  if (type === 'FUND') return fundIcon;
+  return depositIcon;
+}
+function changeProductCard(apiData) {
+  return apiData.map((item) => {
+    const type = getTypeLabel(item.prod_type);
+    const baseProduct = {
+      name: item.prod_name,
+      type,
+      bank: item.bank_name,
+      amount: formatAmount(item.balance_amt),
+      return: item.expected_return ?? '-',
+    };
+    if (item.prod_type === 'DEPOSIT' || item.prod_type === 'SAVINGS') {
+      baseProduct.start = formatDate(item.start_date);
+      baseProduct.end = formatDate(item.end_date);
+    }
+    if (item.prod_type === 'FUND') {
+      baseProduct.fundType = item.fund_type ?? '-';
+      baseProduct.riskLevel = item.risk_level ?? '-';
+    }
+    return {
+      type,
+      icon: getIcon(item.prod_type),
+      product: baseProduct,
+    };
+  });
+}
+
+onMounted(async () => {
+  const data = await getMyProducts();
+  products.value = data.registered_list;
+  userProductList.value = changeProductCard(products.value);
+});
 
 const categories = [
   { label: '전체', value: 'all' },
@@ -57,73 +115,11 @@ const categories = [
   { label: '펀드', value: '펀드' },
 ];
 
-// TODO: api 연동(API 연동 전용 mock 데이터)
-const userProductList = [
-  {
-    type: '예금',
-    icon: depositIcon,
-    product: {
-      name: '스마트정기예금',
-      bank: 'KB 국민은행',
-      amount: '1,000,000원',
-      rate: '연 2.3%',
-      start: '2025-05-01',
-      end: '2026-05-01',
-    },
-  },
-  {
-    type: '적금',
-    icon: savingIcon,
-    product: {
-      name: '자유적립적금',
-      bank: '우리은행',
-      amount: '500,000원',
-      rate: '연 2.8%',
-      start: '2025-04-10',
-      end: '2026-04-10',
-    },
-  },
-  {
-    type: '펀드',
-    icon: fundIcon,
-    product: {
-      name: '글로벌테크펀드',
-      bank: 'NH 투자증권',
-      amount: '2,000,000원',
-      rate: '변동수익 (최근 +5.2%)',
-      start: '2025-03-20',
-      end: '제한 없음',
-    },
-  },
-  {
-    type: '예금',
-    icon: depositIcon,
-    product: {
-      name: '비대면전용예금',
-      bank: '카카오뱅크',
-      amount: '2,000,000원',
-      rate: '연 2.45%',
-      start: '2025-07-01',
-      end: '2026-07-01',
-    },
-  },
-  {
-    type: '적금',
-    icon: savingIcon,
-    product: {
-      name: '매일적금',
-      bank: 'IBK 기업은행',
-      amount: '300,000원',
-      rate: '연 3.0%',
-      start: '2025-06-01',
-      end: '2026-06-01',
-    },
-  },
-];
-
 const filteredProducts = computed(() => {
-  if (selectedCategory.value === 'all') return userProductList;
-  return userProductList.filter((item) => item.type === selectedCategory.value);
+  if (selectedCategory.value === 'all') return userProductList.value;
+  return userProductList.value.filter(
+    (item) => item.type === selectedCategory.value
+  );
 });
 </script>
 
