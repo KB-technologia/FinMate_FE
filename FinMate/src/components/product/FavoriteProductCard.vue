@@ -138,10 +138,6 @@ const getTypeName = (type) => {
   return names[type] || type;
 };
 
-const getBankInitial = (bankName) => {
-  return bankName.charAt(0);
-};
-
 const handleImageError = (event) => {
   // 이미지 로드 실패 시 텍스트로 대체
   const bankIcon = event.target.parentElement;
@@ -158,30 +154,17 @@ const handleImageError = (event) => {
   bankIcon.style.width = '2vw';
   bankIcon.style.height = '4vh';
   bankIcon.style.borderRadius = '0.3vw';
-  bankIcon.textContent = getBankInitial(props.product.bankName);
-};
-
-// 위험등급 관련 메서드 (1~6등급)
-const getRiskClass = (riskGrade) => {
-  const classes = {
-    1: 'risk-grade-1',
-    2: 'risk-grade-2',
-    3: 'risk-grade-3',
-    4: 'risk-grade-4',
-    5: 'risk-grade-5',
-    6: 'risk-grade-6',
-  };
-  return classes[riskGrade] || 'risk-grade-3';
+  bankIcon.textContent = props.product.bankName.charAt(0);
 };
 
 const getRiskName = (riskGrade) => {
   const names = {
-    2: '매우 낮은 위험',
-    3: '낮은 위험',
-    4: '보통 위험',
-    5: '다소 높은 위험',
-    6: '높은 위험',
-    7: '매우 높은 위험',
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
   };
   return names[riskGrade] || '보통위험';
 };
