@@ -182,12 +182,12 @@ const next = () => {
 }
 
 .arrow-button {
-  color: var(--color-white);
-  font-size: 3rem;
+  color: var(--color-black);
+  font-size: 5rem;
   border-radius: 1vh;
   cursor: pointer;
   user-select: none;
-  margin-top: 30vh;
+  margin-top: 5vh;
   transition: background-color 0.2s ease;
 }
 
