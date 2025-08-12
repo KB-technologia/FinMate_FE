@@ -77,47 +77,7 @@
 
           <div class="comparison-details">
             <div class="comparison-grid">
-              <div class="comparison-section analysis-section">
-                <h3 class="section-title">
-                  <svg
-                    width="1.2vw"
-                    height="1.2vw"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"
-                    />
-                    <path d="M9 7L12 4L15 7" />
-                    <path d="M12 4V16" />
-                  </svg>
-                  AI 분석 결과
-                </h3>
-                <div class="analysis-content">
-                  <div v-if="isLoadingAnalysis" class="loading-spinner">
-                    <div class="spinner"></div>
-                    <p>분석 중...</p>
-                  </div>
-                  <div v-else-if="analysisError" class="error-message">
-                    <p>{{ analysisError }}</p>
-                    <button
-                      @click="fetchComparisonAnalysis"
-                      class="retry-button"
-                    >
-                      다시 시도
-                    </button>
-                  </div>
-                  <div v-else-if="analysisResult" class="analysis-result">
-                    <div
-                      class="analysis-text"
-                      v-html="parseMarkdown(analysisResult)"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-
+              <!-- 기본 정보 -->
               <div class="comparison-section">
                 <h3 class="section-title">기본 정보</h3>
                 <div class="comparison-table">
@@ -161,16 +121,17 @@
                 </div>
               </div>
 
-              <div class="comparison-section">
+              <!-- 예금/적금 전용 상세 정보 -->
+              <div v-if="isDepositOrSavings" class="comparison-section">
                 <h3 class="section-title">상세 정보</h3>
                 <div class="comparison-table">
                   <div class="comparison-row">
                     <div class="comparison-label">최소 가입금액</div>
                     <div class="comparison-value left">
-                      {{ formatAmount(selectedProducts[0].minAmount) }}
+                      {{ formatAmount(selectedProducts[0].detail?.minAmount) }}
                     </div>
                     <div class="comparison-value right">
-                      {{ formatAmount(selectedProducts[1].minAmount) }}
+                      {{ formatAmount(selectedProducts[1].detail?.minAmount) }}
                     </div>
                   </div>
                   <div class="comparison-row">
@@ -178,123 +139,250 @@
                     <div class="comparison-value left">
                       {{
                         formatTerm(
-                          selectedProducts[0].minTerm,
-                          selectedProducts[0].maxTerm
+                          selectedProducts[0].detail?.minTerm,
+                          selectedProducts[0].detail?.maxTerm
                         )
                       }}
                     </div>
                     <div class="comparison-value right">
                       {{
                         formatTerm(
-                          selectedProducts[1].minTerm,
-                          selectedProducts[1].maxTerm
+                          selectedProducts[1].detail?.minTerm,
+                          selectedProducts[1].detail?.maxTerm
                         )
                       }}
                     </div>
                   </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">기본금리</div>
+                    <div class="comparison-value left">
+                      {{ formatRate(selectedProducts[0].expectedReturn) }}%
+                    </div>
+                    <div class="comparison-value right">
+                      {{ formatRate(selectedProducts[1].expectedReturn) }}%
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">우대금리</div>
+                    <div class="comparison-value left">
+                      {{
+                        formatRate(selectedProducts[0].detail?.bonusRate || 0)
+                      }}%
+                    </div>
+                    <div class="comparison-value right">
+                      {{
+                        formatRate(selectedProducts[1].detail?.bonusRate || 0)
+                      }}%
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">이자 유형</div>
+                    <div class="comparison-value left">
+                      {{
+                        getInterestType(
+                          selectedProducts[0].detail?.interestType
+                        )
+                      }}
+                    </div>
+                    <div class="comparison-value right">
+                      {{
+                        getInterestType(
+                          selectedProducts[1].detail?.interestType
+                        )
+                      }}
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">중도해지 수수료</div>
+                    <div class="comparison-value left">
+                      {{
+                        formatRate(
+                          selectedProducts[0].detail?.earlyWithdrawalPenalty ||
+                            0
+                        )
+                      }}%
+                    </div>
+                    <div class="comparison-value right">
+                      {{
+                        formatRate(
+                          selectedProducts[1].detail?.earlyWithdrawalPenalty ||
+                            0
+                        )
+                      }}%
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                  <template
-                    v-if="
-                      selectedProducts[0].productType === 'DEPOSIT' ||
-                      selectedProducts[0].productType === 'SAVINGS'
-                    "
-                  >
-                    <div class="comparison-row">
-                      <div class="comparison-label">기본금리</div>
-                      <div class="comparison-value left">
-                        {{ formatRate(selectedProducts[0].expectedReturn) }}%
-                      </div>
-                      <div class="comparison-value right">
-                        {{ formatRate(selectedProducts[1].expectedReturn) }}%
-                      </div>
+              <!-- 펀드 전용 상세 정보 -->
+              <div v-if="isFund" class="comparison-section">
+                <h3 class="section-title">펀드 정보</h3>
+                <div class="comparison-table">
+                  <div class="comparison-row">
+                    <div class="comparison-label">펀드유형</div>
+                    <div class="comparison-value left">
+                      {{ getFundType(selectedProducts[0].detail?.fundType) }}
                     </div>
-                    <div class="comparison-row">
-                      <div class="comparison-label">우대금리</div>
-                      <div class="comparison-value left">
-                        {{
-                          formatRate(
-                            selectedProducts[0].detail?.bonusRate || 0
-                          )
-                        }}%
-                      </div>
-                      <div class="comparison-value right">
-                        {{
-                          formatRate(
-                            selectedProducts[1].detail?.bonusRate || 0
-                          )
-                        }}%
-                      </div>
+                    <div class="comparison-value right">
+                      {{ getFundType(selectedProducts[1].detail?.fundType) }}
                     </div>
-                    <div class="comparison-row">
-                      <div class="comparison-label">이자 유형</div>
-                      <div class="comparison-value left">
-                        {{
-                          getInterestType(
-                            selectedProducts[0].detail?.interestType
-                          )
-                        }}
-                      </div>
-                      <div class="comparison-value right">
-                        {{
-                          getInterestType(
-                            selectedProducts[1].detail?.interestType
-                          )
-                        }}
-                      </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">위험도</div>
+                    <div class="comparison-value left">
+                      {{
+                        getRiskLevel(
+                          selectedProducts[0].detail?.riskGrade ||
+                            selectedProducts[0].riskLevel
+                        )
+                      }}
                     </div>
-                    <div class="comparison-row">
-                      <div class="comparison-label">중도해지 수수료</div>
-                      <div class="comparison-value left">
-                        {{
-                          formatRate(
-                            selectedProducts[0].detail
-                              ?.earlyWithdrawalPenalty || 0
-                          )
-                        }}%
-                      </div>
-                      <div class="comparison-value right">
-                        {{
-                          formatRate(
-                            selectedProducts[1].detail
-                              ?.earlyWithdrawalPenalty || 0
-                          )
-                        }}%
-                      </div>
+                    <div class="comparison-value right">
+                      {{
+                        getRiskLevel(
+                          selectedProducts[1].detail?.riskGrade ||
+                            selectedProducts[1].riskLevel
+                        )
+                      }}
                     </div>
-                  </template>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">기준가</div>
+                    <div class="comparison-value left">
+                      {{ formatAmount(selectedProducts[0].detail?.nav) }}원
+                    </div>
+                    <div class="comparison-value right">
+                      {{ formatAmount(selectedProducts[1].detail?.nav) }}원
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">순자산(AUM)</div>
+                    <div class="comparison-value left">
+                      {{ formatAum(selectedProducts[0].detail?.aum) }}
+                    </div>
+                    <div class="comparison-value right">
+                      {{ formatAum(selectedProducts[1].detail?.aum) }}
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">총비용비율</div>
+                    <div class="comparison-value left">
+                      {{
+                        formatRate(selectedProducts[0].detail?.expenseRatio)
+                      }}%
+                    </div>
+                    <div class="comparison-value right">
+                      {{
+                        formatRate(selectedProducts[1].detail?.expenseRatio)
+                      }}%
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">환매 소요일</div>
+                    <div class="comparison-value left">
+                      {{ selectedProducts[0].detail?.redemptionPeriod || '-' }}
+                      영업일
+                    </div>
+                    <div class="comparison-value right">
+                      {{ selectedProducts[1].detail?.redemptionPeriod || '-' }}
+                      영업일
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 차트 비교 - 회색 배경 안으로 통합 -->
+            <div
+              v-if="hasProductRateData"
+              class="comparison-section chart-section"
+            >
+              <h3 class="section-title">
+                {{ isFund ? '수익률 추이 비교' : '금리 추이 비교' }}
+              </h3>
+              <div class="charts-container">
+                <div class="chart-item">
+                  <div class="chart-item-header">
+                    <h4 class="chart-item-title">
+                      {{ selectedProducts[0].name }}
+                    </h4>
+                    <span class="chart-bank-name">{{
+                      selectedProducts[0].bankName
+                    }}</span>
+                  </div>
+                  <div class="chart-wrapper">
+                    <ProductRateChart
+                      v-if="selectedProducts[0].productRate"
+                      :product-rate="selectedProducts[0].productRate"
+                      :title="isFund ? '수익률 추이' : '금리 추이'"
+                      :show-zero-line="isFund"
+                    />
+                    <div v-else class="no-chart-data">
+                      차트 데이터가 없습니다
+                    </div>
+                  </div>
+                </div>
 
-                  <template
-                    v-else-if="selectedProducts[0].productType === 'FUND'"
-                  >
-                    <div class="comparison-row">
-                      <div class="comparison-label">펀드유형</div>
-                      <div class="comparison-value left">
-                        {{ selectedProducts[0].detail?.fundType || '-' }}
-                      </div>
-                      <div class="comparison-value right">
-                        {{ selectedProducts[1].detail?.fundType || '-' }}
-                      </div>
+                <div class="chart-item">
+                  <div class="chart-item-header">
+                    <h4 class="chart-item-title">
+                      {{ selectedProducts[1].name }}
+                    </h4>
+                    <span class="chart-bank-name">{{
+                      selectedProducts[1].bankName
+                    }}</span>
+                  </div>
+                  <div class="chart-wrapper">
+                    <ProductRateChart
+                      v-if="selectedProducts[1].productRate"
+                      :product-rate="selectedProducts[1].productRate"
+                      :title="isFund ? '수익률 추이' : '금리 추이'"
+                      :show-zero-line="isFund"
+                    />
+                    <div v-else class="no-chart-data">
+                      차트 데이터가 없습니다
                     </div>
-                    <div class="comparison-row">
-                      <div class="comparison-label">위험도</div>
-                      <div class="comparison-value left">
-                        {{
-                          getRiskLevel(
-                            selectedProducts[0].detail?.riskGrade ||
-                              selectedProducts[0].riskLevel
-                          )
-                        }}
-                      </div>
-                      <div class="comparison-value right">
-                        {{
-                          getRiskLevel(
-                            selectedProducts[1].detail?.riskGrade ||
-                              selectedProducts[1].riskLevel
-                          )
-                        }}
-                      </div>
-                    </div>
-                  </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI 분석 결과 -->
+          <div class="analysis-wrapper">
+            <div class="comparison-section analysis-section">
+              <h3 class="section-title">
+                <svg
+                  width="1.2vw"
+                  height="1.2vw"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"
+                  />
+                  <path d="M9 7L12 4L15 7" />
+                  <path d="M12 4V16" />
+                </svg>
+                AI 분석 결과
+              </h3>
+              <div class="analysis-content">
+                <div v-if="isLoadingAnalysis" class="loading-spinner">
+                  <div class="spinner"></div>
+                  <p>분석 중...</p>
+                </div>
+                <div v-else-if="analysisError" class="error-message">
+                  <p>{{ analysisError }}</p>
+                  <button @click="fetchComparisonAnalysis" class="retry-button">
+                    다시 시도
+                  </button>
+                </div>
+                <div v-else-if="analysisResult" class="analysis-result">
+                  <div
+                    class="analysis-text"
+                    v-html="parseMarkdown(analysisResult)"
+                  ></div>
                 </div>
               </div>
             </div>
@@ -310,8 +398,9 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue';
+import { ref, watch, nextTick, computed } from 'vue';
 import { productService } from '../../api/product/productService';
+import ProductRateChart from './ProductRateChart.vue';
 
 const props = defineProps({
   isVisible: { type: Boolean, default: false },
@@ -323,6 +412,28 @@ const emit = defineEmits(['close']);
 const isLoadingAnalysis = ref(false);
 const analysisError = ref(null);
 const analysisResult = ref(null);
+
+const isDepositOrSavings = computed(() => {
+  return (
+    props.selectedProducts.length === 2 &&
+    (props.selectedProducts[0].productType === 'DEPOSIT' ||
+      props.selectedProducts[0].productType === 'SAVINGS') &&
+    (props.selectedProducts[1].productType === 'DEPOSIT' ||
+      props.selectedProducts[1].productType === 'SAVINGS')
+  );
+});
+
+const isFund = computed(() => {
+  return (
+    props.selectedProducts.length === 2 &&
+    props.selectedProducts[0].productType === 'FUND' &&
+    props.selectedProducts[1].productType === 'FUND'
+  );
+});
+
+const hasProductRateData = computed(() => {
+  return props.selectedProducts.some((product) => product.productRate);
+});
 
 watch(
   () => props.isVisible,
@@ -430,9 +541,32 @@ const getInterestType = (type) => {
   return types[type] || type || '-';
 };
 
+const getFundType = (type) => {
+  const types = {
+    STOCK: '주식형',
+    BOND: '채권형',
+    MIXED_EQUITY_BOND: '혼합형',
+    REAL_ESTATE: '부동산형',
+    SPECIAL_ASSET: '특별자산형',
+    HYBRID_ASSET: '혼합자산형',
+  };
+  return types[type] || type || '-';
+};
+
 const formatRate = (rate) => (rate ? rate.toFixed(2) : '0.00');
 const formatAmount = (amount) =>
-  !amount ? '-' : new Intl.NumberFormat('ko-KR').format(amount) + '원';
+  !amount ? '-' : new Intl.NumberFormat('ko-KR').format(amount);
+const formatAum = (aum) => {
+  if (!aum || aum === 0) return '-';
+  const value = Number(aum);
+  if (value >= 1e12) {
+    return `${(value / 1e12).toFixed(1)}조원`;
+  } else if (value >= 1e8) {
+    return `${(value / 1e8).toFixed(1)}억원`;
+  } else {
+    return `${value.toLocaleString()}원`;
+  }
+};
 
 const formatTerm = (minTerm, maxTerm) => {
   if (!minTerm && !maxTerm) return '-';
@@ -459,7 +593,14 @@ const parseMarkdown = (text) => {
 };
 
 const getRiskLevel = (level) => {
-  const levels = { 1: '안전', 2: '낮음', 3: '보통', 4: '높음', 5: '매우높음' };
+  const levels = {
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
+  };
   return levels[level] || `${level}등급`;
 };
 </script>
@@ -482,8 +623,9 @@ const getRiskLevel = (level) => {
 .modal-container {
   background: white;
   border-radius: 1vw;
-  width: 60vw;
+  width: 70vw;
   max-height: 90vh;
+  max-width: 90vw;
   overflow: hidden;
   box-shadow: 0 1.2vw 3.6vw rgba(0, 0, 0, 0.3);
   display: flex;
@@ -504,6 +646,13 @@ const getRiskLevel = (level) => {
   font-weight: 700;
   color: #333;
   margin: 0;
+}
+
+.analysis-wrapper {
+  background: #f9f9f9;
+  border-radius: 0.75vw;
+  padding: 2vh 2vw;
+  margin-top: 3vh;
 }
 
 .close-button {
@@ -531,7 +680,7 @@ const getRiskLevel = (level) => {
 }
 
 .compare-container {
-  margin-bottom: 2vh;
+  margin-bottom: 3vh;
 }
 
 .vs-compare-card {
@@ -696,13 +845,14 @@ const getRiskLevel = (level) => {
 .comparison-details {
   background: #f9f9f9;
   border-radius: 0.75vw;
-  padding: 1.5vh 1.5vw;
+  padding: 2vh 2vw;
+  margin-bottom: 3vh;
 }
 
 .comparison-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.5vh;
+  gap: 2.5vh;
 }
 
 .comparison-section {
@@ -727,6 +877,67 @@ const getRiskLevel = (level) => {
 
 .analysis-section .section-title {
   border-bottom-color: #2196f3;
+}
+
+.chart-section {
+  padding: 2vh 2vw;
+}
+
+.charts-container {
+  display: grid;
+  flex-direction: column;
+  gap: 2.5vw;
+}
+
+.chart-item {
+  background: #fafafa;
+  border-radius: 0.5vw;
+  padding: 1.5vh 1.5vw;
+  border: 1px solid #e5e7eb;
+  min-width: 0;
+}
+
+.chart-item-header {
+  margin-bottom: 1vh;
+  padding-bottom: 1vh;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.chart-item-title {
+  font-size: 1vw;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 0.5vh 0;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.chart-bank-name {
+  font-size: 0.8vw;
+  color: #666;
+  font-weight: 500;
+}
+
+.chart-wrapper {
+  min-height: 20vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.no-chart-data {
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.9vw;
+  background: #f8f9fa;
+  border-radius: 0.5vw;
+  border: 1px dashed #ddd;
 }
 
 .analysis-content {
