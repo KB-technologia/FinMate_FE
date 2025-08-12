@@ -17,7 +17,7 @@
         <div class="CardContainer">
           <MainProductCard
             v-for="(item, index) in visibleProducts"
-            :key="index"
+            :key="`product-${item.id}-${currentIndex}-${index}`"
             :product="item"
           />
         </div>

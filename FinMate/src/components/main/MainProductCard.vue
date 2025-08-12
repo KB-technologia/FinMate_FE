@@ -145,12 +145,15 @@ const getBankLogo = (bankName) => {
 };
 
 const handleImageError = (event) => {
-  const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
+  const bankIcon = event.target?.parentElement;
+  if (!bankIcon) return;
 
+  if (event.target) {
+    event.target.style.display = 'none';
+  }
   bankIcon.style.backgroundColor = '#f0f0f0';
   bankIcon.style.color = '#666';
-  bankIcon.textContent = props.product.bankName.charAt(0);
+  bankIcon.textContent = props.product.bankName?.charAt(0) || '?';
 };
 
 const getRateLabel = (type) => {
