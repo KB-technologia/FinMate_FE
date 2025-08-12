@@ -7,7 +7,11 @@
           <span v-else-if="meError">불러오기 실패</span>
           <span v-else>{{ displayAccountId }}</span>
         </p>
-        <p class="level">Lv.3 소심한 카피바라</p>
+        <p class="level">
+          <span v-if="statLoading">로딩중…</span>
+          <span v-else-if="statError">정보 불러오기 실패</span>
+          <span v-else>{{ levelTitle }}</span>
+        </p>
         <div class="edit-icon-wrap">
           <Tooltip text="정보 수정" :offset="10" theme="naver">
             <button
@@ -97,8 +101,11 @@ import Tooltip from "@/components/allshared/Tooltip.vue";
 import ConfirmModal from "@/components/allshared/ConfirmModal.vue";
 import { useToast } from "@/composables/useToast";
 import withdrawImage from "@/assets/images/logos/withdrawkiwi.png";
+
 import { withdraw } from "@/api/auth/auth.js";
 import { getMyInfo } from "@/api/info/userInfoAPI";
+import { getUserData } from "@/api/mypage/level.js";
+import { getCharacter } from "@/api/mypage/character.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -109,6 +116,11 @@ const meLoading = ref(false);
 const meError = ref(false);
 
 const showWithdrawConfirm = ref(false);
+
+const userData = ref(null);
+const characterData = ref(null);
+const statLoading = ref(false);
+const statError = ref(false);
 
 const current = computed(() => {
   const path = route.path;
@@ -143,6 +155,7 @@ const handleWithdrawConfirm = async (confirmed) => {
       localStorage.removeItem("token");
       window.location.href = "/";
     } catch (error) {
+      // TODO: 콘솔 로그 지우기
       console.error("회원 탈퇴 처리 실패:", error);
       toast("탈퇴 처리 중 오류가 발생했습니다.", "error");
     }
@@ -160,6 +173,28 @@ onMounted(async () => {
   } finally {
     meLoading.value = false;
   }
+  try {
+    statLoading.value = true;
+    const [ud, ch] = await Promise.all([getUserData(), getCharacter()]);
+    userData.value = ud;
+    characterData.value = ch;
+  } catch (e) {
+    // TODO: 콘솔 로그 지우기
+    console.warn("사이드바 스탯/캐릭터 불러오기 실패:", e);
+    statError.value = true;
+  } finally {
+    statLoading.value = false;
+  }
+});
+
+const levelTitle = computed(() => {
+  const lv = userData.value?.currentLevel;
+  const summary = userData.value?.profileSummary;
+  const name = characterData.value?.animalName;
+
+  const left = lv != null ? `Lv.${lv}` : "Lv.-";
+  const right = [summary, name].filter(Boolean).join(" ");
+  return right ? `${left} ${right}` : left;
 });
 
 const displayAccountId = computed(() => me.value?.accountId ?? "...");
@@ -180,7 +215,7 @@ const displayAccountId = computed(() => me.value?.accountId ?? "...");
 
 .top-area {
   flex-shrink: 0;
-  margin-top: 1.5rem;
+  margin-top: 0.75rem;
 }
 
 .user-info {
@@ -283,7 +318,7 @@ const displayAccountId = computed(() => me.value?.accountId ?? "...");
 
 .edit-icon-wrap {
   position: absolute;
-  top: -0.4rem;
+  top: 0.1rem;
   right: 0.8rem;
 }
 
