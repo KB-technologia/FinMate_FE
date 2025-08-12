@@ -7,7 +7,7 @@
         <RightPanel :scroll="true">
           <div class="panel-inner">
             <div class="my-products-header">
-              <h1 class="title">My Products</h1>
+              <h1 class="title">나의 보유 상품</h1>
               <CategoryFilterBar
                 v-model="selectedCategory"
                 :categories="categories"

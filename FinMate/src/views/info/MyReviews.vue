@@ -7,7 +7,7 @@
         <RightPanel :scroll="true" class="stats-right-panel">
           <div class="panel-inner">
             <div class="my-reviews-header">
-              <h1 class="title">My Review</h1>
+              <h1 class="title">나의 작성 리뷰</h1>
               <CategoryFilterBar
                 v-model="selectedCategory"
                 :categories="categories"

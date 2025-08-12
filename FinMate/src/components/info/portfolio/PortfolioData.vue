@@ -95,7 +95,7 @@ watch(
 <template>
   <ToastContainer ref="toastRef" />
   <div class="right-panel-container">
-    <h2 class="title">My Portfolio</h2>
+    <h2 class="title">나의 자산 포트폴리오</h2>
     <div class="chart-info-row">
       <div class="chart-wrapper">
         <canvas ref="chartCanvasRef"></canvas>
