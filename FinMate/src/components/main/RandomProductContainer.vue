@@ -102,6 +102,7 @@ const next = () => {
   align-items: center;
   justify-content: center;
   margin-bottom: 1vh;
+  gap: 10vh;
 }
 
 .CardContainer {
@@ -109,7 +110,7 @@ const next = () => {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 5vh;
+  margin-top: 3vh;
   padding: 3vh;
 }
 
@@ -131,7 +132,7 @@ const next = () => {
 }
 
 .foodstuffs {
-  background: url('@/assets/images/etc/동물상회.png') no-repeat center;
+  background: url('@/assets/images/etc/흙흙.png') no-repeat center;
   background-size: 100% 100%;
   width: 200vh;
   height: 75vh;
@@ -142,7 +143,7 @@ const next = () => {
   margin-top: 1vh;
 }
 .mainbody {
-  margin-top: 6vh;
+  margin-top: 4vh;
 }
 .CardContainer {
   display: flex;
@@ -151,7 +152,7 @@ const next = () => {
   align-items: center;
   width: 100%;
   height: 95%;
-  gap: 2vw;
+  transform: scale(1.1);
 }
 
 .detail-button {
@@ -163,7 +164,7 @@ const next = () => {
   background-color: var(--color-white);
   font-weight: var(--font-weight-medium);
   transition: all 0.1s ease;
-  margin-top: 1.5vh;
+  margin-top: 3.5vh;
 }
 
 .detail-button:hover {
@@ -186,7 +187,7 @@ const next = () => {
   border-radius: 1vh;
   cursor: pointer;
   user-select: none;
-  margin-top: 17vh;
+  margin-top: 30vh;
   transition: background-color 0.2s ease;
 }
 
