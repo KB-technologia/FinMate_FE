@@ -58,13 +58,11 @@
           <template v-else-if="product.productType === 'FUND'">
             <div class="info-row">
               <span>펀드유형:</span>
-              <span>{{ product.detail.fundType }}</span>
+              <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
             </div>
             <div class="info-row">
               <span>위험도:</span>
-              <span>{{
-                getRiskLevel(product.detail.riskGrade || product.riskLevel)
-              }}</span>
+              <span>{{ getRiskLevel(product.detail.riskGrade) }}</span>
             </div>
           </template>
         </div>
@@ -167,13 +165,28 @@ const getRateLabel = (type) => {
 const formatRate = (rate) => {
   return rate ? rate.toFixed(2) : '0.00';
 };
+
+const subCategoriesMap = (fundType) => {
+  const fundChange = {
+    STOCK: '주식형',
+    BOND: '채권형',
+    MIXED_EQUITY_BOND: '혼합형',
+    REAL_ESTATE: '부동산',
+    SPECIAL_ASSET: '특별자산',
+    HYBRID_ASSET: '파생상품',
+  };
+
+  return fundChange[fundType] || fundType;
+};
+
 const getRiskLevel = (level) => {
   const levels = {
-    1: '안전',
-    2: '낮음',
-    3: '보통',
-    4: '높음',
-    5: '매우높음',
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
   };
   return levels[level] || `${level}등급`;
 };
