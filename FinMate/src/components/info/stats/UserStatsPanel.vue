@@ -59,7 +59,6 @@
           >각 항목을 클릭하시면 테스트 결과를 자세히 확인하실 수 있습니다.</span
         >
       </p>
-      <!-- 가치관 -->
       <ChoiceStatCard
         :index="0"
         title="가치관"
@@ -71,8 +70,6 @@
         :readonly="true"
         @toggle="toggle('value')"
       />
-
-      <!-- 속도 -->
       <ChoiceStatCard
         :index="1"
         title="속도"
@@ -85,8 +82,6 @@
         :readonly="true"
         @toggle="toggle('speed')"
       />
-
-      <!-- 운/전략 -->
       <ChoiceStatCard
         :index="2"
         title="운/전략"
@@ -98,8 +93,6 @@
         :readonly="true"
         @toggle="toggle('luckStrategy')"
       />
-
-      <!-- 재정 (바) -->
       <BarStatCard
         :index="3"
         label="재정"
@@ -112,8 +105,6 @@
         :expanded="activeCard === 'finance'"
         @toggle="toggle('finance')"
       />
-
-      <!-- 모험 성향 (바) -->
       <BarStatCard
         :index="4"
         label="모험 성향"
@@ -199,6 +190,7 @@ const adventureDesc = computed(
 onMounted(async () => {
   try {
     const { data: stat } = await getMemberStat();
+    //TODO : 콘솔 로그 삭제
     console.log("☑️ /api/my-page/stat 응답:", stat);
     financePercent.value = Math.max(
       0,
