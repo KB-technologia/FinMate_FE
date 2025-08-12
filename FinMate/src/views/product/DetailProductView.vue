@@ -49,6 +49,8 @@
         />
         <div class="review-list">
           <ReviewCard
+            ㄹ
+            v-if="reviews.length > 0"
             v-for="review in paginatedReviews"
             :key="review.id"
             :username="review.writer"
@@ -56,6 +58,7 @@
             :date="formatDate(review.createdAt)"
             :content="review.content"
           />
+          <div v-else class="no-review">리뷰가 없습니다.</div>
         </div>
         <Pagination
           :current-page="currentPage"
@@ -364,6 +367,7 @@ const loadProductData = async () => {
       : [];
 
     // 즐겨찾기 상태 확인
+    console.log(reviewsResponse.data);
     await checkFavoriteStatus();
   } catch (err) {
     console.error('데이터 로딩 중 오류 발생:', err);
@@ -518,5 +522,15 @@ onMounted(() => {
 
 :deep(.star-icon) {
   font-size: 3rem;
+}
+
+.no-review {
+  width: 100%;
+  height: 15vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2vh;
+  color: var(--color-dark-gray);
 }
 </style>
