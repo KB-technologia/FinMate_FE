@@ -127,19 +127,28 @@ const formatAmount = (amount) => {
   return amount?.toLocaleString() || '0';
 };
 
+// 은행 이미지 경로 생성
 const getBankImagePath = (bankName) => {
   const bankCode = getBankCodeFromName(bankName);
-  return new URL(
-    `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-    import.meta.url
-  ).href;
+  try {
+    return new URL(
+      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
+      import.meta.url
+    ).href;
+  } catch {
+    // 이미지 로드 실패 시 대체 경로
+    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
+  }
 };
 
+// 이미지 로드 실패 시 처리
 const handleImageError = (event) => {
-  const wrapper = event.target.parentElement;
+  // 이미지 로드 실패 시 텍스트로 대체
+  const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
-  wrapper.style.backgroundColor = '#eee';
-  wrapper.textContent = product.bankName?.charAt(0) || '?';
+  bankIcon.style.backgroundColor = '#f0f0f0';
+  bankIcon.style.color = '#666';
+  bankIcon.textContent = props.product.bankName.charAt(0);
 };
 
 const getInterestType = (type) => {
@@ -274,6 +283,10 @@ const getPaymentCycle = (cycle) => {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #f5f5f5;
+  font-weight: 700;
+  font-size: 2.4rem;
+  color: #666;
 }
 
 .bank-logo {

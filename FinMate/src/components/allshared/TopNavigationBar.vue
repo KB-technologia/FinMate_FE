@@ -16,36 +16,27 @@
         :class="{ active: route.path === '/favorites' }"
         @click="$router.push('/favorites')"
       >
-        <Heart class="icon-large heart-filled" />
+        <Tooltip text="즐겨찾기" theme="naver">
+          <Heart class="icon-large heart-filled" />
+        </Tooltip>
       </div>
       <div
         class="top-navigation-menu-right-item"
         :class="{ active: route.path === '/products' }"
         @click="$router.push('/products')"
       >
-        <PackageSearch class="icon-large" />
+        <Tooltip text="상품 검색" theme="naver">
+          <PackageSearch class="icon-large" />
+        </Tooltip>
       </div>
-      <!-- <div class="top-navigation-menu-right-item hvr-underline-from-center">
-        추천 아이템
-      </div>
-      <div class="top-navigation-menu-right-item hvr-underline-from-center">
-        자유게시판
-      </div> -->
-      <!-- <div
-        class="top-navigation-menu-right-item hvr-underline-from-center"
-        :class="{
-          active: route.path === '/quizstart' || route.path === '/quiz',
-        }"
-        @click="$router.push('/quizstart')"
-      >
-        투자 성향 테스트
-      </div> -->
       <div
         class="top-navigation-menu-right-item"
         :class="{ active: route.path === '/my-stats' }"
         @click="$router.push('/my-stats')"
       >
-        <CircleUserRound class="icon-large" />
+        <Tooltip text="마이페이지" theme="naver">
+          <CircleUserRound class="icon-large" />
+        </Tooltip>
       </div>
     </div>
   </nav>
@@ -55,6 +46,8 @@
 import '@/styles/fonts.css';
 import { CircleUserRound, PackageSearch, Heart } from 'lucide-vue-next';
 import { useRoute } from 'vue-router';
+import Tooltip from '@/components/allshared/Tooltip.vue';
+
 const route = useRoute();
 </script>
 
