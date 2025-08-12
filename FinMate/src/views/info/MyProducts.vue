@@ -7,7 +7,7 @@
         <RightPanel :scroll="true">
           <div class="panel-inner">
             <div class="my-products-header">
-              <h1 class="title">My Products</h1>
+              <h1 class="title">나의 보유 상품</h1>
               <CategoryFilterBar
                 v-model="selectedCategory"
                 :categories="categories"
@@ -109,10 +109,10 @@ onMounted(async () => {
 });
 
 const categories = [
-  { label: '전체', value: 'all' },
-  { label: '예금', value: '예금' },
-  { label: '적금', value: '적금' },
-  { label: '펀드', value: '펀드' },
+  { label: "전체", value: "all" },
+  { label: "예금", value: "예금" },
+  { label: "적금", value: "적금" },
+  { label: "펀드", value: "펀드" },
 ];
 
 const filteredProducts = computed(() => {
@@ -132,6 +132,22 @@ const filteredProducts = computed(() => {
   width: 100vw;
   height: 100vh;
 }
+
+.mypage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("@/assets/images/backgroundImage/background_myinfo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
+}
+
 .mypage-container {
   display: flex;
   gap: 2rem;

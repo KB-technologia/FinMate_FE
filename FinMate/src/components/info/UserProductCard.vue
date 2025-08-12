@@ -76,12 +76,10 @@ const riskLevelText = computed(() => {
 .product-box {
   flex: 1;
   min-width: 280px;
-  border: 2px solid var(--color-primary-bluegray);
-  border-radius: 16px;
+  border-radius: var(--card-radius);
   padding: 1.5rem;
   background-color: var(--color-white);
-  font-family: var(--font-wanted);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--card-shadow);
 }
 
 .product-header {

@@ -30,7 +30,7 @@
     <div class="interest-info">
       <div class="main-interest">
         <span class="interest-label">{{
-          product.productType === 'FUND' ? '수익률' : '최고'
+          product.productType === "FUND" ? "수익률" : "최고"
         }}</span>
         <span class="interest-rate">{{ product.maxInterestRate }}%</span>
       </div>
@@ -59,9 +59,8 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-import { Heart } from 'lucide-vue-next';
-import { useRouter } from 'vue-router';
+import { Heart } from "lucide-vue-next";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
@@ -72,43 +71,43 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['remove-favorite']);
+const emit = defineEmits(["remove-favorite"]);
 
 // 메서드
 const handleRemoveFavorite = () => {
-  emit('remove-favorite', props.product.id);
+  emit("remove-favorite", props.product.id);
 };
 
 const getBankLogo = (bankName) => {
   const bankLogos = {
-    국민은행: '/src/assets/images/banks/kb.png',
-    신한은행: '/src/assets/images/banks/shinhan.png',
-    하나은행: '/src/assets/images/banks/hana.png',
-    우리은행: '/src/assets/images/banks/woori.png',
-    NH농협은행: '/src/assets/images/banks/nh.png',
-    IBK기업은행: '/src/assets/images/banks/ibk.png',
-    카카오뱅크: '/src/assets/images/banks/kakao.png',
-    케이뱅크: '/src/assets/images/banks/kbank.png',
-    SC제일은행: '/src/assets/images/banks/sc.png',
-    토스뱅크: '/src/assets/images/banks/toss.png',
+    국민은행: "/src/assets/images/banks/kb.png",
+    신한은행: "/src/assets/images/banks/shinhan.png",
+    하나은행: "/src/assets/images/banks/hana.png",
+    우리은행: "/src/assets/images/banks/woori.png",
+    NH농협은행: "/src/assets/images/banks/nh.png",
+    IBK기업은행: "/src/assets/images/banks/ibk.png",
+    카카오뱅크: "/src/assets/images/banks/kakao.png",
+    케이뱅크: "/src/assets/images/banks/kbank.png",
+    SC제일은행: "/src/assets/images/banks/sc.png",
+    토스뱅크: "/src/assets/images/banks/toss.png",
   };
-  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
+  return bankLogos[bankName] || "/src/assets/images/banks/default.png";
 };
 
 const getTypeClass = (type) => {
   const classes = {
-    SAVINGS: 'type-savings',
-    DEPOSIT: 'type-deposit',
-    FUND: 'type-fund',
+    SAVINGS: "type-savings",
+    DEPOSIT: "type-deposit",
+    FUND: "type-fund",
   };
-  return classes[type] || 'type-default';
+  return classes[type] || "type-default";
 };
 
 const getTypeName = (type) => {
   const names = {
-    SAVINGS: '예금',
-    DEPOSIT: '적금',
-    FUND: '펀드',
+    SAVINGS: "예금",
+    DEPOSIT: "적금",
+    FUND: "펀드",
   };
   return names[type] || type;
 };
@@ -120,45 +119,45 @@ const getBankInitial = (bankName) => {
 const handleImageError = (event) => {
   // 이미지 로드 실패 시 텍스트로 대체
   const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
+  event.target.style.display = "none";
 
-  bankIcon.classList.add('image-error');
-  bankIcon.style.backgroundColor = '#f0f0f0';
-  bankIcon.style.color = '#666';
-  bankIcon.style.display = 'flex';
-  bankIcon.style.alignItems = 'center';
-  bankIcon.style.justifyContent = 'center';
-  bankIcon.style.fontSize = '2vh';
-  bankIcon.style.fontWeight = 'bold';
-  bankIcon.style.width = '2vw';
-  bankIcon.style.height = '4vh';
-  bankIcon.style.borderRadius = '0.3vw';
+  bankIcon.classList.add("image-error");
+  bankIcon.style.backgroundColor = "#f0f0f0";
+  bankIcon.style.color = "#666";
+  bankIcon.style.display = "flex";
+  bankIcon.style.alignItems = "center";
+  bankIcon.style.justifyContent = "center";
+  bankIcon.style.fontSize = "2vh";
+  bankIcon.style.fontWeight = "bold";
+  bankIcon.style.width = "2vw";
+  bankIcon.style.height = "4vh";
+  bankIcon.style.borderRadius = "0.3vw";
   bankIcon.textContent = getBankInitial(props.product.bankName);
 };
 
 // 위험등급 관련 메서드 (1~6등급)
 const getRiskClass = (riskGrade) => {
   const classes = {
-    1: 'risk-grade-1',
-    2: 'risk-grade-2',
-    3: 'risk-grade-3',
-    4: 'risk-grade-4',
-    5: 'risk-grade-5',
-    6: 'risk-grade-6',
+    1: "risk-grade-1",
+    2: "risk-grade-2",
+    3: "risk-grade-3",
+    4: "risk-grade-4",
+    5: "risk-grade-5",
+    6: "risk-grade-6",
   };
-  return classes[riskGrade] || 'risk-grade-3';
+  return classes[riskGrade] || "risk-grade-3";
 };
 
 const getRiskName = (riskGrade) => {
   const names = {
-    2: '매우 낮은 위험',
-    3: '낮은 위험',
-    4: '보통 위험',
-    5: '다소 높은 위험',
-    6: '높은 위험',
-    7: '매우 높은 위험',
+    2: "매우 낮은 위험",
+    3: "낮은 위험",
+    4: "보통 위험",
+    5: "다소 높은 위험",
+    6: "높은 위험",
+    7: "매우 높은 위험",
   };
-  return names[riskGrade] || '보통위험';
+  return names[riskGrade] || "보통위험";
 };
 
 const viewDetails = () => {
@@ -166,7 +165,7 @@ const viewDetails = () => {
 };
 
 const applyProduct = () => {
-  window.open(props.product.url, '_blank');
+  window.open(props.product.url, "_blank");
 };
 </script>
 
@@ -183,7 +182,7 @@ const applyProduct = () => {
 }
 
 .favorite-product-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;

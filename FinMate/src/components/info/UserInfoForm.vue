@@ -60,12 +60,7 @@
       </div>
 
       <div class="btn-group">
-        <button
-          type="submit"
-          class="submit"
-          :class="{ inactive: !isDirty }"
-          :disabled="!isDirty"
-        >
+        <button type="submit" class="common-button submit" :disabled="!isDirty">
           변경사항 저장
         </button>
       </div>
@@ -133,7 +128,13 @@ const onSubmit = async () => {
   }
 
   if (form.birthdate) {
-    payload.birthdate = form.birthdate;
+    const b = form.birthdate;
+    if (/^\d{8}$/.test(b)) {
+      payload.birth = `${b.slice(0, 4)}-${b.slice(4, 6)}-${b.slice(6, 8)}`;
+    } else {
+      toast("생년월일 형식이 올바르지 않습니다.", "error");
+      return;
+    }
   }
 
   try {
@@ -142,9 +143,10 @@ const onSubmit = async () => {
       toast("회원 정보가 성공적으로 수정되었습니다.", "success");
       form.password = "";
       form.passwordCheck = "";
-      form.email = "";
-      form.birthdate = "";
       form.emailVerificationUUID = "";
+
+      original.email = form.email;
+      original.birthdate = form.birthdate;
     } else {
       toast("회원 정보 수정에 실패했습니다.", "error");
     }
@@ -154,12 +156,20 @@ const onSubmit = async () => {
   }
 };
 
+const original = reactive({
+  email: "",
+  birthdate: "",
+});
+
 onMounted(async () => {
   try {
     const user = await getMyInfo();
     form.accountId = user.accountId;
-    form.email = user.email;
-    form.birthdate = user.birthdate;
+    form.email = user.email || "";
+    form.birthdate = user.birth ? user.birth.replaceAll("-", "") : "";
+
+    original.email = form.email;
+    original.birthdate = form.birthdate;
   } catch (e) {
     toast("회원 정보를 불러오는 데 실패했습니다.", "error");
   }
@@ -217,13 +227,13 @@ const isBirthdateValid = computed(() => {
 });
 
 const isDirty = computed(() => {
-  return (
-    (form.password !== "" &&
-      form.passwordCheck !== "" &&
-      isPasswordMatch.value) ||
-    form.email !== "" ||
-    form.birthdate !== ""
-  );
+  const pwChanged =
+    form.password !== "" && form.passwordCheck !== "" && isPasswordMatch.value;
+
+  const emailChanged = form.email !== original.email;
+  const birthChanged = form.birthdate !== original.birthdate;
+
+  return pwChanged || emailChanged || birthChanged;
 });
 </script>
 
@@ -232,7 +242,6 @@ const isDirty = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  font-family: var(--font-wanted);
 }
 
 .form-group {
@@ -246,7 +255,7 @@ const isDirty = computed(() => {
 }
 
 .readonly-label {
-  color: var(--color-light-gray);
+  color: var(--color-black-gray);
 }
 
 input,
@@ -255,8 +264,7 @@ input,
   padding: 0 1rem 0 1.2rem;
   border: 2px solid var(--color-black);
   border-radius: 20px;
-  font-family: var(--font-wanted);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--color-black);
   width: 100%;
 }
@@ -300,36 +308,28 @@ input:focus,
   border-bottom-left-radius: 0;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  font-family: var(--font-wanted);
-  font-weight: bold;
-  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+}
+
+.submit {
+  padding: 0.8rem 3.5rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.submit:disabled {
+  background: var(--color-light-gray) !important;
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
 }
 
 .btn-group {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: auto;
-}
-
-.submit {
-  background-color: var(--color-primary-green);
-  border: none;
-  padding: 0.8rem 2.5rem;
-  border-radius: 10px;
-  cursor: pointer;
-
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: box-shadow 0.2s ease;
-}
-
-.submit:hover {
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
-}
-
-.submit.inactive {
-  background-color: #cfcfcf;
-  cursor: not-allowed;
+  margin-top: 2.5rem;
+  width: var(--form-width);
+  align-self: center;
 }
 
 .error-msg {
@@ -337,7 +337,16 @@ input:focus,
   font-size: 0.75rem;
   margin-top: 0.3rem;
   margin-left: 0.2rem;
-  font-family: var(--font-wanted);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
+}
+
+.user-info-form {
+  --form-width: clamp(28rem, 70vw, 44rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
 }
 </style>

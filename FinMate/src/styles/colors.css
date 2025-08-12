@@ -96,6 +96,9 @@
   --color-product-color: #f7f7f763;
   --color-test-color: #f7f7f79f;
 
+  /* 마이페이지 card 색상 */
+  --color-mypage-card: #f7f7f7c1;
+
   --card-radius: 2vh;
   --card-border: 0.2vh solid var(--color-light-gray);
   --card-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);

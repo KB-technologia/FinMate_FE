@@ -57,8 +57,8 @@ button {
 
 /* 설문지 카드 */
 .survey-card {
-  border-radius: 2vh;
-  box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   width: 70vw;
   height: 80vh;
   padding: 2vh;
