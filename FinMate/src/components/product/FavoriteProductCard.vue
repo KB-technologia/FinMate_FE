@@ -82,15 +82,40 @@ const handleRemoveFavorite = () => {
 const getBankLogo = (bankName) => {
   const bankLogos = {
     국민은행: '/src/assets/images/banks/kb.png',
+    KB증권: '/src/assets/images/banks/kb.png',
+    케이비자산운용: '/src/assets/images/banks/kb.png',
+
     신한은행: '/src/assets/images/banks/shinhan.png',
+    신한투자증권: '/src/assets/images/banks/shinhan.png',
+    제주은행: '/src/assets/images/banks/shinhan.png',
+
     하나은행: '/src/assets/images/banks/hana.png',
+    하나증권: '/src/assets/images/banks/hana.png',
+    하나자산운용: '/src/assets/images/banks/hana.png',
+
     우리은행: '/src/assets/images/banks/woori.png',
+    우리투자증권: '/src/assets/images/banks/woori.png',
+
+    // NH농협 관련
+    농협은행: '/src/assets/images/banks/nh.png',
     NH농협은행: '/src/assets/images/banks/nh.png',
+    NH투자증권: '/src/assets/images/banks/nh.png',
+
     IBK기업은행: '/src/assets/images/banks/ibk.png',
+    IBK투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
+
     카카오뱅크: '/src/assets/images/banks/kakao.png',
     케이뱅크: '/src/assets/images/banks/kbank.png',
     SC제일은행: '/src/assets/images/banks/sc.png',
+
     토스뱅크: '/src/assets/images/banks/toss.png',
+    토스증권: '/src/assets/images/banks/toss.png',
+
+    BNK부산은행: '/src/assets/images/banks/bnk.png',
+    부산은행: '/src/assets/images/banks/bnk.png',
+    iM뱅크: '/src/assets/images/banks/im.png',
   };
   return bankLogos[bankName] || '/src/assets/images/banks/default.png';
 };
