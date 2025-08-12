@@ -110,9 +110,15 @@ const sendAuthCode = async () => {
     isCodeSent.value = true;
     toast('인증코드가 이메일로 전송되었습니다.', 'success');
   } catch (error) {
-    emailError.value = '인증코드 전송에 실패했습니다';
+    if (
+      error.response &&
+      (error.response.status === 500 || error.response.status === 400)
+    ) {
+      toast('해당 이메일로 가입된 계정이 없습니다.', 'error');
+    } else {
+      emailError.value = '인증코드 전송에 실패했습니다. 다시 시도해주세요.';
+    }
     isCodeSent.value = false;
-    console.error('Auth code send error:', error);
   } finally {
     ui.isLoading = false;
   }
