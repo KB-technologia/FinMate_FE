@@ -94,7 +94,12 @@ onMounted(async () => {
       products.value = randomResult.data;
     }
   } catch (error) {
-    console.error('❌ 추천 상품 요청 실패:', error);
+    console.error('❌ 추천 상품 요청 실패:', error.status);
+    if (error.status == 500) {
+      const randomResult = await getRandomRecommendation();
+      console.log('✅ 랜덤 추천 결과:', randomResult.data);
+      products.value = randomResult.data;
+    }
   } finally {
     isLoading.value = false;
   }
