@@ -121,8 +121,67 @@
                 </div>
               </div>
 
+              <!-- 공통 상세 정보(혼합) -->
+              <div v-if="isMixedComparison" class="comparison-section">
+                <h3 class="section-title">상세 정보</h3>
+                <div class="comparison-table">
+                  <div class="comparison-row">
+                    <div class="comparison-label">투자기간</div>
+                    <div class="comparison-value left">
+                      {{ getInvestmentPeriod(selectedProducts[0]) }}
+                    </div>
+                    <div class="comparison-value right">
+                      {{ getInvestmentPeriod(selectedProducts[1]) }}
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">최소투자금액</div>
+                    <div class="comparison-value left">
+                      {{ getMinInvestmentAmount(selectedProducts[0]) }}
+                    </div>
+                    <div class="comparison-value right">
+                      {{ getMinInvestmentAmount(selectedProducts[1]) }}
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">대표 금리/수익률</div>
+                    <div class="comparison-value left expect">
+                      {{ formatRate(selectedProducts[0].expectedReturn) }}%
+                    </div>
+                    <div class="comparison-value right expect">
+                      {{ formatRate(selectedProducts[1].expectedReturn) }}%
+                    </div>
+                  </div>
+
+                  <div class="comparison-row">
+                    <div class="comparison-label">위험도</div>
+                    <div
+                      class="comparison-value left"
+                      :class="getRiskColorClass(selectedProducts[0])"
+                    >
+                      {{ getRiskDescription(selectedProducts[0]) }}
+                    </div>
+                    <div
+                      class="comparison-value right"
+                      :class="getRiskColorClass(selectedProducts[1])"
+                    >
+                      {{ getRiskDescription(selectedProducts[1]) }}
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">수수료/비용</div>
+                    <div class="comparison-value left">
+                      {{ getFeeDescription(selectedProducts[0]) }}
+                    </div>
+                    <div class="comparison-value right">
+                      {{ getFeeDescription(selectedProducts[1]) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- 예금/적금 전용 상세 정보 -->
-              <div v-if="isDepositOrSavings" class="comparison-section">
+              <div v-if="hasDepositOrSavings" class="comparison-section">
                 <h3 class="section-title">상세 정보</h3>
                 <div class="comparison-table">
                   <div class="comparison-row">
@@ -178,10 +237,10 @@
 
                   <div class="comparison-row">
                     <div class="comparison-label">기본금리</div>
-                    <div class="comparison-value left">
+                    <div class="comparison-value left basic">
                       {{ formatRate(selectedProducts[0].expectedReturn) }}%
                     </div>
-                    <div class="comparison-value right">
+                    <div class="comparison-value right basic">
                       {{ formatRate(selectedProducts[1].expectedReturn) }}%
                     </div>
                   </div>
@@ -252,7 +311,10 @@
                   </div>
                   <div class="comparison-row">
                     <div class="comparison-label">위험도</div>
-                    <div class="comparison-value left">
+                    <div
+                      class="comparison-value left"
+                      :class="getRiskColorClass(selectedProducts[0])"
+                    >
                       {{
                         getRiskLevel(
                           selectedProducts[0].detail?.riskGrade ||
@@ -260,7 +322,10 @@
                         )
                       }}
                     </div>
-                    <div class="comparison-value right">
+                    <div
+                      class="comparison-value right"
+                      :class="getRiskColorClass(selectedProducts[1])"
+                    >
                       {{
                         getRiskLevel(
                           selectedProducts[1].detail?.riskGrade ||
@@ -436,13 +501,60 @@ const isLoadingAnalysis = ref(false);
 const analysisError = ref(null);
 const analysisResult = ref(null);
 
-const isDepositOrSavings = computed(() => {
+const getInvestmentPeriod = (product) => {
+  if (product.productType === 'FUND') {
+    return '제한없음';
+  }
+  return product.detail?.defaultTermMonths
+    ? `${product.detail.defaultTermMonths}개월`
+    : `${product.minTerm}개월`;
+};
+
+const getMinInvestmentAmount = (product) => {
+  if (product.productType === 'FUND') {
+    return '제한없음';
+  }
+  return formatAmount(product.minAmount) + '원';
+};
+
+const getRiskDescription = (product) => {
+  if (product.productType === 'DEPOSIT' || product.productType === 'SAVINGS') {
+    return '원금보장';
+  }
+  const riskLevel = product.detail?.riskGrade || product.riskLevel;
+  return getRiskLevel(riskLevel);
+};
+
+const getFeeDescription = (product) => {
+  if (product.productType === 'DEPOSIT' || product.productType === 'SAVINGS') {
+    const penalty = product.detail?.earlyWithdrawalPenalty;
+    return penalty
+      ? `중도해지 ${formatRate(penalty)}%`
+      : '중도해지 수수료 없음';
+  }
+  const expenseRatio = product.detail?.expenseRatio;
+  return expenseRatio
+    ? `총비용비율 ${formatRate(expenseRatio)}%`
+    : '비용정보 없음';
+};
+
+const hasDepositOrSavings = computed(() => {
   return (
     props.selectedProducts.length === 2 &&
     (props.selectedProducts[0].productType === 'DEPOSIT' ||
       props.selectedProducts[0].productType === 'SAVINGS') &&
     (props.selectedProducts[1].productType === 'DEPOSIT' ||
       props.selectedProducts[1].productType === 'SAVINGS')
+  );
+});
+
+const isMixedComparison = computed(() => {
+  if (props.selectedProducts.length !== 2) return false;
+  const types = props.selectedProducts.map((p) => p.productType);
+  // 펀드와 예금/적금을 비교하는 경우만 true 반환 (예금-적금 비교는 제외)
+  return (
+    types.includes('FUND') &&
+    (types.includes('DEPOSIT') || types.includes('SAVINGS'))
   );
 });
 
@@ -457,6 +569,22 @@ const isFund = computed(() => {
 const hasProductRateData = computed(() => {
   return props.selectedProducts.some((product) => product.productRate);
 });
+
+const getRiskColorClass = (product) => {
+  if (product.productType === 'DEPOSIT' || product.productType === 'SAVINGS') {
+    return '';
+  }
+
+  const riskLevel = product.detail?.riskGrade || product.riskLevel;
+
+  if (riskLevel >= 4) {
+    if (riskLevel === 4) return 'risk-medium-high';
+    if (riskLevel === 5) return 'risk-high';
+    if (riskLevel === 6) return 'risk-very-high';
+  }
+
+  return '';
+};
 
 watch(
   () => props.isVisible,
@@ -1088,6 +1216,28 @@ const getRiskLevel = (level) => {
   font-size: 1vw;
   color: #e91e63;
   background: #fff5f8;
+}
+
+.comparison-value.expect {
+  font-weight: 700;
+  color: var(--color-red);
+}
+
+.comparison-value.basic {
+  font-weight: 700;
+  color: var(--color-red);
+}
+
+.comparison-value.risk-medium-high {
+  color: var(--color-orange);
+}
+
+.comparison-value.risk-high {
+  color: var(--color-red-alert);
+}
+
+.comparison-value.risk-very-high {
+  color: var(--color-red);
 }
 
 .modal-footer {
