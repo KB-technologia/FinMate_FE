@@ -69,13 +69,6 @@ const shellBg = computed(() => props.bgImage || defaultBg);
 </template>
 
 <style scoped>
-:deep(.tm-mascot) {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 8vh);
-}
-
 .exp-msg-header {
   position: absolute;
   top: 5.5vh;
@@ -117,5 +110,16 @@ const shellBg = computed(() => props.bgImage || defaultBg);
   background-color: var(--color-exp-fill, #3ccb7f);
   border-radius: 10px;
   transition: width 0.6s ease;
+}
+
+:deep(.tm-mascot) {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 8vh);
+}
+
+:deep(.floating-button-box) {
+  top: 1.8rem;
 }
 </style>
