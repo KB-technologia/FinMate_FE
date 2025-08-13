@@ -106,7 +106,6 @@ watch(selected, async (val) => {
   gap: 0.5rem;
 }
 
-/* 기본 버튼 규격 (두 버튼 모드) */
 .floating-btn {
   display: inline-flex;
   align-items: center;
@@ -123,18 +122,16 @@ watch(selected, async (val) => {
   border: none;
   outline: none;
   box-shadow: none;
-  cursor: pointer;
 }
 
-/* ✅ 단일 버튼 모드일 때 높이/패딩 축소 */
 .btn-stack.single .floating-btn {
   height: 1.8rem;
   padding: 0.35rem 0.7rem;
-  font-size: 0.8rem; /* 필요 시 0.78rem로 더 줄여도 OK */
-  min-width: 5.5rem; /* 살짝 줄임 */
+  font-size: 0.8rem;
+  min-width: 5.5rem;
+  justify-content: center;
 }
 
-/* 아이콘은 선택/호버 시만 표시 */
 .icon {
   width: 1rem;
   height: 1rem;
@@ -145,7 +142,6 @@ watch(selected, async (val) => {
   visibility: visible;
 }
 
-/* 비활성(선택 안된 쪽) 색상 톤다운 */
 .floating-btn.inactive {
   color: #999;
 }
