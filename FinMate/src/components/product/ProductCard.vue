@@ -1,89 +1,91 @@
 <template>
   <div
     class="product-card"
-    :class="{ selected: isSelected }"
+    :class="[cardBgClass, { selected: isSelected }]"
     @click="handleCardClick"
   >
-    <!-- 체크박스와 상품 타입 -->
-    <div class="card-header">
-      <input
-        type="checkbox"
-        :checked="isSelected"
-        @change="handleSelect"
-        @click="$event.stopPropagation()"
-        class="select-checkbox"
-      />
-      <span
-        class="product-type-badge"
-        :class="getTypeClass(product.productType)"
-      >
-        {{ getTypeLabel(product.productType) }}
-      </span>
-    </div>
-
-    <!-- 은행 정보 -->
-    <div class="bank-section">
-      <div class="bank-icon" :class="getBankClass(product.bankName)">
-        <img
-          :src="getBankImagePath(product.bankName)"
-          :alt="product.bankName"
-          @error="handleImageError"
-          class="bank-logo"
+    <div class="scale">
+      <!-- 체크박스와 상품 타입 -->
+      <div class="card-header">
+        <input
+          type="checkbox"
+          :checked="isSelected"
+          @change="handleSelect"
+          @click="$event.stopPropagation()"
+          class="select-checkbox"
         />
-      </div>
-      <div class="bank-info">
-        <span class="bank-name">{{ product.bankName }}</span>
-      </div>
-    </div>
-
-    <!-- 상품명 -->
-    <h3 class="product-name">{{ product.name }}</h3>
-
-    <!-- 수익률 정보 -->
-    <div class="return-section">
-      <div class="main-return">
-        <span class="return-label">{{
-          getRateLabel(product.productType)
-        }}</span>
-        <span class="return-value"
-          >{{
-            product.productType === 'FUND'
-              ? formatRate(product.expectedReturn)
-              : formatRate(product.expectedReturn + product.detail.bonusRate)
-          }}%</span
+        <span
+          class="product-type-badge"
+          :class="getTypeClass(product.productType)"
         >
+          {{ getTypeLabel(product.productType) }}
+        </span>
       </div>
 
-      <!-- 상세 정보 -->
-      <div class="detail-info" v-if="product.detail">
-        <template
-          v-if="
-            product.productType === 'DEPOSIT' ||
-            product.productType === 'SAVINGS'
-          "
-        >
-          <div class="info-row">
-            <span>기본금리:</span>
-            <span>{{ formatRate(product.expectedReturn) }}%</span>
-          </div>
-          <div class="info-row">
-            <span>우대금리:</span>
-            <span>{{ formatRate(product.detail.bonusRate) }}%</span>
-          </div>
-        </template>
+      <!-- 은행 정보 -->
+      <div class="bank-section">
+        <div class="bank-icon" :class="getBankClass(product.bankName)">
+          <img
+            :src="getBankImagePath(product.bankName)"
+            :alt="product.bankName"
+            @error="handleImageError"
+            class="bank-logo"
+          />
+        </div>
+        <div class="bank-info">
+          <span class="bank-name">{{ product.bankName }}</span>
+        </div>
+      </div>
 
-        <template v-else-if="product.productType === 'FUND'">
-          <div class="info-row">
-            <span>펀드유형:</span>
-            <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
-          </div>
-          <div class="info-row">
-            <span>위험도:</span>
-            <span>{{
-              getRiskLevel(product.detail.riskGrade || product.riskLevel)
-            }}</span>
-          </div>
-        </template>
+      <!-- 상품명 -->
+      <h3 class="product-name">{{ product.name }}</h3>
+
+      <!-- 수익률 정보 -->
+      <div class="return-section">
+        <div class="main-return">
+          <span class="return-label">{{
+            getRateLabel(product.productType)
+          }}</span>
+          <span class="return-value"
+            >{{
+              product.productType === 'FUND'
+                ? formatRate(product.expectedReturn)
+                : formatRate(product.expectedReturn + product.detail.bonusRate)
+            }}%</span
+          >
+        </div>
+
+        <!-- 상세 정보 -->
+        <div class="detail-info" v-if="product.detail">
+          <template
+            v-if="
+              product.productType === 'DEPOSIT' ||
+              product.productType === 'SAVINGS'
+            "
+          >
+            <div class="info-row">
+              <span>기본금리:</span>
+              <span>{{ formatRate(product.expectedReturn) }}%</span>
+            </div>
+            <div class="info-row">
+              <span>우대금리:</span>
+              <span>{{ formatRate(product.detail.bonusRate) }}%</span>
+            </div>
+          </template>
+
+          <template v-else-if="product.productType === 'FUND'">
+            <div class="info-row">
+              <span>펀드유형:</span>
+              <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
+            </div>
+            <div class="info-row">
+              <span>위험도:</span>
+              <span>{{
+                getRiskLevel(product.detail.riskGrade || product.riskLevel)
+              }}</span>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -91,6 +93,15 @@
 
 <script setup>
 import { computed } from 'vue';
+
+const cardBgClass = computed(() => {
+  const map = {
+    DEPOSIT: 'bg-chick', // 예금 = 병아리
+    SAVINGS: 'bg-frog', // 적금 = 개구리
+    FUND: 'bg-rabbit', // 펀드 = 토끼
+  };
+  return map[props.product.productType] || 'bg-default';
+});
 
 const props = defineProps({
   product: {
@@ -239,30 +250,57 @@ const getRiskLevel = (level) => {
 
 <style scoped>
 .product-card {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
   width: 100%;
   max-width: 25vw;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 3vh 1.5vw;
+  /* background: #ffffff; */
+  /* border: 1px solid #e0e0e0; */
+  /* border-radius: 12px; */
+  padding: 6vh 2.5vw;
   transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); */
   margin: 0 auto;
   min-height: 35vh;
 }
-
-.product-card:hover {
-  border-color: #4caf50;
-  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.15);
-  transform: translateY(-2px);
+/* 타입별 배경 이미지 */
+.bg-frog {
+  background-image: url('@/assets/images/etc/개굴개굴.png'); /* 예금 */
+}
+.bg-chick {
+  background-image: url('@/assets/images/etc/삐약삐약.png'); /* 적금 */
+}
+.bg-rabbit {
+  background-image: url('@/assets/images/etc/깡총.png'); /* 펀드 */
 }
 
-.product-card.selected {
-  border-color: #4caf50;
-  background-color: #f8fff8;
-  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
+.scale {
+  transform: scale(0.9);
+  margin-top: 3vh;
+}
+
+.product-card:hover {
+  /* border-color: #4caf50; */
+  /* box-shadow: 0 4px 16px rgba(76, 175, 80, 0.15); */
+  transform: translateY(-10px);
+}
+
+/* .product-card.selected {
+  border-color: #4caf50; 
+  background-color: #f8fff8; 
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2); 
+}  */
+.bg-frog.selected {
+  background-image: url('@/assets/images/etc/개굴개굴!.png');
+}
+.bg-chick.selected {
+  background-image: url('@/assets/images/etc/삐약삐약!.png');
+}
+.bg-rabbit.selected {
+  background-image: url('@/assets/images/etc/깡총!.png');
 }
 
 .card-header {

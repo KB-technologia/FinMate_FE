@@ -206,9 +206,9 @@ const bankList = [
 
 // 상품 타입 데이터
 const productTypes = [
-  { code: 'DEPOSIT', name: '예금', icon: '💰', iconClass: 'deposit' },
-  { code: 'SAVINGS', name: '적금', icon: '💳', iconClass: 'savings' },
-  { code: 'FUND', name: '펀드', icon: '📈', iconClass: 'fund' },
+  { code: 'DEPOSIT', name: '예금', icon: '🐣', iconClass: 'deposit' },
+  { code: 'SAVINGS', name: '적금', icon: '🐸', iconClass: 'savings' },
+  { code: 'FUND', name: '펀드', icon: '🐰', iconClass: 'fund' },
 ];
 
 // 세부 카테고리 데이터 - 펀드만 있음
@@ -438,7 +438,11 @@ onMounted(() => {
 
 <style scoped>
 .search-condition-container {
-  background: var(--color-product-color);
+  background: url('@/assets/images/etc/배경.png') no-repeat center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background: var(--color-product-color); */
   border: 0.2vh solid var(--color-light-gray);
   border-radius: 2vh;
   padding: 24px;
