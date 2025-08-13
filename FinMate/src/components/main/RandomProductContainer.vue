@@ -4,10 +4,10 @@
       <div class="loader"></div>
     </div>
     <div v-else>
-      <div v-if="!landom && products.length > 0" class="Product-Text">
+      <div v-if="!random && products.length > 0" class="Product-Text">
         사용자 맞춤 추천 상품
       </div>
-      <div v-if="landom && products.length > 0" class="Product-Text">
+      <div v-if="random && products.length > 0" class="Product-Text">
         랜덤 추천 상품
       </div>
       <div v-if="isLoggedIn && products.length == 0" class="Product-Text"></div>
@@ -78,7 +78,7 @@ import {
 const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
-const landom = ref(false);
+const random = ref(false);
 const products = ref([]);
 const isLoading = ref(true);
 onMounted(async () => {
@@ -92,7 +92,7 @@ onMounted(async () => {
       const randomResult = await getRandomRecommendation();
       console.log('✅ 랜덤 추천 결과:', randomResult.data);
       products.value = randomResult.data;
-      landom.value = true;
+      random.value = true;
     }
   } catch (error) {
     console.error('❌ 추천 상품 요청 실패:', error.status);
@@ -100,7 +100,7 @@ onMounted(async () => {
       const randomResult = await getRandomRecommendation();
       console.log('✅ 랜덤 추천 결과:', randomResult.data);
       products.value = randomResult.data;
-      landom.value = true;
+      random.value = true;
     }
   } finally {
     isLoading.value = false;
