@@ -4,7 +4,7 @@
       <ModalMascot :src="kiwiIntroQuiz" />
       <SpeechBubble sender="FINMATE">
         <TypewriterText
-          :lines="['하루에 딱! 한 번만 도전할 수 있어요. 준비되셨나요?']"
+          :lines="['하루에 딱! 한 번만 도전할 수 있어요. \n준비되셨나요?']"
         />
         <template #overlay>
           <FloatingChoiceButtons
