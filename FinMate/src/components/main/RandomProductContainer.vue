@@ -4,10 +4,28 @@
       <div class="loader"></div>
     </div>
     <div v-else>
-      <div v-if="isLoggedIn" class="Product-Text">사용자 맞춤 추천 상품</div>
-      <div v-if="!isLoggedIn" class="Product-Text">랜덤 추천 상품</div>
+      <div v-if="!random && products.length > 0" class="Product-Text">
+        사용자 맞춤 추천 상품
+      </div>
+      <div v-if="random && products.length > 0" class="Product-Text">
+        랜덤 추천 상품
+      </div>
+      <div v-if="isLoggedIn && products.length == 0" class="Product-Text"></div>
       <div class="foodstuffs">
-        <div class="button-container">
+        <img
+          v-if="products.length == 0"
+          class="moving-image"
+          src="@/assets/images/etc/flying.png"
+          alt="moving"
+        />
+        <!-- <div v-if="products.length == 0">
+          <div class="no-products" @click="handleClick">
+            <p class="no-proudcts-text">
+              사용자 맞춤 추천 상품을 위해 테스트를 진행해주세요!
+            </p>
+          </div>
+        </div> -->
+        <div class="button-container" v-if="products.length > 0">
           <div
             @click="prev"
             :class="['arrow-button', { disabled: currentIndex === 0 }]"
@@ -33,7 +51,12 @@
             ▶
           </div>
         </div>
-        <button class="detail-button" @click="goToProducts">
+
+        <button
+          class="detail-button"
+          @click="goToProducts"
+          v-if="products.length > 0"
+        >
           <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
         </button>
       </div>
@@ -55,7 +78,7 @@ import {
 const router = useRouter();
 const authStore = useAuthStore();
 const isLoggedIn = computed(() => authStore.isLoggedIn);
-
+const random = ref(false);
 const products = ref([]);
 const isLoading = ref(true);
 onMounted(async () => {
@@ -63,15 +86,22 @@ onMounted(async () => {
     isLoading.value = true;
     if (isLoggedIn.value) {
       const allResult = await getAllRecommendations();
-      console.log('✅ 전체 추천 결과:', allResult);
-      products.value = allResult;
+      console.log('✅ 전체 추천 결과:', allResult.data);
+      products.value = allResult.data;
     } else {
       const randomResult = await getRandomRecommendation();
-      console.log('✅ 랜덤 추천 결과:', randomResult);
-      products.value = randomResult;
+      console.log('✅ 랜덤 추천 결과:', randomResult.data);
+      products.value = randomResult.data;
+      random.value = true;
     }
   } catch (error) {
-    console.error('❌ 추천 상품 요청 실패:', error);
+    console.error('❌ 추천 상품 요청 실패:', error.status);
+    if (error.status == 500) {
+      const randomResult = await getRandomRecommendation();
+      console.log('✅ 랜덤 추천 결과:', randomResult.data);
+      products.value = randomResult.data;
+      random.value = true;
+    }
   } finally {
     isLoading.value = false;
   }
@@ -221,6 +251,54 @@ const next = () => {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+.no-products {
+  background: url('@/assets/images/etc/화분.png');
+  width: 17vw;
+  height: 40vh;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.1s ease;
+  transform: scale(1.1);
+  font-family: var(--font-wanted);
+  margin-top: 12vh;
+}
+
+.no-products:hover {
+  cursor: pointer;
+  transform: translateY(-0.8vh);
+}
+
+.no-proudcts-text {
+  width: 10vw;
+  margin-bottom: 10vh;
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+}
+
+.moving-image {
+  position: relative;
+  display: block;
+  width: 20vw;
+  margin-top: 8vh;
+  z-index: -1;
+  animation: moveLeftToRight 8s linear infinite;
+  will-change: transform;
+}
+
+/* translateX로 좌→우 이동 */
+@keyframes moveLeftToRight {
+  0% {
+    transform: translateX(-60vw);
+  }
+  100% {
+    transform: translateX(60vw);
   }
 }
 </style>
