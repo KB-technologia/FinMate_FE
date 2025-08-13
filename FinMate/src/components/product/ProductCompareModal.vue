@@ -128,31 +128,54 @@
                   <div class="comparison-row">
                     <div class="comparison-label">최소 가입금액</div>
                     <div class="comparison-value left">
-                      {{ formatAmount(selectedProducts[0].detail?.minAmount) }}
+                      {{ formatAmount(selectedProducts[0].minAmount) }}원
                     </div>
                     <div class="comparison-value right">
-                      {{ formatAmount(selectedProducts[1].detail?.minAmount) }}
+                      {{ formatAmount(selectedProducts[1].minAmount) }}원
+                    </div>
+                  </div>
+                  <div
+                    v-if="
+                      selectedProducts[0].productType === 'SAVINGS' ||
+                      selectedProducts[1].productType === 'SAVINGS'
+                    "
+                    class="comparison-row"
+                  >
+                    <div class="comparison-label">월 적립한도</div>
+                    <div class="comparison-value left">
+                      {{
+                        formatAmount(
+                          selectedProducts[0].detail?.maxMonthlyPayment
+                        )
+                      }}원
+                    </div>
+                    <div class="comparison-value right">
+                      {{
+                        formatAmount(
+                          selectedProducts[1].detail?.maxMonthlyPayment
+                        )
+                      }}원
                     </div>
                   </div>
                   <div class="comparison-row">
-                    <div class="comparison-label">투자 기간</div>
+                    <div class="comparison-label">최소 가입 기간</div>
                     <div class="comparison-value left">
-                      {{
-                        formatTerm(
-                          selectedProducts[0].detail?.minTerm,
-                          selectedProducts[0].detail?.maxTerm
-                        )
-                      }}
+                      {{ selectedProducts[0].minTerm }}개월
                     </div>
                     <div class="comparison-value right">
-                      {{
-                        formatTerm(
-                          selectedProducts[1].detail?.minTerm,
-                          selectedProducts[1].detail?.maxTerm
-                        )
-                      }}
+                      {{ selectedProducts[1].minTerm }}개월
                     </div>
                   </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">최대 만기 기간</div>
+                    <div class="comparison-value left">
+                      {{ selectedProducts[0].maxTerm }}개월
+                    </div>
+                    <div class="comparison-value right">
+                      {{ selectedProducts[1].maxTerm }}개월
+                    </div>
+                  </div>
+
                   <div class="comparison-row">
                     <div class="comparison-label">기본금리</div>
                     <div class="comparison-value left">
@@ -652,7 +675,7 @@ const getRiskLevel = (level) => {
   background: #f9f9f9;
   border-radius: 0.75vw;
   padding: 2vh 2vw;
-  margin-top: 3vh;
+  margin-top: 2vh;
 }
 
 .close-button {
@@ -852,7 +875,7 @@ const getRiskLevel = (level) => {
 .comparison-grid {
   display: flex;
   flex-direction: column;
-  gap: 2.5vh;
+  gap: 3vh;
 }
 
 .comparison-section {
@@ -881,6 +904,7 @@ const getRiskLevel = (level) => {
 
 .chart-section {
   padding: 2vh 2vw;
+  margin-top: 4vh;
 }
 
 .charts-container {
