@@ -20,11 +20,11 @@
 </template>
 
 <script setup>
-import TalkModalShell from "@/components/allshared/talk-modal/TalkModalShell.vue";
-import ModalMascot from "@/components/allshared/talk-modal/ModalMascot.vue";
-import SpeechBubble from "@/components/allshared/talk-modal/SpeechBubble.vue";
-import TypewriterText from "@/components/allshared/talk-modal/TypewriterText.vue";
-import FloatingChoiceButtons from "@/components/allshared/talk-modal/FloatingChoiceButtons.vue";
+import TalkModalShell from "@/components/dailyquiz/shared/TalkModalShell.vue";
+import ModalMascot from "@/components/dailyquiz/shared/ModalMascot.vue";
+import SpeechBubble from "@/components/dailyquiz/shared/SpeechBubble.vue";
+import TypewriterText from "@/components/dailyquiz/shared/TypewriterText.vue";
+import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceButtons.vue";
 import quizBg from "@/assets/images/backgroundImage/quiz-bg.png";
 import kiwiIntroQuiz from "@/assets/images/logos/kiwi-intro-quiz.png";
 

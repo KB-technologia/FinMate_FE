@@ -1,11 +1,11 @@
 <script setup>
 import { computed } from "vue";
 
-import TalkModalShell from "@/components/allshared/talk-modal/TalkModalShell.vue";
-import SpeechBubble from "@/components/allshared/talk-modal/SpeechBubble.vue";
-import ModalMascot from "@/components/allshared/talk-modal/ModalMascot.vue";
-import TypewriterText from "@/components/allshared/talk-modal/TypewriterText.vue";
-import FloatingChoiceButtons from "@/components/allshared/talk-modal/FloatingChoiceButtons.vue";
+import TalkModalShell from "@/components/dailyquiz/shared/TalkModalShell.vue";
+import ModalMascot from "@/components/dailyquiz/shared/ModalMascot.vue";
+import SpeechBubble from "@/components/dailyquiz/shared/SpeechBubble.vue";
+import TypewriterText from "@/components/dailyquiz/shared/TypewriterText.vue";
+import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceButtons.vue";
 
 import defaultBg from "@/assets/images/backgroundImage/quiz-bg.png";
 
@@ -33,6 +33,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close", "primary", "secondary"]);
+const onClose = () => emit("close");
+
 const shellBg = computed(() => props.bgImage || defaultBg);
 </script>
 
@@ -56,10 +58,9 @@ const shellBg = computed(() => props.bgImage || defaultBg);
         />
         <template #overlay>
           <FloatingChoiceButtons
-            :primary-label="primaryLabel"
-            :secondary-label="secondaryLabel"
-            @primary="emit('primary')"
-            @secondary="emit('secondary')"
+            primary-label="닫기"
+            :show-secondary="false"
+            @primary="onClose"
           />
         </template>
       </SpeechBubble>
