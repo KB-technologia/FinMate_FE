@@ -1,9 +1,9 @@
 <script setup>
-import Sidebar from '@/components/info/Sidebar.vue';
-import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
-import RightPanel from '@/components/info/RightPanel.vue';
-import UserStatsPanel from '@/components/info/stats/UserStatsPanel.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import Sidebar from "@/components/info/Sidebar.vue";
+import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import RightPanel from "@/components/info/RightPanel.vue";
+import UserStatsPanel from "@/components/info/stats/UserStatsPanel.vue";
+import FooterComponent from "../../components/allshared/FooterComponent.vue";
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
     <div class="scroll-able">
       <div class="mypage-container">
         <Sidebar />
-        <RightPanel :scroll="true" class="stats-right-panel">
+        <RightPanel :scroll="true" :noPadding="true" class="stats-right-panel">
           <UserStatsPanel />
         </RightPanel>
       </div>
@@ -32,13 +32,13 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
 }
 
 .mypage::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_myinfo.png');
+  background-image: url("@/assets/images/backgroundImage/background_myinfo.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -61,9 +61,5 @@ import FooterComponent from '../../components/allshared/FooterComponent.vue';
   gap: 2rem;
   padding: 2rem 4rem;
   align-items: flex-start;
-}
-
-.stats-right-panel {
-  padding: 2rem;
 }
 </style>

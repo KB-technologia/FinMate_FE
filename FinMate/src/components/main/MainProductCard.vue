@@ -30,13 +30,13 @@
           <span class="return-label">{{
             getRateLabel(product.productType)
           }}</span>
-          <span class="return-value"
-            >{{
+          <span class="return-value">
+            {{
               product.productType === 'FUND'
                 ? formatRate(product.expectedReturn)
                 : formatRate(product.expectedReturn + product.detail.bonusRate)
-            }}%</span
-          >
+            }}%
+          </span>
         </div>
         <div class="detail-info" v-if="product.detail">
           <template
@@ -202,22 +202,41 @@ const truncatedName = computed(() => {
 </script>
 
 <style scoped>
-.card-container {
-  width: 20vw;
-  height: 40vh;
+/* .card-container {
   background-color: var(--color-white);
   border: 0.2vh solid var(--color-light-gray);
   border-radius: 1vh;
+  width: 20vw;
+  height: 40vh;
   padding: 2vh;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.1s ease;
   font-family: var(--font-wanted);
+} */
+.card-container {
+  background: url('@/assets/images/etc/화분.png');
+  width: 17vw;
+  height: 40vh;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.1s ease;
+  transform: scale(1.1);
+  font-family: var(--font-wanted);
 }
 
-.card-container:hover {
+/* .card-container:hover {
   border: 0.2vh solid var(--color-black);
+  cursor: pointer;
+  transform: translateY(-0.8vh);
+} */
+.card-container:hover {
   cursor: pointer;
   transform: translateY(-0.8vh);
 }
@@ -227,8 +246,47 @@ const truncatedName = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 0.6px;
+  margin-left: -1.5vh;
+  text-align: left;
+  transform: scale(0.6);
+  transform-origin: center;
+  margin-top: -12vh;
+  align-items: flex-start;
+}
+/* .card-content {
+  width: 100%; 
+  height: 100%;
+  margin: auto; 
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  gap: 20px;
   text-align: left;
   align-items: flex-start;
+  transform: scale(0.7);
+  transform-origin: center;
+  margin-top: -12vh;
+} */
+
+/* 화면이 1500px 이하일 때 */
+@media (max-width: 1800px) {
+  .card-content {
+    transform: scale(0.6);
+  }
+}
+
+/* 화면이 900px 이하일 때 */
+@media (max-width: 900px) {
+  .card-content {
+    transform: scale(0.4);
+  }
+}
+
+/* 화면이 600px 이하일 때 */
+@media (max-width: 600px) {
+  .card-content {
+    transform: scale(0.3);
+  }
 }
 
 .card-content p {
@@ -270,16 +328,17 @@ const truncatedName = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5vh;
-  margin-top: 0.5vh;
+  margin-top: 4vh;
 }
 
 .product-type-badge {
-  padding: 0.8vh 1.2vw;
+  margin-right: -2vh;
+  padding: 0.5vh 1vw;
   border-radius: 1.2vw;
-  font-size: clamp(11px, 0.9vw, 13px);
+  font-size: clamp(15px, 0.9vw, 18px);
   font-weight: 600;
   color: white;
+  transform: scale(1.1);
 }
 
 .type-deposit {
@@ -296,7 +355,8 @@ const truncatedName = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.7vw;
-  margin-bottom: 1.5vh;
+  margin-top: -5vh;
+  margin-left: -1vh;
 }
 
 .bank-icon {
@@ -311,6 +371,7 @@ const truncatedName = computed(() => {
   font-size: 1.2vw;
   color: #666;
   overflow: hidden;
+  transform: scale(0.9);
 }
 
 .bank-logo {
@@ -322,6 +383,7 @@ const truncatedName = computed(() => {
 .bank-name {
   font-size: 1vw;
   font-weight: 500;
+  margin-left: -0.5vh;
   color: #666;
 }
 
@@ -330,7 +392,8 @@ const truncatedName = computed(() => {
   font-weight: 700;
   color: #333;
   margin: 0 0 2vh 0;
-  line-height: 1.4;
+  margin-top: 2vh;
+  line-height: 2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -346,21 +409,22 @@ const truncatedName = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5vh;
+  margin-top: 1.5vh;
   padding: 1.2vw;
-  background: #f8f9fa;
+  /* background: #f8f9fa; */
   border-radius: 0.8vw;
-  width: 18vw;
+  width: 16vw;
+  height: 5vh;
 }
 
 .return-label {
-  font-size: 1vw;
-  font-weight: 500;
+  font-size: 1.5vw;
+  font-weight: 600;
   color: #666;
 }
 
 .return-value {
-  font-size: 1.2vw;
+  font-size: 2.5vw;
   font-weight: 700;
   color: #e91e63;
 }
@@ -368,7 +432,7 @@ const truncatedName = computed(() => {
 .detail-info {
   display: flex;
   flex-direction: column;
-  gap: 1vh;
+  margin-top: 5vh;
   padding: 0 0 0.5vw;
 }
 

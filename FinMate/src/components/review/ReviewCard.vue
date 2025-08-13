@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import StarRating from "@/components/allshared/star/StarRating.vue";
-import { Trash2 } from "lucide-vue-next";
+import StarRating from '@/components/allshared/star/StarRating.vue';
+import { Trash2 } from 'lucide-vue-next';
 
 defineProps({
   username: String,
@@ -42,19 +42,21 @@ defineProps({
   productId: Number,
 });
 
-defineEmits(["delete"]);
+defineEmits(['delete']);
 </script>
 
 <style scoped>
 .review-card {
   position: relative;
+  overflow: visible;
   display: flex;
   align-items: center;
   padding: 1rem;
-  border: 0.125rem solid var(--color-black);
+  background-color: var(--color-mypage-card);
   gap: 1.5rem;
-
+  --delete-w: 3.5rem;
   width: 100%;
+  border-radius: 2vh;
 }
 
 .left-section {
@@ -111,10 +113,11 @@ defineEmits(["delete"]);
 
 .delete-button {
   position: absolute;
-  right: -3.6rem;
-  top: -0.15rem;
-  height: 8.5rem;
-  width: 3.5rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--delete-w);
+  transform: translateX(100%);
   background-color: var(--color-delete-bg);
   border: none;
   border-top-right-radius: 0.75rem;

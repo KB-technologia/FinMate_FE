@@ -5,22 +5,52 @@
       <div class="type-wrapper">
         <span class="type">{{ type }}</span>
       </div>
-      <span v-if="showTag" class="tag" :class="tagClass">
-        {{ isExpired ? "만기완료" : "만기전" }}
-      </span>
     </div>
-
     <ul>
-      <li v-for="(label, key) in infoList" :key="key">
-        <span class="label">{{ label }}</span>
-        <span class="value">{{ product[key] }}</span>
+      <li>
+        <span class="label">상품명</span
+        ><span class="value">{{ product.name }}</span>
+      </li>
+      <li>
+        <span class="label">상품유형</span
+        ><span class="value">{{ product.type }}</span>
+      </li>
+      <li>
+        <span class="label">금융기관</span
+        ><span class="value">{{ product.bank }}</span>
+      </li>
+      <li>
+        <span class="label">가입금액</span
+        ><span class="value">{{ product.amount }}</span>
+      </li>
+      <li>
+        <span class="label">기대 수익률</span
+        ><span class="value">{{ product.return }}%</span>
+      </li>
+
+      <li v-if="product.start">
+        <span class="label">가입일</span
+        ><span class="value">{{ product.start }}</span>
+      </li>
+      <li v-if="product.end">
+        <span class="label">만기일</span
+        ><span class="value">{{ product.end }}</span>
+      </li>
+
+      <li v-if="product.fundType">
+        <span class="label">펀드유형</span
+        ><span class="value">{{ product.fundType }}</span>
+      </li>
+      <li v-if="product.riskLevel">
+        <span class="label">위험도</span
+        ><span class="value">{{ riskLevelText }}</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue';
 
 const props = defineProps({
   icon: String,
@@ -28,28 +58,17 @@ const props = defineProps({
   product: Object,
 });
 
-const infoList = {
-  name: "상품명",
-  bank: "금융기관명",
-  amount: "가입금액",
-  rate: "이자율/수익률",
-  start: "가입일",
-  end: "만기일",
-};
-
-const showTag = computed(() => props.type === "예금" || props.type === "적금");
-
-const isExpired = computed(() => {
-  if (!props.product.end || props.product.end === "제한 없음") return false;
-  const today = new Date();
-  const endDate = new Date(props.product.end);
-  return endDate < today;
-});
-
-const tagClass = computed(() => {
-  if (props.type === "예금") return "tag-deposit";
-  if (props.type === "적금") return "tag-saving";
-  return "";
+const riskLevelText = computed(() => {
+  const level = props.product.riskLevel;
+  const map = {
+    2: '매우 낮음',
+    3: '낮음',
+    4: '중간',
+    5: '다소 높음',
+    6: '높음',
+    7: '매우 높음',
+  };
+  return map[level];
 });
 </script>
 
@@ -57,12 +76,10 @@ const tagClass = computed(() => {
 .product-box {
   flex: 1;
   min-width: 280px;
-  border: 2px solid var(--color-primary-bluegray);
-  border-radius: 16px;
+  border-radius: var(--card-radius);
   padding: 1.5rem;
   background-color: var(--color-white);
-  font-family: var(--font-wanted);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--card-shadow);
 }
 
 .product-header {

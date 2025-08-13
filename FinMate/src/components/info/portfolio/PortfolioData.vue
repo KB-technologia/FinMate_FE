@@ -1,17 +1,17 @@
 <script setup>
-import { onMounted, ref, nextTick, watch } from 'vue';
-import PortfolioModal from './PortfolioModal.vue';
-import { Chart } from 'chart.js/auto';
-import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ChartColumnStacked, SquarePen, Info } from 'lucide-vue-next';
-import PortfolioCompareModal from './PortfolioCompareModal.vue';
-import ToastContainer from '@/components/allshared/ToastContainer.vue';
+import { onMounted, ref, nextTick, watch } from "vue";
+import PortfolioModal from "./PortfolioModal.vue";
+import { Chart } from "chart.js/auto";
+import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { ChartColumnStacked, SquarePen, Info } from "lucide-vue-next";
+import PortfolioCompareModal from "./PortfolioCompareModal.vue";
+import ToastContainer from "@/components/allshared/ToastContainer.vue";
 
 ChartJS.register(ArcElement, Tooltip, ChartDataLabels);
 
 const props = defineProps({ portfolio: Object });
-const emit = defineEmits(['requestRefresh']);
+const emit = defineEmits(["requestRefresh"]);
 
 const showCompareModal = ref(false);
 const showModifyModal = ref(false);
@@ -21,22 +21,22 @@ const chartCanvasRef = ref(null);
 const toastRef = ref();
 
 onMounted(() => {
-  toastRef.value?.addToast('마이데이터가 정상적으로 로딩되었어요!', 'success');
+  toastRef.value?.addToast("마이데이터가 정상적으로 로딩되었어요!", "success");
 });
 
 function handleSave() {
-  emit('requestRefresh');
+  emit("requestRefresh");
   showModifyModal.value = false;
 }
 
 function renderChart() {
-  const ctx = chartCanvasRef.value?.getContext('2d');
+  const ctx = chartCanvasRef.value?.getContext("2d");
   chartInstance.value?.destroy();
 
   chartInstance.value = new Chart(ctx, {
-    type: 'pie',
+    type: "pie",
     data: {
-      labels: ['현금', '예금', '적금', '채권', '펀드', '주식', '기타'],
+      labels: ["현금", "예금", "적금", "채권", "펀드", "주식", "기타"],
       datasets: [
         {
           data: [
@@ -49,13 +49,13 @@ function renderChart() {
             props.portfolio.other,
           ],
           backgroundColor: [
-            '#9ECAD6',
-            '#748DAE',
-            '#F5CBCB',
-            '#FFEAEA',
-            '#A3DC9A',
-            '#DEE791',
-            '#DCD0A8',
+            "#9ECAD6",
+            "#748DAE",
+            "#F5CBCB",
+            "#FFEAEA",
+            "#A3DC9A",
+            "#DEE791",
+            "#DCD0A8",
           ],
           hoverOffset: 7,
         },
@@ -64,13 +64,13 @@ function renderChart() {
     options: {
       plugins: {
         datalabels: {
-          color: 'var(--color-black)',
-          font: { weight: 'bold', size: 16 },
+          color: "var(--color-black)",
+          font: { weight: "bold", size: 16 },
           formatter: (value, ctx) => {
             const data = ctx.chart.data.datasets[0].data;
             const total = data.reduce((acc, val) => acc + val, 0);
             const percent = ((value / total) * 100).toFixed(1);
-            if (percent < 5) return '';
+            if (percent < 5) return "";
 
             const label = ctx.chart.data.labels[ctx.dataIndex];
             return `${label}\n${percent}%`;
@@ -95,7 +95,7 @@ watch(
 <template>
   <ToastContainer ref="toastRef" />
   <div class="right-panel-container">
-    <h2 class="portfolio-title">My Portfolio</h2>
+    <h2 class="title">나의 자산 포트폴리오</h2>
     <div class="chart-info-row">
       <div class="chart-wrapper">
         <canvas ref="chartCanvasRef"></canvas>
@@ -203,11 +203,11 @@ watch(
   gap: 1rem;
 }
 
-.portfolio-title {
-  font-size: 3rem;
+.title {
+  font-size: 2.2rem;
   font-weight: var(--font-weight-bold);
+  color: var(--color-black);
   text-align: center;
-  margin-bottom: 1rem;
 }
 
 .chart-info-row {

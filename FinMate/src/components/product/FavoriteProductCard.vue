@@ -59,7 +59,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
 import { Heart } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 

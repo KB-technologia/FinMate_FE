@@ -5,37 +5,40 @@
       @confirm="onGachaConfirmed"
       @close="showGachaModal = false"
     />
-    <div class="actions">
-      <Tooltip text="캐릭터 다시 뽑기" placement="bottom">
-        <button
-          class="action-chip action-chip--ticket"
-          @click="openTicketModal"
-        >
-          <img
-            src="@/assets/images/icons/ticket.png"
-            alt="티켓"
-            class="ticket-icon"
-          />
-          <span class="ticket-count">x{{ userData?.characterTicket }}</span>
-        </button>
-      </Tooltip>
-      <Tooltip text="다시 테스트 하러 가기" placement="bottom">
-        <button
-          class="action-chip action-chip--explore"
-          @click="$router.push('/quizstart')"
-        >
-          <ScrollText class="icon-scroll" />
-          <span>투자 성향 테스트</span>
-        </button>
-      </Tooltip>
-    </div>
+    <div class="header" v-if="userData && characterData">
+      <h2 class="level-title">
+        {{
+          userData.profileSummary + " " + characterData.animalName ||
+          "소심한 펭귄"
+        }}
+      </h2>
 
-    <h2 class="level-title" v-if="userData && characterData">
-      {{
-        userData.profileSummary + ' ' + characterData.animalName ||
-        '소심한 펭귄'
-      }}
-    </h2>
+      <div class="actions">
+        <Tooltip text="캐릭터 다시 뽑기" placement="bottom">
+          <button
+            class="action-chip action-chip--ticket"
+            @click="openTicketModal"
+          >
+            <img
+              src="@/assets/images/icons/ticket.png"
+              alt="티켓"
+              class="ticket-icon"
+            />
+            <span class="ticket-count">x{{ userData?.characterTicket }}</span>
+          </button>
+        </Tooltip>
+
+        <Tooltip text="다시 테스트 하러 가기" placement="bottom">
+          <button
+            class="action-chip action-chip--explore"
+            @click="$router.push('/quizstart')"
+          >
+            <ScrollText class="icon-scroll" />
+            <span>투자 성향 테스트</span>
+          </button>
+        </Tooltip>
+      </div>
+    </div>
 
     <div class="character-section">
       <img
@@ -56,7 +59,6 @@
           >각 항목을 클릭하시면 테스트 결과를 자세히 확인하실 수 있습니다.</span
         >
       </p>
-      <!-- 가치관 -->
       <ChoiceStatCard
         :index="0"
         title="가치관"
@@ -68,8 +70,6 @@
         :readonly="true"
         @toggle="toggle('value')"
       />
-
-      <!-- 속도 -->
       <ChoiceStatCard
         :index="1"
         title="속도"
@@ -82,8 +82,6 @@
         :readonly="true"
         @toggle="toggle('speed')"
       />
-
-      <!-- 운/전략 -->
       <ChoiceStatCard
         :index="2"
         title="운/전략"
@@ -95,8 +93,6 @@
         :readonly="true"
         @toggle="toggle('luckStrategy')"
       />
-
-      <!-- 재정 (바) -->
       <BarStatCard
         :index="3"
         label="재정"
@@ -109,8 +105,6 @@
         :expanded="activeCard === 'finance'"
         @toggle="toggle('finance')"
       />
-
-      <!-- 모험 성향 (바) -->
       <BarStatCard
         :index="4"
         label="모험 성향"
@@ -129,21 +123,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { ScrollText, Info } from 'lucide-vue-next';
+import { ref, computed, onMounted } from "vue";
+import { ScrollText, Info } from "lucide-vue-next";
 
-import defaultPenguin from '@/assets/images/animals/penguin.png';
-import Tooltip from '@/components/allshared/Tooltip.vue';
-import ToastContainer from '@/components/allshared/ToastContainer.vue';
-import CharacterGachaModal from '@/components/info/gacha/CharacterGachaModal.vue';
-import { getMemberStat } from '@/api/main/main.js';
+import Tooltip from "@/components/allshared/Tooltip.vue";
+import ToastContainer from "@/components/allshared/ToastContainer.vue";
+import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
 
-import ChoiceStatCard from '@/components/info/stats/ChoiceStatCard.vue';
-import BarStatCard from '@/components/info/stats/BarStatCard.vue';
-import { userStatDescriptions as descs } from '@/constants/userStatDescriptions';
+import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
+import BarStatCard from "@/components/info/stats/BarStatCard.vue";
+import { userStatDescriptions as descs } from "@/constants/userStatDescriptions";
 
-import { getUserData, FILE_BASE } from '@/api/mypage/level.js';
-import { getCharacter } from '@/api/mypage/character.js';
+import { getMemberStat } from "@/api/main/main.js";
+import { getUserData, FILE_BASE } from "@/api/mypage/level.js";
+import { getCharacter } from "@/api/mypage/character.js";
 
 const userData = ref(null);
 const characterData = ref(null);
@@ -154,7 +147,7 @@ const openTicketModal = () => {
   const currentTicket = userData.value?.characterTicket ?? 0;
   console.log(currentTicket);
   if (currentTicket <= 0) {
-    toastRef.value?.addToast('보유한 티켓이 없어요 🥲', 'warning');
+    toastRef.value?.addToast("보유한 티켓이 없어요 🥲", "warning");
     return;
   }
   showGachaModal.value = true;
@@ -165,17 +158,10 @@ const toggle = (key) => {
   activeCard.value = activeCard.value === key ? null : key;
 };
 
-// TODO: 선택값(임시)
-// const selectedValueType = ref("성장형");
-// const selectedSpeed = ref("중간");
-// const selectedLuckOrStrategy = ref("전략");
-const selectedValueType = ref('');
-const selectedSpeed = ref('');
-const selectedLuckOrStrategy = ref('');
+const selectedValueType = ref("");
+const selectedSpeed = ref("");
+const selectedLuckOrStrategy = ref("");
 
-// TODO: 바 퍼센트(임시)
-// const financePercent = ref(60);
-// const adventurePercent = ref(40);
 const financePercent = ref(0);
 const adventurePercent = ref(0);
 
@@ -194,17 +180,18 @@ const financeLevel = computed(() => toLevel(financePercent.value));
 const adventureLevel = computed(() => toLevel(adventurePercent.value));
 
 const financeDesc = computed(
-  () => descs.finance.getDescription(financeLevel.value) || ''
+  () => descs.finance.getDescription(financeLevel.value) || ""
 );
 
 const adventureDesc = computed(
-  () => descs.adventure.understandingDescriptions[adventureLevel.value] || ''
+  () => descs.adventure.understandingDescriptions[adventureLevel.value] || ""
 );
 
 onMounted(async () => {
   try {
-    const stat = await getMemberStat();
-    console.log('☑️ /api/my-page/stat 응답:', stat);
+    const { data: stat } = await getMemberStat();
+    //TODO : 콘솔 로그 삭제
+    console.log("☑️ /api/my-page/stat 응답:", stat);
     financePercent.value = Math.max(
       0,
       Math.min(100, (stat.financeScore / 3) * 100)
@@ -213,31 +200,31 @@ onMounted(async () => {
       0,
       Math.min(100, (stat.adventureScore / 3) * 100)
     );
-    selectedValueType.value = descs.value.enumToLabel?.[stat.valueTag] ?? '';
-    selectedSpeed.value = descs.speed.enumToLabel?.[stat.speedTag] ?? '';
+    selectedValueType.value = descs.value.enumToLabel?.[stat.valueTag] ?? "";
+    selectedSpeed.value = descs.speed.enumToLabel?.[stat.speedTag] ?? "";
     selectedLuckOrStrategy.value =
-      descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? '';
+      descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? "";
   } catch (e) {
-    console.warn('사용자 스탯 조회 실패:', e);
+    console.warn("사용자 스탯 조회 실패:", e);
   }
 
   try {
     const data = await getUserData();
-    console.log('level 불러오기 성공', data);
+    console.log("level 불러오기 성공", data);
     //TODO : 콘솔 로그 삭제
     userData.value = data;
   } catch (e) {
-    console.log('레벨 불러오기 실패', e);
+    console.log("레벨 불러오기 실패", e);
     //TODO : 콘솔 로그 삭제
   }
 
   try {
     const data = await getCharacter();
-    console.log('캐릭터 이름 가져오기', data);
+    console.log("캐릭터 이름 가져오기", data);
     //TODO : 콘솔 로그 삭제
     characterData.value = data;
   } catch (e) {
-    console.log('캐릭터 가져오기 실패', e);
+    console.log("캐릭터 가져오기 실패", e);
     //TODO : 콘솔 로그 삭제
   }
 });
@@ -250,12 +237,24 @@ onMounted(async () => {
   align-items: center;
 }
 
+.header {
+  width: 100%;
+  max-width: 70rem;
+  margin: 0 auto 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 0.75rem;
+}
+
 .level-title {
+  grid-column: 2;
+  justify-self: center;
+  text-align: center;
+  margin: 0;
   font-size: 2rem;
-  margin-bottom: 1rem;
   font-weight: var(--font-weight-bold);
   padding: 0.5rem 1rem;
-  text-align: center;
 }
 
 .character-section {
@@ -281,13 +280,11 @@ onMounted(async () => {
 }
 
 .actions {
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
+  grid-column: 3;
+  justify-self: end;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.6rem;
 }
 
 .action-chip {
@@ -296,7 +293,7 @@ onMounted(async () => {
   gap: 0.35rem;
   background: var(--color-white);
   border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 20px;
+  border-radius: 2.5rem;
   padding: 0.45rem 0.8rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   font-size: 0.9rem;
@@ -351,7 +348,7 @@ onMounted(async () => {
   width: 240px;
   height: 30px;
   background-color: var(--color-light-gray);
-  border-radius: 20px;
+  border-radius: 2.5rem;
   overflow: hidden;
   margin-bottom: 1rem;
 }
