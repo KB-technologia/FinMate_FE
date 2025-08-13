@@ -41,7 +41,7 @@ async function checkAnswer(userAnswer) {
     const res = await getAnswerDailyQuiz(quiz.value.id, userAnswer);
     const { correct, message, exp, fillPercent } = res.data || {};
     if (correct) {
-      resultLines.value = ["정답입니다!", message || ""];
+      resultLines.value = ["정답입니다!\n", message || ""];
       showExp.value = true;
       expNumber.value = typeof exp === "number" ? exp : 500;
       expPercent.value = typeof fillPercent === "number" ? fillPercent : 50;
@@ -53,7 +53,7 @@ async function checkAnswer(userAnswer) {
       resultLines.value = [
         "아쉽지만 오답이에요!",
         message || "",
-        "다음 퀴즈도 기대해 주세요!",
+        "\n다음 퀴즈도 기대해 주세요!",
       ];
       showExp.value = false;
       resultMascot.value = new URL(
