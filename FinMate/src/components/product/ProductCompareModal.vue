@@ -379,7 +379,7 @@
                 </div>
               </div>
             </div>
-            <!-- 차트 비교 - 회색 배경 안으로 통합 -->
+
             <div
               v-if="hasProductRateData"
               class="comparison-section chart-section"
@@ -388,7 +388,7 @@
                 {{ isFund ? '수익률 추이 비교' : '금리 추이 비교' }}
               </h3>
               <div class="charts-container">
-                <div class="chart-item">
+                <div class="chart-item chart-item-first">
                   <div class="chart-item-header">
                     <h4 class="chart-item-title">
                       {{ selectedProducts[0].name }}
@@ -410,7 +410,7 @@
                   </div>
                 </div>
 
-                <div class="chart-item">
+                <div class="chart-item chart-item-second">
                   <div class="chart-item-header">
                     <h4 class="chart-item-title">
                       {{ selectedProducts[1].name }}
@@ -717,13 +717,6 @@ const formatAum = (aum) => {
   } else {
     return `${value.toLocaleString()}원`;
   }
-};
-
-const formatTerm = (minTerm, maxTerm) => {
-  if (!minTerm && !maxTerm) return '-';
-  if (!maxTerm) return `${minTerm}개월~`;
-  if (minTerm === maxTerm) return `${minTerm}개월`;
-  return `${minTerm}~${maxTerm}개월`;
 };
 
 const parseMarkdown = (text) => {
@@ -1038,7 +1031,7 @@ const getRiskLevel = (level) => {
 .charts-container {
   display: grid;
   flex-direction: column;
-  gap: 2.5vw;
+  gap: 1.5vw;
 }
 
 .chart-item {
@@ -1090,6 +1083,10 @@ const getRiskLevel = (level) => {
   background: #f8f9fa;
   border-radius: 0.5vw;
   border: 1px dashed #ddd;
+}
+
+.chart-item-first :deep(canvas) {
+  filter: hue-rotate(90deg) saturate(1.2) brightness(1);
 }
 
 .analysis-content {
