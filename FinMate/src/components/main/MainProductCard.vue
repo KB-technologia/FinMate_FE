@@ -13,7 +13,7 @@
       <div class="bank-section">
         <div class="bank-icon" :class="getBankClass(product.bankName)">
           <img
-            :src="getBankImagePath(product.bankName)"
+            :src="getBankLogo(product.bankName)"
             :alt="product.bankName"
             @error="handleImageError"
             class="bank-logo"
@@ -58,13 +58,11 @@
           <template v-else-if="product.productType === 'FUND'">
             <div class="info-row">
               <span>펀드유형:</span>
-              <span>{{ product.detail.fundType }}</span>
+              <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
             </div>
             <div class="info-row">
               <span>위험도:</span>
-              <span>{{
-                getRiskLevel(product.detail.riskGrade || product.riskLevel)
-              }}</span>
+              <span>{{ getRiskLevel(product.detail.riskGrade) }}</span>
             </div>
           </template>
         </div>
@@ -106,60 +104,56 @@ const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
 };
 
-const getBankImagePath = (bankName) => {
-  const bankCode = getBankCodeFromName(bankName);
-  try {
-    return new URL(
-      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-      import.meta.url
-    ).href;
-  } catch {
-    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
-  }
-};
+const getBankLogo = (bankName) => {
+  const bankLogos = {
+    국민은행: '/src/assets/images/banks/kb.png',
+    KB증권: '/src/assets/images/banks/kb.png',
+    케이비자산운용: '/src/assets/images/banks/kb.png',
 
-const getBankCodeFromName = (bankName) => {
-  const bankNameMap = {
-    KB국민은행: 'kb',
-    신한은행: 'shinhan',
-    하나은행: 'hana',
-    우리은행: 'woori',
-    NH농협은행: 'nh',
-    IBK기업은행: 'ibk',
-    카카오뱅크: 'kakao',
-    케이뱅크: 'kbank',
-    SC제일은행: 'sc',
-    토스뱅크: 'toss',
-    BNK부산은행: 'bnk',
-    iM뱅크: 'im',
+    신한은행: '/src/assets/images/banks/shinhan.png',
+    신한투자증권: '/src/assets/images/banks/shinhan.png',
+    제주은행: '/src/assets/images/banks/shinhan.png',
+
+    하나은행: '/src/assets/images/banks/hana.png',
+    하나증권: '/src/assets/images/banks/hana.png',
+    하나자산운용: '/src/assets/images/banks/hana.png',
+
+    우리은행: '/src/assets/images/banks/woori.png',
+    우리투자증권: '/src/assets/images/banks/woori.png',
+
+    농협은행: '/src/assets/images/banks/nh.png',
+    NH농협은행: '/src/assets/images/banks/nh.png',
+    NH투자증권: '/src/assets/images/banks/nh.png',
+
+    IBK기업은행: '/src/assets/images/banks/ibk.png',
+    IBK투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
+
+    카카오뱅크: '/src/assets/images/banks/kakao.png',
+    케이뱅크: '/src/assets/images/banks/kbank.png',
+    SC제일은행: '/src/assets/images/banks/sc.png',
+
+    토스뱅크: '/src/assets/images/banks/toss.png',
+    토스증권: '/src/assets/images/banks/toss.png',
+
+    BNK부산은행: '/src/assets/images/banks/bnk.png',
+    부산은행: '/src/assets/images/banks/bnk.png',
+    iM뱅크: '/src/assets/images/banks/im.png',
   };
-
-  if (bankNameMap[bankName]) {
-    return bankNameMap[bankName];
-  }
-
-  for (const [fullName, code] of Object.entries(bankNameMap)) {
-    if (
-      bankName.includes(fullName.replace('은행', '')) ||
-      fullName.includes(bankName)
-    ) {
-      return code;
-    }
-  }
-
-  return bankName.charAt(0).toLowerCase();
-};
-
-const getBankInitial = (bankName) => {
-  return bankName.charAt(0);
+  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
 };
 
 const handleImageError = (event) => {
-  const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
+  const bankIcon = event.target?.parentElement;
+  if (!bankIcon) return;
+
+  if (event.target) {
+    event.target.style.display = 'none';
+  }
   bankIcon.style.backgroundColor = '#f0f0f0';
   bankIcon.style.color = '#666';
-  bankIcon.textContent = getBankInitial(props.product.bankName);
+  bankIcon.textContent = props.product.bankName?.charAt(0) || '?';
 };
 
 const getRateLabel = (type) => {
@@ -174,13 +168,28 @@ const getRateLabel = (type) => {
 const formatRate = (rate) => {
   return rate ? rate.toFixed(2) : '0.00';
 };
+
+const subCategoriesMap = (fundType) => {
+  const fundChange = {
+    STOCK: '주식형',
+    BOND: '채권형',
+    MIXED_EQUITY_BOND: '혼합형',
+    REAL_ESTATE: '부동산',
+    SPECIAL_ASSET: '특별자산',
+    HYBRID_ASSET: '파생상품',
+  };
+
+  return fundChange[fundType] || fundType;
+};
+
 const getRiskLevel = (level) => {
   const levels = {
-    1: '안전',
-    2: '낮음',
-    3: '보통',
-    4: '높음',
-    5: '매우높음',
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
   };
   return levels[level] || `${level}등급`;
 };
