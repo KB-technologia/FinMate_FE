@@ -255,8 +255,25 @@ const handleProductSelect = (product) => {
 };
 
 const handleProductDetail = (product) => {
-  // 상품 상세 페이지로 이동
-  router.push(`/product/${product.id}`);
+  console.log('--- 클릭된 상품 정보 ---');
+  console.log('상품 객체:', product);
+  console.log('상품 타입:', product.productType);
+  console.log('위험 등급:', product.detail?.riskGrade);
+  console.log('----------------------');
+  const routePayload = {
+    path: `/product/${product.id}`,
+    query: {},
+  };
+
+  if (product.productType === 'FUND' && product.detail?.riskGrade) {
+    const toastType = getToastTypeByRisk(product.detail.riskGrade);
+
+    if (toastType) {
+      routePayload.query.showRiskToast = toastType;
+    }
+  }
+
+  router.push(routePayload);
 };
 
 // 비교하기 버튼 클릭 시 모달 열기
@@ -276,6 +293,13 @@ const handleRemoveProduct = (product) => {
   if (index > -1) {
     selectedProducts.value.splice(index, 1);
   }
+};
+
+const getToastTypeByRisk = (riskGrade) => {
+  if (riskGrade == 6) return 'highRisk1';
+  if (riskGrade == 5) return 'highRisk2';
+  if (riskGrade == 4) return 'highRisk3';
+  return null;
 };
 </script>
 

@@ -36,7 +36,9 @@
   --toast-bg-error: #fdecea;
   --toast-bg-info: #e8f0fe;
   --toast-bg-warning: #fff4e5;
-  --toast-bg-high-risk: #fee2e2;
+  --toast-bg-high-risk-1: #ffe3e3;
+  --toast-bg-high-risk-2: #fff0f0;
+  --toast-bg-high-risk-3: #fff9f9;
 
   /* Toast 아이콘 색상 */
   --toast-icon-success: #3c8c75;

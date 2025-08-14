@@ -368,6 +368,17 @@ const loadProductData = async () => {
     // 즐겨찾기 상태 확인
     console.log(reviewsResponse.data);
     await checkFavoriteStatus();
+    if (product.value) {
+      const level = product.value.riskLevel;
+
+      if (level == 7) {
+        toast(getToastMessage('highRisk1'), 'highRisk1');
+      } else if (level == 6) {
+        toast(getToastMessage('highRisk2'), 'highRisk2');
+      } else if (level == 5) {
+        toast(getToastMessage('highRisk3'), 'highRisk3');
+      }
+    }
   } catch (err) {
     console.error('데이터 로딩 중 오류 발생:', err);
   }
@@ -398,6 +409,17 @@ const handleReviewSubmit = async (reviewData) => {
     isReviewModalOpen.value = false;
   } catch (err) {
     console.error('리뷰 제출 중 오류 발생:', err);
+  }
+};
+
+const getToastMessage = (type) => {
+  switch (type) {
+    case 'highRisk1':
+      return '큰 수익을 노릴 수 있지만 원금을 잃을 위험이 가장 높아요';
+    case 'highRisk2':
+      return '시장 평균보다 높은 수익을 추구하지만 원금 손실 위험이 있어요';
+    case 'highRisk3':
+      return '예금보다 수익이 높지만 원금이 줄어들 수 있어요';
   }
 };
 
