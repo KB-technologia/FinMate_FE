@@ -1,17 +1,17 @@
 <script setup>
-import { onMounted, ref, nextTick, watch } from "vue";
-import PortfolioModal from "./PortfolioModal.vue";
-import { Chart } from "chart.js/auto";
-import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import { ChartColumnStacked, SquarePen, Info } from "lucide-vue-next";
-import PortfolioCompareModal from "./PortfolioCompareModal.vue";
-import ToastContainer from "@/components/allshared/ToastContainer.vue";
+import { onMounted, ref, nextTick, watch } from 'vue';
+import PortfolioModal from './PortfolioModal.vue';
+import { Chart } from 'chart.js/auto';
+import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { ChartColumnStacked, SquarePen, Info } from 'lucide-vue-next';
+import PortfolioCompareModal from './PortfolioCompareModal.vue';
+import ToastContainer from '@/components/allshared/ToastContainer.vue';
 
 ChartJS.register(ArcElement, Tooltip, ChartDataLabels);
 
 const props = defineProps({ portfolio: Object });
-const emit = defineEmits(["requestRefresh"]);
+const emit = defineEmits(['requestRefresh']);
 
 const showCompareModal = ref(false);
 const showModifyModal = ref(false);
@@ -21,22 +21,22 @@ const chartCanvasRef = ref(null);
 const toastRef = ref();
 
 onMounted(() => {
-  toastRef.value?.addToast("마이데이터가 정상적으로 로딩되었어요!", "success");
+  toastRef.value?.addToast('마이데이터가 정상적으로 로딩되었어요!', 'success');
 });
 
 function handleSave() {
-  emit("requestRefresh");
+  emit('requestRefresh');
   showModifyModal.value = false;
 }
 
 function renderChart() {
-  const ctx = chartCanvasRef.value?.getContext("2d");
+  const ctx = chartCanvasRef.value?.getContext('2d');
   chartInstance.value?.destroy();
 
   chartInstance.value = new Chart(ctx, {
-    type: "pie",
+    type: 'pie',
     data: {
-      labels: ["현금", "예금", "적금", "채권", "펀드", "주식", "기타"],
+      labels: ['현금', '예금', '적금', '채권', '펀드', '주식', '기타'],
       datasets: [
         {
           data: [
@@ -49,13 +49,13 @@ function renderChart() {
             props.portfolio.other,
           ],
           backgroundColor: [
-            "#9ECAD6",
-            "#748DAE",
-            "#F5CBCB",
-            "#FFEAEA",
-            "#A3DC9A",
-            "#DEE791",
-            "#DCD0A8",
+            '#9ECAD6',
+            '#748DAE',
+            '#F5CBCB',
+            '#FFEAEA',
+            '#A3DC9A',
+            '#DEE791',
+            '#DCD0A8',
           ],
           hoverOffset: 7,
         },
@@ -64,13 +64,13 @@ function renderChart() {
     options: {
       plugins: {
         datalabels: {
-          color: "var(--color-black)",
-          font: { weight: "bold", size: 16 },
+          color: 'var(--color-black)',
+          font: { weight: 'bold', size: 16 },
           formatter: (value, ctx) => {
             const data = ctx.chart.data.datasets[0].data;
             const total = data.reduce((acc, val) => acc + val, 0);
             const percent = ((value / total) * 100).toFixed(1);
-            if (percent < 5) return "";
+            if (percent < 5) return '';
 
             const label = ctx.chart.data.labels[ctx.dataIndex];
             return `${label}\n${percent}%`;
@@ -125,22 +125,7 @@ watch(
             </div>
           </div>
           <div class="asset-cards-row">
-            <div class="asset-card">
-              <div class="asset-card-header">
-                <div class="asset-title">현금 및 기타</div>
-              </div>
-              <div class="asset-row">
-                <span class="asset-label"
-                  >현금 : {{ props.portfolio.cash.toLocaleString() }} 원</span
-                >
-              </div>
-              <div class="asset-row">
-                <span class="asset-label"
-                  >기타 : {{ props.portfolio.other.toLocaleString() }} 원</span
-                >
-              </div>
-            </div>
-            <div class="asset-card">
+            <div class="asset-card safe-assets">
               <div class="asset-card-header">
                 <div class="asset-title">안전자산</div>
               </div>
@@ -162,7 +147,7 @@ watch(
                 >
               </div>
             </div>
-            <div class="asset-card">
+            <div class="asset-card risk-assets">
               <div class="asset-card-header">
                 <div class="asset-title">위험자산</div>
               </div>
@@ -174,6 +159,21 @@ watch(
               <div class="asset-row">
                 <span class="asset-label"
                   >주식 : {{ props.portfolio.stock.toLocaleString() }} 원</span
+                >
+              </div>
+            </div>
+            <div class="asset-card other-assets">
+              <div class="asset-card-header">
+                <div class="asset-title">현금 및 기타자산</div>
+              </div>
+              <div class="asset-row">
+                <span class="asset-label"
+                  >현금 : {{ props.portfolio.cash.toLocaleString() }} 원</span
+                >
+              </div>
+              <div class="asset-row">
+                <span class="asset-label"
+                  >기타 : {{ props.portfolio.other.toLocaleString() }} 원</span
                 >
               </div>
             </div>
@@ -200,7 +200,6 @@ watch(
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
 }
 
 .title {
@@ -208,6 +207,7 @@ watch(
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
   text-align: center;
+  margin-bottom: 3rem;
 }
 
 .chart-info-row {
@@ -216,7 +216,6 @@ watch(
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  height: 65vh;
 }
 
 canvas {
@@ -225,13 +224,14 @@ canvas {
 }
 
 .chart-wrapper {
-  width: 40%;
+  width: 43%;
 }
 
 .chart-info {
   font-size: 0.8rem;
   margin-top: 0.5rem;
   color: var(--color-chart-info);
+  margin-top: 1rem;
 }
 
 .info-boxes {
@@ -239,15 +239,15 @@ canvas {
   flex-direction: column;
   align-items: flex-end;
   gap: 1rem;
-  width: 60%;
 }
 
 .portfolio-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1rem;
-  width: 65%;
+  width: auto;
   align-items: flex-end;
+  margin-bottom: 1rem;
 }
 
 .asset-cards-row {
@@ -262,49 +262,52 @@ canvas {
 .asset-group {
   border: none;
   background-color: var(--color-right-panel);
-  border-radius: 30px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  gap: 1rem;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  border-radius: var(--card-radius);
+  background-color: var(--color-product-color);
 }
 
 .asset-row {
-  margin-bottom: 0.6rem;
-  padding: 0.4rem;
+  margin-bottom: 0.2rem;
 }
 
 .asset-title {
   padding-top: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding-bottom: 0.5rem;
   font-weight: var(--font-weight-bold);
-  border-radius: 12px 12px 0 0;
-  background-color: var(--color-primary-yellow);
 }
 
 .asset-card {
   background-color: var(--color-white);
   border-radius: 12px;
   text-align: center;
-  width: 12.5rem;
-  font-size: 1.1rem;
+  width: 80%;
   font-weight: var(--font-weight-bold);
-  padding-bottom: 0.4rem;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  padding-bottom: 0.5rem;
+}
+.asset-card.other-assets {
+  border-left: 5px solid var(--infocard-color-1);
+}
+
+.asset-card.risk-assets {
+  border-left: 5px solid var(--infocard-decrease);
+}
+
+.asset-card.safe-assets {
+  border-left: 5px solid var(--infocard-increase);
 }
 
 .info-totalassets {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  background-color: var(--color-totalassets);
-  border-radius: 8px 8px 0px 0px;
-  color: var(--color-white);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: var(--font-weight-bold);
 }
 
@@ -315,7 +318,7 @@ canvas {
 
 .totalassets-label {
   margin-bottom: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: var(--font-weight-bold);
 }
 
@@ -325,27 +328,30 @@ canvas {
   background-color: var(--color-white);
   border-radius: 10px;
   align-items: center;
-  width: 20vw;
+  width: 80%;
   margin-top: 0.5rem;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  border-left: 5px solid var(--infocard-color-2);
 }
 
 .modify-btn,
 .compare-btn {
   border: none;
-  background-color: var(--color-primary-bluegray);
-  border-radius: 10px;
+  background-color: var(--color-info-button);
+  border-radius: 2vh;
   flex-direction: column;
   align-items: center;
   color: var(--color-white);
   font-size: 1.2rem;
   padding: 1rem;
-  width: 60%;
+  width: auto;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  transition: all 0.2s ease;
 }
 
 .modify-btn:hover,
 .compare-btn:hover {
   opacity: 0.8;
+  transform: translateY(-0.5vh);
 }
 </style>
