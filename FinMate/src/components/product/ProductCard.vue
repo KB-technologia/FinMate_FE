@@ -293,7 +293,7 @@ const getRiskLevel = (level) => {
   background-color: #f8fff8; 
   box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2); 
 }  */
-.bg-frog.selected {
+/* .bg-frog.selected {
   background-image: url('@/assets/images/etc/frog!.png');
 }
 .bg-chick.selected {
@@ -301,7 +301,7 @@ const getRiskLevel = (level) => {
 }
 .bg-rabbit.selected {
   background-image: url('@/assets/images/etc/rabbit!.png');
-}
+} */
 
 .card-header {
   display: flex;
