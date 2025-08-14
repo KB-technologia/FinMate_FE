@@ -7,20 +7,20 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed } from "vue";
 import {
   CircleCheckBig,
   Ban,
   Info,
   TriangleAlert,
   Siren,
-} from 'lucide-vue-next';
+} from "lucide-vue-next";
 
 const props = defineProps({
   message: String,
   type: {
     type: String,
-    default: 'info', // 'success', 'error', 'info', 'warning', 'high-risk'
+    default: "info", // 'success', 'error', 'info', 'warning', 'high-risk'
   },
 });
 
@@ -87,10 +87,11 @@ const IconComponent = computed(() => iconMap[props.type]);
 .message {
   flex: 1;
   font-size: 14px;
-  font-family: var(--font-wanted);
   font-weight: 700;
   color: var(--color-black);
   font-weight: 500;
+  white-space: pre-line;
+  line-height: 1.4;
 }
 
 .close-btn {
