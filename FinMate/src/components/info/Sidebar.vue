@@ -10,9 +10,7 @@
         <p class="level">
           <span v-if="statLoading">로딩중…</span>
           <span v-else-if="statError">정보 불러오기 실패</span>
-          <span v-else-if="!hasAnalysis"
-            >어떤 캐릭터일지 궁금하다면...테스트...
-          </span>
+          <span v-else-if="!hasAnalysis">테스트를 먼저 진행해주세요! </span>
           <span v-else>{{ levelTitle }}</span>
         </p>
         <div class="edit-icon-wrap">
