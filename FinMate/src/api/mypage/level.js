@@ -1,24 +1,19 @@
-import axios from 'axios';
-import { useAuthStore } from '@/stores/auth/auth.js';
+import axios from "axios";
+import { useAuthStore } from "@/stores/auth/auth.js";
 
-export const API_BASE = import.meta.env.VITE_BASE_API_URL + '/api/level';
-export const FILE_BASE = import.meta.env.VITE_BASE_API_URL;
+export const API_BASE = import.meta.env.VITE_BASE_API_URL + "/api/level";
 
 export const getUserData = async () => {
   const authStore = useAuthStore();
-  const { data } = await axios.get(API_BASE, {
-    headers: {
-      Authorization: `Bearer ${authStore.token}`,
-    },
+  const res = await axios.get(API_BASE, {
+    headers: { Authorization: `Bearer ${authStore.token}` },
   });
-  return data;
+  return res.data;
 };
 
-export const updateUserData = async (data) => {
+export const updateUserData = async (payload) => {
   const authStore = useAuthStore();
-  return axios.post(API_BASE, data, {
-    headers: {
-      Authorization: `Bearer ${authStore.token}`,
-    },
+  return axios.post(API_BASE, payload, {
+    headers: { Authorization: `Bearer ${authStore.token}` },
   });
 };
