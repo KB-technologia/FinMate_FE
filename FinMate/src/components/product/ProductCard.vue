@@ -80,9 +80,7 @@
             </div>
             <div class="info-row">
               <span>위험도:</span>
-              <span>{{
-                getRiskLevel(product.detail.riskGrade || product.riskLevel)
-              }}</span>
+              <span>{{ getRiskLevel(product.detail.riskGrade) }}</span>
             </div>
           </template>
         </div>
@@ -237,12 +235,12 @@ const subCategoriesMap = (fundType) => {
 
 const getRiskLevel = (level) => {
   const levels = {
-    2: '매우 낮은 위험',
-    3: '낮은 위험',
-    4: '보통 위험',
-    5: '다소 높은 위험',
-    6: '높은 위험',
-    7: '매우 높은 위험',
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
   };
   return levels[level] || `${level}등급`;
 };
