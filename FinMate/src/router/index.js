@@ -16,7 +16,7 @@ const routes = [
     component: () => import('@/views/auth/LoginView.vue'),
   },
   {
-    path: '/auth/kakao/callback',
+    path: '/oauth/kakao/callback',
     name: 'KakaoRedirect',
     component: () => import('@/views/auth/KakaoRedirect.vue'),
   },
