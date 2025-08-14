@@ -245,13 +245,13 @@ const truncatedName = computed(() => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.6px;
-  margin-left: -1.5vh;
+  gap: 0.4px;
   text-align: left;
   transform: scale(0.6);
   transform-origin: center;
-  margin-top: -12vh;
+  margin-top: -10vh;
   align-items: flex-start;
+  padding: 2vh;
 }
 /* .card-content {
   width: 100%; 
@@ -278,14 +278,14 @@ const truncatedName = computed(() => {
 /* 화면이 900px 이하일 때 */
 @media (max-width: 900px) {
   .card-content {
-    transform: scale(0.4);
+    transform: scale(0.3);
   }
 }
 
 /* 화면이 600px 이하일 때 */
 @media (max-width: 600px) {
   .card-content {
-    transform: scale(0.3);
+    transform: scale(0.2);
   }
 }
 
@@ -328,11 +328,10 @@ const truncatedName = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 4vh;
+  margin-top: 2vh;
 }
 
 .product-type-badge {
-  margin-right: -2vh;
   padding: 0.5vh 1vw;
   border-radius: 1.2vw;
   font-size: clamp(15px, 0.9vw, 18px);
@@ -410,6 +409,7 @@ const truncatedName = computed(() => {
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5vh;
+  margin-right: -7vh;
   padding: 1.2vw;
   /* background: #f8f9fa; */
   border-radius: 0.8vw;
@@ -418,12 +418,14 @@ const truncatedName = computed(() => {
 }
 
 .return-label {
-  font-size: 1.5vw;
+  margin-left: -2vh;
+  font-size: 1.2vw;
   font-weight: 600;
   color: #666;
 }
 
 .return-value {
+  margin-right: 3vh;
   font-size: 2.5vw;
   font-weight: 700;
   color: #e91e63;
