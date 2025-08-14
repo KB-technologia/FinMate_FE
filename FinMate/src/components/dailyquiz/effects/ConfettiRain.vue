@@ -35,6 +35,7 @@ const canvas = ref(null);
 let myConfetti;
 let intervalId;
 let resizeObs;
+let transferred = false;
 
 function placeCanvasOverAnchor() {
   const el =
@@ -58,14 +59,17 @@ function placeCanvasOverAnchor() {
     pointerEvents: "none",
     zIndex: String(props.zIndex),
   });
-  c.width = Math.floor(rect.width);
-  c.height = Math.floor(height);
+  if (!transferred) {
+    c.width = Math.floor(rect.width);
+    c.height = Math.floor(height);
+  }
 }
 
 function startRain() {
   const c = canvas.value;
   if (!c) return;
-  myConfetti = confetti.create(c, { resize: false, useWorker: true });
+  myConfetti = confetti.create(c, { resize: true, useWorker: true });
+  transferred = true;
 
   const end = Date.now() + props.duration;
 
