@@ -2,9 +2,16 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_BASE_API_URL + '/api/product';
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const productService = {
   getAllProducts() {
-    return axios.get(`${API_BASE_URL}`);
+    return axios.get(`${API_BASE_URL}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getFilteredProducts(filterParams) {
@@ -48,19 +55,25 @@ export const productService = {
       };
     }
 
-    return axios.get(url);
+    return axios.get(url, { headers: getAuthHeaders });
   },
 
   compareProducts(id1, id2) {
-    return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`);
+    return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getProductDetails(productId) {
-    return axios.get(`${API_BASE_URL}/${productId}`);
+    return axios.get(`${API_BASE_URL}/${productId}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getProductReviews(productId) {
-    return axios.get(`${API_BASE_URL}/${productId}/review`);
+    return axios.get(`${API_BASE_URL}/${productId}/review`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   async submitReview(productId, reviewData) {
