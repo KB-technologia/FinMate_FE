@@ -41,7 +41,8 @@ defineProps({ sender: { type: String, default: "FINMATE" } });
   color: var(--color-brown);
   text-align: center;
   line-height: 1.5;
-  word-break: break-word;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .bubble-sender-name {
