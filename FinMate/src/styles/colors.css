@@ -108,6 +108,7 @@
   --btn-radius: 3.5vh;
   --btn-font-size: 1rem;
   --btn-gradient: linear-gradient(135deg, #4caf50, #66bb6a);
+
   --btn-hover-shadow: 0 0.2vh 0.3vw var(--color-light-gray);
   --btn-hover-translate: -0.5vh;
 }
