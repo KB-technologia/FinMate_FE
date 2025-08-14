@@ -1267,3 +1267,4 @@ const getRiskLevel = (level) => {
   font-size: 0.9vw;
 }
 </style>
+-->
