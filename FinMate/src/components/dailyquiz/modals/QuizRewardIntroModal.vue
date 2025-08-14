@@ -3,7 +3,11 @@
     <template #bubble>
       <ModalMascot :src="kiwiIntroQuiz" />
       <SpeechBubble sender="FINMATE">
-        <TypewriterText :lines="['오늘의 퀴즈를 풀면 경험치를 드려요!']" />
+        <TypewriterText
+          :lines="[
+            '오늘의 퀴즈를 풀러 오셨군요? 환영합니다!\n오늘의 퀴즈를 맞히신다면 경험치를 드려요!',
+          ]"
+        />
         <template #overlay>
           <FloatingChoiceButtons
             primaryLabel="다음으로"

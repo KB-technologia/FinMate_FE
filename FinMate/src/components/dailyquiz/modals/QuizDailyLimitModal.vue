@@ -8,8 +8,8 @@
         />
         <template #overlay>
           <FloatingChoiceButtons
-            primaryLabel="시작하기"
-            secondaryLabel="나가기"
+            primaryLabel="준비됐어!"
+            secondaryLabel="이따가 다시 올게!"
             @primary="$emit('start')"
             @secondary="$emit('close')"
           />
