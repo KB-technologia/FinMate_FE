@@ -66,6 +66,7 @@ const resultText = computed(
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  cursor: pointer;
 }
 .choice-label {
   font-size: 1.1rem;
