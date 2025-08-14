@@ -17,7 +17,7 @@
           />
 
           <button
-            type="submit"
+            :type="isCodeSent ? 'button' : 'submit'"
             class="action-btn"
             :disabled="!email || isCodeSent"
           >
@@ -30,15 +30,8 @@
       <div v-if="isCodeSent" class="field">
         <label>인증코드</label>
         <div class="input-group">
-          <input
-            v-model="authCode"
-            placeholder="인증코드 입력"
-            maxlength="6"
-            @keyup.enter="verifyAuthCode"
-          />
-          <button type="button" class="action-btn" @click="verifyAuthCode">
-            확인
-          </button>
+          <input v-model="authCode" placeholder="인증코드 입력" maxlength="6" />
+          <button type="submit" class="action-btn">확인</button>
         </div>
       </div>
     </form>
@@ -194,12 +187,21 @@ const days = computed(() => {
   return Array.from({ length: daysInMonth }, (_, i) => i + 1);
 });
 
-const handleEmailAuthSubmit = () => {
-  if (!email.value) {
-    toast("이메일을 입력해주세요.", "warning");
+const handleEmailAuthSubmit = async () => {
+  if (ui.isLoading) return;
+
+  if (!isCodeSent.value) {
+    if (!email.value) {
+      return;
+    }
+    emailError.value = "";
+    await SendAuthCodeClick();
     return;
   }
-  SendAuthCodeClick();
+  if (!authCode.value) {
+    return;
+  }
+  await verifyAuthCode();
 };
 
 const isValidEmail = (email) => {
@@ -281,6 +283,7 @@ const checkIdDuplication = async () => {
     toast("중복 확인 중 오류가 발생했습니다.", "error");
   }
 };
+
 const handleSubmit = () => {
   if (idAvailable.value !== true) {
     toast("아이디 중복 확인을 해주세요.", "error");
@@ -291,6 +294,17 @@ const handleSubmit = () => {
     toast("비밀번호가 일치하지 않습니다.", "error");
     return;
   }
+
+  if (!birthYear.value || !birthMonth.value || !birthDay.value) {
+    toast("생년, 월, 일을 모두 선택해주세요.", "warning");
+    return;
+  }
+
+  if (gender.value !== "MALE" && gender.value !== "FEMALE") {
+    toast("성별을 선택해주세요.", "warning");
+    return;
+  }
+
   store.provider = "LOCAL";
   store.email = email.value;
   store.name = name.value;
@@ -298,13 +312,11 @@ const handleSubmit = () => {
   store.password = password.value;
   store.passwordConfirm = confirmPassword.value;
   store.gender = gender.value;
-  store.birth =
-    birthYear.value && birthMonth.value && birthDay.value
-      ? `${birthYear.value}-${String(birthMonth.value).padStart(
-          2,
-          "0"
-        )}-${String(birthDay.value).padStart(2, "0")}`
-      : "";
+  store.birth = `${birthYear.value}-${String(birthMonth.value).padStart(
+    2,
+    "0"
+  )}-${String(birthDay.value).padStart(2, "0")}`;
+
   router.push("/signup-survey");
 };
 </script>
