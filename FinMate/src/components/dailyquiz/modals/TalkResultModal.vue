@@ -1,46 +1,12 @@
-<script setup>
-import { computed } from "vue";
-
-import TalkModalShell from "@/components/dailyquiz/shared/TalkModalShell.vue";
-import ModalMascot from "@/components/dailyquiz/shared/ModalMascot.vue";
-import SpeechBubble from "@/components/dailyquiz/shared/SpeechBubble.vue";
-import TypewriterText from "@/components/dailyquiz/shared/TypewriterText.vue";
-import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceButtons.vue";
-
-import defaultBg from "@/assets/images/backgroundImage/quiz-bg.png";
-
-const props = defineProps({
-  // 말풍선(타자 효과)으로 보여줄 라인들
-  lines: { type: Array, required: true },
-
-  // 상단 마스코트/배경/보낸이
-  mascotSrc: { type: String, default: "" },
-  bgImage: { type: String, default: "" },
-  sender: { type: String, default: "FINMATE" },
-
-  // 버튼 라벨
-  primaryLabel: { type: String, default: "닫기" },
-  secondaryLabel: { type: String, default: "나가기" },
-
-  // 타자 효과 옵션
-  speed: { type: Number, default: 45 },
-  startDelay: { type: Number, default: 120 },
-
-  // 정답일 때 경험치 표시
-  showExp: { type: Boolean, default: false },
-  expNumber: { type: Number, default: 0 },
-  expPercent: { type: Number, default: 50 },
-});
-
-const emit = defineEmits(["close", "primary", "secondary"]);
-const onClose = () => emit("close");
-
-const shellBg = computed(() => props.bgImage || defaultBg);
-</script>
-
 <template>
   <TalkModalShell :bg-image="shellBg" @close="emit('close')">
     <template #bubble>
+      <ConfettiRain
+        v-if="showExp"
+        :key="confettiKey"
+        :duration="2000"
+        :height-ratio="0.6"
+      />
       <ModalMascot :src="mascotSrc" />
       <div v-if="showExp" class="exp-msg-header">
         <p class="exp-msg">캐릭터가 {{ expNumber }}의 경험치를 획득했어요!</p>
@@ -67,6 +33,55 @@ const shellBg = computed(() => props.bgImage || defaultBg);
     </template>
   </TalkModalShell>
 </template>
+
+<script setup>
+import { computed, ref, onMounted, watch } from "vue";
+
+import TalkModalShell from "@/components/dailyquiz/shared/TalkModalShell.vue";
+import ModalMascot from "@/components/dailyquiz/shared/ModalMascot.vue";
+import SpeechBubble from "@/components/dailyquiz/shared/SpeechBubble.vue";
+import TypewriterText from "@/components/dailyquiz/shared/TypewriterText.vue";
+import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceButtons.vue";
+import ConfettiRain from "@/components/dailyquiz/effects/ConfettiRain.vue";
+
+import defaultBg from "@/assets/images/backgroundImage/quiz-bg.png";
+
+const props = defineProps({
+  lines: { type: Array, required: true },
+
+  mascotSrc: { type: String, default: "" },
+  bgImage: { type: String, default: "" },
+  sender: { type: String, default: "FINMATE" },
+
+  primaryLabel: { type: String, default: "닫기" },
+  secondaryLabel: { type: String, default: "나가기" },
+
+  speed: { type: Number, default: 45 },
+  startDelay: { type: Number, default: 120 },
+
+  showExp: { type: Boolean, default: false },
+  expNumber: { type: Number, default: 0 },
+  expPercent: { type: Number, default: 50 },
+});
+
+const emit = defineEmits(["close", "primary", "secondary"]);
+const onClose = () => emit("close");
+
+const shellBg = computed(() => props.bgImage || defaultBg);
+
+const confettiKey = ref(0);
+onMounted(() => {
+  if (props.showExp) confettiKey.value++;
+});
+
+watch(
+  () => props.lines,
+  () => {
+    if (props.showExp) confettiKey.value++;
+  },
+  { deep: true }
+);
+</script>
 
 <style scoped>
 .exp-msg-header {
