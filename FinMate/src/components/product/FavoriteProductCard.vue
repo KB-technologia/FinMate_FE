@@ -44,7 +44,7 @@
       <!-- 펀드인 경우 위험등급 표시 -->
       <div class="risk-info" v-if="product.productType === 'FUND'">
         <span class="risk-label">위험도</span>
-        <span class="risk-grade" :class="getRiskClass(product.riskGrade)">
+        <span class="risk-grade" :class="getRiskName(product.riskGrade)">
           {{ getRiskName(product.riskGrade) }}
         </span>
       </div>
