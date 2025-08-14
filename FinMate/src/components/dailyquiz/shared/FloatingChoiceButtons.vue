@@ -1,4 +1,3 @@
-<!-- FinMate/src/components/dailyquiz/shared/FloatingChoiceButtons.vue -->
 <template>
   <div class="btn-stack" :class="{ single: !renderSecondary }">
     <button
@@ -18,8 +17,6 @@
       />
       {{ primaryLabel }}
     </button>
-
-    <!-- 보조 버튼은 옵션 -->
     <button
       v-if="renderSecondary"
       ref="secondaryBtnRef"
@@ -50,12 +47,10 @@ import {
 const props = defineProps({
   primaryLabel: { type: String, default: "다음으로" },
   secondaryLabel: { type: String, default: "나가기" },
-  /** ✅ false면 보조 버튼 숨김 (단일 버튼 모드) */
   showSecondary: { type: Boolean, default: true },
 });
 const emit = defineEmits(["primary", "secondary"]);
 
-/** secondaryLabel이 비었거나 showSecondary=false면 보조 버튼 비표시 */
 const renderSecondary = computed(
   () => props.showSecondary && !!props.secondaryLabel
 );
@@ -65,7 +60,6 @@ const primaryBtnRef = ref(null);
 const secondaryBtnRef = ref(null);
 
 const handleKeyDown = (e) => {
-  // 단일 버튼 모드: Enter만 동작
   if (!renderSecondary.value) {
     if (e.key === "Enter" || e.code === "NumpadEnter") {
       e.preventDefault();
@@ -73,7 +67,6 @@ const handleKeyDown = (e) => {
     }
     return;
   }
-  // 두 버튼 모드: ↑/↓로 토글 + Enter
   if (e.key === "ArrowUp" || e.key === "ArrowDown") {
     e.preventDefault();
     selected.value = selected.value === "primary" ? "secondary" : "primary";
@@ -92,7 +85,7 @@ onMounted(() => {
 onBeforeUnmount(() => window.removeEventListener("keydown", handleKeyDown));
 
 watch(selected, async (val) => {
-  if (!renderSecondary.value) return; // 단일 버튼 모드면 포커스 토글 불필요
+  if (!renderSecondary.value) return;
   await nextTick();
   if (val === "primary") primaryBtnRef.value?.focus();
   else secondaryBtnRef.value?.focus();
