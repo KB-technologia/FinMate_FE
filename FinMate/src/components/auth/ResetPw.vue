@@ -105,7 +105,6 @@ const passwordMismatch = computed(
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-// 이메일 인증코드 발송 함수
 const sendAuthCode = async () => {
   emailError.value = '';
   if (!isValidEmail(email.value)) {
@@ -119,8 +118,15 @@ const sendAuthCode = async () => {
     uuid.value = response.data.uuid;
     isCodeSent.value = true;
     toast('인증코드를 전송했습니다.', 'success');
-  } catch (err) {
-    emailError.value = '가입되지 않은 이메일이거나, 전송에 실패했습니다.';
+  } catch (error) {
+    if (
+      error.response &&
+      (error.response.status === 500 || error.response.status === 400)
+    ) {
+      toast('해당 이메일로 가입된 계정이 없습니다.', 'error');
+    } else {
+      emailError.value = '인증코드 전송에 실패했습니다. 다시 시도해주세요.';
+    }
     isCodeSent.value = false;
   } finally {
     ui.isLoading = false;

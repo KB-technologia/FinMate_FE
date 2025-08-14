@@ -56,6 +56,10 @@ export const sendEmailAuth = (email) => {
   return axios.post(`${BASE_URL}/api/email/authentication`, { email });
 };
 
+export const sendEmailAuthForSingUp = (email) => {
+  return axios.post(`${BASE_URL}/api/email/authentication/signup`, { email });
+};
+
 export const verifyEmailAuth = (code, uuid) => {
   return axios.post(`${BASE_URL}/api/email/authentication/verify`, {
     authCode: code,
