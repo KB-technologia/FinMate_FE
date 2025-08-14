@@ -7,7 +7,10 @@
         :duration="2000"
         :height-ratio="0.6"
       />
-      <ModalMascot :src="mascotSrc" />
+      <ModalMascot
+        :src="mascotSrc"
+        :class="showExp ? 'is-correct' : 'is-wrong'"
+      />
 
       <div v-if="showExp" class="exp-msg-header">
         <p class="exp-msg">캐릭터가 {{ expNumber }}의 경험치를 획득했어요!</p>
@@ -201,5 +204,15 @@ watch(
 }
 :deep(.floating-button-box) {
   top: 1.8rem;
+}
+
+:deep(.tm-mascot.is-correct) {
+  transform: translate(-50%, 6vh) scale(1.05);
+  width: 8.5rem;
+}
+
+:deep(.tm-mascot.is-wrong) {
+  transform: translate(-50%, 7vh) scale(1);
+  width: 10rem;
 }
 </style>
