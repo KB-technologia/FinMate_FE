@@ -87,6 +87,7 @@ jobs:
 
           # 심볼릭 링크 전환 (무중단)
           ssh -o StrictHostKeyChecking=yes "$SSH_USER@$SSH_HOST" "sudo ln -sfn $REL/dist /var/www/finmate/current && sudo chown -h $SSH_USER:$SSH_USER /var/www/finmate/current"
+        working-directory: FinMate
 
       - name: Revoke SSH from runner IP
         if: always()
