@@ -29,7 +29,9 @@ const iconMap = {
   error: Ban,
   info: Info,
   warning: TriangleAlert,
-  highRisk: Siren,
+  highRisk1: Siren,
+  highRisk2: Siren,
+  highRisk3: Siren,
 };
 
 const IconComponent = computed(() => iconMap[props.type]);
@@ -63,8 +65,16 @@ const IconComponent = computed(() => iconMap[props.type]);
 .toast.warning {
   background-color: var(--toast-bg-warning);
 }
-.toast.highRisk {
-  background-color: var(--toast-bg-high-risk);
+.toast.highRisk1 {
+  background-color: var(--toast-bg-high-risk-1);
+  border-color: var(--toast-icon-error);
+}
+.toast.highRisk2 {
+  background-color: var(--toast-bg-high-risk-2);
+  border-color: var(--toast-icon-error);
+}
+.toast.highRisk3 {
+  background-color: var(--toast-bg-high-risk-3);
   border-color: var(--toast-icon-error);
 }
 
@@ -80,6 +90,9 @@ const IconComponent = computed(() => iconMap[props.type]);
 .toast.warning .toast-icon {
   color: var(--color-orange);
 }
+.toast.highRisk1 .toast-icon,
+.toast.highRisk2 .toast-icon,
+.toast.highRisk3 .toast-icon,
 .toast.highRisk .toast-icon {
   color: var(--toast-icon-high-risk);
 }
