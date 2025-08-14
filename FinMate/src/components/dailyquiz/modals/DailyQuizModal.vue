@@ -1,7 +1,52 @@
+<template>
+  <TalkModalShell
+    v-show="!showResult"
+    :bg-image="quizBg"
+    @close="$emit('close')"
+  >
+    <template #bubble>
+      <ModalMascot class="ask-mascot" />
+      <SpeechBubble sender="FINMATE">
+        <TypewriterText
+          v-if="quiz?.quiz"
+          class="question-text"
+          :lines="[quiz.quiz]"
+          :speed="60"
+          :startDelay="150"
+        />
+        <template #overlay>
+          <FloatingChoiceButtons
+            :class="{ 'is-disabled': isSubmitting }"
+            primaryLabel="맞아요"
+            secondaryLabel="아니에요"
+            @primary="checkAnswer(true)"
+            @secondary="checkAnswer(false)"
+          />
+        </template>
+      </SpeechBubble>
+    </template>
+  </TalkModalShell>
+
+  <TalkResultModal
+    v-if="showResult"
+    :lines="resultLines"
+    :mascot-src="resultMascot"
+    :bg-image="quizBg"
+    :show-exp="showExp"
+    :exp-number="expNumber"
+    :exp-percent="expPercent"
+    primaryLabel="닫기"
+    secondaryLabel="나가기"
+    @primary="closeAll"
+    @secondary="closeAll"
+    @close="closeAll"
+  />
+</template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import { getDailyQuiz, getAnswerDailyQuiz } from "@/api/dailyquiz/dailyQuiz.js";
-// import { updateQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
+import { updateQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
 
 import TalkModalShell from "@/components/dailyquiz/shared/TalkModalShell.vue";
 import ModalMascot from "@/components/dailyquiz/shared/ModalMascot.vue";
@@ -78,51 +123,6 @@ function closeAll() {
 }
 </script>
 
-<template>
-  <TalkModalShell
-    v-show="!showResult"
-    :bg-image="quizBg"
-    @close="$emit('close')"
-  >
-    <template #bubble>
-      <ModalMascot />
-      <SpeechBubble sender="FINMATE">
-        <TypewriterText
-          v-if="quiz?.quiz"
-          class="question-text"
-          :lines="[quiz.quiz]"
-          :speed="60"
-          :startDelay="150"
-        />
-        <template #overlay>
-          <FloatingChoiceButtons
-            :class="{ 'is-disabled': isSubmitting }"
-            primaryLabel="맞아요"
-            secondaryLabel="아니에요"
-            @primary="checkAnswer(true)"
-            @secondary="checkAnswer(false)"
-          />
-        </template>
-      </SpeechBubble>
-    </template>
-  </TalkModalShell>
-
-  <TalkResultModal
-    v-if="showResult"
-    :lines="resultLines"
-    :mascot-src="resultMascot"
-    :bg-image="quizBg"
-    :show-exp="showExp"
-    :exp-number="expNumber"
-    :exp-percent="expPercent"
-    primaryLabel="닫기"
-    secondaryLabel="나가기"
-    @primary="closeAll"
-    @secondary="closeAll"
-    @close="closeAll"
-  />
-</template>
-
 <style scoped>
 .question-text {
   font-size: 1.1rem;
@@ -132,8 +132,14 @@ function closeAll() {
   line-height: 1.5;
   white-space: pre-line;
 }
+
 .is-disabled {
   pointer-events: none;
   opacity: 0.6;
+}
+
+:deep(.tm-mascot.ask-mascot) {
+  transform: translate(-45%, 9.5vh);
+  width: clamp(9rem, 8vw + 6rem, 11rem);
 }
 </style>
