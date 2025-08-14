@@ -1,0 +1,692 @@
+<template>
+  <div class="product-detail-card">
+    <button class="favorite-btn" @click="handleToggleFavorite">
+      <Heart class="heart-icon" :class="{ 'is-favorite': isFavorite }" />
+    </button>
+    <div class="top-right-badge">
+      <span
+        class="product-type-badge"
+        :class="getTypeClass(product.productType)"
+      >
+        {{ getTypeLabel(product.productType) }}
+      </span>
+    </div>
+
+    <div class="center-header">
+      <div class="bank-logo-wrapper">
+        <img
+          :src="getBankLogo(product.bankName)"
+          class="bank-logo"
+          :alt="product.bankName"
+          @error="handleImageError"
+        />
+      </div>
+      <h2 class="product-name">{{ product.name }}</h2>
+      <div class="bank-name">{{ product.bankName }}</div>
+    </div>
+
+    <div class="fund-stats">
+      <div class="stat primary">
+        <div class="stat-label">대표 수익률</div>
+        <div class="stat-value">
+          <strong>{{ formatRate(fundHeadline.rate) }}</strong
+          ><span class="unit">%</span>
+        </div>
+        <div class="stat-sub">{{ fundHeadline.label }}</div>
+      </div>
+
+      <div class="stat emerald">
+        <div class="stat-label">기준가</div>
+        <div class="stat-value">
+          <strong>{{ formatAmount(detail.nav) }}</strong
+          ><span class="unit">{{ navUnit }}</span>
+        </div>
+        <div class="stat-sub">
+          최초가
+          {{
+            detail.initialNav != null
+              ? `${formatAmount(detail.initialNav)}${navUnit}`
+              : '-'
+          }}
+        </div>
+      </div>
+      <div class="stat alt">
+        <div class="stat-label">순자산(AUM)</div>
+        <div class="stat-value">
+          <strong>{{ formatAum(detail.aum) }}</strong>
+        </div>
+        <div class="stat-sub" v-if="detail.baseDate">
+          기준일 {{ formatDate(detail.baseDate) }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="info-card info-grid">
+    <div>
+      <span :class="`pill pill-risk ${riskTone(detail.riskGrade)}`"
+        >{{ 7 - detail.riskGrade }}등급 ·
+        {{ riskLabel(detail.riskGrade) }}</span
+      >
+    </div>
+    <dl class="kv-list">
+      <div
+        v-for="it in infoItems"
+        :key="it.key"
+        class="kv-row"
+        :class="it.tone && `kv--${it.tone}`"
+      >
+        <dt>{{ it.label }}</dt>
+        <dd v-html="it.value"></dd>
+      </div>
+    </dl>
+    <div class="actions">
+      <a :href="product.url" target="_blank" class="btn solid"
+        >이 상품 보러가기 🔗</a
+      >
+    </div>
+  </div>
+  <ProductRateChart
+    v-if="product.productRate"
+    :product-rate="product.productRate"
+    :title="product.productType === 'FUND' ? '수익률 추이' : '이율 추이'"
+    :show-zero-line="product.productType === 'FUND'"
+  />
+</template>
+
+<script setup>
+import { Heart } from 'lucide-vue-next';
+import ProductRateChart from './ProductRateChart.vue';
+import { ref, computed, toRaw } from 'vue';
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true,
+  },
+  isFavorite: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['toggle-favorite']);
+
+const handleToggleFavorite = () => {
+  emit('toggle-favorite');
+};
+
+const getTypeLabel = (type) => {
+  const labels = {
+    DEPOSIT: '예금',
+    SAVINGS: '적금',
+    FUND: '펀드',
+  };
+  return labels[type] || type;
+};
+
+const getTypeClass = (type) => {
+  return `type-${type.toLowerCase()}`;
+};
+
+const formatRate = (rate) => {
+  return rate ? rate.toFixed(2) : '0.00';
+};
+
+const getBankLogo = (bankName) => {
+  const bankLogos = {
+    국민은행: '/src/assets/images/banks/kb.png',
+    KB증권: '/src/assets/images/banks/kb.png',
+    케이비자산운용: '/src/assets/images/banks/kb.png',
+
+    신한은행: '/src/assets/images/banks/shinhan.png',
+    신한투자증권: '/src/assets/images/banks/shinhan.png',
+    제주은행: '/src/assets/images/banks/shinhan.png',
+
+    하나은행: '/src/assets/images/banks/hana.png',
+    하나증권: '/src/assets/images/banks/hana.png',
+    하나자산운용: '/src/assets/images/banks/hana.png',
+
+    우리은행: '/src/assets/images/banks/woori.png',
+    우리투자증권: '/src/assets/images/banks/woori.png',
+
+    농협은행: '/src/assets/images/banks/nh.png',
+    NH농협은행: '/src/assets/images/banks/nh.png',
+    NH투자증권: '/src/assets/images/banks/nh.png',
+
+    IBK기업은행: '/src/assets/images/banks/ibk.png',
+    IBK투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
+
+    카카오뱅크: '/src/assets/images/banks/kakao.png',
+    케이뱅크: '/src/assets/images/banks/kbank.png',
+    SC제일은행: '/src/assets/images/banks/sc.png',
+
+    토스뱅크: '/src/assets/images/banks/toss.png',
+    토스증권: '/src/assets/images/banks/toss.png',
+
+    BNK부산은행: '/src/assets/images/banks/bnk.png',
+    부산은행: '/src/assets/images/banks/bnk.png',
+    iM뱅크: '/src/assets/images/banks/im.png',
+  };
+  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
+};
+
+// 이미지 로드 실패 시 처리
+const handleImageError = (event) => {
+  // 이미지 로드 실패 시 텍스트로 대체
+  const bankIcon = event.target.parentElement;
+  event.target.style.display = 'none';
+  bankIcon.style.backgroundColor = '#f0f0f0';
+  bankIcon.style.color = '#666';
+  bankIcon.textContent = props.product.bankName.charAt(0);
+};
+
+const detail = computed(() => props.product.detail ?? {});
+
+// NAV 단위(원/좌로 쓰고 싶으면 '원/좌'로 바꿔)
+const navUnit = '원';
+
+// 숫자 포맷
+const formatAmount = (n) =>
+  n == null ? '-' : Number(n).toLocaleString('ko-KR');
+
+// AUM은 억/조 단위로 축약
+const formatAum = (n) => {
+  if (n == null || !Number.isFinite(+n)) return '-';
+  const v = +n;
+  const abs = Math.abs(v);
+  if (abs >= 1e12) return `${(v / 1e12).toFixed(2).replace(/\\.00$/, '')}조원`;
+  if (abs >= 1e8) return `${(v / 1e8).toFixed(2).replace(/\\.00$/, '')}억원`;
+  return `${v.toLocaleString('ko-KR')}원`;
+};
+
+// 날짜 YYYY.MM.DD
+const formatDate = (d) => {
+  if (!d) return '';
+  const dt = new Date(d);
+  if (Number.isNaN(dt.getTime())) return d;
+  const mm = String(dt.getMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getDate()).padStart(2, '0');
+  return `${dt.getFullYear()}.${mm}.${dd}`;
+};
+
+const pr = computed(() => toRaw(props.product.productRate) ?? {});
+
+const numOrNull = (v) =>
+  v == null || v === '' ? null : Number.isFinite(+v) ? +v : null;
+const R = computed(() => ({
+  '1m': numOrNull(pr.value?.returnRate1m),
+  '3m': numOrNull(pr.value?.returnRate3m),
+  '6m': numOrNull(pr.value?.returnRate6m),
+  '12m': numOrNull(pr.value?.returnRate12m),
+}));
+
+const fundHeadline = computed(() => {
+  const r = R.value;
+  if (Number.isFinite(r['3m'])) return { rate: r['3m'], label: '최근 3개월' };
+  if (Number.isFinite(r['6m'])) return { rate: r['6m'], label: '최근 6개월' };
+  if (Number.isFinite(r['12m']))
+    return { rate: r['12m'], label: '최근 1년(단순)' };
+  if (Number.isFinite(r['1m'])) return { rate: r['1m'], label: '최근 1개월' };
+  return { rate: 0, label: '데이터 없음' };
+});
+
+const fundPills = computed(() => {
+  const r = R.value;
+  const pills = [
+    { key: '1m', label: '1M', value: r['1m'] },
+    { key: '3m', label: '3M', value: r['3m'] },
+    { key: '6m', label: '6M', value: r['6m'] },
+    { key: '12m', label: '1Y', value: r['12m'] },
+  ];
+  return pills.filter((p) => Number.isFinite(p.value));
+});
+
+const fundTypeLabel = (t) =>
+  ({
+    STOCK: '주식형',
+    BOND: '채권형',
+    MIXED_EQUITY_BOND: '혼합형',
+    REAL_ESTATE: '부동산형',
+    SPECIAL_ASSET: '특별자산형',
+    HYBRID_ASSET: '혼합자산형',
+  }[t] || t);
+const riskLabel = (n) =>
+  ({
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
+  }[n] || `${n}`);
+const riskTone = (n) =>
+  ({
+    1: 'risk--verylow', // 초록
+    2: 'risk--low', // 청록
+    3: 'risk--medium', // 하늘/슬레이트
+    4: 'risk--modhigh', // 앰버
+    5: 'risk--high', // 오렌지
+    6: 'risk--veryhigh', // 로즈
+  }[n]);
+
+const infoItems = computed(() => {
+  const d = detail.value;
+  const items = [
+    {
+      key: 'description',
+      label: '상품 소개',
+      value: props.product.description,
+      show: props.product.description != null,
+      tone: '',
+    },
+    {
+      key: 'bankName',
+      label: '판매회사',
+      value: props.product.bankName,
+      show: !!props.product.bankName,
+    },
+    {
+      key: 'fundType',
+      label: '펀드 유형',
+      value: fundTypeLabel(d.fundType),
+      show: !!d.fundType,
+    },
+
+    // 대표 수익률(요건: 3M 기준이라고 했으니 expectedReturn을 3M로 노출)
+    {
+      key: 'headlineReturn',
+      label: '대표 수익률',
+      value: `${formatRate(props.product.expectedReturn)}% (3M)`,
+      show: props.product.expectedReturn != null,
+      tone: 'ok',
+    },
+
+    { key: 'manager', label: '운용사', value: d.manager, show: !!d.manager },
+    {
+      key: 'inceptionDate',
+      label: '최초 설정일',
+      value: formatDate(d.inceptionDate),
+      show: !!d.inceptionDate,
+    },
+
+    {
+      key: 'nav',
+      label: '기준가',
+      value: `${formatAmount(d.nav)} 원/좌`,
+      show: d.nav != null,
+      tone: 'money',
+    },
+    {
+      key: 'initialNav',
+      label: '최초가',
+      value: `${formatAmount(d.initialNav)} 원/좌`,
+      show: d.initialNav != null,
+    },
+    {
+      key: 'baseDate',
+      label: '기준일',
+      value: formatDate(d.baseDate),
+      show: !!d.baseDate,
+    },
+
+    {
+      key: 'aum',
+      label: '순자산(AUM)',
+      value: formatAum(d.aum),
+      show: d.aum != null,
+      tone: 'money',
+    },
+    {
+      key: 'expenseRatio',
+      label: '총비용비율(TER)',
+      value: `${formatRate(d.expenseRatio)}%`,
+      show: d.expenseRatio != null,
+    },
+    {
+      key: 'redemptionPeriod',
+      label: '환매 소요일',
+      value: `${d.redemptionPeriod} 영업일`,
+      show: d.redemptionPeriod != null,
+    },
+    {
+      key: 'productClassCode',
+      label: '분류코드',
+      value: d.productClassCode,
+      show: !!d.productClassCode,
+    },
+    {
+      key: 'associationCode',
+      label: '협회코드',
+      value: d.associationCode,
+      show: !!d.associationCode,
+    },
+  ];
+
+  return items.filter((it) => it.show);
+});
+</script>
+
+<style scoped>
+.product-detail-card {
+  width: 62.5rem;
+  max-width: 62.5rem;
+  margin: 0 auto;
+  padding: 2.5rem;
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  background-color: var(--color-white);
+  position: relative;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 0.15vw solid #e8f5e8;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.favorite-btn:hover {
+  background: #4caf50;
+  border-color: #4caf50;
+  transform: scale(1.1);
+}
+
+.favorite-btn:hover .heart-icon {
+  color: white;
+}
+
+.heart-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: #4caf50;
+  transition: all 0.3s ease;
+  stroke-width: 2;
+}
+
+.heart-icon.is-favorite {
+  color: #4caf50;
+  fill: #4caf50;
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.3);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.top-right-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.product-type-badge {
+  padding: 0.625rem 1.125rem;
+  border-radius: 999px;
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.9375rem;
+}
+
+.type-deposit {
+  background: var(--color-survey-blue);
+}
+.type-savings {
+  background: var(--color-saving-orange);
+}
+.type-fund {
+  background: var(--color-fund-green);
+}
+
+.center-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.bank-logo-wrapper {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  font-weight: 700;
+  font-size: 2.4rem;
+  color: #666;
+  overflow: hidden; /* 이미지가 원형을 벗어나지 않도록 */
+}
+
+.bank-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-name {
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-bold);
+  margin: 1rem 0 0.5rem;
+  text-align: center;
+}
+
+.bank-name {
+  font-size: 1.125rem;
+  color: var(--color-dark-gray);
+}
+
+.fund-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .fund-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat {
+  border-radius: 0.875rem;
+  padding: 1rem 1.25rem;
+}
+.stat.primary {
+  border-color: #dbeafe;
+  background: #f8fbff;
+}
+.stat.emerald {
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+}
+.stat.alt {
+  border-color: #fecdd3;
+  background: #fff1f2;
+}
+
+.stat-label {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+.stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.125rem;
+}
+.stat-value strong {
+  font-size: 1.6rem;
+  color: #111827;
+}
+.unit {
+  font-size: 1rem;
+  color: #6b7280;
+}
+.stat-sub {
+  margin-top: 0.2rem;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.info-card {
+  width: 62.5rem;
+  max-width: 62.5rem;
+  margin: 1rem auto;
+  padding: 2.5rem;
+  position: relative;
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  background-color: var(--color-white);
+}
+
+.info-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.pill {
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  color: #111827;
+}
+
+/* 위험등급 전용 색상 6종 */
+.pill-risk.risk--verylow {
+  background: #ecfdf5;
+  border-color: #bbf7d0;
+  color: #065f46;
+} /* 매우 낮음: 에메랄드 */
+.pill-risk.risk--low {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #0f766e;
+} /* 낮음: 틸 */
+.pill-risk.risk--medium {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+} /* 보통: 스카이/블루 */
+.pill-risk.risk--modhigh {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+} /* 다소 높음: 앰버 */
+.pill-risk.risk--high {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #c2410c;
+} /* 높음: 오렌지 */
+.pill-risk.risk--veryhigh {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+} /* 매우 높음: 로즈 */
+
+.kv-list {
+  display: grid;
+  gap: 0.25rem;
+  border-top: 1px solid #eef2f7;
+  padding-top: 0.75rem;
+}
+.kv-row {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+.kv-row:not(:last-child) {
+  border-bottom: 1px dashed #edf2f7;
+}
+.kv-row dt {
+  color: #6b7280;
+  font-weight: 600;
+}
+.kv-row dd {
+  margin: 0;
+  color: #111827;
+  font-weight: 700;
+}
+
+.kv--caution dd {
+  color: #b45309;
+}
+/* 강조 톤 */
+.kv--warn dd {
+  color: #b91c1c;
+} /* 패널티 붉은 기조 */
+.kv--ok dd {
+  color: #166534;
+} /* 유연성 초록 기조 */
+.kv--money dd {
+  color: #0f766e;
+} /* 금액 항목 청록 기조 */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn.solid {
+  font-size: var(--btn-font-size);
+  border-radius: var(--btn-radius);
+  background: var(--btn-gradient);
+  color: var(--color-white);
+  border: none;
+  transition: all 0.2s ease;
+}
+.btn.solid:hover {
+  box-shadow: var(--btn-hover-shadow);
+  transform: translateY(var(--btn-hover-translate));
+}
+
+.protection-note {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: #f8fafc; /* 연회색 배경 */
+  border: 1px solid #e5e7eb; /* 연회색 테두리 */
+  color: #4b5563; /* 텍스트 회색 */
+  margin-top: 0.5rem;
+}
+.note-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+</style>

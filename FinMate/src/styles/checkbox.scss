@@ -1,0 +1,48 @@
+.model-7 {
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input {
+      display: none;
+    }
+
+    label {
+      background: none;
+      border: 0.5vh solid var(--color-light-gray);
+      height: 40px;
+      width: 80px;
+      display: inline-block;
+      border-radius: 2vh;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:after {
+        content: '';
+        position: absolute;
+        background: var(--color-light-gray);
+        top: 3px;
+        left: 4px;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+    }
+
+    input:checked + label {
+      border-color: var(--color-primary-green);
+    }
+
+    input:checked + label:after {
+      background: var(--color-primary-green);
+      left: 42px;
+    }
+
+    .toggle-text {
+      font-weight: 500;
+    }
+  }
+}

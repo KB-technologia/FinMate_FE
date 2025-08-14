@@ -1,0 +1,70 @@
+/* 
+  이 파일은 브라우저 간 기본 스타일 차이를 최소화하기 위한 리셋 스타일을 정의합니다.
+  - 모든 요소에 box-sizing: border-box를 적용하여 레이아웃 계산을 직관적으로 만듭니다.
+  - 버튼에 기본 스타일 제거 및 cursor: pointer를 설정하여 일관된 인터랙션을 제공합니다.
+  - 프로젝트에 공통 적용할 기본 스타일을 이 파일에 함께 추가해 주세요.
+
+  ※ 컴포넌트별 고유 스타일은 각 컴포넌트의 <style scoped> 블록 안에 작성합니다.
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  text-align: center;
+}
+
+/* 카드 공통 */
+.common-card {
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  background-color: var(--color-white);
+}
+
+/* 버튼 공통 */
+.common-button {
+  font-size: var(--btn-font-size);
+  border-radius: var(--btn-radius);
+  background: var(--btn-gradient);
+  color: var(--color-white);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.common-button:hover {
+  box-shadow: var(--btn-hover-shadow);
+  transform: translateY(var(--btn-hover-translate));
+}
+
+/* 컨테이너 공통 */
+.common-container {
+  background-color: var(--color-product-color);
+  border-radius: var(--card-radius);
+}
+
+/* 설문지 카드 */
+.survey-card {
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  width: 70vw;
+  height: 80vh;
+  padding: 2vh;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  border: 0.2vh solid var(--color-light-gray);
+}
