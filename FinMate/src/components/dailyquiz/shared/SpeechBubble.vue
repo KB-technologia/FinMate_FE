@@ -22,6 +22,10 @@ defineProps({ sender: { type: String, default: "FINMATE" } });
   width: 100%;
   margin: 23vh auto 0;
   overflow: visible;
+
+  --sender-top: 12.5%;
+  --sender-left: 11.8%;
+  --sender-rotate: -4deg;
 }
 
 .speech-bubble {
@@ -47,8 +51,8 @@ defineProps({ sender: { type: String, default: "FINMATE" } });
 
 .bubble-sender-name {
   position: absolute;
-  top: 1.7rem;
-  left: 5.2rem;
+  top: var(--sender-top);
+  left: var(--sender-left);
   font-size: 1rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-brown);
