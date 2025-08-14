@@ -11,7 +11,6 @@ export const getPortfolio = async () => {
         'Content-Type': 'application/json',
       },
     });
-    console.log(`왜안나와 : ${response}`);
     return response;
   } catch (error) {
     console.error('❌ Portfolio 요청 실패:', error);
@@ -58,7 +57,7 @@ export const getAllRecommendations = async () => {
         },
       }
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error('❌ 전체 추천상품 요청 실패:', error);
     if (error.response) {
@@ -80,7 +79,7 @@ export const getRandomRecommendation = async () => {
         },
       }
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error('❌ 랜덤 추천상품 요청 실패:', error);
     if (error.response) {

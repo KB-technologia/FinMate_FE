@@ -37,6 +37,8 @@
 <script setup>
 import { ref } from 'vue';
 import { postAttendance } from '@/api/main/main.js';
+import { useAuthStore } from '@/stores/auth/auth';
+import { useToast } from '@/composables/useToast';
 
 const props = defineProps({
   userName: String,
@@ -44,15 +46,22 @@ const props = defineProps({
 });
 
 const currentAttendance = ref(props.attendanceDays);
+const authStore = useAuthStore();
+const { toast } = useToast();
 
 const handleAttendance = async () => {
   try {
+    if (authStore.isFirst == false) {
+      toast('오늘 이미 출석했어요!', 'warning');
+      return;
+    }
     const result = await postAttendance();
     console.log('✅ 출석 성공:', result);
 
     if (result === 200) {
       console.log('🎯 조건 통과!');
       currentAttendance.value++;
+      authStore.isFirst = false;
     }
   } catch (error) {
     console.error('❌ 출석 실패:', error);

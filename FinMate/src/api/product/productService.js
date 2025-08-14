@@ -2,9 +2,16 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_BASE_API_URL + '/api/product';
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const productService = {
   getAllProducts() {
-    return axios.get(`${API_BASE_URL}`);
+    return axios.get(`${API_BASE_URL}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getFilteredProducts(filterParams) {
@@ -48,25 +55,25 @@ export const productService = {
       };
     }
 
-    return axios.get(url);
+    return axios.get(url, { headers: getAuthHeaders });
   },
 
   compareProducts(id1, id2) {
-    console.log(
-      '상품 비교 API 호출:',
-      `${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`
-    );
-    return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`);
+    return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getProductDetails(productId) {
-    console.log('상품 상세 정보 API 호출:', `${API_BASE_URL}/${productId}`);
-    return axios.get(`${API_BASE_URL}/${productId}`);
+    return axios.get(`${API_BASE_URL}/${productId}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getProductReviews(productId) {
-    console.log('상품 리뷰 API 호출:', `${API_BASE_URL}/${productId}/reviews`);
-    return axios.get(`${API_BASE_URL}/${productId}/review`);
+    return axios.get(`${API_BASE_URL}/${productId}/review`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   async submitReview(productId, reviewData) {
@@ -110,7 +117,6 @@ export const productService = {
     }
 
     try {
-      console.log('즐겨찾기 목록 조회 API 호출:', `${API_BASE_URL}/favorite`);
       const response = await axios.get(`${API_BASE_URL}/favorite`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -139,10 +145,6 @@ export const productService = {
     }
 
     try {
-      console.log(
-        '즐겨찾기 등록 API 호출:',
-        `${API_BASE_URL}/favorite/${productId}`
-      );
       const response = await axios.post(
         `${API_BASE_URL}/favorite/${productId}`,
         {},
@@ -174,10 +176,6 @@ export const productService = {
     }
 
     try {
-      console.log(
-        '즐겨찾기 삭제 API 호출:',
-        `${API_BASE_URL}/favorite/${productId}`
-      );
       const response = await axios.delete(
         `${API_BASE_URL}/favorite/${productId}`,
         {
