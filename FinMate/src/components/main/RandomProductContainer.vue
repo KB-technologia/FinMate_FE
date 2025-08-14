@@ -132,7 +132,7 @@ const next = () => {
 }
 
 .foodstuffs {
-  background: url('@/assets/images/etc/흙흙.png') no-repeat center;
+  background: url('@/assets/images/etc/soil.png') no-repeat center;
   background-size: 100% 100%;
   width: 200vh;
   height: 75vh;

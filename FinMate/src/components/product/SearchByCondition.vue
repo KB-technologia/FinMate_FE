@@ -438,7 +438,7 @@ onMounted(() => {
 
 <style scoped>
 .search-condition-container {
-  background: url('@/assets/images/etc/배경.png') no-repeat center;
+  background: url('@/assets/images/etc/background.png') no-repeat center;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

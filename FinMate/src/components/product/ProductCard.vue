@@ -268,13 +268,13 @@ const getRiskLevel = (level) => {
 }
 /* 타입별 배경 이미지 */
 .bg-frog {
-  background-image: url('@/assets/images/etc/개굴개굴.png'); /* 예금 */
+  background-image: url('@/assets/images/etc/frog.png'); /* 예금 */
 }
 .bg-chick {
-  background-image: url('@/assets/images/etc/삐약삐약.png'); /* 적금 */
+  background-image: url('@/assets/images/etc/chick.png'); /* 적금 */
 }
 .bg-rabbit {
-  background-image: url('@/assets/images/etc/깡총.png'); /* 펀드 */
+  background-image: url('@/assets/images/etc/rabbit.png'); /* 펀드 */
 }
 
 .scale {
@@ -294,13 +294,13 @@ const getRiskLevel = (level) => {
   box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2); 
 }  */
 .bg-frog.selected {
-  background-image: url('@/assets/images/etc/개굴개굴!.png');
+  background-image: url('@/assets/images/etc/frog!.png');
 }
 .bg-chick.selected {
-  background-image: url('@/assets/images/etc/삐약삐약!.png');
+  background-image: url('@/assets/images/etc/chick!.png');
 }
 .bg-rabbit.selected {
-  background-image: url('@/assets/images/etc/깡총!.png');
+  background-image: url('@/assets/images/etc/rabbit!.png');
 }
 
 .card-header {
