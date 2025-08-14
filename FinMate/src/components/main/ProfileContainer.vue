@@ -1,7 +1,9 @@
 <template>
   <div class="profile-container">
     <div v-if="isLoggedIn" class="profile-header">
-      <button class="quiz-button" @click="openQuizModal">오늘의 퀴즈</button>
+      <button v-if="animalImage" class="quiz-button" @click="openQuizModal">
+        오늘의 퀴즈
+      </button>
       <div class="logout-button" @click="handleLoginClick">
         <img
           src="@/assets/images/icons/LogoutRounded.png"
@@ -15,12 +17,18 @@
     <div v-if="isLoggedIn" class="profile-info">
       <div class="image-wrapper">
         <img
-          v-if="!isLoading && animalImage"
+          v-if="!isLoadingImage && animalImage"
           :src="animalImage"
           alt="캐릭터 이미지"
+          class="no-image"
+        />
+        <img
+          v-if="!isLoadingImage && !animalImage"
+          :src="noimage"
+          alt="이미지가 없음"
           class="capybara-img"
         />
-        <div v-else class="image-spinner"></div>
+        <div v-if="isLoadingImage" class="image-spinner"></div>
       </div>
 
       <p class="level-text">
@@ -34,7 +42,7 @@
         </template>
       </p>
 
-      <div class="xp-bar">
+      <div v-if="memberLevel" class="xp-bar">
         <div class="xp-fill" :style="{ width: fillPercentage + '%' }"></div>
         <span class="xp-text">{{ levelexp }}/{{ maxXp }}</span>
       </div>
@@ -88,6 +96,7 @@
 </template>
 
 <script setup>
+<script setup>
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth/auth";
 import { ref, computed, onMounted } from "vue";
@@ -103,6 +112,8 @@ import { getQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
 import QuizRewardIntroModal from "@/components/dailyquiz/modals/QuizRewardIntroModal.vue";
 import QuizDailyLimitModal from "@/components/dailyquiz/modals/QuizDailyLimitModal.vue";
 
+import noimage from "@/assets/images/logos/kiwiLogo3.png";
+
 const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const authStore = useAuthStore();
@@ -113,7 +124,8 @@ const isLoggedIn = computed(() => authStore.isLoggedIn);
 const showOnboarding = ref(false);
 const showDailyQuiz = ref(false);
 const showLogoutConfirm = ref(false);
-const isLoading = ref(true);
+const isLoadingImage = ref(true);
+const isLoadinglevel = ref(true);
 
 const maxXp = 1000;
 const memberLevel = ref(0);
@@ -154,7 +166,15 @@ onMounted(async () => {
   try {
     if (isLoggedIn.value) {
       const levelData = await getMemberLevel();
+      if (levelData.status == 404) {
+        isLoadinglevel.value = false;
+        memberLevel.value = '';
+      }
       const character = await getMemberCharacter();
+      if (character.status == 404) {
+        isLoadingImage.value = false;
+        animalImage.value = '';
+      }
       memberLevel.value = levelData.data.currentLevel;
       totalexp.value = levelData.data.totalExp;
       levelexp.value = totalexp.value % 1000;
@@ -167,7 +187,8 @@ onMounted(async () => {
   } catch (err) {
     console.error("⚠️ 사용자 정보 로딩 실패:", err);
   } finally {
-    isLoading.value = false;
+    isLoadinglevel.value = false;
+    isLoadingImage.value = false;
   }
 });
 
@@ -220,8 +241,8 @@ function applyExpPatch(payload) {
 .profile-container {
   width: 23vw;
   height: 35vh;
-  border: 0.2vh solid var(--color-light-gray);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  background-color: var(--color-product-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -291,7 +312,7 @@ function applyExpPatch(payload) {
   margin-bottom: 0.5rem;
 }
 .capybara-img {
-  width: 100%;
+  width: 10vw;
 }
 .image-spinner {
   width: 12vh;
@@ -340,20 +361,22 @@ function applyExpPatch(payload) {
   text-align: center;
   z-index: 1;
 }
+
 .custom-login-button {
   width: 70%;
   height: 5rem;
-  background-color: var(--color-main-button);
-  color: var(--color-black);
+  background-color: var(--color-dark-gray);
+  color: var(--color-white);
   font-size: 1rem;
-  border-radius: 2vh;
+  border-radius: 3.5vh;
   cursor: pointer;
   font-family: var(--font-wanted);
   font-weight: var(--font-weight-extrabold);
+  transition: ease 0.2s all;
 }
 .custom-login-button:hover {
   transform: translateY(-0.6vh);
-  background-color: var(--color-main-button);
+  background-color: var(--color-black);
   color: var(--color-white);
   box-shadow: 0 0.5vh 0.5vw rgba(50, 50, 50, 0.15);
 }
@@ -365,7 +388,7 @@ function applyExpPatch(payload) {
   align-items: center;
   gap: 1rem;
   font-size: 0.8rem;
-  color: var(--color-light-gray);
+  color: var(--color-dark-gray);
 }
 .login-option {
   cursor: pointer;
@@ -399,5 +422,9 @@ function applyExpPatch(payload) {
   100% {
     background-position: -200% 0;
   }
+}
+
+.no-image {
+  width: 8vw;
 }
 </style>

@@ -16,7 +16,7 @@ const routes = [
     component: () => import('@/views/auth/LoginView.vue'),
   },
   {
-    path: '/auth/kakao/callback',
+    path: '/oauth/kakao/callback',
     name: 'KakaoRedirect',
     component: () => import('@/views/auth/KakaoRedirect.vue'),
   },
@@ -141,7 +141,6 @@ router.beforeEach((to, from, next) => {
   console.log('[라우터 진입]', to.path, 'isLoggedIn:', isLoggedIn);
 
   if (to.meta.requiresAuth && !isLoggedIn) {
-    next({ name: 'login' });
     toast('로그인이 필요합니다.', 'warning');
   } else {
     next();

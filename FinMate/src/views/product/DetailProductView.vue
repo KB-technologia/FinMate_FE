@@ -15,7 +15,7 @@
         </div>
         <div class="divider">&nbsp;</div>
         <div class="rating-row">
-          <h1 class="review-title">Product Review</h1>
+          <h1 class="review-title">상품 리뷰</h1>
           <div class="rating-detail-wrapper">
             <StarRatingWithDetail
               :rating="averageRating"
@@ -49,6 +49,7 @@
         />
         <div class="review-list">
           <ReviewCard
+            v-if="reviews.length > 0"
             v-for="review in paginatedReviews"
             :key="review.id"
             :username="review.writer"
@@ -56,6 +57,7 @@
             :date="formatDate(review.createdAt)"
             :content="review.content"
           />
+          <div v-else class="no-review">리뷰가 없습니다.</div>
         </div>
         <Pagination
           :current-page="currentPage"
@@ -89,6 +91,8 @@ import Pagination from '@/components/allshared/Pagination.vue';
 import WriteReviewModal from '@/components/review/WriteReviewModal.vue';
 import RatingDetailModal from '@/components/review/RatingDetailModal.vue';
 import { productService } from '@/api/product/productService';
+import { useToast } from '@/composables/useToast';
+import { useAuthStore } from '@/stores/auth/auth';
 
 const route = useRoute();
 
@@ -100,6 +104,9 @@ const filter = ref('all');
 const sort = ref('latest');
 const currentPage = ref(1);
 const pageSize = 5;
+const { toast } = useToast();
+const authStore = useAuthStore();
+const isLoggedIn = authStore.isLoggedIn;
 
 const getProductComponent = (productType) => {
   const componentMap = {
@@ -220,6 +227,10 @@ const isReviewModalOpen = ref(false);
 const isRatingDetailOpen = ref(false);
 
 const openReviewModal = () => {
+  if (!isLoggedIn) {
+    toast('로그인이 필요합니다.', 'warning');
+    return;
+  }
   isRatingDetailOpen.value = false;
   isReviewModalOpen.value = true;
 };
@@ -331,9 +342,9 @@ const handleToggleFavorite = async () => {
   } catch (error) {
     // 에러 메시지 처리
     if (error.message === '로그인이 필요합니다.') {
-      alert('로그인이 필요합니다.');
+      toast('로그인이 필요합니다.', 'warning');
     } else {
-      alert('즐겨찾기 처리에 실패했습니다.');
+      toast('즐겨찾기 처리에 실패했습니다.', 'warning');
     }
   }
 };
@@ -355,7 +366,19 @@ const loadProductData = async () => {
       : [];
 
     // 즐겨찾기 상태 확인
+    console.log(reviewsResponse.data);
     await checkFavoriteStatus();
+    if (product.value) {
+      const level = product.value.riskLevel;
+
+      if (level == 7) {
+        toast(getToastMessage('highRisk1'), 'highRisk1');
+      } else if (level == 6) {
+        toast(getToastMessage('highRisk2'), 'highRisk2');
+      } else if (level == 5) {
+        toast(getToastMessage('highRisk3'), 'highRisk3');
+      }
+    }
   } catch (err) {
     console.error('데이터 로딩 중 오류 발생:', err);
   }
@@ -386,6 +409,17 @@ const handleReviewSubmit = async (reviewData) => {
     isReviewModalOpen.value = false;
   } catch (err) {
     console.error('리뷰 제출 중 오류 발생:', err);
+  }
+};
+
+const getToastMessage = (type) => {
+  switch (type) {
+    case 'highRisk1':
+      return '큰 수익을 노릴 수 있지만 원금을 잃을 위험이 가장 높아요';
+    case 'highRisk2':
+      return '시장 평균보다 높은 수익을 추구하지만 원금 손실 위험이 있어요';
+    case 'highRisk3':
+      return '예금보다 수익이 높지만 원금이 줄어들 수 있어요';
   }
 };
 
@@ -509,5 +543,15 @@ onMounted(() => {
 
 :deep(.star-icon) {
   font-size: 3rem;
+}
+
+.no-review {
+  width: 100%;
+  height: 15vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2vh;
+  color: var(--color-dark-gray);
 }
 </style>

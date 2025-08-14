@@ -12,7 +12,7 @@
           <div class="product-icon">
             <div class="bank-icon">
               <img
-                :src="getBankImagePath(selectedProducts[0].bankName)"
+                :src="getBankLogo(selectedProducts[0].bankName)"
                 :alt="selectedProducts[0].bankName"
                 @error="
                   (e) => handleImageError(e, selectedProducts[0].bankName)
@@ -38,7 +38,7 @@
           <div class="product-icon">
             <div class="bank-icon">
               <img
-                :src="getBankImagePath(selectedProducts[1].bankName)"
+                :src="getBankLogo(selectedProducts[1].bankName)"
                 :alt="selectedProducts[1].bankName"
                 @error="
                   (e) => handleImageError(e, selectedProducts[1].bankName)
@@ -74,7 +74,7 @@
             :class="getBankClass(selectedProducts[0].bankName)"
           >
             <img
-              :src="getBankImagePath(selectedProducts[0].bankName)"
+              :src="getBankLogo(selectedProducts[0].bankName)"
               :alt="selectedProducts[0].bankName"
               @error="(e) => handleImageError(e, selectedProducts[0].bankName)"
               class="bank-logo small-logo"
@@ -128,63 +128,57 @@ const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
 };
 
-// 은행 이미지 경로 생성 (ProductCard와 동일)
-const getBankImagePath = (bankName) => {
-  const bankCode = getBankCodeFromName(bankName);
-  try {
-    return new URL(
-      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-      import.meta.url
-    ).href;
-  } catch {
-    // 이미지 로드 실패 시 대체 경로
-    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
-  }
-};
+const getBankLogo = (bankName) => {
+  const bankLogos = {
+    국민은행: '/src/assets/images/banks/kb.png',
+    KB증권: '/src/assets/images/banks/kb.png',
+    케이비자산운용: '/src/assets/images/banks/kb.png',
 
-// 은행명을 코드로 변환 (ProductCard와 동일)
-const getBankCodeFromName = (bankName) => {
-  const bankNameMap = {
-    국민은행: 'kb',
-    신한은행: 'shinhan',
-    하나은행: 'hana',
-    우리은행: 'woori',
-    NH농협은행: 'nh',
-    IBK기업은행: 'ibk',
-    카카오뱅크: 'kakao',
-    케이뱅크: 'kbank',
-    SC제일은행: 'sc',
-    토스뱅크: 'toss',
-    BNK부산은행: 'bnk',
-    iM뱅크: 'im',
+    신한은행: '/src/assets/images/banks/shinhan.png',
+    신한투자증권: '/src/assets/images/banks/shinhan.png',
+    제주은행: '/src/assets/images/banks/shinhan.png',
+
+    하나은행: '/src/assets/images/banks/hana.png',
+    하나증권: '/src/assets/images/banks/hana.png',
+    하나자산운용: '/src/assets/images/banks/hana.png',
+
+    우리은행: '/src/assets/images/banks/woori.png',
+    우리투자증권: '/src/assets/images/banks/woori.png',
+
+    농협은행: '/src/assets/images/banks/nh.png',
+    NH농협은행: '/src/assets/images/banks/nh.png',
+    NH투자증권: '/src/assets/images/banks/nh.png',
+
+    IBK기업은행: '/src/assets/images/banks/ibk.png',
+    IBK투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
+
+    카카오뱅크: '/src/assets/images/banks/kakao.png',
+    케이뱅크: '/src/assets/images/banks/kbank.png',
+    SC제일은행: '/src/assets/images/banks/sc.png',
+
+    토스뱅크: '/src/assets/images/banks/toss.png',
+    토스증권: '/src/assets/images/banks/toss.png',
+
+    BNK부산은행: '/src/assets/images/banks/bnk.png',
+    부산은행: '/src/assets/images/banks/bnk.png',
+    iM뱅크: '/src/assets/images/banks/im.png',
   };
-
-  // 정확한 매칭 먼저 시도
-  if (bankNameMap[bankName]) {
-    return bankNameMap[bankName];
-  }
-
-  // 부분 매칭 시도
-  for (const [fullName, code] of Object.entries(bankNameMap)) {
-    if (
-      bankName.includes(fullName.replace('은행', '')) ||
-      fullName.includes(bankName)
-    ) {
-      return code;
-    }
-  }
-
-  // 매칭되지 않으면 첫 글자 사용
-  return bankName.charAt(0).toLowerCase();
+  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
 };
 
-// 이미지 로드 실패 시 처리
 const handleImageError = (event, bankName) => {
-  // 이미지 로드 실패 시 텍스트로 대체
   const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
-  bankIcon.style.color = 'inherit';
-  bankIcon.textContent = getBankInitial(bankName);
+  bankIcon.style.backgroundColor = '#f0f0f0';
+  bankIcon.style.color = '#666';
+  bankIcon.style.display = 'flex';
+  bankIcon.style.alignItems = 'center';
+  bankIcon.style.justifyContent = 'center';
+  bankIcon.style.fontSize = '1.2vw';
+  bankIcon.style.fontWeight = 700;
+  bankIcon.textContent = bankName.charAt(0);
 };
 </script>
 
@@ -196,7 +190,7 @@ const handleImageError = (event, bankName) => {
   transform: translateX(-50%);
   z-index: 1000;
   width: calc(100% - 4vw);
-  max-width: 42vw;
+  max-width: 46vw;
 }
 
 /* VS 비교 카드 (2개 선택 시) */
@@ -287,8 +281,8 @@ const handleImageError = (event, bankName) => {
 }
 
 .bank-icon {
-  width: 48px;
-  height: 48px;
+  width: 3vw;
+  height: 3vw;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -327,9 +321,9 @@ const handleImageError = (event, bankName) => {
 }
 
 .product-name {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 700;
-  margin: 0;
+  margin: 0.1rem 0.6rem 0.1rem 0;
   line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;

@@ -95,7 +95,7 @@ watch(
 <template>
   <ToastContainer ref="toastRef" />
   <div class="right-panel-container">
-    <h2 class="portfolio-title">My Portfolio</h2>
+    <h2 class="title">나의 자산 포트폴리오</h2>
     <div class="chart-info-row">
       <div class="chart-wrapper">
         <canvas ref="chartCanvasRef"></canvas>
@@ -125,22 +125,7 @@ watch(
             </div>
           </div>
           <div class="asset-cards-row">
-            <div class="asset-card">
-              <div class="asset-card-header">
-                <div class="asset-title">현금 및 기타</div>
-              </div>
-              <div class="asset-row">
-                <span class="asset-label"
-                  >현금 : {{ props.portfolio.cash.toLocaleString() }} 원</span
-                >
-              </div>
-              <div class="asset-row">
-                <span class="asset-label"
-                  >기타 : {{ props.portfolio.other.toLocaleString() }} 원</span
-                >
-              </div>
-            </div>
-            <div class="asset-card">
+            <div class="asset-card safe-assets">
               <div class="asset-card-header">
                 <div class="asset-title">안전자산</div>
               </div>
@@ -162,7 +147,7 @@ watch(
                 >
               </div>
             </div>
-            <div class="asset-card">
+            <div class="asset-card risk-assets">
               <div class="asset-card-header">
                 <div class="asset-title">위험자산</div>
               </div>
@@ -174,6 +159,21 @@ watch(
               <div class="asset-row">
                 <span class="asset-label"
                   >주식 : {{ props.portfolio.stock.toLocaleString() }} 원</span
+                >
+              </div>
+            </div>
+            <div class="asset-card other-assets">
+              <div class="asset-card-header">
+                <div class="asset-title">현금 및 기타자산</div>
+              </div>
+              <div class="asset-row">
+                <span class="asset-label"
+                  >현금 : {{ props.portfolio.cash.toLocaleString() }} 원</span
+                >
+              </div>
+              <div class="asset-row">
+                <span class="asset-label"
+                  >기타 : {{ props.portfolio.other.toLocaleString() }} 원</span
                 >
               </div>
             </div>
@@ -200,14 +200,14 @@ watch(
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
 }
 
-.portfolio-title {
-  font-size: 3rem;
+.title {
+  font-size: 2.2rem;
   font-weight: var(--font-weight-bold);
+  color: var(--color-black);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
 }
 
 .chart-info-row {
@@ -216,7 +216,6 @@ watch(
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  height: 65vh;
 }
 
 canvas {
@@ -225,13 +224,15 @@ canvas {
 }
 
 .chart-wrapper {
-  width: 40%;
+  width: 43%;
+  margin-left: 3rem;
 }
 
 .chart-info {
   font-size: 0.8rem;
   margin-top: 0.5rem;
   color: var(--color-chart-info);
+  margin-top: 1rem;
 }
 
 .info-boxes {
@@ -239,15 +240,15 @@ canvas {
   flex-direction: column;
   align-items: flex-end;
   gap: 1rem;
-  width: 60%;
 }
 
 .portfolio-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1rem;
-  width: 65%;
+  width: auto;
   align-items: flex-end;
+  margin-bottom: 1rem;
 }
 
 .asset-cards-row {
@@ -262,49 +263,53 @@ canvas {
 .asset-group {
   border: none;
   background-color: var(--color-right-panel);
-  border-radius: 30px;
-  padding: 1.5rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
-  gap: 1rem;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  border-radius: var(--card-radius);
+  background-color: var(--color-product-color);
 }
 
 .asset-row {
-  margin-bottom: 0.6rem;
-  padding: 0.4rem;
+  margin-bottom: 0.2rem;
 }
 
 .asset-title {
   padding-top: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding-bottom: 0.5rem;
   font-weight: var(--font-weight-bold);
-  border-radius: 12px 12px 0 0;
-  background-color: var(--color-primary-yellow);
 }
 
 .asset-card {
   background-color: var(--color-white);
   border-radius: 12px;
   text-align: center;
-  width: 12.5rem;
-  font-size: 1.1rem;
+  width: 80%;
   font-weight: var(--font-weight-bold);
-  padding-bottom: 0.4rem;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  padding-bottom: 0.5rem;
+  gap: 2rem;
+}
+.asset-card.other-assets {
+  border-left: 5px solid var(--infocard-color-1);
+}
+
+.asset-card.risk-assets {
+  border-left: 5px solid var(--infocard-decrease);
+}
+
+.asset-card.safe-assets {
+  border-left: 5px solid var(--infocard-increase);
 }
 
 .info-totalassets {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  background-color: var(--color-totalassets);
-  border-radius: 8px 8px 0px 0px;
-  color: var(--color-white);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: var(--font-weight-bold);
 }
 
@@ -315,7 +320,7 @@ canvas {
 
 .totalassets-label {
   margin-bottom: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: var(--font-weight-bold);
 }
 
@@ -325,27 +330,30 @@ canvas {
   background-color: var(--color-white);
   border-radius: 10px;
   align-items: center;
-  width: 20vw;
+  width: 80%;
   margin-top: 0.5rem;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  border-left: 5px solid var(--infocard-color-2);
 }
 
 .modify-btn,
 .compare-btn {
   border: none;
-  background-color: var(--color-primary-bluegray);
-  border-radius: 10px;
+  background-color: var(--color-info-button);
+  border-radius: 2vh;
   flex-direction: column;
   align-items: center;
   color: var(--color-white);
   font-size: 1.2rem;
   padding: 1rem;
-  width: 60%;
+  width: auto;
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
+  transition: all 0.2s ease;
 }
 
 .modify-btn:hover,
 .compare-btn:hover {
   opacity: 0.8;
+  transform: translateY(-0.5vh);
 }
 </style>

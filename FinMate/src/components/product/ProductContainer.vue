@@ -36,12 +36,13 @@
           <label for="sortOrder" class="sort-label">정렬:</label>
           <select
             id="sortOrder"
-            :value="currentSortOrder"
+            :value="currentSortType"
             @change="handleSortChange"
             class="sort-select"
           >
-            <option value="desc">수익률 높은순</option>
-            <option value="asc">수익률 낮은순</option>
+            <option v-if="isLoggedIn" value="RECOMMENDED">추천순</option>
+            <option value="YIELD_DESC">수익률 높은순</option>
+            <option value="BASE_RATE_DESC">기본금리 높은순</option>
           </select>
         </div>
       </div>
@@ -93,9 +94,14 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  currentSortOrder: {
+  currentSortType: {
     type: String,
-    default: 'desc',
+    default: 'YIELD_DESC',
+  },
+
+  isLoggedIn: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -109,15 +115,19 @@ const emit = defineEmits([
 // 반응형 데이터
 const currentPage = ref(1);
 const pageSize = ref(12);
-// const sortOrder = ref('expectedReturn-desc');
+
+// 정렬된 상품 목록
+const sortedProducts = computed(() => {
+  return [...props.products];
+});
 
 // Computed 속성들
-const totalProducts = computed(() => props.products.length);
+const totalProducts = computed(() => sortedProducts.value.length);
 
 const paginatedProducts = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
   const end = start + pageSize.value;
-  return props.products.slice(start, end);
+  return sortedProducts.value.slice(start, end);
 });
 
 // 메서드들
@@ -144,7 +154,6 @@ const handlePageSizeChange = (newPageSize) => {
 };
 
 const handleSortChange = (event) => {
-  sortOrder.value = event.target.value;
   currentPage.value = 1; // 정렬 변경 시 첫 페이지로
 
   // 부모 컴포넌트에 정렬 변경 알림
@@ -168,7 +177,7 @@ watch(
 <style scoped>
 .product-container {
   width: 100%;
-  background: #ffffff;
+  /* background: #ffffff; */
   min-height: 400px;
 }
 
@@ -284,6 +293,8 @@ watch(
 
 /* 상품 콘텐츠 */
 .products-content {
+  background-size: 100% 100%;
+  border-radius: 1vw;
   padding: 0;
 }
 

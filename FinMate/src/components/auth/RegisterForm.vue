@@ -14,7 +14,7 @@
           />
           <button
             class="action-btn"
-            @click="sendAuthCode"
+            @click="SendAuthCodeClick"
             :disabled="!email || isCodeSent"
           >
             {{ isCodeSent ? '전송완료' : '인증' }}
@@ -133,9 +133,9 @@ import LoadingOverlay from '@/components/allshared/LoadingOverlay.vue';
 import { ref, computed, reactive } from 'vue';
 import { useSignupStore } from '@/stores/signup/signupStore';
 import {
-  sendEmailAuth,
   verifyEmailAuth,
   checkAccountId,
+  sendEmailAuthForSingUp,
 } from '@/api/auth/auth';
 import { useToast } from '@/composables/useToast';
 import { useRouter } from 'vue-router';
@@ -189,7 +189,7 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
-const sendAuthCode = async () => {
+const SendAuthCodeClick = async () => {
   emailError.value = '';
 
   if (!isValidEmail(email.value)) {
@@ -199,14 +199,20 @@ const sendAuthCode = async () => {
 
   try {
     ui.isLoading = true;
-    const response = await sendEmailAuth(email.value);
+    const response = await sendEmailAuthForSingUp(email.value);
     uuid.value = response.data;
     isCodeSent.value = true;
     toast('인증코드가 이메일로 전송되었습니다.', 'success');
   } catch (error) {
-    emailError.value = '인증코드 전송에 실패했습니다';
+    if (
+      error.response &&
+      (error.response.status === 409 || error.response.status === 400)
+    ) {
+      toast('이미 가입된 이메일입니다.', 'error');
+    } else {
+      emailError.value = '인증코드 전송에 실패했습니다. 다시 시도해주세요.';
+    }
     isCodeSent.value = false;
-    console.error('Auth code send error:', error);
   } finally {
     ui.isLoading = false;
   }
@@ -292,7 +298,7 @@ const handleSubmit = () => {
   margin: 5vh auto;
   padding: 3rem;
   background: var(--color-white);
-  border-radius: 12px;
+  border-radius: var(--card-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -354,13 +360,16 @@ input:disabled {
 
 .action-btn {
   height: 6vh;
-  width: 4.5vw;
+  width: 5.5vw;
   padding: 0 16px;
   background: var(--color-primary-yellow);
   color: var(--color-black);
   border-radius: 8px;
   font-weight: 600;
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   white-space: nowrap;
   transition: background-color 0.2s ease;
 }

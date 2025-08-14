@@ -13,7 +13,7 @@
       <div class="bank-section">
         <div class="bank-icon" :class="getBankClass(product.bankName)">
           <img
-            :src="getBankImagePath(product.bankName)"
+            :src="getBankLogo(product.bankName)"
             :alt="product.bankName"
             @error="handleImageError"
             class="bank-logo"
@@ -30,13 +30,13 @@
           <span class="return-label">{{
             getRateLabel(product.productType)
           }}</span>
-          <span class="return-value"
-            >{{
+          <span class="return-value">
+            {{
               product.productType === 'FUND'
                 ? formatRate(product.expectedReturn)
                 : formatRate(product.expectedReturn + product.detail.bonusRate)
-            }}%</span
-          >
+            }}%
+          </span>
         </div>
         <div class="detail-info" v-if="product.detail">
           <template
@@ -58,13 +58,11 @@
           <template v-else-if="product.productType === 'FUND'">
             <div class="info-row">
               <span>펀드유형:</span>
-              <span>{{ product.detail.fundType }}</span>
+              <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
             </div>
             <div class="info-row">
               <span>위험도:</span>
-              <span>{{
-                getRiskLevel(product.detail.riskGrade || product.riskLevel)
-              }}</span>
+              <span>{{ getRiskLevel(product.detail.riskGrade) }}</span>
             </div>
           </template>
         </div>
@@ -106,60 +104,56 @@ const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
 };
 
-const getBankImagePath = (bankName) => {
-  const bankCode = getBankCodeFromName(bankName);
-  try {
-    return new URL(
-      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-      import.meta.url
-    ).href;
-  } catch {
-    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
-  }
-};
+const getBankLogo = (bankName) => {
+  const bankLogos = {
+    국민은행: '/src/assets/images/banks/kb.png',
+    KB증권: '/src/assets/images/banks/kb.png',
+    케이비자산운용: '/src/assets/images/banks/kb.png',
 
-const getBankCodeFromName = (bankName) => {
-  const bankNameMap = {
-    KB국민은행: 'kb',
-    신한은행: 'shinhan',
-    하나은행: 'hana',
-    우리은행: 'woori',
-    NH농협은행: 'nh',
-    IBK기업은행: 'ibk',
-    카카오뱅크: 'kakao',
-    케이뱅크: 'kbank',
-    SC제일은행: 'sc',
-    토스뱅크: 'toss',
-    BNK부산은행: 'bnk',
-    iM뱅크: 'im',
+    신한은행: '/src/assets/images/banks/shinhan.png',
+    신한투자증권: '/src/assets/images/banks/shinhan.png',
+    제주은행: '/src/assets/images/banks/shinhan.png',
+
+    하나은행: '/src/assets/images/banks/hana.png',
+    하나증권: '/src/assets/images/banks/hana.png',
+    하나자산운용: '/src/assets/images/banks/hana.png',
+
+    우리은행: '/src/assets/images/banks/woori.png',
+    우리투자증권: '/src/assets/images/banks/woori.png',
+
+    농협은행: '/src/assets/images/banks/nh.png',
+    NH농협은행: '/src/assets/images/banks/nh.png',
+    NH투자증권: '/src/assets/images/banks/nh.png',
+
+    IBK기업은행: '/src/assets/images/banks/ibk.png',
+    IBK투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
+
+    카카오뱅크: '/src/assets/images/banks/kakao.png',
+    케이뱅크: '/src/assets/images/banks/kbank.png',
+    SC제일은행: '/src/assets/images/banks/sc.png',
+
+    토스뱅크: '/src/assets/images/banks/toss.png',
+    토스증권: '/src/assets/images/banks/toss.png',
+
+    BNK부산은행: '/src/assets/images/banks/bnk.png',
+    부산은행: '/src/assets/images/banks/bnk.png',
+    iM뱅크: '/src/assets/images/banks/im.png',
   };
-
-  if (bankNameMap[bankName]) {
-    return bankNameMap[bankName];
-  }
-
-  for (const [fullName, code] of Object.entries(bankNameMap)) {
-    if (
-      bankName.includes(fullName.replace('은행', '')) ||
-      fullName.includes(bankName)
-    ) {
-      return code;
-    }
-  }
-
-  return bankName.charAt(0).toLowerCase();
-};
-
-const getBankInitial = (bankName) => {
-  return bankName.charAt(0);
+  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
 };
 
 const handleImageError = (event) => {
-  const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
+  const bankIcon = event.target?.parentElement;
+  if (!bankIcon) return;
+
+  if (event.target) {
+    event.target.style.display = 'none';
+  }
   bankIcon.style.backgroundColor = '#f0f0f0';
   bankIcon.style.color = '#666';
-  bankIcon.textContent = getBankInitial(props.product.bankName);
+  bankIcon.textContent = props.product.bankName?.charAt(0) || '?';
 };
 
 const getRateLabel = (type) => {
@@ -174,13 +168,28 @@ const getRateLabel = (type) => {
 const formatRate = (rate) => {
   return rate ? rate.toFixed(2) : '0.00';
 };
+
+const subCategoriesMap = (fundType) => {
+  const fundChange = {
+    STOCK: '주식형',
+    BOND: '채권형',
+    MIXED_EQUITY_BOND: '혼합형',
+    REAL_ESTATE: '부동산',
+    SPECIAL_ASSET: '특별자산',
+    HYBRID_ASSET: '파생상품',
+  };
+
+  return fundChange[fundType] || fundType;
+};
+
 const getRiskLevel = (level) => {
   const levels = {
-    1: '안전',
-    2: '낮음',
-    3: '보통',
-    4: '높음',
-    5: '매우높음',
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
   };
   return levels[level] || `${level}등급`;
 };
@@ -193,22 +202,41 @@ const truncatedName = computed(() => {
 </script>
 
 <style scoped>
-.card-container {
-  width: 20vw;
-  height: 40vh;
+/* .card-container {
   background-color: var(--color-white);
   border: 0.2vh solid var(--color-light-gray);
   border-radius: 1vh;
+  width: 20vw;
+  height: 40vh;
   padding: 2vh;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.1s ease;
   font-family: var(--font-wanted);
+} */
+.card-container {
+  background: url('@/assets/images/etc/pot.png');
+  width: 17vw;
+  height: 40vh;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.1s ease;
+  transform: scale(1.1);
+  font-family: var(--font-wanted);
 }
 
-.card-container:hover {
+/* .card-container:hover {
   border: 0.2vh solid var(--color-black);
+  cursor: pointer;
+  transform: translateY(-0.8vh);
+} */
+.card-container:hover {
   cursor: pointer;
   transform: translateY(-0.8vh);
 }
@@ -218,8 +246,47 @@ const truncatedName = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 0.6px;
+  margin-left: -1.5vh;
+  text-align: left;
+  transform: scale(0.6);
+  transform-origin: center;
+  margin-top: -12vh;
+  align-items: flex-start;
+}
+/* .card-content {
+  width: 100%; 
+  height: 100%;
+  margin: auto; 
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  gap: 20px;
   text-align: left;
   align-items: flex-start;
+  transform: scale(0.7);
+  transform-origin: center;
+  margin-top: -12vh;
+} */
+
+/* 화면이 1500px 이하일 때 */
+@media (max-width: 1800px) {
+  .card-content {
+    transform: scale(0.6);
+  }
+}
+
+/* 화면이 900px 이하일 때 */
+@media (max-width: 900px) {
+  .card-content {
+    transform: scale(0.4);
+  }
+}
+
+/* 화면이 600px 이하일 때 */
+@media (max-width: 600px) {
+  .card-content {
+    transform: scale(0.3);
+  }
 }
 
 .card-content p {
@@ -261,16 +328,17 @@ const truncatedName = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5vh;
-  margin-top: 0.5vh;
+  margin-top: 4vh;
 }
 
 .product-type-badge {
-  padding: 0.8vh 1.2vw;
+  margin-right: -2vh;
+  padding: 0.5vh 1vw;
   border-radius: 1.2vw;
-  font-size: clamp(11px, 0.9vw, 13px);
+  font-size: clamp(15px, 0.9vw, 18px);
   font-weight: 600;
   color: white;
+  transform: scale(1.1);
 }
 
 .type-deposit {
@@ -287,7 +355,8 @@ const truncatedName = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.7vw;
-  margin-bottom: 1.5vh;
+  margin-top: -5vh;
+  margin-left: -1vh;
 }
 
 .bank-icon {
@@ -302,6 +371,7 @@ const truncatedName = computed(() => {
   font-size: 1.2vw;
   color: #666;
   overflow: hidden;
+  transform: scale(0.9);
 }
 
 .bank-logo {
@@ -313,6 +383,7 @@ const truncatedName = computed(() => {
 .bank-name {
   font-size: 1vw;
   font-weight: 500;
+  margin-left: -0.5vh;
   color: #666;
 }
 
@@ -321,7 +392,8 @@ const truncatedName = computed(() => {
   font-weight: 700;
   color: #333;
   margin: 0 0 2vh 0;
-  line-height: 1.4;
+  margin-top: 2vh;
+  line-height: 2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -337,21 +409,22 @@ const truncatedName = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5vh;
+  margin-top: 1.5vh;
   padding: 1.2vw;
-  background: #f8f9fa;
+  /* background: #f8f9fa; */
   border-radius: 0.8vw;
-  width: 18vw;
+  width: 16vw;
+  height: 5vh;
 }
 
 .return-label {
-  font-size: 1vw;
-  font-weight: 500;
+  font-size: 1.5vw;
+  font-weight: 600;
   color: #666;
 }
 
 .return-value {
-  font-size: 1.2vw;
+  font-size: 2.5vw;
   font-weight: 700;
   color: #e91e63;
 }
@@ -359,7 +432,7 @@ const truncatedName = computed(() => {
 .detail-info {
   display: flex;
   flex-direction: column;
-  gap: 1vh;
+  margin-top: 5vh;
   padding: 0 0 0.5vw;
 }
 

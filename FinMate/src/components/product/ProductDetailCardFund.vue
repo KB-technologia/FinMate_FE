@@ -15,7 +15,7 @@
     <div class="center-header">
       <div class="bank-logo-wrapper">
         <img
-          :src="getBankImagePath(product.bankName)"
+          :src="getBankLogo(product.bankName)"
           class="bank-logo"
           :alt="product.bankName"
           @error="handleImageError"
@@ -94,7 +94,6 @@
 </template>
 
 <script setup>
-import { getBankCodeFromName } from '@/utils/bank.js';
 import { Heart } from 'lucide-vue-next';
 import ProductRateChart from './ProductRateChart.vue';
 import { ref, computed, toRaw } from 'vue';
@@ -133,18 +132,44 @@ const formatRate = (rate) => {
   return rate ? rate.toFixed(2) : '0.00';
 };
 
-// 은행 이미지 경로 생성
-const getBankImagePath = (bankName) => {
-  const bankCode = getBankCodeFromName(bankName);
-  try {
-    return new URL(
-      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-      import.meta.url
-    ).href;
-  } catch {
-    // 이미지 로드 실패 시 대체 경로
-    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
-  }
+const getBankLogo = (bankName) => {
+  const bankLogos = {
+    국민은행: '/src/assets/images/banks/kb.png',
+    KB증권: '/src/assets/images/banks/kb.png',
+    케이비자산운용: '/src/assets/images/banks/kb.png',
+
+    신한은행: '/src/assets/images/banks/shinhan.png',
+    신한투자증권: '/src/assets/images/banks/shinhan.png',
+    제주은행: '/src/assets/images/banks/shinhan.png',
+
+    하나은행: '/src/assets/images/banks/hana.png',
+    하나증권: '/src/assets/images/banks/hana.png',
+    하나자산운용: '/src/assets/images/banks/hana.png',
+
+    우리은행: '/src/assets/images/banks/woori.png',
+    우리투자증권: '/src/assets/images/banks/woori.png',
+
+    농협은행: '/src/assets/images/banks/nh.png',
+    NH농협은행: '/src/assets/images/banks/nh.png',
+    NH투자증권: '/src/assets/images/banks/nh.png',
+
+    IBK기업은행: '/src/assets/images/banks/ibk.png',
+    IBK투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
+
+    카카오뱅크: '/src/assets/images/banks/kakao.png',
+    케이뱅크: '/src/assets/images/banks/kbank.png',
+    SC제일은행: '/src/assets/images/banks/sc.png',
+
+    토스뱅크: '/src/assets/images/banks/toss.png',
+    토스증권: '/src/assets/images/banks/toss.png',
+
+    BNK부산은행: '/src/assets/images/banks/bnk.png',
+    부산은행: '/src/assets/images/banks/bnk.png',
+    iM뱅크: '/src/assets/images/banks/im.png',
+  };
+  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
 };
 
 // 이미지 로드 실패 시 처리

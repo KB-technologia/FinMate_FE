@@ -14,6 +14,8 @@ const router = useRouter();
 const authStore = useAuthStore();
 const { toast } = useToast();
 
+const BASE_URL = import.meta.env.VITE_BASE_API_URL;
+
 onMounted(async () => {
   const code = new URLSearchParams(window.location.search).get('code');
   if (!code) {
@@ -24,9 +26,7 @@ onMounted(async () => {
 
   try {
     //백엔드에 code 보내고 JSON응답(token + user + isNewUser) 받기
-    const res = await axios.get(
-      `http://localhost:8080/auth/kakao/callback?code=${code}`
-    );
+    const res = await axios.get(`${BASE_URL}/auth/kakao/callback?code=${code}`);
     console.log('[DEBUG] 응답 전체:', res);
     console.log('[DEBUG] 응답 data:', res.data);
     const { token, user, newUser, rewardClaimed, consecutiveDays } = res.data;

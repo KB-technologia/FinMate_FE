@@ -7,7 +7,7 @@
         <RightPanel :scroll="true" class="stats-right-panel">
           <div class="panel-inner">
             <div class="my-reviews-header">
-              <h1 class="title">My Review</h1>
+              <h1 class="title">나의 작성 리뷰</h1>
               <CategoryFilterBar
                 v-model="selectedCategory"
                 :categories="categories"
@@ -155,6 +155,21 @@ const paginatedReviews = computed(() => {
   height: 100vh;
 }
 
+.my-reviews-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("@/assets/images/backgroundImage/background_myinfo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
+}
+
 .mypage-container {
   display: flex;
   gap: 2rem;
@@ -250,6 +265,7 @@ const paginatedReviews = computed(() => {
   border: 0.0625rem solid var(--color-dark-gray);
   color: var(--color-black);
   background-color: var(--color-white);
+  border: none;
   appearance: none;
   text-align: center;
 

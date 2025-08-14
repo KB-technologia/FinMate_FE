@@ -19,7 +19,8 @@
           :loading="loading"
           :error="error"
           :selected-products="selectedProducts"
-          :currentSortOrder="currentSortOrder"
+          :currentSortType="currentSortType"
+          :is-logged-in="isLoggedIn"
           @product-select="handleProductSelect"
           @product-detail="handleProductDetail"
           @retry-fetch="fetchProducts"
@@ -47,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 import FooterComponent from '../../components/allshared/FooterComponent.vue';
@@ -65,7 +66,7 @@ const products = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const selectedProducts = ref([]);
-const currentSortOrder = ref('desc');
+const currentSortType = ref('YIELD_DESC'); // 기본 정렬 방식
 
 // 모달 상태
 const isCompareModalVisible = ref(false);
@@ -78,8 +79,16 @@ const currentFilters = ref({
   subCategories: [],
 });
 
+// 로그인 여부 확인
+const isLoggedIn = computed(() => {
+  return !!localStorage.getItem('token');
+});
+
 // 컴포넌트 마운트 시 실행
 onMounted(() => {
+  if (isLoggedIn.value) {
+    currentSortType.value = 'RECOMMENDED';
+  }
   fetchProducts();
 });
 
@@ -90,6 +99,7 @@ const fetchProducts = async () => {
 
   try {
     const apiParams = buildApiParams(); // { sortOrder: 'desc' } 포함
+    apiParams.sortType = currentSortType.value; // 현재 정렬 방식 추가
     const response = await productService.getFilteredProducts(apiParams);
     products.value = response.data || [];
   } catch (err) {
@@ -106,11 +116,10 @@ const fetchFilteredProducts = async (apiParams) => {
   error.value = null;
 
   try {
-    console.log('필터링 API 호출:', apiParams);
+    // console.log('필터링 API 호출:', apiParams);
     const response = await productService.getFilteredProducts(apiParams);
 
     products.value = response.data || [];
-    console.log(`필터링 완료: ${products.value.length}개 상품`);
   } catch (err) {
     console.error('필터링 에러:', err);
 
@@ -132,7 +141,8 @@ const handleSearch = (searchQuery) => {
 
   // 검색 시 즉시 API 호출
   const apiParams = buildApiParams();
-  if (Object.keys(apiParams).length > 0) {
+  apiParams.sortType = currentSortType.value;
+  if (Object.keys(apiParams).length > 1) {
     fetchFilteredProducts(apiParams);
   } else {
     fetchProducts(); // 필터가 없으면 전체 조회
@@ -144,27 +154,38 @@ const handleFilterChange = (filterData) => {
 
   // API 파라미터가 있으면 필터링 API 호출, 없으면 전체 조회
   if (filterData.apiParams && Object.keys(filterData.apiParams).length > 0) {
-    fetchFilteredProducts(filterData.apiParams);
+    const apiParamsWithSort = {
+      ...filterData.apiParams,
+      sortType: currentSortType.value,
+    };
+    fetchFilteredProducts(apiParamsWithSort);
   } else {
     fetchProducts();
   }
 };
 
 // ProductContainer에 이벤트 핸들러 추가
-const handleSortChange = (newSortOrder) => {
-  currentSortOrder.value = newSortOrder;
+const handleSortChange = (newSortType) => {
+  currentSortType.value = newSortType;
 
   // 현재 필터와 함께 새로운 정렬로 API 재호출
   const apiParams = buildApiParams();
-  apiParams.sortOrder = newSortOrder;
+  apiParams.sortType = newSortType;
 
-  if (Object.keys(apiParams).length > 1) {
-    // sortOrder 외에 다른 필터가 있으면
+  if (hasActiveFilters()) {
     fetchFilteredProducts(apiParams);
   } else {
-    // 필터가 없으면 전체 조회 (sortOrder만 포함)
-    fetchFilteredProducts({ sortOrder: newSortOrder });
+    fetchFilteredProducts({ sortType: newSortType });
   }
+};
+
+const hasActiveFilters = () => {
+  return (
+    currentFilters.value.query?.trim() ||
+    currentFilters.value.banks?.length > 0 ||
+    currentFilters.value.productTypes?.length > 0 ||
+    currentFilters.value.subCategories?.length > 0
+  );
 };
 
 const buildApiParams = () => {
@@ -184,7 +205,7 @@ const buildApiParams = () => {
 
   // 상품 타입 (첫 번째만)
   if (currentFilters.value.productTypes?.length > 0) {
-    params.productType = currentFilters.value.productTypes[0];
+    params.productType = currentFilters.value.productTypes;
   }
 
   // 펀드 타입 (FUND 선택 시에만)
@@ -195,7 +216,6 @@ const buildApiParams = () => {
     params.fundType = currentFilters.value.subCategories;
   }
 
-  params.sortOrder = currentSortOrder.value;
   return params;
 };
 
@@ -235,8 +255,25 @@ const handleProductSelect = (product) => {
 };
 
 const handleProductDetail = (product) => {
-  // 상품 상세 페이지로 이동
-  router.push(`/product/${product.id}`);
+  console.log('--- 클릭된 상품 정보 ---');
+  console.log('상품 객체:', product);
+  console.log('상품 타입:', product.productType);
+  console.log('위험 등급:', product.detail?.riskGrade);
+  console.log('----------------------');
+  const routePayload = {
+    path: `/product/${product.id}`,
+    query: {},
+  };
+
+  if (product.productType === 'FUND' && product.detail?.riskGrade) {
+    const toastType = getToastTypeByRisk(product.detail.riskGrade);
+
+    if (toastType) {
+      routePayload.query.showRiskToast = toastType;
+    }
+  }
+
+  router.push(routePayload);
 };
 
 // 비교하기 버튼 클릭 시 모달 열기
@@ -256,6 +293,13 @@ const handleRemoveProduct = (product) => {
   if (index > -1) {
     selectedProducts.value.splice(index, 1);
   }
+};
+
+const getToastTypeByRisk = (riskGrade) => {
+  if (riskGrade == 6) return 'highRisk1';
+  if (riskGrade == 5) return 'highRisk2';
+  if (riskGrade == 4) return 'highRisk3';
+  return null;
 };
 </script>
 

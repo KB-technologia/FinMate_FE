@@ -110,9 +110,15 @@ const sendAuthCode = async () => {
     isCodeSent.value = true;
     toast('인증코드가 이메일로 전송되었습니다.', 'success');
   } catch (error) {
-    emailError.value = '인증코드 전송에 실패했습니다';
+    if (
+      error.response &&
+      (error.response.status === 500 || error.response.status === 400)
+    ) {
+      toast('해당 이메일로 가입된 계정이 없습니다.', 'error');
+    } else {
+      emailError.value = '인증코드 전송에 실패했습니다. 다시 시도해주세요.';
+    }
     isCodeSent.value = false;
-    console.error('Auth code send error:', error);
   } finally {
     ui.isLoading = false;
   }
@@ -175,7 +181,7 @@ const goToFindPassword = () => {
   margin: 5vh auto;
   padding: 3rem;
   background: var(--color-white);
-  border-radius: 12px;
+  border-radius: var(--card-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -243,7 +249,7 @@ input:disabled {
 
 .action-btn {
   height: 6vh;
-  width: 4.5vw;
+  width: 5.5vw;
   padding: 0 16px;
   background: var(--color-primary-yellow);
   color: var(--color-black);

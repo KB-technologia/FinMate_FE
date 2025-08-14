@@ -36,7 +36,9 @@
   --toast-bg-error: #fdecea;
   --toast-bg-info: #e8f0fe;
   --toast-bg-warning: #fff4e5;
-  --toast-bg-high-risk: #fee2e2;
+  --toast-bg-high-risk-1: #ffe3e3;
+  --toast-bg-high-risk-2: #fff0f0;
+  --toast-bg-high-risk-3: #fff9f9;
 
   /* Toast 아이콘 색상 */
   --toast-icon-success: #3c8c75;
@@ -94,6 +96,10 @@
 
   --color-logout-button: #f31111b1;
   --color-product-color: #f7f7f763;
+  --color-test-color: #f7f7f79f;
+
+  /* 마이페이지 card 색상 */
+  --color-mypage-card: #f7f7f7c1;
 
   --card-radius: 2vh;
   --card-border: 0.2vh solid var(--color-light-gray);

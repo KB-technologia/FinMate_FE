@@ -2,9 +2,16 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_BASE_API_URL + '/api/product';
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const productService = {
   getAllProducts() {
-    return axios.get(`${API_BASE_URL}`);
+    return axios.get(`${API_BASE_URL}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getFilteredProducts(filterParams) {
@@ -14,8 +21,11 @@ export const productService = {
       params.append('query', filterParams.query.trim());
     }
 
-    if (filterParams.productType) {
-      params.append('productType', filterParams.productType);
+    // 다중 상품 타입 지원
+    if (filterParams.productType?.length > 0) {
+      filterParams.productType.forEach((type) => {
+        params.append('productType', type);
+      });
     }
 
     if (filterParams.bankName?.length > 0) {
@@ -30,32 +40,40 @@ export const productService = {
       });
     }
 
-    if (filterParams.sortOrder) {
-      params.append('sortOrder', filterParams.sortOrder);
+    if (filterParams.sortType) {
+      params.append('sortType', filterParams.sortType);
     }
 
     const url = `${API_BASE_URL}/filter?${params.toString()}`;
-    // console.log('최종 필터링 API URL:', url);
 
-    return axios.get(url);
+    const token = localStorage.getItem('token');
+    const config = {};
+
+    if (token) {
+      config.headers = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+
+    return axios.get(url, { headers: getAuthHeaders });
   },
 
   compareProducts(id1, id2) {
-    console.log(
-      '상품 비교 API 호출:',
-      `${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`
-    );
-    return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`);
+    return axios.get(`${API_BASE_URL}/compare?id1=${id1}&id2=${id2}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getProductDetails(productId) {
-    console.log('상품 상세 정보 API 호출:', `${API_BASE_URL}/${productId}`);
-    return axios.get(`${API_BASE_URL}/${productId}`);
+    return axios.get(`${API_BASE_URL}/${productId}`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   getProductReviews(productId) {
-    console.log('상품 리뷰 API 호출:', `${API_BASE_URL}/${productId}/reviews`);
-    return axios.get(`${API_BASE_URL}/${productId}/review`);
+    return axios.get(`${API_BASE_URL}/${productId}/review`, {
+      headers: getAuthHeaders(),
+    });
   },
 
   async submitReview(productId, reviewData) {
@@ -99,7 +117,6 @@ export const productService = {
     }
 
     try {
-      console.log('즐겨찾기 목록 조회 API 호출:', `${API_BASE_URL}/favorite`);
       const response = await axios.get(`${API_BASE_URL}/favorite`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -128,10 +145,6 @@ export const productService = {
     }
 
     try {
-      console.log(
-        '즐겨찾기 등록 API 호출:',
-        `${API_BASE_URL}/favorite/${productId}`
-      );
       const response = await axios.post(
         `${API_BASE_URL}/favorite/${productId}`,
         {},
@@ -163,10 +176,6 @@ export const productService = {
     }
 
     try {
-      console.log(
-        '즐겨찾기 삭제 API 호출:',
-        `${API_BASE_URL}/favorite/${productId}`
-      );
       const response = await axios.delete(
         `${API_BASE_URL}/favorite/${productId}`,
         {

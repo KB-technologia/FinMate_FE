@@ -105,7 +105,6 @@ const passwordMismatch = computed(
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-// 이메일 인증코드 발송 함수
 const sendAuthCode = async () => {
   emailError.value = '';
   if (!isValidEmail(email.value)) {
@@ -119,8 +118,15 @@ const sendAuthCode = async () => {
     uuid.value = response.data.uuid;
     isCodeSent.value = true;
     toast('인증코드를 전송했습니다.', 'success');
-  } catch (err) {
-    emailError.value = '가입되지 않은 이메일이거나, 전송에 실패했습니다.';
+  } catch (error) {
+    if (
+      error.response &&
+      (error.response.status === 500 || error.response.status === 400)
+    ) {
+      toast('해당 이메일로 가입된 계정이 없습니다.', 'error');
+    } else {
+      emailError.value = '인증코드 전송에 실패했습니다. 다시 시도해주세요.';
+    }
     isCodeSent.value = false;
   } finally {
     ui.isLoading = false;
@@ -181,7 +187,7 @@ const handleResetPassword = async () => {
   margin: 5vh auto;
   padding: 3rem;
   background: var(--color-white);
-  border-radius: 12px;
+  border-radius: var(--card-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -249,7 +255,7 @@ input:disabled {
 
 .action-btn {
   height: 6vh;
-  width: auto;
+  width: 5.5vw;
   min-width: 6rem;
   padding: 0 16px;
   background: var(--color-primary-yellow);

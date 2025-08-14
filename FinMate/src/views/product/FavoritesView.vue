@@ -100,6 +100,7 @@ import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
 import FooterComponent from '../../components/allshared/FooterComponent.vue';
 import FavoriteProductCard from '@/components/product/FavoriteProductCard.vue';
 import { productService } from '@/api/product/productService.js';
+import { useToast } from '@/composables/useToast';
 
 // 반응형 데이터
 const searchQuery = ref('');
@@ -108,6 +109,7 @@ const sortBy = ref('interest');
 const favoriteProducts = ref([]);
 const loading = ref(false);
 const error = ref(null);
+const { toast } = useToast();
 
 // 상품 유형
 const productTypes = ref([
@@ -190,9 +192,9 @@ const removeFavorite = async (productId) => {
 
     // 에러 메시지 처리
     if (error.message === '로그인이 필요합니다.') {
-      alert('로그인이 필요합니다.');
+      toast('로그인이 필요합니다.', 'warning');
     } else {
-      alert('즐겨찾기 제거에 실패했습니다.');
+      toast('즐겨찾기 제거에 실패했습니다.', 'warning');
     }
   }
 };
@@ -235,20 +237,13 @@ const fetchFavoriteProducts = async () => {
   error.value = null;
 
   try {
-    console.log('즐겨찾기 목록 조회 시작');
     const response = await productService.getFavoriteProducts();
     const favoriteItems = response.data || [];
-
-    console.log('원본 즐겨찾기 데이터:', favoriteItems);
 
     // API 응답 구조에 맞게 데이터 변환
     const transformedProducts = transformFavoriteData(favoriteItems);
 
-    console.log('변환된 즐겨찾기 상품들:', transformedProducts);
-
     favoriteProducts.value = transformedProducts;
-
-    console.log('즐겨찾기 목록 조회 성공:', favoriteProducts.value);
   } catch (err) {
     console.error('즐겨찾기 조회 실패:', err);
 

@@ -43,8 +43,8 @@
 
       <!-- 펀드인 경우 위험등급 표시 -->
       <div class="risk-info" v-if="product.productType === 'FUND'">
-        <span class="risk-label">위험등급</span>
-        <span class="risk-grade" :class="getRiskClass(product.riskGrade)">
+        <span class="risk-label">위험도</span>
+        <span class="risk-grade" :class="getRiskName(product.riskGrade)">
           {{ getRiskName(product.riskGrade) }}
         </span>
       </div>
@@ -59,7 +59,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
 import { Heart } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
@@ -82,15 +81,40 @@ const handleRemoveFavorite = () => {
 const getBankLogo = (bankName) => {
   const bankLogos = {
     국민은행: '/src/assets/images/banks/kb.png',
+    KB증권: '/src/assets/images/banks/kb.png',
+    케이비자산운용: '/src/assets/images/banks/kb.png',
+
     신한은행: '/src/assets/images/banks/shinhan.png',
+    신한투자증권: '/src/assets/images/banks/shinhan.png',
+    제주은행: '/src/assets/images/banks/shinhan.png',
+
     하나은행: '/src/assets/images/banks/hana.png',
+    하나증권: '/src/assets/images/banks/hana.png',
+    하나자산운용: '/src/assets/images/banks/hana.png',
+
     우리은행: '/src/assets/images/banks/woori.png',
+    우리투자증권: '/src/assets/images/banks/woori.png',
+
+    // NH농협 관련
+    농협은행: '/src/assets/images/banks/nh.png',
     NH농협은행: '/src/assets/images/banks/nh.png',
+    NH투자증권: '/src/assets/images/banks/nh.png',
+
     IBK기업은행: '/src/assets/images/banks/ibk.png',
+    IBK투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
+    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
+
     카카오뱅크: '/src/assets/images/banks/kakao.png',
     케이뱅크: '/src/assets/images/banks/kbank.png',
     SC제일은행: '/src/assets/images/banks/sc.png',
+
     토스뱅크: '/src/assets/images/banks/toss.png',
+    토스증권: '/src/assets/images/banks/toss.png',
+
+    BNK부산은행: '/src/assets/images/banks/bnk.png',
+    부산은행: '/src/assets/images/banks/bnk.png',
+    iM뱅크: '/src/assets/images/banks/im.png',
   };
   return bankLogos[bankName] || '/src/assets/images/banks/default.png';
 };
@@ -113,10 +137,6 @@ const getTypeName = (type) => {
   return names[type] || type;
 };
 
-const getBankInitial = (bankName) => {
-  return bankName.charAt(0);
-};
-
 const handleImageError = (event) => {
   // 이미지 로드 실패 시 텍스트로 대체
   const bankIcon = event.target.parentElement;
@@ -130,33 +150,20 @@ const handleImageError = (event) => {
   bankIcon.style.justifyContent = 'center';
   bankIcon.style.fontSize = '2vh';
   bankIcon.style.fontWeight = 'bold';
-  bankIcon.style.width = '2.5vw';
+  bankIcon.style.width = '2vw';
   bankIcon.style.height = '4vh';
   bankIcon.style.borderRadius = '0.3vw';
-  bankIcon.textContent = getBankInitial(props.product.bankName);
-};
-
-// 위험등급 관련 메서드 (1~6등급)
-const getRiskClass = (riskGrade) => {
-  const classes = {
-    1: 'risk-grade-1',
-    2: 'risk-grade-2',
-    3: 'risk-grade-3',
-    4: 'risk-grade-4',
-    5: 'risk-grade-5',
-    6: 'risk-grade-6',
-  };
-  return classes[riskGrade] || 'risk-grade-3';
+  bankIcon.textContent = props.product.bankName.charAt(0);
 };
 
 const getRiskName = (riskGrade) => {
   const names = {
-    1: '매우낮은위험',
-    2: '낮은위험',
-    3: '보통위험',
-    4: '다소높은위험',
-    5: '높은위험',
-    6: '매우높은위험',
+    1: '매우 낮은 위험',
+    2: '낮은 위험',
+    3: '보통 위험',
+    4: '다소 높은 위험',
+    5: '높은 위험',
+    6: '매우 높은 위험',
   };
   return names[riskGrade] || '보통위험';
 };
@@ -275,6 +282,7 @@ const applyProduct = () => {
   display: flex;
   align-items: center;
   gap: 0.5vw;
+  margin-top: 1vh;
   margin-bottom: 1.5vh;
 }
 
