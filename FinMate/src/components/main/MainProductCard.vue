@@ -216,7 +216,7 @@ const truncatedName = computed(() => {
   font-family: var(--font-wanted);
 } */
 .card-container {
-  background: url('@/assets/images/etc/화분.png');
+  background: url('@/assets/images/etc/pot.png');
   width: 17vw;
   height: 40vh;
   background-size: contain;

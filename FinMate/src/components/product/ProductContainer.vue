@@ -177,7 +177,7 @@ watch(
 <style scoped>
 .product-container {
   width: 100%;
-  background: #ffffff;
+  /* background: #ffffff; */
   min-height: 400px;
 }
 
@@ -293,7 +293,6 @@ watch(
 
 /* 상품 콘텐츠 */
 .products-content {
-  background: url('@/assets/images/etc/진열대.png') no-repeat center;
   background-size: 100% 100%;
   border-radius: 1vw;
   padding: 0;

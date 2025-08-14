@@ -1,87 +1,91 @@
 <template>
   <div
     class="product-card"
-    :class="{ selected: isSelected }"
+    :class="[cardBgClass, { selected: isSelected }]"
     @click="handleCardClick"
   >
-    <!-- 체크박스와 상품 타입 -->
-    <div class="card-header">
-      <input
-        type="checkbox"
-        :checked="isSelected"
-        @change="handleSelect"
-        @click="$event.stopPropagation()"
-        class="select-checkbox"
-      />
-      <span
-        class="product-type-badge"
-        :class="getTypeClass(product.productType)"
-      >
-        {{ getTypeLabel(product.productType) }}
-      </span>
-    </div>
-
-    <!-- 은행 정보 -->
-    <div class="bank-section">
-      <div class="bank-icon" :class="getBankClass(product.bankName)">
-        <img
-          :src="getBankLogo(product.bankName)"
-          :alt="product.bankName"
-          @error="handleImageError"
-          class="bank-logo"
+    <div class="scale">
+      <!-- 체크박스와 상품 타입 -->
+      <div class="card-header">
+        <input
+          type="checkbox"
+          :checked="isSelected"
+          @change="handleSelect"
+          @click="$event.stopPropagation()"
+          class="select-checkbox"
         />
-      </div>
-      <div class="bank-info">
-        <span class="bank-name">{{ product.bankName }}</span>
-      </div>
-    </div>
-
-    <!-- 상품명 -->
-    <h3 class="product-name">{{ product.name }}</h3>
-
-    <!-- 수익률 정보 -->
-    <div class="return-section">
-      <div class="main-return">
-        <span class="return-label">{{
-          getRateLabel(product.productType)
-        }}</span>
-        <span class="return-value"
-          >{{
-            product.productType === 'FUND'
-              ? formatRate(product.expectedReturn)
-              : formatRate(product.expectedReturn + product.detail.bonusRate)
-          }}%</span
+        <span
+          class="product-type-badge"
+          :class="getTypeClass(product.productType)"
         >
+          {{ getTypeLabel(product.productType) }}
+        </span>
       </div>
 
-      <!-- 상세 정보 -->
-      <div class="detail-info" v-if="product.detail">
-        <template
-          v-if="
-            product.productType === 'DEPOSIT' ||
-            product.productType === 'SAVINGS'
-          "
-        >
-          <div class="info-row">
-            <span>기본금리:</span>
-            <span>{{ formatRate(product.expectedReturn) }}%</span>
-          </div>
-          <div class="info-row">
-            <span>우대금리:</span>
-            <span>{{ formatRate(product.detail.bonusRate) }}%</span>
-          </div>
-        </template>
+      <!-- 은행 정보 -->
+      <div class="bank-section">
+        <div class="bank-icon" :class="getBankClass(product.bankName)">
+          <img
+            :src="getBankImagePath(product.bankName)"
+            :alt="product.bankName"
+            @error="handleImageError"
+            class="bank-logo"
+          />
+        </div>
+        <div class="bank-info">
+          <span class="bank-name">{{ product.bankName }}</span>
+        </div>
+      </div>
 
-        <template v-else-if="product.productType === 'FUND'">
-          <div class="info-row">
-            <span>펀드유형:</span>
-            <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
-          </div>
-          <div class="info-row">
-            <span>위험도:</span>
-            <span>{{ getRiskLevel(product.detail.riskGrade) }}</span>
-          </div>
-        </template>
+      <!-- 상품명 -->
+      <h3 class="product-name">{{ product.name }}</h3>
+
+      <!-- 수익률 정보 -->
+      <div class="return-section">
+        <div class="main-return">
+          <span class="return-label">{{
+            getRateLabel(product.productType)
+          }}</span>
+          <span class="return-value"
+            >{{
+              product.productType === 'FUND'
+                ? formatRate(product.expectedReturn)
+                : formatRate(product.expectedReturn + product.detail.bonusRate)
+            }}%</span
+          >
+        </div>
+
+        <!-- 상세 정보 -->
+        <div class="detail-info" v-if="product.detail">
+          <template
+            v-if="
+              product.productType === 'DEPOSIT' ||
+              product.productType === 'SAVINGS'
+            "
+          >
+            <div class="info-row">
+              <span>기본금리:</span>
+              <span>{{ formatRate(product.expectedReturn) }}%</span>
+            </div>
+            <div class="info-row">
+              <span>우대금리:</span>
+              <span>{{ formatRate(product.detail.bonusRate) }}%</span>
+            </div>
+          </template>
+
+          <template v-else-if="product.productType === 'FUND'">
+            <div class="info-row">
+              <span>펀드유형:</span>
+              <span>{{ subCategoriesMap(product.detail.fundType) }}</span>
+            </div>
+            <div class="info-row">
+              <span>위험도:</span>
+              <span>{{
+                getRiskLevel(product.detail.riskGrade || product.riskLevel)
+              }}</span>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -89,6 +93,15 @@
 
 <script setup>
 import { computed } from 'vue';
+
+const cardBgClass = computed(() => {
+  const map = {
+    DEPOSIT: 'bg-chick', // 예금 = 병아리
+    SAVINGS: 'bg-frog', // 적금 = 개구리
+    FUND: 'bg-rabbit', // 펀드 = 토끼
+  };
+  return map[props.product.productType] || 'bg-default';
+});
 
 const props = defineProps({
   product: {
@@ -132,44 +145,58 @@ const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
 };
 
-const getBankLogo = (bankName) => {
-  const bankLogos = {
-    국민은행: '/src/assets/images/banks/kb.png',
-    KB증권: '/src/assets/images/banks/kb.png',
-    케이비자산운용: '/src/assets/images/banks/kb.png',
+const getBankInitial = (bankName) => {
+  return bankName.charAt(0);
+};
 
-    신한은행: '/src/assets/images/banks/shinhan.png',
-    신한투자증권: '/src/assets/images/banks/shinhan.png',
-    제주은행: '/src/assets/images/banks/shinhan.png',
+// 은행 이미지 경로 생성
+const getBankImagePath = (bankName) => {
+  const bankCode = getBankCodeFromName(bankName);
+  try {
+    return new URL(
+      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
+      import.meta.url
+    ).href;
+  } catch {
+    // 이미지 로드 실패 시 대체 경로
+    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
+  }
+};
 
-    하나은행: '/src/assets/images/banks/hana.png',
-    하나증권: '/src/assets/images/banks/hana.png',
-    하나자산운용: '/src/assets/images/banks/hana.png',
-
-    우리은행: '/src/assets/images/banks/woori.png',
-    우리투자증권: '/src/assets/images/banks/woori.png',
-
-    농협은행: '/src/assets/images/banks/nh.png',
-    NH농협은행: '/src/assets/images/banks/nh.png',
-    NH투자증권: '/src/assets/images/banks/nh.png',
-
-    IBK기업은행: '/src/assets/images/banks/ibk.png',
-    IBK투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
-
-    카카오뱅크: '/src/assets/images/banks/kakao.png',
-    케이뱅크: '/src/assets/images/banks/kbank.png',
-    SC제일은행: '/src/assets/images/banks/sc.png',
-
-    토스뱅크: '/src/assets/images/banks/toss.png',
-    토스증권: '/src/assets/images/banks/toss.png',
-
-    BNK부산은행: '/src/assets/images/banks/bnk.png',
-    부산은행: '/src/assets/images/banks/bnk.png',
-    iM뱅크: '/src/assets/images/banks/im.png',
+// 은행명을 코드로 변환
+const getBankCodeFromName = (bankName) => {
+  const bankNameMap = {
+    국민은행: 'kb',
+    신한은행: 'shinhan',
+    하나은행: 'hana',
+    우리은행: 'woori',
+    NH농협은행: 'nh',
+    IBK기업은행: 'ibk',
+    카카오뱅크: 'kakao',
+    케이뱅크: 'kbank',
+    SC제일은행: 'sc',
+    토스뱅크: 'toss',
+    BNK부산은행: 'bnk',
+    iM뱅크: 'im',
   };
-  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
+
+  // 정확한 매칭 먼저 시도
+  if (bankNameMap[bankName]) {
+    return bankNameMap[bankName];
+  }
+
+  // 부분 매칭 시도
+  for (const [fullName, code] of Object.entries(bankNameMap)) {
+    if (
+      bankName.includes(fullName.replace('은행', '')) ||
+      fullName.includes(bankName)
+    ) {
+      return code;
+    }
+  }
+
+  // 매칭되지 않으면 첫 글자 사용
+  return bankName.charAt(0).toLowerCase();
 };
 
 // 이미지 로드 실패 시 처리
@@ -177,10 +204,9 @@ const handleImageError = (event) => {
   // 이미지 로드 실패 시 텍스트로 대체
   const bankIcon = event.target.parentElement;
   event.target.style.display = 'none';
-
   bankIcon.style.backgroundColor = '#f0f0f0';
   bankIcon.style.color = '#666';
-  bankIcon.textContent = props.product.bankName.charAt(0);
+  bankIcon.textContent = getBankInitial(props.product.bankName);
 };
 
 const getRateLabel = (type) => {
@@ -211,12 +237,12 @@ const subCategoriesMap = (fundType) => {
 
 const getRiskLevel = (level) => {
   const levels = {
-    1: '매우 낮은 위험',
-    2: '낮은 위험',
-    3: '보통 위험',
-    4: '다소 높은 위험',
-    5: '높은 위험',
-    6: '매우 높은 위험',
+    2: '매우 낮은 위험',
+    3: '낮은 위험',
+    4: '보통 위험',
+    5: '다소 높은 위험',
+    6: '높은 위험',
+    7: '매우 높은 위험',
   };
   return levels[level] || `${level}등급`;
 };
@@ -224,32 +250,60 @@ const getRiskLevel = (level) => {
 
 <style scoped>
 .product-card {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
   width: 100%;
   max-width: 25vw;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 3vh 1.5vw;
+  /* background: #ffffff; */
+  /* border: 1px solid #e0e0e0; */
+  /* border-radius: 12px; */
+  padding: 6vh 2.5vw;
   transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); */
   margin: 0 auto;
   min-height: 35vh;
 }
+/* 타입별 배경 이미지 */
+.bg-frog {
+  background-image: url('@/assets/images/etc/frog.png'); /* 예금 */
+}
+.bg-chick {
+  background-image: url('@/assets/images/etc/chick.png'); /* 적금 */
+}
+.bg-rabbit {
+  background-image: url('@/assets/images/etc/rabbit.png'); /* 펀드 */
+}
+
+.scale {
+  transform: scale(0.9);
+  margin-top: 5vh;
+  padding: 1.3vh;
+}
 
 .product-card:hover {
-  border-color: #4caf50;
-  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.15);
-  transform: translateY(-2px);
+  /* border-color: #4caf50; */
+  /* box-shadow: 0 4px 16px rgba(76, 175, 80, 0.15); */
+  transform: translateY(-10px);
 }
 
-.product-card.selected {
-  border-color: #4caf50;
-  background-color: #f8fff8;
-  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
-}
+/* .product-card.selected {
+  border-color: #4caf50; 
+  background-color: #f8fff8; 
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2); 
+}  */
 
+.bg-frog.selected {
+  background-image: url('@/assets/images/etc/frog!.png');
+}
+.bg-chick.selected {
+  background-image: url('@/assets/images/etc/chick!.png');
+}
+.bg-rabbit.selected {
+  background-image: url('@/assets/images/etc/rabbit!.png');
+}
 .card-header {
   display: flex;
   justify-content: space-between;
