@@ -45,8 +45,9 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { getDailyQuiz, getAnswerDailyQuiz } from "@/api/dailyquiz/dailyQuiz.js";
+import { updateUserData } from "@/api/mypage/level.js";
 import { updateQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
+import { getDailyQuiz, getAnswerDailyQuiz } from "@/api/dailyquiz/dailyQuiz.js";
 
 import TalkModalShell from "@/components/dailyquiz/shared/TalkModalShell.vue";
 import ModalMascot from "@/components/dailyquiz/shared/ModalMascot.vue";
@@ -57,7 +58,7 @@ import TalkResultModal from "@/components/dailyquiz/modals/TalkResultModal.vue";
 
 import quizBg from "@/assets/images/backgroundImage/quiz-bg.png";
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "exp-updated"]);
 
 const quiz = ref(null);
 const isSubmitting = ref(false);
@@ -85,10 +86,18 @@ async function checkAnswer(userAnswer) {
   try {
     const res = await getAnswerDailyQuiz(quiz.value.id, userAnswer);
     const { correct, message, exp, fillPercent } = res.data || {};
+
     if (correct) {
+      const gainedExp = typeof exp === "number" ? exp : 500;
+      try {
+        const levelRes = await updateUserData({ exp: gainedExp });
+        emit("exp-updated", levelRes.data);
+      } catch (e) {
+        console.warn("경험치 반영 실패:", e);
+      }
       resultLines.value = ["정답입니다!\n", message || ""];
       showExp.value = true;
-      expNumber.value = typeof exp === "number" ? exp : 500;
+      expNumber.value = gainedExp;
       expPercent.value = typeof fillPercent === "number" ? fillPercent : 50;
       resultMascot.value = new URL(
         "@/assets/images/logos/correctkiwi.png",
@@ -106,12 +115,30 @@ async function checkAnswer(userAnswer) {
         import.meta.url
       ).href;
     }
-
     showResult.value = true;
-    await updateQuizSolved();
   } catch (e) {
     console.error("정답 확인 실패", e);
-    isSubmitting.value = false;
+    resultLines.value = [
+      "앗, 결과를 확인하지 못했어요.",
+      "그래도 오늘의 시도는 기록되었어요. 내일 다시 도전해주세요!",
+    ];
+    showExp.value = false;
+    resultMascot.value = new URL(
+      "@/assets/images/logos/wrongkiwi.png",
+      import.meta.url
+    ).href;
+    showResult.value = true;
+  } finally {
+    try {
+      await updateQuizSolved();
+    } catch (e) {
+      console.warn("퀴즈 완료 처리 실패:", e);
+    }
+    // 클라이언트 가드도 같이 저장 (오프라인 대비)
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      localStorage.setItem("quizAttemptDate", today);
+    } catch {}
   }
 }
 

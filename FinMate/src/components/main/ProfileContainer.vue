@@ -72,7 +72,11 @@
     @start="openDailyQuiz"
     @close="closeOnboarding"
   />
-  <DailyQuizModal v-if="showDailyQuiz" @close="closeDailyQuiz" />
+  <DailyQuizModal
+    v-if="showDailyQuiz"
+    @close="closeDailyQuiz"
+    @exp-updated="applyExpPatch"
+  />
   <ConfirmModal
     v-if="showLogoutConfirm"
     :firsttext="'오늘의 금융 탐험은 여기까지!\n동물 친구들이 다음 추천을 준비 중이에요'"
@@ -131,6 +135,7 @@ const openDailyQuiz = () => {
 };
 const closeDailyQuiz = () => {
   showDailyQuiz.value = false;
+  if (isLoggedIn.value) refreshLevel();
 };
 
 function handleLoginClick() {
@@ -185,6 +190,29 @@ async function openQuizModal() {
       "warning"
     );
   }
+}
+
+async function refreshLevel() {
+  try {
+    const levelData = await getMemberLevel();
+    memberLevel.value = levelData.data.currentLevel;
+    totalexp.value = levelData.data.totalExp;
+    levelexp.value = totalexp.value % maxXp;
+    summary.value = levelData.data.profileSummary;
+    console.log("[Profile] refreshLevel:", levelData.data);
+  } catch (err) {
+    console.error("레벨 재조회 실패:", err);
+  }
+}
+
+function applyExpPatch(payload) {
+  console.log("[Profile] exp-updated payload:", payload);
+  if (payload?.currentLevel != null) memberLevel.value = payload.currentLevel;
+  if (payload?.totalExp != null) {
+    totalexp.value = payload.totalExp;
+    levelexp.value = totalexp.value % maxXp;
+  }
+  if (payload?.profileSummary) summary.value = payload.profileSummary;
 }
 </script>
 
