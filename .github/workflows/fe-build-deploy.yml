@@ -1,0 +1,97 @@
+name: FE Build & Deploy (Static)
+
+on:
+  push:
+    branches: ['main']
+    tags: ['v*']
+
+concurrency:
+  group: fe-prod
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      SECURITY_GROUP_ID: sg-0d6993b211ee0c103
+      SSH_HOST: ${{ secrets.EC2_HOST }}
+      SSH_USER: ${{ secrets.EC2_USER }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install & Build
+        env:
+          VITE_BASE_API_URL: ${{ secrets.VITE_BASE_API_URL }}
+          VITE_KAKAO_REDIRECT_URI: ${{ secrets.VITE_KAKAO_REDIRECT_URI }}
+          VITE_KAKAO_REST_API_KEY: ${{ secrets.VITE_KAKAO_REST_API_KEY }}
+        run: |
+          cd FinMate
+          set -euo pipefail
+          {
+            echo "VITE_BASE_API_URL=$VITE_BASE_API_URL"
+            echo "VITE_KAKAO_REDIRECT_URI=$VITE_KAKAO_REDIRECT_URI"
+            echo "VITE_KAKAO_REST_API_KEY=$VITE_KAKAO_REST_API_KEY"
+          } > .env.production
+          npm ci
+          npm run build
+
+      - name: Configure AWS credentials (access keys)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Detect runner public IP
+        id: ip
+        run: echo "RUNNER_IP=$(curl -s https://checkip.amazonaws.com)/32" >> $GITHUB_ENV
+
+      - name: Authorize SSH from runner IP
+        run: |
+          echo "Authorizing $RUNNER_IP on $SECURITY_GROUP_ID ..."
+          aws ec2 authorize-security-group-ingress \
+            --group-id "$SECURITY_GROUP_ID" \
+            --protocol tcp --port 22 \
+            --cidr "$RUNNER_IP" \
+          || echo "Rule may already exist; continuing."
+
+      - name: Add EC2 to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -T 5 -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_KEY }}
+
+      - name: Upload dist to EC2 and switch symlink
+        run: |
+          set -euo pipefail
+          TS=$(date -u +%Y%m%d_%H%M%S)
+          REL=/var/www/finmate/releases/$TS
+
+          # 권한 문제 방지: 릴리즈 경로 생성/권한 조정
+          ssh -o StrictHostKeyChecking=yes "$SSH_USER@$SSH_HOST" "sudo mkdir -p $REL && sudo chown -R $SSH_USER:$SSH_USER /var/www/finmate/releases /var/www/finmate || true"
+
+          # 업로드 (ssh 옵션 명시)
+          rsync -az --delete -e "ssh -o StrictHostKeyChecking=yes" dist/ "$SSH_USER@$SSH_HOST:$REL/dist/"
+
+          # 심볼릭 링크 전환 (무중단)
+          ssh -o StrictHostKeyChecking=yes "$SSH_USER@$SSH_HOST" "sudo ln -sfn $REL/dist /var/www/finmate/current && sudo chown -h $SSH_USER:$SSH_USER /var/www/finmate/current"
+
+      - name: Revoke SSH from runner IP
+        if: always()
+        run: |
+          echo "Revoking $RUNNER_IP from $SECURITY_GROUP_ID ..."
+          aws ec2 revoke-security-group-ingress \
+            --group-id "$SECURITY_GROUP_ID" \
+            --protocol tcp --port 22 \
+            --cidr "$RUNNER_IP" \
+          || echo "Rule not found; nothing to revoke."
