@@ -263,7 +263,7 @@ canvas {
 .asset-group {
   border: none;
   background-color: var(--color-right-panel);
-  padding: 1.5rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -292,6 +292,7 @@ canvas {
   font-weight: var(--font-weight-bold);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   padding-bottom: 0.5rem;
+  gap: 2rem;
 }
 .asset-card.other-assets {
   border-left: 5px solid var(--infocard-color-1);
