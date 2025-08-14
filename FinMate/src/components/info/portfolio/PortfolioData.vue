@@ -225,6 +225,7 @@ canvas {
 
 .chart-wrapper {
   width: 43%;
+  margin-left: 3rem;
 }
 
 .chart-info {
