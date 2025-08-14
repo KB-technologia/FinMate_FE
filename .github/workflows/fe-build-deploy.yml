@@ -22,8 +22,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20.19.0'
           cache: 'npm'
+          cache-dependency-path: FinMate/package-lock.json
 
       - name: Install & Build
         env:
@@ -31,7 +32,7 @@ jobs:
           VITE_KAKAO_REDIRECT_URI: ${{ secrets.VITE_KAKAO_REDIRECT_URI }}
           VITE_KAKAO_REST_API_KEY: ${{ secrets.VITE_KAKAO_REST_API_KEY }}
         run: |
-          cd FinMate
+          node -v && npm -v
           set -euo pipefail
           {
             echo "VITE_BASE_API_URL=$VITE_BASE_API_URL"
@@ -40,6 +41,7 @@ jobs:
           } > .env.production
           npm ci
           npm run build
+        working-directory: FinMate
 
       - name: Configure AWS credentials (access keys)
         uses: aws-actions/configure-aws-credentials@v4
