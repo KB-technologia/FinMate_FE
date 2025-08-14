@@ -20,9 +20,7 @@ defineProps({ sender: { type: String, default: "FINMATE" } });
 .bubble-container {
   position: relative;
   width: 100%;
-  margin-top: 23vh;
-  margin-left: 0;
-  transform: translateX(1.2rem);
+  margin: 23vh auto 0;
   overflow: visible;
 }
 
