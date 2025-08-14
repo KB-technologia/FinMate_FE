@@ -108,8 +108,7 @@ async function checkAnswer(userAnswer) {
     }
 
     showResult.value = true;
-    // 테스트 끝나면 다시 사용
-    // await updateQuizSolved();
+    await updateQuizSolved();
   } catch (e) {
     console.error("정답 확인 실패", e);
     isSubmitting.value = false;

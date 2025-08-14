@@ -62,7 +62,17 @@
     </div>
   </div>
 
-  <DailyQuizModal v-if="showQuizModal" @close="showQuizModal = false" />
+  <QuizRewardIntroModal
+    v-if="showOnboarding && stage === 'reward'"
+    @next="stage = 'limit'"
+    @close="closeOnboarding"
+  />
+  <QuizDailyLimitModal
+    v-if="showOnboarding && stage === 'limit'"
+    @start="openDailyQuiz"
+    @close="closeOnboarding"
+  />
+  <DailyQuizModal v-if="showDailyQuiz" @close="closeDailyQuiz" />
   <ConfirmModal
     v-if="showLogoutConfirm"
     :firsttext="'오늘의 금융 탐험은 여기까지!\n동물 친구들이 다음 추천을 준비 중이에요'"
@@ -74,22 +84,30 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth/auth';
-import { ref, computed, onMounted } from 'vue';
-import DailyQuizModal from '@/components/dailyquiz/DailyQuizModal.vue';
-import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
-import logoutImage from '@/assets/images/logos/logoutkiwi.png';
-import { getMemberLevel } from '@/api/main/main.js';
-import { getMemberCharacter } from '@/api/info/userStatsAPI';
-import { getQuizSolved } from '@/api/dailyquiz/dailyQuizSolved.js';
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth/auth";
+import { ref, computed, onMounted } from "vue";
+
+import { useToast } from "@/composables/useToast";
+import DailyQuizModal from "@/components/dailyquiz/modals/DailyQuizModal.vue";
+import ConfirmModal from "@/components/allshared/ConfirmModal.vue";
+import logoutImage from "@/assets/images/logos/logoutkiwi.png";
+import { getMemberLevel } from "@/api/main/main.js";
+import { getMemberCharacter } from "@/api/info/userStatsAPI";
+import { getQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
+
+import QuizRewardIntroModal from "@/components/dailyquiz/modals/QuizRewardIntroModal.vue";
+import QuizDailyLimitModal from "@/components/dailyquiz/modals/QuizDailyLimitModal.vue";
 
 const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const authStore = useAuthStore();
 
+const { toast } = useToast();
+
 const isLoggedIn = computed(() => authStore.isLoggedIn);
-const showQuizModal = ref(false);
+const showOnboarding = ref(false);
+const showDailyQuiz = ref(false);
 const showLogoutConfirm = ref(false);
 const isLoading = ref(true);
 
@@ -98,13 +116,26 @@ const memberLevel = ref(0);
 const totalexp = ref(0);
 const levelexp = ref(0);
 const fillPercentage = computed(() => (levelexp.value / maxXp) * 100);
-const animalName = ref('');
-const animalImage = ref('');
-const summary = ref('');
+const animalName = ref("");
+const animalImage = ref("");
+const summary = ref("");
+
+const stage = ref("reward");
+const closeOnboarding = () => {
+  showOnboarding.value = false;
+  stage.value = "reward";
+};
+const openDailyQuiz = () => {
+  showOnboarding.value = false;
+  showDailyQuiz.value = true;
+};
+const closeDailyQuiz = () => {
+  showDailyQuiz.value = false;
+};
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push('/login');
+    router.push("/login");
   } else {
     showLogoutConfirm.value = true;
   }
@@ -129,24 +160,30 @@ onMounted(async () => {
       console.log(character.data);
     }
   } catch (err) {
-    console.error('⚠️ 사용자 정보 로딩 실패:', err);
+    console.error("⚠️ 사용자 정보 로딩 실패:", err);
   } finally {
     isLoading.value = false;
   }
 });
 
 async function openQuizModal() {
+  if (showOnboarding.value || showDailyQuiz.value) return;
+
   try {
     const res = await getQuizSolved();
-    console.log('퀴즈 풀이 상태', res.data.quizSolved);
-    if (res.data.quizSolved == false) {
-      showQuizModal.value = true;
-    } else if (res.data.quizSolved == true) {
-      //Todo : alert 대신 다른 방법
-      alert('오늘은 이미 퀴즈를 푸셨군요?');
+    console.log("퀴즈 풀이 상태", res.data.quizSolved);
+    if (res.data.quizSolved) {
+      toast("오늘은 이미 퀴즈를 푸셨군요?\n내일 다시 도전해주세요!", "warning");
+      return;
     }
+    showOnboarding.value = true;
+    stage.value = "reward";
   } catch (error) {
-    console.error('퀴즈 로딩 실패', error);
+    console.error("퀴즈 로딩 실패", error);
+    toast(
+      "퀴즈 상태를 가져오지 못했어요. 잠시 후 다시 시도해주세요.",
+      "warning"
+    );
   }
 }
 </script>
