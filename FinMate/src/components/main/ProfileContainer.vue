@@ -128,13 +128,13 @@ onMounted(async () => {
     if (isLoggedIn.value) {
       const levelData = await getMemberLevel();
       if (levelData.status == 404) {
-        isLoadinglevel = false;
-        memberLevel = '';
+        isLoadinglevel.value = false;
+        memberLevel.value = '';
       }
       const character = await getMemberCharacter();
       if (character.status == 404) {
-        isLoadingImage = false;
-        animalImage = '';
+        isLoadingImage.value = false;
+        animalImage.value = '';
       }
       memberLevel.value = levelData.data.currentLevel;
       totalexp.value = levelData.data.totalExp;
