@@ -255,7 +255,6 @@ const next = () => {
 }
 
 .no-products {
-  background: url('@/assets/images/etc/화분.png');
   width: 17vw;
   height: 40vh;
   background-size: contain;
