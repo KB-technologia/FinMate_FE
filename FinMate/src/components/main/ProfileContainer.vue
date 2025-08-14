@@ -96,7 +96,6 @@
 </template>
 
 <script setup>
-<script setup>
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth/auth";
 import { ref, computed, onMounted } from "vue";
@@ -168,12 +167,12 @@ onMounted(async () => {
       const levelData = await getMemberLevel();
       if (levelData.status == 404) {
         isLoadinglevel.value = false;
-        memberLevel.value = '';
+        memberLevel.value = "";
       }
       const character = await getMemberCharacter();
       if (character.status == 404) {
         isLoadingImage.value = false;
-        animalImage.value = '';
+        animalImage.value = "";
       }
       memberLevel.value = levelData.data.currentLevel;
       totalexp.value = levelData.data.totalExp;
