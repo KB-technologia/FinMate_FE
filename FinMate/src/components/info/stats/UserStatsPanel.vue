@@ -212,22 +212,16 @@ onMounted(async () => {
 
   try {
     const data = await getUserData();
-    console.log('level 불러오기 성공', data);
-    //TODO : 콘솔 로그 삭제
     userData.value = data;
   } catch (e) {
     console.log('레벨 불러오기 실패', e);
-    //TODO : 콘솔 로그 삭제
   }
 
   try {
     const data = await getCharacter();
-    console.log('캐릭터 이름 가져오기', data);
-    //TODO : 콘솔 로그 삭제
     characterData.value = data;
   } catch (e) {
     console.log('캐릭터 가져오기 실패', e);
-    //TODO : 콘솔 로그 삭제
   }
 });
 
