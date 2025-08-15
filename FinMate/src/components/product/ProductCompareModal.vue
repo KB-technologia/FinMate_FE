@@ -24,7 +24,7 @@
             <div class="vs-compare-card">
               <div class="product-compare-section">
                 <div class="background-shapes">
-                  <div class="left-shape"></div>
+                  <div class="사left-shape"></div>
                   <div class="right-shape"></div>
                 </div>
 
