@@ -77,7 +77,7 @@ import { useRoute } from 'vue-router';
 
 import { Pencil } from 'lucide-vue-next';
 
-import { getBankLogoPath } from '@/utils/bank';
+import { getBankLogo } from '@/utils/bank';
 
 import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
 import FooterComponent from '@/components/allshared/FooterComponent.vue';
@@ -194,7 +194,7 @@ const transformedProduct = computed(() => {
 });
 
 const logoPath = computed(() => {
-  return product.value ? getBankLogoPath(product.value.bankName) : '';
+  return product.value ? getBankLogo(product.value.bankName) : '';
 });
 
 // 평균 평점 계산 (데이터베이스 구조에 맞춤)

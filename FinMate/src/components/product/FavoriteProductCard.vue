@@ -16,7 +16,6 @@
         <img
           :src="getBankLogo(product.bankName)"
           :alt="product.bankName"
-          @error="handleImageError"
           class="bank-logo"
         />
       </div>
@@ -61,6 +60,7 @@
 <script setup>
 import { Heart } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import { getBankLogo } from '../../utils/bank';
 
 const router = useRouter();
 
@@ -76,47 +76,6 @@ const emit = defineEmits(['remove-favorite']);
 // 메서드
 const handleRemoveFavorite = () => {
   emit('remove-favorite', props.product.id);
-};
-
-const getBankLogo = (bankName) => {
-  const bankLogos = {
-    국민은행: '/src/assets/images/banks/kb.png',
-    KB증권: '/src/assets/images/banks/kb.png',
-    케이비자산운용: '/src/assets/images/banks/kb.png',
-
-    신한은행: '/src/assets/images/banks/shinhan.png',
-    신한투자증권: '/src/assets/images/banks/shinhan.png',
-    제주은행: '/src/assets/images/banks/shinhan.png',
-
-    하나은행: '/src/assets/images/banks/hana.png',
-    하나증권: '/src/assets/images/banks/hana.png',
-    하나자산운용: '/src/assets/images/banks/hana.png',
-
-    우리은행: '/src/assets/images/banks/woori.png',
-    우리투자증권: '/src/assets/images/banks/woori.png',
-
-    // NH농협 관련
-    농협은행: '/src/assets/images/banks/nh.png',
-    NH농협은행: '/src/assets/images/banks/nh.png',
-    NH투자증권: '/src/assets/images/banks/nh.png',
-
-    IBK기업은행: '/src/assets/images/banks/ibk.png',
-    IBK투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
-
-    카카오뱅크: '/src/assets/images/banks/kakao.png',
-    케이뱅크: '/src/assets/images/banks/kbank.png',
-    SC제일은행: '/src/assets/images/banks/sc.png',
-
-    토스뱅크: '/src/assets/images/banks/toss.png',
-    토스증권: '/src/assets/images/banks/toss.png',
-
-    BNK부산은행: '/src/assets/images/banks/bnk.png',
-    부산은행: '/src/assets/images/banks/bnk.png',
-    iM뱅크: '/src/assets/images/banks/im.png',
-  };
-  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
 };
 
 const getTypeClass = (type) => {
@@ -135,25 +94,6 @@ const getTypeName = (type) => {
     FUND: '펀드',
   };
   return names[type] || type;
-};
-
-const handleImageError = (event) => {
-  // 이미지 로드 실패 시 텍스트로 대체
-  const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
-
-  bankIcon.classList.add('image-error');
-  bankIcon.style.backgroundColor = '#f0f0f0';
-  bankIcon.style.color = '#666';
-  bankIcon.style.display = 'flex';
-  bankIcon.style.alignItems = 'center';
-  bankIcon.style.justifyContent = 'center';
-  bankIcon.style.fontSize = '2vh';
-  bankIcon.style.fontWeight = 'bold';
-  bankIcon.style.width = '2vw';
-  bankIcon.style.height = '4vh';
-  bankIcon.style.borderRadius = '0.3vw';
-  bankIcon.textContent = props.product.bankName.charAt(0);
 };
 
 const getRiskName = (riskGrade) => {

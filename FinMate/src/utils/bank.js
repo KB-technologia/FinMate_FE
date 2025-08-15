@@ -1,29 +1,70 @@
-export const bankNameMap = {
-  KB국민은행: "kb",
-  신한은행: "shinhan",
-  하나은행: "hana",
-  우리은행: "woori",
-  NH농협은행: "nh",
-  IBK기업은행: "ibk",
-  카카오뱅크: "kakao",
-  케이뱅크: "kbank",
-  SC제일은행: "sc",
-  토스뱅크: "toss",
-  BNK부산은행: "bnk",
-  iM뱅크: "im",
+import kbLogo from '@/assets/images/banks/kb.png';
+import shinhanLogo from '@/assets/images/banks/shinhan.png';
+import hanaLogo from '@/assets/images/banks/hana.png';
+import wooriLogo from '@/assets/images/banks/woori.png';
+import nhLogo from '@/assets/images/banks/nh.png';
+import ibkLogo from '@/assets/images/banks/ibk.png';
+import kakaoLogo from '@/assets/images/banks/kakao.png';
+import kbankLogo from '@/assets/images/banks/kbank.png';
+import scLogo from '@/assets/images/banks/sc.png';
+import tossLogo from '@/assets/images/banks/toss.png';
+import bnkLogo from '@/assets/images/banks/bnk.png';
+import imLogo from '@/assets/images/banks/im.png';
+import defaultLogo from '@/assets/images/banks/default.png';
+
+const BANK_LOGOS = {
+  // KB 그룹
+  국민은행: kbLogo,
+  KB증권: kbLogo,
+  케이비자산운용: kbLogo,
+
+  // 신한 그룹
+  신한은행: shinhanLogo,
+  신한투자증권: shinhanLogo,
+  제주은행: shinhanLogo,
+
+  // 하나 그룹
+  하나은행: hanaLogo,
+  하나증권: hanaLogo,
+  하나자산운용: hanaLogo,
+
+  // 우리 그룹
+  우리은행: wooriLogo,
+  우리투자증권: wooriLogo,
+
+  // NH 농협 그룹
+  농협은행: nhLogo,
+  NH농협은행: nhLogo,
+  NH투자증권: nhLogo,
+
+  // IBK 그룹
+  IBK기업은행: ibkLogo,
+  IBK투자증권: ibkLogo,
+  아이비케이투자증권: ibkLogo,
+  아이비케이기업은행: ibkLogo,
+
+  // 기타 은행들
+  카카오뱅크: kakaoLogo,
+  케이뱅크: kbankLogo,
+  SC제일은행: scLogo,
+  토스뱅크: tossLogo,
+  토스증권: tossLogo,
+  BNK부산은행: bnkLogo,
+  부산은행: bnkLogo,
+  iM뱅크: imLogo,
 };
 
-export function getBankCodeFromName(bankName) {
-  if (bankNameMap[bankName]) return bankNameMap[bankName];
+export const getBankLogo = (bankName) => {
+  return BANK_LOGOS[bankName] || defaultLogo;
+};
 
-  for (const [full, code] of Object.entries(bankNameMap)) {
-    if (bankName.includes(full.replace("은행", "")) || full.includes(bankName))
-      return code;
+export const handleImageError = (event) => {
+  if (event.target) {
+    event.target.src = defaultLogo;
   }
-  return bankName.charAt(0).toLowerCase();
-}
+};
 
-export function getBankLogoPath(bankName) {
-  const code = getBankCodeFromName(bankName);
-  return new URL(`/src/assets/images/banks/${code}.png`, import.meta.url).href;
-}
+export default {
+  getBankLogo,
+  handleImageError,
+};

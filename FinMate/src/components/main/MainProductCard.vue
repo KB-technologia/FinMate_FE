@@ -15,7 +15,6 @@
           <img
             :src="getBankLogo(product.bankName)"
             :alt="product.bankName"
-            @error="handleImageError"
             class="bank-logo"
           />
         </div>
@@ -74,6 +73,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
+import { getBankLogo } from '../../utils/bank';
 
 const props = defineProps({
   product: {
@@ -102,58 +102,6 @@ const getTypeLabel = (type) => {
 
 const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
-};
-
-const getBankLogo = (bankName) => {
-  const bankLogos = {
-    국민은행: '/src/assets/images/banks/kb.png',
-    KB증권: '/src/assets/images/banks/kb.png',
-    케이비자산운용: '/src/assets/images/banks/kb.png',
-
-    신한은행: '/src/assets/images/banks/shinhan.png',
-    신한투자증권: '/src/assets/images/banks/shinhan.png',
-    제주은행: '/src/assets/images/banks/shinhan.png',
-
-    하나은행: '/src/assets/images/banks/hana.png',
-    하나증권: '/src/assets/images/banks/hana.png',
-    하나자산운용: '/src/assets/images/banks/hana.png',
-
-    우리은행: '/src/assets/images/banks/woori.png',
-    우리투자증권: '/src/assets/images/banks/woori.png',
-
-    농협은행: '/src/assets/images/banks/nh.png',
-    NH농협은행: '/src/assets/images/banks/nh.png',
-    NH투자증권: '/src/assets/images/banks/nh.png',
-
-    IBK기업은행: '/src/assets/images/banks/ibk.png',
-    IBK투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
-
-    카카오뱅크: '/src/assets/images/banks/kakao.png',
-    케이뱅크: '/src/assets/images/banks/kbank.png',
-    SC제일은행: '/src/assets/images/banks/sc.png',
-
-    토스뱅크: '/src/assets/images/banks/toss.png',
-    토스증권: '/src/assets/images/banks/toss.png',
-
-    BNK부산은행: '/src/assets/images/banks/bnk.png',
-    부산은행: '/src/assets/images/banks/bnk.png',
-    iM뱅크: '/src/assets/images/banks/im.png',
-  };
-  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
-};
-
-const handleImageError = (event) => {
-  const bankIcon = event.target?.parentElement;
-  if (!bankIcon) return;
-
-  if (event.target) {
-    event.target.style.display = 'none';
-  }
-  bankIcon.style.backgroundColor = '#f0f0f0';
-  bankIcon.style.color = '#666';
-  bankIcon.textContent = props.product.bankName?.charAt(0) || '?';
 };
 
 const getRateLabel = (type) => {

@@ -26,9 +26,8 @@
       <div class="bank-section">
         <div class="bank-icon" :class="getBankClass(product.bankName)">
           <img
-            :src="getBankImagePath(product.bankName)"
+            :src="getBankLogo(product.bankName)"
             :alt="product.bankName"
-            @error="handleImageError"
             class="bank-logo"
           />
         </div>
@@ -91,6 +90,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { getBankLogo } from '../../utils/bank';
 
 const cardBgClass = computed(() => {
   const map = {
@@ -145,66 +145,6 @@ const getBankClass = (bankName) => {
 
 const getBankInitial = (bankName) => {
   return bankName.charAt(0);
-};
-
-// 은행 이미지 경로 생성
-const getBankImagePath = (bankName) => {
-  const bankCode = getBankCodeFromName(bankName);
-  try {
-    return new URL(
-      `/src/assets/images/banks/${bankCode.toLowerCase()}.png`,
-      import.meta.url
-    ).href;
-  } catch {
-    // 이미지 로드 실패 시 대체 경로
-    return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
-  }
-};
-
-// 은행명을 코드로 변환
-const getBankCodeFromName = (bankName) => {
-  const bankNameMap = {
-    국민은행: 'kb',
-    신한은행: 'shinhan',
-    하나은행: 'hana',
-    우리은행: 'woori',
-    NH농협은행: 'nh',
-    IBK기업은행: 'ibk',
-    카카오뱅크: 'kakao',
-    케이뱅크: 'kbank',
-    SC제일은행: 'sc',
-    토스뱅크: 'toss',
-    BNK부산은행: 'bnk',
-    iM뱅크: 'im',
-  };
-
-  // 정확한 매칭 먼저 시도
-  if (bankNameMap[bankName]) {
-    return bankNameMap[bankName];
-  }
-
-  // 부분 매칭 시도
-  for (const [fullName, code] of Object.entries(bankNameMap)) {
-    if (
-      bankName.includes(fullName.replace('은행', '')) ||
-      fullName.includes(bankName)
-    ) {
-      return code;
-    }
-  }
-
-  // 매칭되지 않으면 첫 글자 사용
-  return bankName.charAt(0).toLowerCase();
-};
-
-// 이미지 로드 실패 시 처리
-const handleImageError = (event) => {
-  // 이미지 로드 실패 시 텍스트로 대체
-  const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
-  bankIcon.style.backgroundColor = '#f0f0f0';
-  bankIcon.style.color = '#666';
-  bankIcon.textContent = getBankInitial(props.product.bankName);
 };
 
 const getRateLabel = (type) => {
