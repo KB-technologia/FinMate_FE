@@ -131,7 +131,7 @@ const getBankClass = (bankName) => {
   transform: translateX(-50%);
   z-index: 1000;
   width: calc(100% - 4vw);
-  max-width: 46vw;
+  max-width: 55vw;
 }
 
 /* VS 비교 카드 (2개 선택 시) */
@@ -187,8 +187,8 @@ const getBankClass = (bankName) => {
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 16px 24px;
   z-index: 2;
+  padding: 1vh 0;
 }
 
 .left-side {
@@ -196,6 +196,8 @@ const getBankClass = (bankName) => {
   width: 50%; /* 정확히 반반 */
   color: #ffffff;
   justify-content: flex-start;
+  padding-left: 1vw;
+  padding-right: 1vw;
 }
 
 .right-side {
@@ -204,6 +206,8 @@ const getBankClass = (bankName) => {
   color: #000000;
   justify-content: flex-end;
   text-align: right;
+  padding-right: 1vw;
+  padding-left: 1vw;
 }
 
 .product-icon {
@@ -212,13 +216,12 @@ const getBankClass = (bankName) => {
 }
 
 .left-side .product-icon {
-  margin-right: 12px;
+  margin-right: 0.5vw;
 }
 
 .right-side .product-icon {
   order: 2;
-  margin-left: 12px;
-  margin-right: 0;
+  margin-left: 0.5vw;
 }
 
 .bank-icon {
@@ -254,22 +257,33 @@ const getBankClass = (bankName) => {
   flex: 1;
   z-index: 3;
   min-width: 0;
+  overflow: hidden;
 }
 
 .right-side .product-info {
   order: 1;
   text-align: right;
+  overflow: visible;
+  flex: 1;
+  min-width: 0;
+  max-width: calc(100% - 4vw);
 }
 
 .product-name {
   font-size: 1rem;
   font-weight: 700;
-  margin: 0.1rem 0.6rem 0.1rem 0;
-  line-height: 1.2;
+  line-height: 1.3;
+  display: -webkit-box;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  margin: 0;
+
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .vs-divider {
@@ -358,6 +372,11 @@ const getBankClass = (bankName) => {
   font-size: clamp(12px, 1vw, 16px);
   font-weight: 600;
   color: #333;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .selection-guide {
@@ -368,82 +387,5 @@ const getBankClass = (bankName) => {
   margin: 0;
   font-size: clamp(11px, 1vw, 15px);
   color: #666;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
-  .compare-container {
-    bottom: 1vh;
-    width: calc(100% - 2.5vw);
-    max-width: none;
-  }
-
-  .product-compare-section {
-    height: 15vh;
-  }
-
-  .product-side {
-    padding: 1.5vh 2vw;
-  }
-
-  .bank-icon {
-    width: 5vw;
-    height: 5vw;
-    font-size: clamp(16px, 2.3vw, 20px);
-  }
-
-  .product-name {
-    font-size: clamp(14px, 2vw, 18px);
-    max-width: 22vw;
-  }
-
-  .vs-circle {
-    width: 8.5vw;
-    height: 8.5vw;
-  }
-
-  .vs-text {
-    font-size: clamp(14px, 7.5vw, 20px);
-  }
-
-  .compare-btn {
-    font-size: clamp(12px, 1.8vw, 16px);
-    padding: 1.5vh 2.5vw;
-  }
-}
-
-@media (max-width: 480px) {
-  .product-compare-section {
-    height: 13vh;
-  }
-
-  .product-side {
-    padding: 1.2vh 2vw;
-    width: 42%;
-  }
-
-  .product-name {
-    font-size: clamp(12px, 3vw, 16px);
-    max-width: 25vw;
-  }
-
-  .bank-icon {
-    width: 3vw;
-    height: 3vw;
-    font-size: 1vw;
-  }
-
-  .vs-circle {
-    width: 12vw;
-    height: 12vw;
-  }
-
-  .vs-text {
-    font-size: clamp(14px, 3vw, 18px);
-  }
-
-  .compare-button-section {
-    padding: 1.2vh 2vw;
-  }
 }
 </style>
