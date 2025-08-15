@@ -117,7 +117,6 @@ const animals = [
   { id: 9, name: '팬더' },
   { id: 10, name: '카피바라' },
 ];
-//TODO : name 값은 필요 없지만 구분을 위해 임시 데이터
 
 async function updateUserCharacter() {
   try {
