@@ -8,9 +8,13 @@
       />
 
       <transition name="fade">
-        <div v-if="isRevealed" class="character-wrapper" key="character">
-          <img :src="character.image" class="character-img" />
-          <p class="character-name">{{ character.name }}</p>
+        <div
+          v-if="isRevealed && character.animalImage"
+          class="character-wrapper"
+          key="character"
+        >
+          <img :src="character.animalImage" class="character-img" />
+          <p class="character-name">{{ character.animalName }}</p>
         </div>
       </transition>
 
@@ -25,28 +29,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { Rocket } from "lucide-vue-next";
+import { ref, onMounted } from 'vue';
+import { Rocket } from 'lucide-vue-next';
+import { getCharacter } from '@/api/mypage/character.js';
 
 defineProps({
   selectedEgg: {
     type: Object,
     required: true,
   },
-  character: {
-    type: Object,
-    required: true,
-  },
 });
 
-defineEmits(["close"]);
+defineEmits(['close']);
 
 const isRevealed = ref(false);
+const character = ref({ animalName: '', animalImage: '' });
+const BASE_URL = 'http://localhost:8080';
 
-onMounted(() => {
-  setTimeout(() => {
-    isRevealed.value = true;
-  }, 2000);
+const toLv3 = (url = '') =>
+  url.replace(/level\d+/g, 'level3').replace(/_lv\d+/g, '_lv3');
+
+onMounted(async () => {
+  try {
+    const res = await getCharacter();
+    character.value = {
+      animalName: res.animalName,
+      animalImage: BASE_URL + toLv3(res.animalImage),
+    };
+  } catch (err) {
+    console.log('캐릭터 API 호출 실패');
+  } finally {
+    setTimeout(() => {
+      isRevealed.value = true;
+    }, 2000);
+  }
 });
 </script>
 

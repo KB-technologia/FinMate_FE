@@ -10,6 +10,13 @@
       <div v-if="random && products.length > 0" class="Product-Text">
         랜덤 추천 상품
       </div>
+
+      <div class="button-wrapper" v-if="products.length > 0">
+        <button class="detail-button" @click="goToProducts">
+          <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
+        </button>
+      </div>
+
       <div v-if="isLoggedIn && products.length == 0" class="Product-Text"></div>
       <div class="foodstuffs">
         <img
@@ -51,14 +58,6 @@
             ▶
           </div>
         </div>
-
-        <button
-          class="detail-button"
-          @click="goToProducts"
-          v-if="products.length > 0"
-        >
-          <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
-        </button>
       </div>
     </div>
   </div>
@@ -185,31 +184,41 @@ const next = () => {
   transform: scale(1.1);
 }
 
+.button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .detail-button {
   width: 15vw;
   height: 5vh;
-  border-radius: 2vh;
+  border-radius: 3.5vh;
   border: 0.2vh solid var(--color-light-gray);
   color: var(--color-black);
   background-color: var(--color-white);
   font-weight: var(--font-weight-medium);
   transition: all 0.1s ease;
   margin-top: 3.5vh;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 .detail-button:hover {
-  background-color: var(--color-black);
-  border: 0.2vh solid var(--color-black);
+  background: var(--btn-gradient);
+  border: 0.2vh solid var(--btn-gradient);
   color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 0.2vh 0.3vw var(--color-black);
+  box-shadow: 0 0.2vh 0.3vw var(--color-light-gray);
   transform: translateY(-0.5vh);
+  opacity: 1;
+  background-clip: padding-box;
 }
 
 .icon-large {
   width: 2vw;
   height: 2vh;
-  margin-right: 0.3rem;
 }
 
 .arrow-button {
@@ -255,7 +264,6 @@ const next = () => {
 }
 
 .no-products {
-  background: url('@/assets/images/etc/화분.png');
   width: 17vw;
   height: 40vh;
   background-size: contain;
