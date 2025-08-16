@@ -55,7 +55,7 @@ export const productService = {
       };
     }
 
-    return axios.get(url, { headers: getAuthHeaders });
+    return axios.get(url, { headers: getAuthHeaders() });
   },
 
   compareProducts(id1, id2) {

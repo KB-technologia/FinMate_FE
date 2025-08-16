@@ -34,11 +34,10 @@ import QuizComponent from '../../components/quiz/QuizComponent.vue';
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_test.png');
+  background-image: url('@/assets/images/backgroundImage/background_main.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.3;
   z-index: -1;
 }
 
