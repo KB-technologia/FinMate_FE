@@ -34,6 +34,9 @@
                       <img
                         :src="getBankLogo(selectedProducts[0].bankName)"
                         :alt="selectedProducts[0].bankName"
+                        @error="
+                          handleImageError($event, selectedProducts[0].bankName)
+                        "
                         class="bank-logo"
                       />
                     </div>
@@ -55,6 +58,9 @@
                       <img
                         :src="getBankLogo(selectedProducts[1].bankName)"
                         :alt="selectedProducts[1].bankName"
+                        @error="
+                          handleImageError($event, selectedProducts[1].bankName)
+                        "
                         class="bank-logo"
                       />
                     </div>
@@ -445,6 +451,12 @@
                   <path d="M9 7L12 4L15 7" />
                   <path d="M12 4V16" />
                 </svg>
+                <!-- <img
+                  v-if="characterImage"
+                  :src="characterImagePath"
+                  :alt="characterData?.animalName || '캐릭터'"
+                  class="character-icon"
+                /> -->
                 AI 분석 결과
               </h3>
               <div class="analysis-content">
@@ -458,7 +470,18 @@
                     다시 시도
                   </button>
                 </div>
-                <div v-else-if="analysisResult" class="analysis-result">
+                <div
+                  v-else-if="analysisResult"
+                  class="analysis-result-container"
+                >
+                  <div class="character-area">
+                    <img
+                      v-if="characterImage"
+                      :src="characterImagePath"
+                      :alt="characterData?.animalName || '캐릭터'"
+                      class="character-icon"
+                    />
+                  </div>
                   <div
                     class="analysis-text"
                     v-html="parseMarkdown(analysisResult)"
@@ -481,7 +504,8 @@
 import { ref, watch, nextTick, computed } from 'vue';
 import { productService } from '../../api/product/productService';
 import ProductRateChart from './ProductRateChart.vue';
-import { getBankLogo } from '../../utils/bank';
+import { getBankLogo, handleImageError } from '../../utils/bank';
+import { getCharacter } from '../../api/mypage/character';
 
 const props = defineProps({
   isVisible: { type: Boolean, default: false },
@@ -493,6 +517,34 @@ const emit = defineEmits(['close']);
 const isLoadingAnalysis = ref(false);
 const analysisError = ref(null);
 const analysisResult = ref(null);
+const characterData = ref(null);
+const characterImage = ref(null);
+
+const characterImagePath = computed(() => {
+  if (!characterData.value?.animalImage) return null;
+
+  // lv0를 lv3로 변경
+  const imagePath = characterData.value.animalImage.replace(
+    'level0/panda_lv0.png',
+    'level3/panda_lv3.png'
+  );
+  return import.meta.env.VITE_BASE_API_URL + imagePath;
+});
+
+const fetchCharacter = async () => {
+  try {
+    const response = await getCharacter();
+    if (response.data) {
+      characterData.value = response.data;
+    } else if (response) {
+      characterData.value = response;
+    }
+    characterImage.value = true;
+  } catch (error) {
+    console.error('캐릭터 데이터 로드 실패:', error);
+    characterImage.value = false;
+  }
+};
 
 const getInvestmentPeriod = (product) => {
   if (product.productType === 'FUND') {
@@ -585,6 +637,7 @@ watch(
     if (newValue && props.selectedProducts.length === 2) {
       nextTick(() => {
         fetchComparisonAnalysis();
+        fetchCharacter();
       });
     }
   }
@@ -739,6 +792,30 @@ const getRiskLevel = (level) => {
   margin-top: 2vh;
 }
 
+.character-area {
+  flex-shrink: 0;
+  display: flex;
+  align-content: flex-end;
+  justify-content: center;
+  padding-top: 23rem;
+  padding-left: 1vw;
+  height: 100%;
+  transform: scaleX(-1);
+}
+
+.character-icon {
+  width: 7vw;
+  height: 7vw;
+}
+
+.analysis-result-container {
+  display: flex;
+  /* gap: 1vw; */
+  width: 100%;
+  align-items: flex-start;
+  min-height: 15vh;
+}
+
 .close-button {
   background: none;
   border: none;
@@ -889,7 +966,7 @@ const getRiskLevel = (level) => {
 }
 
 .product-name {
-  font-size: 1.1vw;
+  font-size: 0.9vw;
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
@@ -1088,7 +1165,8 @@ const getRiskLevel = (level) => {
 }
 
 .analysis-result {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .analysis-text {
@@ -1101,7 +1179,6 @@ const getRiskLevel = (level) => {
   background: #f8f9fa;
   padding: 1.2vh 1.2vw;
   border-radius: 0.5vw;
-  border-left: 0.25vw solid #2196f3;
   margin: 0;
 }
 
@@ -1207,4 +1284,3 @@ const getRiskLevel = (level) => {
   font-size: 0.9vw;
 }
 </style>
--->

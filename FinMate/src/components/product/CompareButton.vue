@@ -14,6 +14,7 @@
               <img
                 :src="getBankLogo(selectedProducts[0].bankName)"
                 :alt="selectedProducts[0].bankName"
+                @error="handleImageError($event, selectedProducts[0].bankName)"
                 class="bank-logo"
               />
             </div>
@@ -37,6 +38,7 @@
               <img
                 :src="getBankLogo(selectedProducts[1].bankName)"
                 :alt="selectedProducts[1].bankName"
+                @error="handleImageError($event, selectedProducts[1].bankName)"
                 class="bank-logo"
               />
             </div>
@@ -70,6 +72,7 @@
             <img
               :src="getBankLogo(selectedProducts[0].bankName)"
               :alt="selectedProducts[0].bankName"
+              @error="handleImageError($event, selectedProducts[0].bankName)"
               class="bank-logo small-logo"
             />
           </div>
@@ -87,7 +90,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { getBankLogo } from '../../utils/bank';
+import { getBankLogo, handleImageError } from '../../utils/bank';
 
 const props = defineProps({
   selectedProducts: {
@@ -131,7 +134,7 @@ const getBankClass = (bankName) => {
   transform: translateX(-50%);
   z-index: 1000;
   width: calc(100% - 4vw);
-  max-width: 55vw;
+  max-width: 58vw;
 }
 
 /* VS 비교 카드 (2개 선택 시) */
@@ -270,20 +273,17 @@ const getBankClass = (bankName) => {
 }
 
 .product-name {
-  font-size: 1rem;
+  font-size: 0.9vw;
   font-weight: 700;
-  line-height: 1.3;
-  display: -webkit-box;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  hyphens: auto;
   margin: 0;
-
+  line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .vs-divider {

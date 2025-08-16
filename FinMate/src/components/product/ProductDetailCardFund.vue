@@ -18,6 +18,7 @@
           :src="getBankLogo(product.bankName)"
           class="bank-logo"
           :alt="product.bankName"
+          @error="handleImageError($event, product.bankName)"
         />
       </div>
       <h2 class="product-name">{{ product.name }}</h2>
@@ -96,7 +97,7 @@
 import { Heart } from 'lucide-vue-next';
 import ProductRateChart from './ProductRateChart.vue';
 import { ref, computed, toRaw } from 'vue';
-import { getBankLogo } from '../../utils/bank';
+import { getBankLogo, handleImageError } from '../../utils/bank';
 
 const props = defineProps({
   product: {

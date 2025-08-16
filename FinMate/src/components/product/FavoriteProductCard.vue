@@ -16,6 +16,7 @@
         <img
           :src="getBankLogo(product.bankName)"
           :alt="product.bankName"
+          @error="handleImageError($event, product.bankName)"
           class="bank-logo"
         />
       </div>
@@ -60,7 +61,7 @@
 <script setup>
 import { Heart } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
-import { getBankLogo } from '../../utils/bank';
+import { getBankLogo, handleImageError } from '../../utils/bank';
 
 const router = useRouter();
 

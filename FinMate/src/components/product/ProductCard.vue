@@ -28,6 +28,7 @@
           <img
             :src="getBankLogo(product.bankName)"
             :alt="product.bankName"
+            @error="handleImageError($event, product.bankName)"
             class="bank-logo"
           />
         </div>
@@ -90,7 +91,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { getBankLogo } from '../../utils/bank';
+import { getBankLogo, handleImageError } from '../../utils/bank';
 
 const cardBgClass = computed(() => {
   const map = {

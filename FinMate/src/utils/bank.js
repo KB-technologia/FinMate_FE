@@ -10,7 +10,6 @@ import scLogo from '@/assets/images/banks/sc.png';
 import tossLogo from '@/assets/images/banks/toss.png';
 import bnkLogo from '@/assets/images/banks/bnk.png';
 import imLogo from '@/assets/images/banks/im.png';
-import defaultLogo from '@/assets/images/banks/default.png';
 
 const BANK_LOGOS = {
   // KB 그룹
@@ -55,13 +54,20 @@ const BANK_LOGOS = {
 };
 
 export const getBankLogo = (bankName) => {
-  return BANK_LOGOS[bankName] || defaultLogo;
+  return BANK_LOGOS[bankName] || '/assets/images/banks/default.png';
 };
 
-export const handleImageError = (event) => {
-  if (event.target) {
-    event.target.src = defaultLogo;
-  }
+export const handleImageError = (event, bankName) => {
+  const bankIcon = event.target.parentElement;
+  event.target.style.display = 'none';
+  bankIcon.style.backgroundColor = '#f0f0f0';
+  bankIcon.style.color = '#666';
+  bankIcon.style.display = 'flex';
+  bankIcon.style.alignItems = 'center';
+  bankIcon.style.justifyContent = 'center';
+  bankIcon.style.fontSize = '1.2vw';
+  bankIcon.style.fontWeight = '700';
+  bankIcon.textContent = bankName.charAt(0);
 };
 
 export default {
