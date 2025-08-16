@@ -10,6 +10,7 @@
         <p class="level">
           <span v-if="statLoading">로딩중…</span>
           <span v-else-if="statError">정보 불러오기 실패</span>
+          <span v-else-if="!hasAnalysis">테스트를 먼저 진행해주세요! </span>
           <span v-else>{{ levelTitle }}</span>
         </p>
         <div class="edit-icon-wrap">
@@ -121,6 +122,7 @@ const userData = ref(null);
 const characterData = ref(null);
 const statLoading = ref(false);
 const statError = ref(false);
+const statEmpty = ref(false);
 
 const current = computed(() => {
   const path = route.path;
@@ -173,18 +175,39 @@ onMounted(async () => {
   } finally {
     meLoading.value = false;
   }
+
   try {
     statLoading.value = true;
-    const [ud, ch] = await Promise.all([getUserData(), getCharacter()]);
-    userData.value = ud;
-    characterData.value = ch;
-  } catch (e) {
-    // TODO: 콘솔 로그 지우기
-    console.warn("사이드바 스탯/캐릭터 불러오기 실패:", e);
-    statError.value = true;
+    const [udRes, chRes] = await Promise.allSettled([
+      getUserData(),
+      getCharacter(),
+    ]);
+
+    if (udRes.status === "fulfilled") {
+      userData.value = udRes.value;
+      const lv = udRes.value?.currentLevel;
+      const summary = udRes.value?.profileSummary;
+      if (lv == null && !summary) statEmpty.value = true;
+    } else {
+      const code = udRes.reason?.response?.status;
+      if (code === 404 || code === 204) statEmpty.value = true;
+      else statError.value = true;
+    }
+    if (chRes.status === "fulfilled") {
+      characterData.value = chRes.value;
+    } else {
+      const code = chRes.reason?.response?.status;
+      if (code !== 404 && code !== 204) statError.value = true;
+    }
   } finally {
     statLoading.value = false;
   }
+});
+
+const hasAnalysis = computed(() => {
+  const summary = userData.value?.profileSummary?.trim();
+  const animal = characterData.value?.animalName?.trim();
+  return !!summary && !!animal;
 });
 
 const levelTitle = computed(() => {
