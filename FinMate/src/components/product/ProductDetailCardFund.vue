@@ -1,5 +1,5 @@
 <template>
-  <div class="product-detail-card">
+  <div class="product-detail-card" id="summary">
     <button class="favorite-btn" @click="handleToggleFavorite">
       <Heart class="heart-icon" :class="{ 'is-favorite': isFavorite }" />
     </button>
@@ -61,7 +61,7 @@
       </div>
     </div>
   </div>
-  <div class="info-card info-grid">
+  <div class="info-card info-grid" id="details">
     <div>
       <span :class="`pill pill-risk ${riskTone(detail.riskGrade)}`"
         >{{ 7 - detail.riskGrade }}등급 ·

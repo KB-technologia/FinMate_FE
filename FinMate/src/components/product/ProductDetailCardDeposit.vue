@@ -1,5 +1,5 @@
 <template>
-  <div class="product-detail-card">
+  <div class="product-detail-card" id="summary">
     <button class="favorite-btn" @click="handleToggleFavorite">
       <Heart class="heart-icon" :class="{ 'is-favorite': isFavorite }" />
     </button>
@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  <div class="info-card info-grid">
+  <div class="info-card info-grid" id="details">
     <!-- 태그 -->
     <div v-if="tags.length" class="pill-list">
       <span
