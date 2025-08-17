@@ -177,10 +177,10 @@ onMounted(async () => {
         isLoadingImage.value = false;
         animalImage.value = '';
       }
-      // memberLevel.value = levelData.data.currentLevel;
-      // animalName.value = character.data.animalName;
-      // animalImage.value = `${BASE_API_URL}${character.data.animalImage}`;
-      // summary.value = levelData.data.profileSummary;
+      memberLevel.value = levelData.data.currentLevel;
+      animalName.value = character.data.animalName;
+      animalImage.value = `${BASE_API_URL}${character.data.animalImage}`;
+      summary.value = levelData.data.profileSummary;
       totalexp.value = levelData.data.totalExp;
       levelexp.value = totalexp.value % 1000;
       console.log(levelData.data);
