@@ -169,7 +169,7 @@ const showGachaModal = ref(false);
 const openTicketModal = () => {
   const currentTicket = userData.value?.characterTicket ?? 0;
   if (currentTicket <= 0) {
-    toastRef.value?.addToast('보유한 티켓이 없어요 🥲', 'warning');
+    toastRef.value?.addToast('보유한 티켓이 없어요 :smiling_face_with_tear:', 'warning');
     return;
   }
   showGachaModal.value = true;

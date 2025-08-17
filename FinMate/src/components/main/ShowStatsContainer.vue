@@ -5,7 +5,11 @@
       <div v-if="isLoadingStats" class="spinner-wrapper">
         <div class="loader"></div>
       </div>
-      <div v-if="!isLoadingStats && isstats" class="stat-bar-wrapper">
+      <div
+        v-if="!isLoadingStats && isstats"
+        class="stat-bar-wrapper"
+        @click="goToStatsPage"
+      >
         <div class="stat-row">
           <span class="stat-label"
             ><div class="tooltip-wrapper">
@@ -72,9 +76,9 @@
           </div>
         </div>
 
-        <button class="detail-button" @click="goToStatsPage">
+        <!-- <button class="detail-button" @click="goToStatsPage">
           자세히 보기
-        </button>
+        </button> -->
       </div>
       <div v-if="!isLoadingStats && !isstats" class="no-stats">
         <div>
@@ -85,7 +89,7 @@
         </div>
         <div class="no-login-content">
           <p class="nologin-text">
-            추천 아이템을 받으려면 <br />투자 성향 테스트를 진행해주세요!
+            추천 아이템을 받으려면 <br />투자 성향 테스트를 <br />진행해주세요!
           </p>
           <button class="detail-button" @click="goToTest">
             테스트 시작하기
@@ -107,6 +111,7 @@
         v-else-if="isPortfolio"
         class="no-login-content portfolio-animated"
         :class="{ revealed: portfolioRevealed }"
+        @click="goToPortfolio"
       >
         <p class="nologin-text2">
           <UserRoundCheck class="UserRoundCheck" /><span class="highlight-text"
@@ -139,9 +144,9 @@
             </div>
           </div>
         </div>
-        <button class="detail-button" @click="goToPortfolio">
+        <!-- <button class="detail-button" @click="goToPortfolio">
           자세히 보기
-        </button>
+        </button> -->
       </div>
       <div v-else class="no-portfolio">
         <div>
@@ -349,7 +354,6 @@ function renderPortfolioChart() {
 .show-stats-container {
   width: 70vw;
   height: 35vh;
-
   background-color: var(--color-product-color);
   box-shadow: 0 1vh 1vw rgba(50, 50, 50, 0.15);
   border-radius: 2vh;
@@ -411,6 +415,7 @@ function renderPortfolioChart() {
   justify-content: center;
   align-items: center;
   gap: 0.8rem;
+  cursor: pointer;
 }
 
 .char-stat {
@@ -426,8 +431,7 @@ function renderPortfolioChart() {
 .detail-button {
   width: 15vw;
   height: 4vh;
-  background-color: var(--color-white);
-  border: 0.2vh solid var(--color-light-gray);
+  background-color: var(--color-main-button);
   border-radius: 2vh;
   font-weight: var(--font-weight-extrabold);
   cursor: pointer;
@@ -533,10 +537,11 @@ function renderPortfolioChart() {
   justify-content: center;
   color: var(--color-black);
   position: relative;
-  background: var(--color-main-button);
+  background: var(--color-white);
   border-radius: 2vh;
   padding: 1vh;
   font-weight: var(--font-weight-medium);
+  box-shadow: var(--card-shadow);
 }
 .nologin-text:after {
   content: '';
@@ -545,7 +550,7 @@ function renderPortfolioChart() {
   width: 0;
   height: 0;
   border: 1em solid transparent;
-  border-right-color: var(--color-main-button);
+  border-right-color: var(--color-white);
   border-left: 0;
   border-bottom: 0;
   margin-top: -0.5em;

@@ -144,8 +144,8 @@ const getRiskLevel = (level) => {
 };
 
 const truncatedName = computed(() => {
-  return props.product.name.length > 12
-    ? props.product.name.slice(0, 12) + '...'
+  return props.product.name.length > 11
+    ? props.product.name.slice(0, 11) + '...'
     : props.product.name;
 });
 </script>

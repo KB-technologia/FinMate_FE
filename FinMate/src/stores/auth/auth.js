@@ -51,6 +51,7 @@ export const useAuthStore = defineStore('auth', {
           this.setToken(res.data.token);
           this.setIsFirst(!res.data.rewardClaimed);
           this.setUserName(res.data.user.name);
+          localStorage.setItem('username', res.data.user.name);
           this.setDays(res.data.consecutiveDays);
           this.setProvider('LOCAL');
           console.log(res.data);
