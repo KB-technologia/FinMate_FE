@@ -21,43 +21,31 @@
       </div>
 
       <div class="floating-button-box">
-        <button
-          ref="nextBtnRef"
-          type="button"
-          class="floating-btn"
-          @click="handleClick('next')"
-        >
-          <!-- <PawPrint :class="['icon', { visible: selected === 'next' }]" /> -->
-          다음으로
-        </button>
-
-        <button
-          ref="exitBtnRef"
-          type="button"
-          class="floating-btn"
-          @click="handleClick('exit')"
-        >
-          <!-- <PawPrint :class="['icon', { visible: selected === 'exit' }]" /> -->
-          나가기
-        </button>
+        <FloatingChoiceButtons
+          primaryLabel="다음으로"
+          secondaryLabel="나가기"
+          :showSecondary="true"
+          @primary="handleClick('next')"
+          @secondary="handleClick('exit')"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
+import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceButtons.vue";
 
 const router = useRouter();
 
 const fullText =
-  '트럭에 치인 당신! \n이를 불쌍히 여긴 자연의 신이 당신을 동물로 환생시켜 \n새로운 기회를 주려 합니다.';
+  "트럭에 치인 당신! \n이를 불쌍히 여긴 자연의 신이 당신을 동물로 환생시켜 \n새로운 기회를 주려 합니다.";
 
-const visibleText = ref('');
+const visibleText = ref("");
 const showButton = ref(false);
 let interval = null;
 
@@ -85,10 +73,10 @@ onMounted(() => {
 });
 
 const handleClick = (type) => {
-  if (type === 'next') {
-    router.push('/quizsecond');
+  if (type === "next") {
+    router.push("/quizsecond");
   } else {
-    router.push('/my-stats');
+    router.push("/my-stats");
   }
 };
 </script>
@@ -105,13 +93,13 @@ const handleClick = (type) => {
 }
 
 .quiz-view::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_test.png');
+  background-image: url("@/assets/images/backgroundImage/background_test.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -119,7 +107,7 @@ const handleClick = (type) => {
 }
 
 .quiz-view-content {
-  background-image: url('@/assets/images/quiz/quizstartImage.png');
+  background-image: url("@/assets/images/quiz/quizstartImage.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -150,20 +138,16 @@ const handleClick = (type) => {
 
 .text-container {
   font-size: 2.1rem;
-  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  flex-direction: row;
   color: var(--color-black);
   font-weight: var(--font-weight-medium);
   z-index: 10;
   white-space: pre-line;
   width: 100%;
-  text-align: center;
-  white-space: pre-line;
   margin-bottom: -72vh;
 }
 
@@ -175,43 +159,6 @@ const handleClick = (type) => {
   min-height: 6rem;
 }
 
-.next-button {
-  background-color: var(--color-main-button);
-  width: 15vw;
-  color: var(--color-black);
-  border: none;
-  border-radius: 2vh;
-  padding: 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 2rem;
-  animation: bounce 1.2s infinite;
-  transition: transform 0.2s ease;
-}
-.next-button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  animation: none;
-  transform: none;
-}
-.next-button:hover {
-  color: var(--color-white);
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.2);
-  transform: translateY(-8px);
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-/* 다음으로/나가기 선택 버튼 styles */
 .floating-button-box {
   position: absolute;
   top: 1rem;
@@ -227,33 +174,6 @@ const handleClick = (type) => {
   width: 28dvh;
   height: 13vh;
   justify-content: center;
-}
-
-.floating-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: var(--font-weight-bold);
-  font-size: 1rem;
-  padding: 0.6rem 1rem;
-  border-radius: 1rem;
-  transition: background-color 0.2s;
-  background-color: var(--color-primary-yellow);
-  width: 100%;
-  justify-content: flex-start;
-  margin-top: 0vh;
-
-  background-color: var(--color-primary-yellow) !important; /* 고정 배경색 */
-  color: var(--color-black) !important; /* 고정 글자색 */
-  border: none !important; /* 테두리 제거 */
-  transition: transform 0.2s ease; /* 애니메이션만 유지 */
-  box-shadow: none !important;
-}
-
-button:hover {
-  color: var(--color-white);
-  transition: all 0.2s ease-in-out;
-  transform: translateY(-8px);
 }
 
 .quiz-start-content {
@@ -297,5 +217,10 @@ button:hover {
   margin-right: 1vw;
   align-items: center;
   justify-content: center;
+}
+
+:deep(.icon) {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 </style>
