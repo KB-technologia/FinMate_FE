@@ -4,9 +4,12 @@
 
     <div class="quiz-view-content background-fade-in">
       <div @click="skipTyping" class="text-container">
-        <div class="typing-text">
-          {{ visibleText }}
-        </div>
+        <TypewriterText
+          ref="twRef"
+          :lines="[dialogues[currentIndex]]"
+          :speed="60"
+          class="typing-text"
+        />
       </div>
 
       <div class="floating-button-box">
@@ -23,11 +26,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
 import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceButtons.vue";
+import TypewriterText from "@/components/dailyquiz/shared/TypewriterText.vue";
 
 const router = useRouter();
 
@@ -39,41 +43,18 @@ const dialogues = [
 ];
 
 const currentIndex = ref(0); // 현재 대사 인덱스
-const visibleText = ref(""); // 타이핑 중인 텍스트
-let interval = null;
-
-const typeDialogue = () => {
-  visibleText.value = "";
-  let i = 0;
-  const typingInterval = 60;
-  interval = setInterval(() => {
-    if (i < dialogues[currentIndex.value].length) {
-      visibleText.value += dialogues[currentIndex.value][i];
-      i++;
-    } else {
-      clearInterval(interval);
-    }
-  }, typingInterval);
-};
+const twRef = ref(null);
 
 const skipTyping = () => {
-  if (visibleText.value !== dialogues[currentIndex.value]) {
-    clearInterval(interval);
-    visibleText.value = dialogues[currentIndex.value];
-  }
+  twRef.value?.skip();
 };
-
-onMounted(() => {
-  typeDialogue();
-});
 
 const handleClick = (type) => {
   if (type === "next") {
     if (currentIndex.value < dialogues.length - 1) {
       currentIndex.value++;
-      typeDialogue(); // 다음 대사 타이핑 시작
     } else {
-      router.push("/quiz"); // 마지막 대사 끝나면 퀴즈 페이지로 이동
+      router.push("/quiz");
     }
   } else {
     router.push("/my-stats");
