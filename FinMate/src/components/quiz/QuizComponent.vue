@@ -166,7 +166,8 @@ const handleOptionSelect = () => {
 
 .description {
   font-size: 0.8rem;
-  color: var(--color-chart-info);
+  /* color: var(--color-chart-info); */
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -178,7 +179,8 @@ const handleOptionSelect = () => {
 }
 
 .survey-card {
-  background-color: var(--color-test-color);
+  /* background-color: var(--color-test-color); */
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .survey-card.show-extra {

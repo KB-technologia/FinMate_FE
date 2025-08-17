@@ -149,7 +149,7 @@ const handleClick = (type) => {
 }
 
 .text-container {
-  font-size: 1.8rem;
+  font-size: 2.1rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -168,7 +168,7 @@ const handleClick = (type) => {
 }
 
 .typing-text {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: black;
   line-height: 1.6;

@@ -153,7 +153,7 @@ const handleClick = (type) => {
 }
 
 .text-container {
-  font-size: 1.8rem;
+  font-size: 2.1rem;
   text-align: center;
   display: flex;
   flex-direction: column;
