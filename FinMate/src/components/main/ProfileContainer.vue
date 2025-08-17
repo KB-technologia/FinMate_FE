@@ -4,6 +4,7 @@
       <button v-if="animalImage" class="quiz-button" @click="openQuizModal">
         오늘의 퀴즈
       </button>
+      <div v-if="!animalImage"></div>
       <div class="logout-button" @click="handleLoginClick">
         <img
           src="@/assets/images/icons/LogoutRounded.png"
@@ -22,20 +23,21 @@
           alt="캐릭터 이미지"
           class="no-image"
         />
-        <img
-          v-if="!isLoadingImage && !animalImage"
-          :src="noimage"
-          alt="이미지가 없음"
-          class="capybara-img"
-        />
+        <div class="img-with-bubble" v-if="!isLoadingImage && !animalImage">
+          <img :src="noimage" alt="이미지가 없음" class="capybara-img" />
+          <div class="text">
+            나를 얻고 싶다면 <br />
+            테스트 해봐!
+          </div>
+        </div>
         <div v-if="isLoadingImage" class="image-spinner"></div>
       </div>
 
       <p class="level-text">
         <template v-if="!isLoading">
           <span v-if="memberLevel">Lv.{{ memberLevel }}</span
-          >&nbsp; <span>{{ summary }}</span
-          >&nbsp;<span>{{ animalName }}</span>
+          >&nbsp; <span v-if="memberLevel">{{ summary }}</span
+          >&nbsp;<span v-if="memberLevel">{{ animalName }}</span>
         </template>
         <template v-else>
           <div class="skeleton-text long"></div>
@@ -46,6 +48,7 @@
         <div class="xp-fill" :style="{ width: fillPercentage + '%' }"></div>
         <span class="xp-text">{{ levelexp }}/{{ maxXp }}</span>
       </div>
+      <div v-else></div>
     </div>
 
     <button
@@ -96,22 +99,22 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth/auth";
-import { ref, computed, onMounted } from "vue";
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth/auth';
+import { ref, computed, onMounted } from 'vue';
 
-import { useToast } from "@/composables/useToast";
-import DailyQuizModal from "@/components/dailyquiz/modals/DailyQuizModal.vue";
-import ConfirmModal from "@/components/allshared/ConfirmModal.vue";
-import logoutImage from "@/assets/images/logos/logoutkiwi.png";
-import { getMemberLevel } from "@/api/main/main.js";
-import { getMemberCharacter } from "@/api/info/userStatsAPI";
-import { getQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
+import { useToast } from '@/composables/useToast';
+import DailyQuizModal from '@/components/dailyquiz/modals/DailyQuizModal.vue';
+import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
+import logoutImage from '@/assets/images/logos/logoutkiwi.png';
+import { getMemberLevel } from '@/api/main/main.js';
+import { getMemberCharacter } from '@/api/info/userStatsAPI';
+import { getQuizSolved } from '@/api/dailyquiz/dailyQuizSolved.js';
 
-import QuizRewardIntroModal from "@/components/dailyquiz/modals/QuizRewardIntroModal.vue";
-import QuizDailyLimitModal from "@/components/dailyquiz/modals/QuizDailyLimitModal.vue";
+import QuizRewardIntroModal from '@/components/dailyquiz/modals/QuizRewardIntroModal.vue';
+import QuizDailyLimitModal from '@/components/dailyquiz/modals/QuizDailyLimitModal.vue';
 
-import noimage from "@/assets/images/logos/kiwiLogo3.png";
+import noimage from '@/assets/images/logos/kiwiLogo.png';
 
 const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
@@ -131,14 +134,14 @@ const memberLevel = ref(0);
 const totalexp = ref(0);
 const levelexp = ref(0);
 const fillPercentage = computed(() => (levelexp.value / maxXp) * 100);
-const animalName = ref("");
-const animalImage = ref("");
-const summary = ref("");
+const animalName = ref('');
+const animalImage = ref('');
+const summary = ref('');
 
-const stage = ref("reward");
+const stage = ref('reward');
 const closeOnboarding = () => {
   showOnboarding.value = false;
-  stage.value = "reward";
+  stage.value = 'reward';
 };
 const openDailyQuiz = () => {
   showOnboarding.value = false;
@@ -151,7 +154,7 @@ const closeDailyQuiz = () => {
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push("/login");
+    router.push('/login');
   } else {
     showLogoutConfirm.value = true;
   }
@@ -167,24 +170,24 @@ onMounted(async () => {
       const levelData = await getMemberLevel();
       if (levelData.status == 404) {
         isLoadinglevel.value = false;
-        memberLevel.value = "";
+        memberLevel.value = '';
       }
       const character = await getMemberCharacter();
       if (character.status == 404) {
         isLoadingImage.value = false;
-        animalImage.value = "";
+        animalImage.value = '';
       }
-      memberLevel.value = levelData.data.currentLevel;
+      // memberLevel.value = levelData.data.currentLevel;
+      // animalName.value = character.data.animalName;
+      // animalImage.value = `${BASE_API_URL}${character.data.animalImage}`;
+      // summary.value = levelData.data.profileSummary;
       totalexp.value = levelData.data.totalExp;
       levelexp.value = totalexp.value % 1000;
-      animalName.value = character.data.animalName;
-      animalImage.value = `${BASE_API_URL}${character.data.animalImage}`;
-      summary.value = levelData.data.profileSummary;
       console.log(levelData.data);
       console.log(character.data);
     }
   } catch (err) {
-    console.error("⚠️ 사용자 정보 로딩 실패:", err);
+    console.error('⚠️ 사용자 정보 로딩 실패:', err);
   } finally {
     isLoadinglevel.value = false;
     isLoadingImage.value = false;
@@ -196,18 +199,18 @@ async function openQuizModal() {
 
   try {
     const res = await getQuizSolved();
-    console.log("퀴즈 풀이 상태", res.data.quizSolved);
+    console.log('퀴즈 풀이 상태', res.data.quizSolved);
     if (res.data.quizSolved) {
-      toast("오늘은 이미 퀴즈를 푸셨군요?\n내일 다시 도전해주세요!", "warning");
+      toast('오늘은 이미 퀴즈를 푸셨군요?\n내일 다시 도전해주세요!', 'warning');
       return;
     }
     showOnboarding.value = true;
-    stage.value = "reward";
+    stage.value = 'reward';
   } catch (error) {
-    console.error("퀴즈 로딩 실패", error);
+    console.error('퀴즈 로딩 실패', error);
     toast(
-      "퀴즈 상태를 가져오지 못했어요. 잠시 후 다시 시도해주세요.",
-      "warning"
+      '퀴즈 상태를 가져오지 못했어요. 잠시 후 다시 시도해주세요.',
+      'warning'
     );
   }
 }
@@ -219,14 +222,14 @@ async function refreshLevel() {
     totalexp.value = levelData.data.totalExp;
     levelexp.value = totalexp.value % maxXp;
     summary.value = levelData.data.profileSummary;
-    console.log("[Profile] refreshLevel:", levelData.data);
+    console.log('[Profile] refreshLevel:', levelData.data);
   } catch (err) {
-    console.error("레벨 재조회 실패:", err);
+    console.error('레벨 재조회 실패:', err);
   }
 }
 
 function applyExpPatch(payload) {
-  console.log("[Profile] exp-updated payload:", payload);
+  console.log('[Profile] exp-updated payload:', payload);
   if (payload?.currentLevel != null) memberLevel.value = payload.currentLevel;
   if (payload?.totalExp != null) {
     totalexp.value = payload.totalExp;
@@ -290,7 +293,7 @@ function applyExpPatch(payload) {
   padding: 0.5rem;
   cursor: pointer;
   font-weight: var(--font-weight-extrabold);
-  background-color: var(--color-logout-button);
+  background-color: var(--color-dark-gray);
   font-size: 0.9rem;
   border-radius: 2vh;
   transition: all 0.2s ease;
@@ -425,5 +428,41 @@ function applyExpPatch(payload) {
 
 .no-image {
   width: 8vw;
+}
+
+.img-with-bubble {
+  display: flex;
+  align-items: center;
+  height: 12vh;
+  margin-top: 3vh;
+}
+
+.text {
+  width: 8vw;
+  height: 10vh;
+  font-size: 1.2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-black);
+  position: relative;
+  background: var(--color-white);
+  border-radius: 2vh;
+  padding: 1vh;
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--card-shadow);
+}
+
+.text:after {
+  content: '';
+  position: absolute;
+  left: -1.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border: 1em solid transparent;
+  border-right-color: var(--color-white);
 }
 </style>
