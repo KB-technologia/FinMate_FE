@@ -474,7 +474,10 @@
                   v-else-if="analysisResult"
                   class="analysis-result-container"
                 >
-                  <div class="character-area">
+                  <div
+                    class="character-area"
+                    :class="{ flip: shouldFlipCharacter }"
+                  >
                     <img
                       v-if="characterImage"
                       :src="characterImagePath"
@@ -482,10 +485,22 @@
                       class="character-icon"
                     />
                   </div>
-                  <div
-                    class="analysis-text"
-                    v-html="parseMarkdown(analysisResult)"
-                  ></div>
+                  <div class="chat-messages">
+                    <div
+                      v-for="(message, index) in getChatMessages(
+                        analysisResult
+                      )"
+                      :key="index"
+                      class="chat-bubble"
+                      :class="{ delay: index > 0 }"
+                      :style="{ animationDelay: `${index * 0.3}s` }"
+                    >
+                      <div
+                        class="message-content"
+                        v-html="parseMarkdown(message)"
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -529,6 +544,14 @@ const characterImagePath = computed(() => {
     'level3/panda_lv3.png'
   );
   return import.meta.env.VITE_BASE_API_URL + imagePath;
+});
+
+const shouldFlipCharacter = computed(() => {
+  if (!characterData.value?.animalImage) return true;
+
+  const imagePath = characterData.value.animalImage;
+  // cat이나 koala가 포함되면 반전하지 않음
+  return !imagePath.includes('cat') && !imagePath.includes('koala');
 });
 
 const fetchCharacter = async () => {
@@ -729,6 +752,16 @@ const parseMarkdown = (text) => {
     .replace(/<p><\/p>/g, '');
 };
 
+const getChatMessages = (text) => {
+  if (!text) return [];
+
+  // \n\n으로 먼저 나누고, 빈 문자열 제거
+  return text
+    .split('\n\n')
+    .map((msg) => msg.trim())
+    .filter((msg) => msg.length > 0);
+};
+
 const getRiskLevel = (level) => {
   const levels = {
     1: '매우 낮은 위험',
@@ -800,12 +833,89 @@ const getRiskLevel = (level) => {
   padding-top: 23rem;
   padding-left: 1vw;
   height: 100%;
+}
+
+.character-area.flip {
   transform: scaleX(-1);
 }
 
 .character-icon {
   width: 7vw;
   height: 7vw;
+}
+
+.chat-messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  min-width: 0;
+}
+
+.chat-bubble {
+  background: #e3f2fd;
+  border-radius: 1.2vw;
+  padding: 1vh 1.2vw;
+  position: relative;
+  max-width: 100%;
+  word-wrap: break-word;
+  animation: fadeInUp 0.4s ease-out forwards;
+  opacity: 0;
+  box-shadow: 0 0.1vw 0.3vw rgba(0, 0, 0, 0.1);
+}
+
+.chat-bubble.delay {
+  animation-fill-mode: both;
+}
+
+.chat-bubble:before {
+  content: '';
+  position: absolute;
+  left: -0.5vw;
+  bottom: 1vh;
+  width: 0;
+  height: 0;
+  border-top: 0.7vw solid transparent;
+  border-bottom: 0.7vw solid transparent;
+  border-right: 0.7vw solid #e3f2fd;
+}
+
+.message-content {
+  font-family: WantedSans, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    sans-serif;
+  font-size: 0.9vw;
+  line-height: 1.5;
+  color: #333;
+  margin: 0;
+}
+
+.message-content p {
+  margin: 0 0 0.5vh 0;
+}
+
+.message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.message-content strong {
+  color: #1976d2;
+  font-weight: 700;
+}
+
+.message-content ul {
+  margin: 0.5vh 0;
+  padding-left: 1.2vw;
+}
+
+.message-content li {
+  margin: 0.3vh 0;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .analysis-result-container {
