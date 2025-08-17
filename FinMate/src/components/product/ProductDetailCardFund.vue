@@ -70,8 +70,8 @@
       />
 
       <!-- 말풍선 -->
-      <div class="speech-bubble">
-        {{ product.aiExplanation }}
+      <div class="speech-bubble" :class="{ 'is-typing': isTyping }">
+        <div class="bubble-content">{{ typedText }}</div>
       </div>
     </div>
   </div>
@@ -111,7 +111,7 @@
 <script setup>
 import { Heart } from 'lucide-vue-next';
 import ProductRateChart from './ProductRateChart.vue';
-import { ref, computed, toRaw } from 'vue';
+import { ref, computed, toRaw, watch, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
   product: {
@@ -381,6 +381,43 @@ const infoItems = computed(() => {
 
   return items.filter((it) => it.show);
 });
+
+const sanitized = computed(() =>
+  (props.product.aiExplanation ?? '').replace(/["]/g, '')
+);
+
+const typedText = ref('');
+const isTyping = ref(false);
+let timerId = null;
+
+const startTyping = () => {
+  clearInterval(timerId);
+  const full = sanitized.value;
+  typedText.value = '';
+
+  if (!full) {
+    isTyping.value = false;
+    return;
+  }
+
+  const len = full.length;
+  // 긴 문장은 살짝 가속
+  const base = 30;
+  const step = len > 300 ? Math.max(10, base - 6) : base;
+
+  isTyping.value = true;
+  let i = 0;
+  timerId = setInterval(() => {
+    typedText.value += full[i++];
+    if (i >= len) {
+      clearInterval(timerId);
+      timerId = null;
+      isTyping.value = false;
+    }
+  }, step);
+};
+watch(sanitized, startTyping, { immediate: true });
+onBeforeUnmount(() => clearInterval(timerId));
 </script>
 
 <style scoped>
@@ -772,7 +809,29 @@ const infoItems = computed(() => {
   max-width: 100%;
   line-height: 1.5;
 }
-
+.bubble-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+  position: relative;
+}
+.bubble-content::after {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-left: 2px;
+  background: currentColor;
+  opacity: 0;
+}
+.speech-bubble.is-typing .bubble-content::after {
+  animation: caret 1s steps(1) infinite;
+  opacity: 1;
+}
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
 /* 말풍선 꼬리 */
 /* 꼬리 테두리(바깥) */
 .speech-bubble::before {
