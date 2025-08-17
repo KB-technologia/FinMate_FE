@@ -5,13 +5,19 @@
     <div class="product-page-container">
       <div class="scrollable-content">
         <div class="product-card-wrapper">
-          <component
-            v-if="transformedProduct && transformedProduct.productType"
-            :is="getProductComponent(transformedProduct.productType)"
-            :product="transformedProduct"
-            :is-favorite="isFavorite"
-            @toggle-favorite="handleToggleFavorite"
-          />
+          <div v-if="isLoading" class="loading-spinner">
+            <div class="spinner"></div>
+            ⏳ 로딩중...
+          </div>
+          <div v-else>
+            <component
+              v-if="transformedProduct && transformedProduct.productType"
+              :is="getProductComponent(transformedProduct.productType)"
+              :product="transformedProduct"
+              :is-favorite="isFavorite"
+              @toggle-favorite="handleToggleFavorite"
+            />
+          </div>
         </div>
         <div class="divider">&nbsp;</div>
         <div class="rating-row" id="reviews">
@@ -72,7 +78,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { Pencil } from 'lucide-vue-next';
@@ -107,6 +113,7 @@ const pageSize = 5;
 const { toast } = useToast();
 const authStore = useAuthStore();
 const isLoggedIn = authStore.isLoggedIn;
+const isLoading = ref(true);
 
 const getProductComponent = (productType) => {
   const componentMap = {
@@ -164,6 +171,7 @@ const transformedProduct = computed(() => {
       ),
     },
     productRate: product.value.productRate,
+    aiExplanation: product.value.aiExplanation,
   };
 
   // 적금의 경우 추가 필드
@@ -191,6 +199,16 @@ const transformedProduct = computed(() => {
   }
 
   return base;
+});
+
+watch(transformedProduct, (newVal) => {
+  if (newVal) {
+    // 값 들어오면 로딩 종료
+    isLoading.value = false;
+  } else {
+    // null일 땐 로딩 상태 유지
+    isLoading.value = true;
+  }
 });
 
 const logoPath = computed(() => {
@@ -553,5 +571,32 @@ onMounted(() => {
   text-align: center;
   font-size: 2vh;
   color: var(--color-dark-gray);
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vh;
+  color: #666;
+}
+
+.spinner {
+  width: 2.5vw;
+  height: 2.5vw;
+  margin-top: 2vh;
+  border: 0.25vw solid #f3f3f3;
+  border-top: 0.25vw solid #2196f3;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
