@@ -219,7 +219,7 @@ const transformFavoriteData = (favoriteItems) => {
             product.expectedReturn || product.maxInterestRate || 0, // 예상 수익률을 최고금리로 사용
           url: product.url || '', // 상품 URL
           baseInterestRate: product.baseInterestRate || 0,
-          riskGrade: product.riskLevel || 1, // riskLevel -> riskGrade
+          riskGrade: product.detail.riskGrade,
           specialCondition: product.description || '', // 설명을 특별조건으로 사용
           favoriteItemId: favoriteItem.id, // 즐겨찾기 항목 ID (참고용)
         };

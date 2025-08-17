@@ -35,8 +35,7 @@
                         :src="getBankLogo(selectedProducts[0].bankName)"
                         :alt="selectedProducts[0].bankName"
                         @error="
-                          (e) =>
-                            handleImageError(e, selectedProducts[0].bankName)
+                          handleImageError($event, selectedProducts[0].bankName)
                         "
                         class="bank-logo"
                       />
@@ -60,8 +59,7 @@
                         :src="getBankLogo(selectedProducts[1].bankName)"
                         :alt="selectedProducts[1].bankName"
                         @error="
-                          (e) =>
-                            handleImageError(e, selectedProducts[1].bankName)
+                          handleImageError($event, selectedProducts[1].bankName)
                         "
                         class="bank-logo"
                       />
@@ -453,6 +451,12 @@
                   <path d="M9 7L12 4L15 7" />
                   <path d="M12 4V16" />
                 </svg>
+                <!-- <img
+                  v-if="characterImage"
+                  :src="characterImagePath"
+                  :alt="characterData?.animalName || '캐릭터'"
+                  class="character-icon"
+                /> -->
                 AI 분석 결과
               </h3>
               <div class="analysis-content">
@@ -466,11 +470,37 @@
                     다시 시도
                   </button>
                 </div>
-                <div v-else-if="analysisResult" class="analysis-result">
+                <div
+                  v-else-if="analysisResult"
+                  class="analysis-result-container"
+                >
                   <div
-                    class="analysis-text"
-                    v-html="parseMarkdown(analysisResult)"
-                  ></div>
+                    class="character-area"
+                    :class="{ flip: shouldFlipCharacter }"
+                  >
+                    <img
+                      v-if="characterImage"
+                      :src="characterImagePath"
+                      :alt="characterData?.animalName || '캐릭터'"
+                      class="character-icon"
+                    />
+                  </div>
+                  <div class="chat-messages">
+                    <div
+                      v-for="(message, index) in getChatMessages(
+                        analysisResult
+                      )"
+                      :key="index"
+                      class="chat-bubble"
+                      :class="{ delay: index > 0 }"
+                      :style="{ animationDelay: `${index * 0.3}s` }"
+                    >
+                      <div
+                        class="message-content"
+                        v-html="parseMarkdown(message)"
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -489,6 +519,8 @@
 import { ref, watch, nextTick, computed } from 'vue';
 import { productService } from '../../api/product/productService';
 import ProductRateChart from './ProductRateChart.vue';
+import { getBankLogo, handleImageError } from '../../utils/bank';
+import { getCharacter } from '../../api/mypage/character';
 
 const props = defineProps({
   isVisible: { type: Boolean, default: false },
@@ -500,6 +532,42 @@ const emit = defineEmits(['close']);
 const isLoadingAnalysis = ref(false);
 const analysisError = ref(null);
 const analysisResult = ref(null);
+const characterData = ref(null);
+const characterImage = ref(null);
+
+const characterImagePath = computed(() => {
+  if (!characterData.value?.animalImage) return null;
+
+  // lv0를 lv3로 변경
+  const imagePath = characterData.value.animalImage.replace(
+    'level0/panda_lv0.png',
+    'level3/panda_lv3.png'
+  );
+  return import.meta.env.VITE_BASE_API_URL + imagePath;
+});
+
+const shouldFlipCharacter = computed(() => {
+  if (!characterData.value?.animalImage) return true;
+
+  const imagePath = characterData.value.animalImage;
+  // cat이나 koala가 포함되면 반전하지 않음
+  return !imagePath.includes('cat') && !imagePath.includes('koala');
+});
+
+const fetchCharacter = async () => {
+  try {
+    const response = await getCharacter();
+    if (response.data) {
+      characterData.value = response.data;
+    } else if (response) {
+      characterData.value = response;
+    }
+    characterImage.value = true;
+  } catch (error) {
+    console.error('캐릭터 데이터 로드 실패:', error);
+    characterImage.value = false;
+  }
+};
 
 const getInvestmentPeriod = (product) => {
   if (product.productType === 'FUND') {
@@ -592,6 +660,7 @@ watch(
     if (newValue && props.selectedProducts.length === 2) {
       nextTick(() => {
         fetchComparisonAnalysis();
+        fetchCharacter();
       });
     }
   }
@@ -627,59 +696,6 @@ const closeModal = () => {
 
 const handleOverlayClick = () => {
   closeModal();
-};
-
-const getBankLogo = (bankName) => {
-  const bankLogos = {
-    국민은행: '/src/assets/images/banks/kb.png',
-    KB증권: '/src/assets/images/banks/kb.png',
-    케이비자산운용: '/src/assets/images/banks/kb.png',
-
-    신한은행: '/src/assets/images/banks/shinhan.png',
-    신한투자증권: '/src/assets/images/banks/shinhan.png',
-    제주은행: '/src/assets/images/banks/shinhan.png',
-
-    하나은행: '/src/assets/images/banks/hana.png',
-    하나증권: '/src/assets/images/banks/hana.png',
-    하나자산운용: '/src/assets/images/banks/hana.png',
-
-    우리은행: '/src/assets/images/banks/woori.png',
-    우리투자증권: '/src/assets/images/banks/woori.png',
-
-    농협은행: '/src/assets/images/banks/nh.png',
-    NH농협은행: '/src/assets/images/banks/nh.png',
-    NH투자증권: '/src/assets/images/banks/nh.png',
-
-    IBK기업은행: '/src/assets/images/banks/ibk.png',
-    IBK투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
-
-    카카오뱅크: '/src/assets/images/banks/kakao.png',
-    케이뱅크: '/src/assets/images/banks/kbank.png',
-    SC제일은행: '/src/assets/images/banks/sc.png',
-
-    토스뱅크: '/src/assets/images/banks/toss.png',
-    토스증권: '/src/assets/images/banks/toss.png',
-
-    BNK부산은행: '/src/assets/images/banks/bnk.png',
-    부산은행: '/src/assets/images/banks/bnk.png',
-    iM뱅크: '/src/assets/images/banks/im.png',
-  };
-  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
-};
-
-const handleImageError = (event, bankName) => {
-  const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
-  bankIcon.style.backgroundColor = '#f0f0f0';
-  bankIcon.style.color = '#666';
-  bankIcon.style.display = 'flex';
-  bankIcon.style.alignItems = 'center';
-  bankIcon.style.justifyContent = 'center';
-  bankIcon.style.fontSize = '1.2vw';
-  bankIcon.style.fontWeight = 700;
-  bankIcon.textContent = bankName.charAt(0);
 };
 
 const getTypeLabel = (type) => {
@@ -734,6 +750,30 @@ const parseMarkdown = (text) => {
     .replace(/\n/g, '<br>')
     .replace(/^(.*)$/s, '<p>$1</p>')
     .replace(/<p><\/p>/g, '');
+};
+
+const getChatMessages = (text) => {
+  if (!text) return [];
+
+  return text
+    .split('\n\n')
+    .map((msg) => msg.trim())
+    .filter((msg) => {
+      if (msg.length === 0) return false;
+
+      if (/^-{3,}$/.test(msg)) return false;
+
+      if (/^[\n\r\s]*$/.test(msg)) return false;
+
+      return true;
+    })
+    .map((msg) => {
+      return msg
+        .replace(/\n{3,}/g, '\n\n')
+        .replace(/^\n+|\n+$/g, '')
+        .trim();
+    })
+    .filter((msg) => msg.length > 0);
 };
 
 const getRiskLevel = (level) => {
@@ -797,6 +837,107 @@ const getRiskLevel = (level) => {
   border-radius: 0.75vw;
   padding: 2vh 2vw;
   margin-top: 2vh;
+}
+
+.character-area {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 8vw;
+  padding-top: 20vh;
+  padding-left: 0.5vw;
+  padding-bottom: 2vh;
+  height: 100%;
+}
+
+.character-area.flip {
+  transform: scaleX(-1);
+}
+
+.character-icon {
+  width: 7vw;
+  height: 7vw;
+  object-fit: contain;
+}
+
+.chat-messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+.chat-bubble {
+  background: #f0f8ff;
+  border-radius: 1.2vw;
+  padding: 1vh 1.2vw;
+  margin-bottom: 0.7vh;
+  position: relative;
+  max-width: 100%;
+  word-wrap: break-word;
+  animation: fadeInUp 0.4s ease-out forwards;
+  opacity: 0;
+  box-shadow: 0 0.1vw 0.3vw rgba(0, 0, 0, 0.1);
+}
+
+.chat-bubble.delay {
+  animation-fill-mode: both;
+}
+
+.chat-bubble:before {
+  content: '';
+  position: absolute;
+  left: -0.5vw;
+  bottom: 1vh;
+  width: 0;
+  height: 0;
+  border-top: 0.7vw solid transparent;
+  border-bottom: 0.7vw solid transparent;
+  border-right: 0.7vw solid #f0f8ff;
+}
+
+.message-content {
+  font-family: WantedSans, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    sans-serif;
+  font-size: 0.9vw;
+  line-height: 1.5;
+  color: #333;
+  margin: 0;
+}
+.message-content * {
+  margin: 0;
+}
+
+.message-content strong {
+  color: #1976d2;
+  font-weight: 700;
+}
+
+.message-content ul {
+  margin: 0.5vh 0;
+  padding-left: 1.2vw;
+}
+
+.message-content li {
+  margin: 0.3vh 0;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.analysis-result-container {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  min-height: 20vh;
+  position: relative;
 }
 
 .close-button {
@@ -949,7 +1090,7 @@ const getRiskLevel = (level) => {
 }
 
 .product-name {
-  font-size: 1.1vw;
+  font-size: 0.9vw;
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
@@ -1148,7 +1289,8 @@ const getRiskLevel = (level) => {
 }
 
 .analysis-result {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .analysis-text {
@@ -1161,7 +1303,6 @@ const getRiskLevel = (level) => {
   background: #f8f9fa;
   padding: 1.2vh 1.2vw;
   border-radius: 0.5vw;
-  border-left: 0.25vw solid #2196f3;
   margin: 0;
 }
 

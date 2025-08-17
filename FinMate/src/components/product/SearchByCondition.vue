@@ -58,9 +58,8 @@
             >
               <div class="bank-icon">
                 <img
-                  :src="getBankImagePath(bank.code)"
+                  :src="getBankLogo(bank.name)"
                   :alt="bank.name"
-                  @error="handleImageError"
                   class="bank-logo"
                 />
               </div>
@@ -174,6 +173,7 @@
 
 <script setup>
 import { ref, computed, watch, nextTick, onMounted } from 'vue';
+import { getBankLogo } from '../../utils/bank';
 
 const emit = defineEmits(['search', 'filter-change']);
 
@@ -247,18 +247,6 @@ const hasActiveFilters = computed(() => {
     searchQuery.value.trim().length > 0
   );
 });
-
-// 메서드
-const getBankImagePath = (bankCode) => {
-  return `/src/assets/images/banks/${bankCode.toLowerCase()}.png`;
-};
-
-const handleImageError = (event) => {
-  // 이미지 로드 실패 시 기본 이미지 또는 텍스트로 대체
-  event.target.style.display = 'none';
-  event.target.parentElement.style.backgroundColor = '#f0f0f0';
-  event.target.parentElement.innerHTML = event.target.alt.charAt(0);
-};
 
 const getBankName = (bankCode) => {
   const bank = bankList.find((b) => b.code === bankCode);
