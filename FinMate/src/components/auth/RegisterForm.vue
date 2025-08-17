@@ -1,8 +1,11 @@
 <template>
   <div class="signup-wrapper">
     <h2>회원가입</h2>
-
-    <div v-if="!isEmailVerified" class="form-section">
+    <form
+      v-if="!isEmailVerified"
+      class="form-section"
+      @submit.prevent="handleEmailAuthSubmit"
+    >
       <div class="field">
         <label>이메일</label>
         <div class="input-group">
@@ -12,12 +15,13 @@
             placeholder="이메일 입력"
             :disabled="isCodeSent"
           />
+
           <button
+            :type="isCodeSent ? 'button' : 'submit'"
             class="action-btn"
-            @click="SendAuthCodeClick"
             :disabled="!email || isCodeSent"
           >
-            {{ isCodeSent ? '전송완료' : '인증' }}
+            {{ isCodeSent ? "전송완료" : "인증" }}
           </button>
         </div>
         <div v-if="emailError" class="error">{{ emailError }}</div>
@@ -27,12 +31,11 @@
         <label>인증코드</label>
         <div class="input-group">
           <input v-model="authCode" placeholder="인증코드 입력" maxlength="6" />
-          <button class="action-btn" @click="verifyAuthCode">확인</button>
+          <button type="submit" class="action-btn">확인</button>
         </div>
       </div>
-    </div>
-
-    <div v-else class="form-section">
+    </form>
+    <form v-else class="form-section" @submit.prevent="handleSubmit">
       <div class="field">
         <label>이름</label>
         <input v-model="name" placeholder="이름 입력" />
@@ -46,15 +49,15 @@
             placeholder="아이디 입력"
             :disabled="isIdConfirmed"
           />
-          <button class="action-btn" @click="checkIdDuplication">
+          <button type="button" class="action-btn" @click="checkIdDuplication">
             중복 확인
           </button>
         </div>
         <p v-if="idAvailable === true" class="success">
-          사용 가능한 아이디입니다 ✅
+          사용 가능한 아이디입니다.
         </p>
         <p v-else-if="idAvailable === false" class="error">
-          이미 사용 중인 아이디입니다 ❌
+          이미 사용 중인 아이디입니다.
         </p>
       </div>
 
@@ -71,7 +74,7 @@
           placeholder="비밀번호 확인"
         />
         <p v-if="confirmPassword && password !== confirmPassword" class="error">
-          비밀번호가 일치하지 않습니다 ❌
+          비밀번호가 일치하지 않습니다.
         </p>
       </div>
 
@@ -118,48 +121,48 @@
           </button>
         </div>
       </div>
+      <button type="submit" class="submit-btn">완료</button>
+    </form>
 
-      <button class="submit-btn" @click="handleSubmit">완료</button>
-    </div>
+    <LoadingOverlay
+      v-if="ui.isLoading"
+      :message="'인증 메일을 전송 중이에요...'"
+    />
   </div>
-  <LoadingOverlay
-    v-if="ui.isLoading"
-    :message="'인증 메일을 전송 중이에요...'"
-  />
 </template>
 
 <script setup>
-import LoadingOverlay from '@/components/allshared/LoadingOverlay.vue';
-import { ref, computed, reactive } from 'vue';
-import { useSignupStore } from '@/stores/signup/signupStore';
+import LoadingOverlay from "@/components/allshared/LoadingOverlay.vue";
+import { ref, computed, reactive } from "vue";
+import { useSignupStore } from "@/stores/signup/signupStore";
 import {
   verifyEmailAuth,
   checkAccountId,
   sendEmailAuthForSingUp,
-} from '@/api/auth/auth';
-import { useToast } from '@/composables/useToast';
-import { useRouter } from 'vue-router';
+} from "@/api/auth/auth";
+import { useToast } from "@/composables/useToast";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const { toast } = useToast();
 const store = useSignupStore();
 
-const email = ref('');
-const authCode = ref('');
-const uuid = ref('');
-const name = ref('');
-const accountId = ref('');
-const password = ref('');
-const confirmPassword = ref('');
-const birthYear = ref('');
-const birthMonth = ref('');
-const birthDay = ref('');
-const gender = ref('');
+const email = ref("");
+const authCode = ref("");
+const uuid = ref("");
+const name = ref("");
+const accountId = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const birthYear = ref("");
+const birthMonth = ref("");
+const birthDay = ref("");
+const gender = ref("");
 
 const isCodeSent = ref(false);
 const isEmailVerified = ref(false);
 const verifySuccess = ref(false);
-const emailError = ref('');
+const emailError = ref("");
 const idAvailable = ref(null);
 const isIdConfirmed = ref(false);
 
@@ -184,16 +187,33 @@ const days = computed(() => {
   return Array.from({ length: daysInMonth }, (_, i) => i + 1);
 });
 
+const handleEmailAuthSubmit = async () => {
+  if (ui.isLoading) return;
+
+  if (!isCodeSent.value) {
+    if (!email.value) {
+      return;
+    }
+    emailError.value = "";
+    await SendAuthCodeClick();
+    return;
+  }
+  if (!authCode.value) {
+    return;
+  }
+  await verifyAuthCode();
+};
+
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
 const SendAuthCodeClick = async () => {
-  emailError.value = '';
+  emailError.value = "";
 
   if (!isValidEmail(email.value)) {
-    emailError.value = '올바른 이메일 형식을 입력해주세요';
+    emailError.value = "올바른 이메일 형식을 입력해주세요";
     return;
   }
 
@@ -202,15 +222,15 @@ const SendAuthCodeClick = async () => {
     const response = await sendEmailAuthForSingUp(email.value);
     uuid.value = response.data;
     isCodeSent.value = true;
-    toast('인증코드가 이메일로 전송되었습니다.', 'success');
+    toast("인증코드가 이메일로 전송되었습니다.", "success");
   } catch (error) {
     if (
       error.response &&
       (error.response.status === 409 || error.response.status === 400)
     ) {
-      toast('이미 가입된 이메일입니다.', 'error');
+      toast("이미 가입된 이메일입니다.", "error");
     } else {
-      emailError.value = '인증코드 전송에 실패했습니다. 다시 시도해주세요.';
+      emailError.value = "인증코드 전송에 실패했습니다. 다시 시도해주세요.";
     }
     isCodeSent.value = false;
   } finally {
@@ -220,7 +240,7 @@ const SendAuthCodeClick = async () => {
 
 const verifyAuthCode = async () => {
   if (!authCode.value) {
-    toast('인증코드를 입력해주세요.', 'error');
+    toast("인증코드를 입력해주세요.", "error");
     verifySuccess.value = false;
     return;
   }
@@ -229,21 +249,21 @@ const verifyAuthCode = async () => {
     const response = await verifyEmailAuth(authCode.value, uuid.value.uuid);
 
     if (response.data === true) {
-      toast('이메일 인증이 완료되었습니다.', 'success');
+      toast("이메일 인증이 완료되었습니다.", "success");
       verifySuccess.value = true;
       isEmailVerified.value = true;
     } else {
-      toast('인증코드가 올바르지 않습니다.', 'error');
+      toast("인증코드가 올바르지 않습니다.", "error");
       verifySuccess.value = false;
     }
   } catch (error) {
-    toast('인증 중 오류가 발생했습니다.', 'error');
+    toast("인증 중 오류가 발생했습니다.", "error");
     verifySuccess.value = false;
   }
 };
 const checkIdDuplication = async () => {
   if (!accountId.value) {
-    toast('아이디를 입력해주세요.', 'warning');
+    toast("아이디를 입력해주세요.", "warning");
     return;
   }
 
@@ -253,41 +273,51 @@ const checkIdDuplication = async () => {
     if (res.data === false) {
       idAvailable.value = true;
       isIdConfirmed.value = true;
-      toast('사용 가능한 아이디입니다.', 'success');
+      toast("사용 가능한 아이디입니다.", "success");
     } else {
       idAvailable.value = false;
-      toast('이미 사용 중인 아이디입니다.', 'error');
+      toast("이미 사용 중인 아이디입니다.", "error");
     }
   } catch (err) {
     idAvailable.value = false;
-    toast('중복 확인 중 오류가 발생했습니다.', 'error');
+    toast("중복 확인 중 오류가 발생했습니다.", "error");
   }
 };
+
 const handleSubmit = () => {
   if (idAvailable.value !== true) {
-    toast('아이디 중복 확인을 해주세요.', 'error');
+    toast("아이디 중복 확인을 해주세요.", "error");
     return;
   }
 
   if (password.value !== confirmPassword.value) {
-    toast('비밀번호가 일치하지 않습니다.', 'error');
+    toast("비밀번호가 일치하지 않습니다.", "error");
     return;
   }
-  store.provider = 'LOCAL';
+
+  if (!birthYear.value || !birthMonth.value || !birthDay.value) {
+    toast("생년, 월, 일을 모두 선택해주세요.", "warning");
+    return;
+  }
+
+  if (gender.value !== "MALE" && gender.value !== "FEMALE") {
+    toast("성별을 선택해주세요.", "warning");
+    return;
+  }
+
+  store.provider = "LOCAL";
   store.email = email.value;
   store.name = name.value;
   store.accountId = accountId.value;
   store.password = password.value;
   store.passwordConfirm = confirmPassword.value;
   store.gender = gender.value;
-  store.birth =
-    birthYear.value && birthMonth.value && birthDay.value
-      ? `${birthYear.value}-${String(birthMonth.value).padStart(
-          2,
-          '0'
-        )}-${String(birthDay.value).padStart(2, '0')}`
-      : '';
-  router.push('/signup-survey');
+  store.birth = `${birthYear.value}-${String(birthMonth.value).padStart(
+    2,
+    "0"
+  )}-${String(birthDay.value).padStart(2, "0")}`;
+
+  router.push("/signup-survey");
 };
 </script>
 

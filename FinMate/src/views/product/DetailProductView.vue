@@ -1,7 +1,7 @@
 <template>
   <div class="product-page">
     <TopNavigationBar />
-
+    <ProductDetailController />
     <div class="product-page-container">
       <div class="scrollable-content">
         <div class="product-card-wrapper">
@@ -14,7 +14,7 @@
           />
         </div>
         <div class="divider">&nbsp;</div>
-        <div class="rating-row">
+        <div class="rating-row" id="reviews">
           <h1 class="review-title">상품 리뷰</h1>
           <div class="rating-detail-wrapper">
             <StarRatingWithDetail
@@ -83,7 +83,7 @@ import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
 import FooterComponent from '@/components/allshared/FooterComponent.vue';
 import ProductDetailCardFund from '@/components/product/ProductDetailCardFund.vue';
 import ProductDetailCardDeposit from '@/components/product/ProductDetailCardDeposit.vue';
-import ProductDetailCardSavings from '@/components/product/ProductDetailCardSavings.vue';
+import ProductDetailController from '@/components/product/ProductDetailController.vue';
 import StarRatingWithDetail from '@/components/allshared/star/StarRatingWithDetail.vue';
 import ReviewFilterBar from '@/components/review/ReviewFilterBar.vue';
 import ReviewCard from '@/components/review/ReviewCard.vue';
