@@ -16,17 +16,23 @@
         </div>
       </div>
     </div>
-    <button class="confirm-btn" @click="startRolling">
+    <button class="confirm-btn" @click="handleConfirmClick">
       이제 알을 골라볼게요!
     </button>
   </div>
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
-import arrowIcon from "@/assets/images/icons/arrow_triangle.svg";
+import { ref, nextTick } from 'vue';
+import arrowIcon from '@/assets/images/icons/arrow_triangle.svg';
+import { getCharacter, updateCharacter } from '@/api/mypage/character.js';
 
-const emit = defineEmits(["confirm"]);
+const emit = defineEmits(['confirm']);
+
+const handleConfirmClick = async () => {
+  await updateUserCharacter();
+  await startRolling();
+};
 
 const innerRef = ref(null);
 const selectedIndex = ref(0);
@@ -35,13 +41,13 @@ const offsetX = ref(0);
 let speed = 30;
 let frameId = null;
 
-const images = import.meta.glob("@/assets/images/animals/Gacha_egg/*.png", {
+const images = import.meta.glob('@/assets/images/animals/Gacha_egg/*.png', {
   eager: true,
-  import: "default",
+  import: 'default',
 });
 
 const eggList = Object.keys(images)
-  .filter((path) => !path.includes("egg_family.png"))
+  .filter((path) => !path.includes('egg_family.png'))
   .sort()
   .map((path, index) => ({
     id: index,
@@ -74,7 +80,7 @@ const startRolling = async () => {
       cancelAnimationFrame(frameId);
       isRolling.value = false;
 
-      const eggs = inner.querySelectorAll(".egg");
+      const eggs = inner.querySelectorAll('.egg');
       const wrapperCenter = window.innerWidth / 2;
       let closest = 0;
       let min = Infinity;
@@ -90,7 +96,7 @@ const startRolling = async () => {
       });
 
       selectedIndex.value = closest;
-      emit("confirm", duplicatedEggList[closest]);
+      emit('confirm', duplicatedEggList[closest]);
     } else {
       frameId = requestAnimationFrame(animate);
     }
@@ -98,6 +104,35 @@ const startRolling = async () => {
 
   frameId = requestAnimationFrame(animate);
 };
+
+const animals = [
+  { id: 1, name: '래서판다' },
+  { id: 2, name: '고양이' },
+  { id: 3, name: '펭귄' },
+  { id: 4, name: '해달' },
+  { id: 5, name: '코알라' },
+  { id: 6, name: '하늘다람쥐' },
+  { id: 7, name: '키위새' },
+  { id: 8, name: '사막여우' },
+  { id: 9, name: '팬더' },
+  { id: 10, name: '카피바라' },
+];
+
+async function updateUserCharacter() {
+  try {
+    const data = await getCharacter();
+    const currentCharacter = data.animalId;
+    const candidates = animals.filter(
+      (animal) => animal.id !== currentCharacter
+    );
+    const randomAnimal =
+      candidates[Math.floor(Math.random() * candidates.length)];
+
+    await updateCharacter({ animalId: randomAnimal.id });
+  } catch (error) {
+    console.error('캐릭터 업데이트 중 오류:', error);
+  }
+}
 </script>
 
 <style scoped>

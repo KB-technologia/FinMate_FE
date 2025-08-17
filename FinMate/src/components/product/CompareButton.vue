@@ -14,9 +14,7 @@
               <img
                 :src="getBankLogo(selectedProducts[0].bankName)"
                 :alt="selectedProducts[0].bankName"
-                @error="
-                  (e) => handleImageError(e, selectedProducts[0].bankName)
-                "
+                @error="handleImageError($event, selectedProducts[0].bankName)"
                 class="bank-logo"
               />
             </div>
@@ -40,9 +38,7 @@
               <img
                 :src="getBankLogo(selectedProducts[1].bankName)"
                 :alt="selectedProducts[1].bankName"
-                @error="
-                  (e) => handleImageError(e, selectedProducts[1].bankName)
-                "
+                @error="handleImageError($event, selectedProducts[1].bankName)"
                 class="bank-logo"
               />
             </div>
@@ -76,7 +72,7 @@
             <img
               :src="getBankLogo(selectedProducts[0].bankName)"
               :alt="selectedProducts[0].bankName"
-              @error="(e) => handleImageError(e, selectedProducts[0].bankName)"
+              @error="handleImageError($event, selectedProducts[0].bankName)"
               class="bank-logo small-logo"
             />
           </div>
@@ -94,6 +90,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { getBankLogo, handleImageError } from '../../utils/bank';
 
 const props = defineProps({
   selectedProducts: {
@@ -127,59 +124,6 @@ const compareProducts = async () => {
 const getBankClass = (bankName) => {
   return bankName.replace(/\s+/g, '').toLowerCase();
 };
-
-const getBankLogo = (bankName) => {
-  const bankLogos = {
-    국민은행: '/src/assets/images/banks/kb.png',
-    KB증권: '/src/assets/images/banks/kb.png',
-    케이비자산운용: '/src/assets/images/banks/kb.png',
-
-    신한은행: '/src/assets/images/banks/shinhan.png',
-    신한투자증권: '/src/assets/images/banks/shinhan.png',
-    제주은행: '/src/assets/images/banks/shinhan.png',
-
-    하나은행: '/src/assets/images/banks/hana.png',
-    하나증권: '/src/assets/images/banks/hana.png',
-    하나자산운용: '/src/assets/images/banks/hana.png',
-
-    우리은행: '/src/assets/images/banks/woori.png',
-    우리투자증권: '/src/assets/images/banks/woori.png',
-
-    농협은행: '/src/assets/images/banks/nh.png',
-    NH농협은행: '/src/assets/images/banks/nh.png',
-    NH투자증권: '/src/assets/images/banks/nh.png',
-
-    IBK기업은행: '/src/assets/images/banks/ibk.png',
-    IBK투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이투자증권: '/src/assets/images/banks/ibk.png',
-    아이비케이기업은행: '/src/assets/images/banks/ibk.png',
-
-    카카오뱅크: '/src/assets/images/banks/kakao.png',
-    케이뱅크: '/src/assets/images/banks/kbank.png',
-    SC제일은행: '/src/assets/images/banks/sc.png',
-
-    토스뱅크: '/src/assets/images/banks/toss.png',
-    토스증권: '/src/assets/images/banks/toss.png',
-
-    BNK부산은행: '/src/assets/images/banks/bnk.png',
-    부산은행: '/src/assets/images/banks/bnk.png',
-    iM뱅크: '/src/assets/images/banks/im.png',
-  };
-  return bankLogos[bankName] || '/src/assets/images/banks/default.png';
-};
-
-const handleImageError = (event, bankName) => {
-  const bankIcon = event.target.parentElement;
-  event.target.style.display = 'none';
-  bankIcon.style.backgroundColor = '#f0f0f0';
-  bankIcon.style.color = '#666';
-  bankIcon.style.display = 'flex';
-  bankIcon.style.alignItems = 'center';
-  bankIcon.style.justifyContent = 'center';
-  bankIcon.style.fontSize = '1.2vw';
-  bankIcon.style.fontWeight = 700;
-  bankIcon.textContent = bankName.charAt(0);
-};
 </script>
 
 <style scoped>
@@ -190,7 +134,7 @@ const handleImageError = (event, bankName) => {
   transform: translateX(-50%);
   z-index: 1000;
   width: calc(100% - 4vw);
-  max-width: 46vw;
+  max-width: 58vw;
 }
 
 /* VS 비교 카드 (2개 선택 시) */
@@ -246,8 +190,8 @@ const handleImageError = (event, bankName) => {
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 16px 24px;
   z-index: 2;
+  padding: 1vh 0;
 }
 
 .left-side {
@@ -255,6 +199,8 @@ const handleImageError = (event, bankName) => {
   width: 50%; /* 정확히 반반 */
   color: #ffffff;
   justify-content: flex-start;
+  padding-left: 1vw;
+  padding-right: 1vw;
 }
 
 .right-side {
@@ -263,6 +209,8 @@ const handleImageError = (event, bankName) => {
   color: #000000;
   justify-content: flex-end;
   text-align: right;
+  padding-right: 1vw;
+  padding-left: 1vw;
 }
 
 .product-icon {
@@ -271,13 +219,12 @@ const handleImageError = (event, bankName) => {
 }
 
 .left-side .product-icon {
-  margin-right: 12px;
+  margin-right: 0.5vw;
 }
 
 .right-side .product-icon {
   order: 2;
-  margin-left: 12px;
-  margin-right: 0;
+  margin-left: 0.5vw;
 }
 
 .bank-icon {
@@ -313,22 +260,30 @@ const handleImageError = (event, bankName) => {
   flex: 1;
   z-index: 3;
   min-width: 0;
+  overflow: hidden;
 }
 
 .right-side .product-info {
   order: 1;
   text-align: right;
+  overflow: visible;
+  flex: 1;
+  min-width: 0;
+  max-width: calc(100% - 4vw);
 }
 
 .product-name {
-  font-size: 1rem;
+  font-size: 0.9vw;
   font-weight: 700;
-  margin: 0.1rem 0.6rem 0.1rem 0;
+  margin: 0;
   line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .vs-divider {
@@ -417,6 +372,11 @@ const handleImageError = (event, bankName) => {
   font-size: clamp(12px, 1vw, 16px);
   font-weight: 600;
   color: #333;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .selection-guide {
@@ -427,82 +387,5 @@ const handleImageError = (event, bankName) => {
   margin: 0;
   font-size: clamp(11px, 1vw, 15px);
   color: #666;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
-  .compare-container {
-    bottom: 1vh;
-    width: calc(100% - 2.5vw);
-    max-width: none;
-  }
-
-  .product-compare-section {
-    height: 15vh;
-  }
-
-  .product-side {
-    padding: 1.5vh 2vw;
-  }
-
-  .bank-icon {
-    width: 5vw;
-    height: 5vw;
-    font-size: clamp(16px, 2.3vw, 20px);
-  }
-
-  .product-name {
-    font-size: clamp(14px, 2vw, 18px);
-    max-width: 22vw;
-  }
-
-  .vs-circle {
-    width: 8.5vw;
-    height: 8.5vw;
-  }
-
-  .vs-text {
-    font-size: clamp(14px, 7.5vw, 20px);
-  }
-
-  .compare-btn {
-    font-size: clamp(12px, 1.8vw, 16px);
-    padding: 1.5vh 2.5vw;
-  }
-}
-
-@media (max-width: 480px) {
-  .product-compare-section {
-    height: 13vh;
-  }
-
-  .product-side {
-    padding: 1.2vh 2vw;
-    width: 42%;
-  }
-
-  .product-name {
-    font-size: clamp(12px, 3vw, 16px);
-    max-width: 25vw;
-  }
-
-  .bank-icon {
-    width: 3vw;
-    height: 3vw;
-    font-size: 1vw;
-  }
-
-  .vs-circle {
-    width: 12vw;
-    height: 12vw;
-  }
-
-  .vs-text {
-    font-size: clamp(14px, 3vw, 18px);
-  }
-
-  .compare-button-section {
-    padding: 1.2vh 2vw;
-  }
 }
 </style>

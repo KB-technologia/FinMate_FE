@@ -60,12 +60,14 @@ const emit = defineEmits(["confirm"]);
   width: 10vw;
   height: 10vw;
   margin-bottom: 1rem;
+  transform: translateY(-1rem);
 }
 
 .modal-text {
   white-space: pre-line;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
+
 .modal-text2 {
   white-space: pre-line;
   margin-bottom: 1rem;
@@ -76,25 +78,26 @@ const emit = defineEmits(["confirm"]);
 .modal-buttons {
   width: 100%;
   display: flex;
-  justify-content: space-around;
-  gap: 5rem;
+  justify-content: center;
+  gap: 6rem;
+  margin-top: 1.25rem;
 }
 
 .modal-buttons button {
   width: 12rem;
   height: 4rem;
   padding: 0.6rem 1.2rem;
-  border: none;
   border-radius: 1vh;
-  cursor: pointer;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-black);
   transition: transform 0.2s ease;
+  font-size: 1.2rem;
 }
 
 .modal-buttons button:first-child {
   background-color: var(--color-modal-bg);
   border: 0.3vh solid var(--color-light-gray);
+  border-radius: var(--btn-radius);
 }
 .modal-buttons button:hover {
   background-color: var(--color-light-gray);
@@ -103,7 +106,9 @@ const emit = defineEmits(["confirm"]);
 }
 
 .modal-buttons button:last-child {
-  background-color: var(--color-red);
+  background-color: var(--color-red-alert);
+  border-radius: var(--btn-radius);
+  color: var(--color-white);
 }
 .modal-buttons button:last-child:hover {
   color: var(--color-white);

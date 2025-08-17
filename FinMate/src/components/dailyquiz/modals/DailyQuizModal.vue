@@ -57,6 +57,8 @@ import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceB
 import TalkResultModal from "@/components/dailyquiz/modals/TalkResultModal.vue";
 
 import quizBg from "@/assets/images/backgroundImage/quiz-bg.png";
+import correctKiwi from "@/assets/images/logos/correctkiwi.png";
+import wrongKiwi from "@/assets/images/logos/wrongkiwi.png";
 
 const emit = defineEmits(["close", "exp-updated"]);
 
@@ -99,10 +101,7 @@ async function checkAnswer(userAnswer) {
       showExp.value = true;
       expNumber.value = gainedExp;
       expPercent.value = typeof fillPercent === "number" ? fillPercent : 50;
-      resultMascot.value = new URL(
-        "@/assets/images/logos/correctkiwi.png",
-        import.meta.url
-      ).href;
+      resultMascot.value = correctKiwi;
     } else {
       resultLines.value = [
         "아쉽지만 오답이에요!",
@@ -110,10 +109,7 @@ async function checkAnswer(userAnswer) {
         "\n다음 퀴즈도 기대해 주세요!",
       ];
       showExp.value = false;
-      resultMascot.value = new URL(
-        "@/assets/images/logos/wrongkiwi.png",
-        import.meta.url
-      ).href;
+      resultMascot.value = wrongKiwi;
     }
     showResult.value = true;
   } catch (e) {
@@ -123,11 +119,7 @@ async function checkAnswer(userAnswer) {
       "그래도 오늘의 시도는 기록되었어요. 내일 다시 도전해주세요!",
     ];
     showExp.value = false;
-    resultMascot.value = new URL(
-      "@/assets/images/logos/wrongkiwi.png",
-      import.meta.url
-    ).href;
-    showResult.value = true;
+    resultMascot.value = wrongKiwi;
   } finally {
     try {
       await updateQuizSolved();
