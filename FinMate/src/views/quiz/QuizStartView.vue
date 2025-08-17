@@ -15,9 +15,12 @@
       </div>
 
       <div @click="skipTyping" class="text-container">
-        <div class="typing-text">
-          {{ visibleText }}
-        </div>
+        <TypewriterText
+          ref="twRef"
+          :lines="[fullText]"
+          :speed="60"
+          class="typing-text"
+        />
       </div>
 
       <div class="floating-button-box">
@@ -34,43 +37,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
 import FloatingChoiceButtons from "@/components/dailyquiz/shared/FloatingChoiceButtons.vue";
+import TypewriterText from "@/components/dailyquiz/shared/TypewriterText.vue";
 
 const router = useRouter();
 
 const fullText =
   "트럭에 치인 당신! \n이를 불쌍히 여긴 자연의 신이 당신을 동물로 환생시켜 \n새로운 기회를 주려 합니다.";
 
-const visibleText = ref("");
-const showButton = ref(false);
-let interval = null;
+const twRef = ref(null);
 
 const skipTyping = () => {
-  // 타이핑 중이면 전부 보여주고 버튼 활성화
-  if (visibleText.value !== fullText) {
-    clearInterval(interval);
-    visibleText.value = fullText;
-    showButton.value = true;
-  }
+  twRef.value?.skip();
 };
-
-onMounted(() => {
-  let i = 0;
-  const typingInterval = 50; // 속도 조절
-  interval = setInterval(() => {
-    if (i < fullText.length) {
-      visibleText.value += fullText[i];
-      i++;
-    } else {
-      clearInterval(interval);
-      showButton.value = true;
-    }
-  }, typingInterval);
-});
 
 const handleClick = (type) => {
   if (type === "next") {
