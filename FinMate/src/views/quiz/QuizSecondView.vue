@@ -115,7 +115,7 @@ const handleClick = (type) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_main.png');
+  background-image: url('@/assets/images/backgroundImage/background_forest.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
