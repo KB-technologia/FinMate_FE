@@ -25,22 +25,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
+import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
 
 const router = useRouter();
 
 const fullText =
-  '트럭에 치인 당신!\n이를 불쌍하게 여긴 자연의 신이 당신을 동물로 환생시켜\n새로운 기회를 주려고 합니다.';
+  "트럭에 치인 당신!\n이를 불쌍하게 여긴 자연의 신이 당신을 동물로 환생시켜\n새로운 기회를 주려고 합니다.";
 
-const visibleText = ref('');
+const visibleText = ref("");
 const showButton = ref(false);
 
 const goNext = () => {
-  router.push('/quiz');
+  router.push("/quiz");
 };
 
 onMounted(() => {
@@ -70,13 +69,13 @@ onMounted(() => {
 }
 
 .quiz-view::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_test.png');
+  background-image: url("@/assets/images/backgroundImage/background_test.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

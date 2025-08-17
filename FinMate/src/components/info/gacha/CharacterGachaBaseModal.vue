@@ -219,7 +219,6 @@ onMounted(() => {
   transform: rotate(-2deg);
 }
 
-/* 다음으로/나가기 선택 버튼 styles */
 .floating-button-box {
   position: absolute;
   top: 1rem;
