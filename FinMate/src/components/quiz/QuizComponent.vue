@@ -51,29 +51,28 @@
             </transition>
           </li>
         </ul>
+        <div class="quiz-navigation">
+          <button
+            class="nav-button"
+            @click="prevQuestion"
+            :disabled="currentIndex === 0"
+          >
+            ◀ 이전
+          </button>
+          <span>{{ currentIndex + 1 }} / {{ quizData.length }}</span>
+          <button
+            class="nav-button"
+            @click="nextQuestion"
+            :disabled="
+              currentIndex === quizData.length - 1 ||
+              selectedAnswers[currentIndex] === null
+            "
+          >
+            다음 ▶
+          </button>
+        </div>
       </div>
     </transition>
-
-    <div class="quiz-navigation">
-      <button
-        class="nav-button"
-        @click="prevQuestion"
-        :disabled="currentIndex === 0"
-      >
-        ◀ 이전
-      </button>
-      <span>{{ currentIndex + 1 }} / {{ quizData.length }}</span>
-      <button
-        class="nav-button"
-        @click="nextQuestion"
-        :disabled="
-          currentIndex === quizData.length - 1 ||
-          selectedAnswers[currentIndex] === null
-        "
-      >
-        다음 ▶
-      </button>
-    </div>
 
     <div class="submit-container">
       <button class="submit-button" :disabled="!isComplete" @click="onSubmit">
@@ -181,6 +180,10 @@ const handleOptionSelect = () => {
 .survey-card {
   /* background-color: var(--color-test-color); */
   background-color: rgba(255, 255, 255, 0.9);
+  margin-top: 0;
+  margin-bottom: 0vh;
+  padding: 0;
+  height: 50vh;
 }
 
 .survey-card.show-extra {
@@ -233,7 +236,8 @@ const handleOptionSelect = () => {
 
 .base-option {
   font-size: 1rem;
-  color: var(--color-light-gray);
+  /* color: var(--color-light-gray); */
+  color: black;
   margin-left: 1rem;
   white-space: nowrap;
 }
@@ -243,8 +247,12 @@ const handleOptionSelect = () => {
   justify-content: space-between;
   align-items: center;
   padding: 5vh;
+  padding-top: 0vh;
+  padding-bottom: 0vh;
+  margin: 0;
 }
 .nav-button {
+  /* background-color: var(--color-primary-green); */
   background-color: var(--color-primary-green);
   color: white;
   border: none;
@@ -277,6 +285,7 @@ const handleOptionSelect = () => {
   font-size: 1rem;
   border-radius: 3.5vh;
   transition: all 0.2s ease;
+  width: 30vh;
 }
 .submit-button:disabled {
   background-color: var(--color-light-gray);
