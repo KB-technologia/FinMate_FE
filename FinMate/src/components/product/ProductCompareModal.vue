@@ -828,10 +828,12 @@ const getRiskLevel = (level) => {
 .character-area {
   flex-shrink: 0;
   display: flex;
-  align-content: flex-end;
+  align-items: flex-start;
   justify-content: center;
-  padding-top: 23rem;
-  padding-left: 1vw;
+  width: 8vw;
+  padding-top: 20vh;
+  padding-left: 0.5vw;
+  padding-bottom: 2vh;
   height: 100%;
 }
 
@@ -842,6 +844,7 @@ const getRiskLevel = (level) => {
 .character-icon {
   width: 7vw;
   height: 7vw;
+  object-fit: contain;
 }
 
 .chat-messages {
@@ -850,6 +853,7 @@ const getRiskLevel = (level) => {
   flex-direction: column;
   gap: 1vh;
   min-width: 0;
+  justify-content: flex-start;
 }
 
 .chat-bubble {
@@ -923,7 +927,8 @@ const getRiskLevel = (level) => {
   /* gap: 1vw; */
   width: 100%;
   align-items: flex-start;
-  min-height: 15vh;
+  min-height: 20vh;
+  position: relative;
 }
 
 .close-button {
