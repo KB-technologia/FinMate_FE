@@ -61,16 +61,12 @@
       </div>
     </div>
 
-    <div
-      v-if="product.aiExplanation"
-      class="character-message-wrapper"
-      id="character-message"
-    >
+    <div v-if="product.aiExplanation" class="character-message-wrapper">
       <!-- 캐릭터 이미지 -->
       <img
         src="@/assets/images/animals/kiwibird.png"
         alt="AI 캐릭터"
-        class="character-img"
+        class="character-img avatar-bounce"
       />
 
       <!-- 말풍선 -->
@@ -721,8 +717,51 @@ const infoItems = computed(() => {
   width: 80px;
   height: 80px;
   object-fit: contain;
+  /* 튀는 느낌 제어용 변수 */
+  --bounce-amp: 14px; /* 튀는 높이 */
+  --bounce-duration: 1.6s; /* 한 사이클 시간 */
+  transform-origin: 50% 100%; /* 바닥을 기준으로 찌그러짐 */
+  animation: bounce var(--bounce-duration) cubic-bezier(0.34, 1.56, 0.64, 1)
+    infinite;
+  will-change: transform;
 }
 
+/* 통통 튀는 모션 (스쿼시&스트레치 포함) */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  20% {
+    transform: translateY(calc(-1 * var(--bounce-amp))) scale(0.98, 1.02); /* 공중에서 살짝 늘어남 */
+  }
+  40% {
+    transform: translateY(0) scale(1.06, 0.94); /* 바닥 착지: 납작+반동 */
+  }
+  55% {
+    transform: translateY(calc(-0.5 * var(--bounce-amp))) scale(0.99, 1.01);
+  }
+  70% {
+    transform: translateY(0) scale(1.03, 0.97);
+  }
+}
+
+/* 약하게/강하게 버전 (원하면 클래스만 추가) */
+.avatar-bounce--soft {
+  --bounce-amp: 9px;
+  --bounce-duration: 1.8s;
+}
+.avatar-bounce--hard {
+  --bounce-amp: 18px;
+  --bounce-duration: 1.3s;
+}
+
+/* 접근성: 움직임 최소화 환경 */
+@media (prefers-reduced-motion: reduce) {
+  .avatar-bounce {
+    animation: none;
+  }
+}
 .speech-bubble {
   position: relative;
   background: var(--color-white);
@@ -735,14 +774,25 @@ const infoItems = computed(() => {
 }
 
 /* 말풍선 꼬리 */
+/* 꼬리 테두리(바깥) */
 .speech-bubble::before {
   content: '';
   position: absolute;
-  top: 20px; /* 꼬리 위치 조정 */
-  left: -15px; /* 캐릭터 쪽으로 꼬리 빼내기 */
+  top: 20px;
+  left: -17px; /* 바깥 삼각형이 더 크니 조금 더 왼쪽 */
+  border-width: 11px 16px 11px 0; /* 바깥이 한 사이즈 큼 */
+  border-style: solid;
+  border-color: transparent var(--color-light-gray) transparent transparent;
+}
+
+/* 꼬리 배경(안쪽) */
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: -15px; /* 안쪽이 살짝 덮도록 */
   border-width: 10px 15px 10px 0;
   border-style: solid;
   border-color: transparent var(--color-white) transparent transparent;
-  filter: drop-shadow(-1px 1px 1px rgba(0, 0, 0, 0.1));
 }
 </style>
