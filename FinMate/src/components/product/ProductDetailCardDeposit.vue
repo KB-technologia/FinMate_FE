@@ -47,7 +47,26 @@
         <div class="rate-sub">우대 금리 포함</div>
       </div>
     </div>
+
+    <div
+      v-if="product.aiExplanation"
+      class="character-message-wrapper"
+      id="character-message"
+    >
+      <!-- 캐릭터 이미지 -->
+      <img
+        src="@/assets/images/animals/kiwibird.png"
+        alt="AI 캐릭터"
+        class="character-img"
+      />
+
+      <!-- 말풍선 -->
+      <div class="speech-bubble">
+        {{ product.aiExplanation }}
+      </div>
+    </div>
   </div>
+
   <div class="info-card info-grid" id="details">
     <!-- 태그 -->
     <div v-if="tags.length" class="pill-list">
@@ -680,5 +699,42 @@ const infoItems = computed(() => {
   background: #f8fafc;
   border-color: #e2e8f0;
   color: #334155;
+}
+
+.character-message-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem; /* 캐릭터와 말풍선 간격 */
+  max-width: 62.5rem;
+  margin: 1rem auto;
+}
+
+.character-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.speech-bubble {
+  position: relative;
+  background: var(--color-white);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem 2rem;
+  max-width: 100%;
+  line-height: 1.5;
+}
+
+/* 말풍선 꼬리 */
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  top: 20px; /* 꼬리 위치 조정 */
+  left: -15px; /* 캐릭터 쪽으로 꼬리 빼내기 */
+  border-width: 10px 15px 10px 0;
+  border-style: solid;
+  border-color: transparent var(--color-white) transparent transparent;
+  filter: drop-shadow(-1px 1px 1px rgba(0, 0, 0, 0.1));
 }
 </style>
