@@ -755,10 +755,24 @@ const parseMarkdown = (text) => {
 const getChatMessages = (text) => {
   if (!text) return [];
 
-  // \n\n으로 먼저 나누고, 빈 문자열 제거
   return text
     .split('\n\n')
     .map((msg) => msg.trim())
+    .filter((msg) => {
+      if (msg.length === 0) return false;
+
+      if (/^-{3,}$/.test(msg)) return false;
+
+      if (/^[\n\r\s]*$/.test(msg)) return false;
+
+      return true;
+    })
+    .map((msg) => {
+      return msg
+        .replace(/\n{3,}/g, '\n\n')
+        .replace(/^\n+|\n+$/g, '')
+        .trim();
+    })
     .filter((msg) => msg.length > 0);
 };
 
@@ -851,15 +865,16 @@ const getRiskLevel = (level) => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1vh;
+  gap: 2vh;
   min-width: 0;
   justify-content: flex-start;
 }
 
 .chat-bubble {
-  background: #e3f2fd;
+  background: #f0f8ff;
   border-radius: 1.2vw;
   padding: 1vh 1.2vw;
+  margin-bottom: 0.7vh;
   position: relative;
   max-width: 100%;
   word-wrap: break-word;
@@ -881,7 +896,7 @@ const getRiskLevel = (level) => {
   height: 0;
   border-top: 0.7vw solid transparent;
   border-bottom: 0.7vw solid transparent;
-  border-right: 0.7vw solid #e3f2fd;
+  border-right: 0.7vw solid #f0f8ff;
 }
 
 .message-content {
@@ -892,13 +907,8 @@ const getRiskLevel = (level) => {
   color: #333;
   margin: 0;
 }
-
-.message-content p {
-  margin: 0 0 0.5vh 0;
-}
-
-.message-content p:last-child {
-  margin-bottom: 0;
+.message-content * {
+  margin: 0;
 }
 
 .message-content strong {
@@ -924,7 +934,6 @@ const getRiskLevel = (level) => {
 
 .analysis-result-container {
   display: flex;
-  /* gap: 1vw; */
   width: 100%;
   align-items: flex-start;
   min-height: 20vh;
