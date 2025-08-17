@@ -223,4 +223,10 @@ const handleClick = (type) => {
   width: 1.2rem;
   height: 1.2rem;
 }
+
+.floating-button-box :deep(.floating-btn) {
+  --fcb-font-size: 1.05rem;
+  --fcb-gap: 0.8rem;
+  --fcb-icon-size: 1.2rem;
+}
 </style>
