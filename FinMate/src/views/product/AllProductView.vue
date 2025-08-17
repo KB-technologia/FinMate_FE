@@ -337,7 +337,7 @@ const getToastTypeByRisk = (riskGrade) => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.3;
+  opacity: 0.4;
   z-index: -1;
 }
 

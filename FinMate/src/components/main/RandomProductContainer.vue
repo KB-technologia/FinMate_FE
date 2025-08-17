@@ -200,8 +200,8 @@ const next = () => {
 .foodstuffs {
   background: url('@/assets/images/etc/soil.png') no-repeat center;
   background-size: 100% 100%;
-  width: 200vh;
-  height: 75vh;
+  width: 250vh;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   font-family: var(--font-wanted);
