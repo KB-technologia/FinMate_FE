@@ -2,7 +2,11 @@
   <div class="signup-wrapper">
     <h2>아이디 찾기</h2>
 
-    <div v-if="!isEmailVerified" class="form-section">
+    <form
+      v-if="!isEmailVerified"
+      class="form-section"
+      @submit.prevent="handleFindIdSubmit"
+    >
       <div class="field">
         <label>이메일</label>
         <div class="input-group">
@@ -13,11 +17,11 @@
             :disabled="isCodeSent"
           />
           <button
+            :type="isCodeSent ? 'button' : 'submit'"
             class="action-btn"
-            @click="sendAuthCode"
             :disabled="!email || isCodeSent"
           >
-            {{ isCodeSent ? '전송완료' : '인증' }}
+            {{ isCodeSent ? "전송완료" : "인증" }}
           </button>
         </div>
         <div v-if="emailError" class="error">{{ emailError }}</div>
@@ -27,10 +31,10 @@
         <label>인증코드</label>
         <div class="input-group">
           <input v-model="authCode" placeholder="인증코드 입력" maxlength="6" />
-          <button class="action-btn" @click="verifyAuthCode">확인</button>
+          <button type="submit" class="action-btn">확인</button>
         </div>
       </div>
-    </div>
+    </form>
 
     <div v-else class="form-section">
       <div class="result-section">
@@ -62,33 +66,47 @@
 </template>
 
 <script setup>
-import LoadingOverlay from '@/components/allshared/LoadingOverlay.vue';
-import { ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import LoadingOverlay from "@/components/allshared/LoadingOverlay.vue";
+import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
 import {
   sendEmailAuth,
   verifyEmailAuth,
   findAccountIdByUuid,
-} from '@/api/auth/auth';
-import { useToast } from '@/composables/useToast';
+} from "@/api/auth/auth";
+import { useToast } from "@/composables/useToast";
 
 const { toast } = useToast();
 const router = useRouter();
 
-const email = ref('');
-const authCode = ref('');
-const uuid = ref('');
-const foundName = ref('');
-const foundAccountId = ref('');
-const joinDate = ref('');
+const email = ref("");
+const authCode = ref("");
+const uuid = ref("");
+const foundName = ref("");
+const foundAccountId = ref("");
+const joinDate = ref("");
 
 const isCodeSent = ref(false);
 const isEmailVerified = ref(false);
-const emailError = ref('');
+const emailError = ref("");
 
 const ui = reactive({
   isLoading: false,
 });
+
+const handleFindIdSubmit = async () => {
+  if (ui.isLoading) return;
+
+  if (!isCodeSent.value) {
+    if (!email.value) return;
+    emailError.value = "";
+    await sendAuthCode();
+    return;
+  }
+
+  if (!authCode.value) return;
+  await verifyAuthCode();
+};
 
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -96,10 +114,10 @@ const isValidEmail = (email) => {
 };
 
 const sendAuthCode = async () => {
-  emailError.value = '';
+  emailError.value = "";
 
   if (!isValidEmail(email.value)) {
-    emailError.value = '올바른 이메일 형식을 입력해주세요';
+    emailError.value = "올바른 이메일 형식을 입력해주세요";
     return;
   }
 
@@ -108,15 +126,15 @@ const sendAuthCode = async () => {
     const response = await sendEmailAuth(email.value);
     uuid.value = response.data.uuid;
     isCodeSent.value = true;
-    toast('인증코드가 이메일로 전송되었습니다.', 'success');
+    toast("인증코드가 이메일로 전송되었습니다.", "success");
   } catch (error) {
     if (
       error.response &&
       (error.response.status === 500 || error.response.status === 400)
     ) {
-      toast('해당 이메일로 가입된 계정이 없습니다.', 'error');
+      toast("해당 이메일로 가입된 계정이 없습니다.", "error");
     } else {
-      emailError.value = '인증코드 전송에 실패했습니다. 다시 시도해주세요.';
+      emailError.value = "인증코드 전송에 실패했습니다. 다시 시도해주세요.";
     }
     isCodeSent.value = false;
   } finally {
@@ -126,7 +144,7 @@ const sendAuthCode = async () => {
 
 const verifyAuthCode = async () => {
   if (!authCode.value) {
-    toast('인증코드를 입력해주세요.', 'error');
+    toast("인증코드를 입력해주세요.", "error");
     return;
   }
 
@@ -134,13 +152,13 @@ const verifyAuthCode = async () => {
     ui.isLoading = true;
     const response = await verifyEmailAuth(authCode.value, uuid.value);
     if (response.data === true) {
-      toast('이메일 인증이 완료되었습니다.', 'success');
+      toast("이메일 인증이 완료되었습니다.", "success");
       await findUserAccountId();
     } else {
-      toast('인증코드가 올바르지 않습니다.', 'error');
+      toast("인증코드가 올바르지 않습니다.", "error");
     }
   } catch (error) {
-    toast('인증 중 오류가 발생했습니다.', 'error');
+    toast("인증 중 오류가 발생했습니다.", "error");
   } finally {
     ui.isLoading = false;
   }
@@ -152,24 +170,24 @@ const findUserAccountId = async () => {
     const response = await findAccountIdByUuid(uuid.value);
     foundName.value = response.name;
     foundAccountId.value = response.accountId;
-    joinDate.value = response.joinDate || '정보 없음';
+    joinDate.value = response.joinDate || "정보 없음";
     isEmailVerified.value = true;
 
-    toast('아이디를 찾았습니다!', 'success');
+    toast("아이디를 찾았습니다!", "success");
   } catch (error) {
-    toast('해당 이메일로 가입된 계정을 찾을 수 없습니다.', 'error');
-    console.error('Find account ID error:', error);
+    toast("해당 이메일로 가입된 계정을 찾을 수 없습니다.", "error");
+    console.error("Find account ID error:", error);
   } finally {
     ui.isLoading = false;
   }
 };
 
 const goToLogin = () => {
-  router.push('/login');
+  router.push("/login");
 };
 
 const goToFindPassword = () => {
-  router.push('/reset-pw');
+  router.push("/reset-pw");
 };
 </script>
 

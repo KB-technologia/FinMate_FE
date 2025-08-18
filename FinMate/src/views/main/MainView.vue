@@ -39,7 +39,6 @@ import { useAuthStore } from '@/stores/auth/auth';
 import AttendanceCheckModal from '@/components/allshared/AttendanceCheckModal.vue';
 
 import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
-import RealTimeInfoBar from '../../components/main/RealTimeInfoBar.vue';
 import ShowStatsContainer from '../../components/main/ShowStatsContainer.vue';
 import ProfileContainer from '../../components/main/ProfileContainer.vue';
 import RandomProductContainer from '../../components/main/RandomProductContainer.vue';
@@ -88,7 +87,7 @@ const closeModal = () => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.3;
+  opacity: 0.4;
   z-index: -1;
 }
 
@@ -126,6 +125,7 @@ const closeModal = () => {
   width: 100vw;
   justify-content: center;
   margin-top: 1vh;
+  align-items: center;
 }
 
 .main-view-footer {

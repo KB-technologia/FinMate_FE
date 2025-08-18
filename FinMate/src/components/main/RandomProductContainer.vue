@@ -3,13 +3,25 @@
     <div v-if="isLoading" class="spinner-wrapper">
       <div class="loader"></div>
     </div>
-    <div v-else>
-      <div v-if="!random && products.length > 0" class="Product-Text">
-        사용자 맞춤 추천 상품
+    <div v-else class="not-spinner">
+      <div v-if="!random && products.length > 0" class="Product-Text-title">
+        <p class="title-text">
+          <span class="name">{{ userName }}</span> 님의 추천 상품
+        </p>
       </div>
-      <div v-if="random && products.length > 0" class="Product-Text">
-        랜덤 추천 상품
+      <div v-if="random && products.length > 0" class="Product-Text-title">
+        <p class="title-text">금융 상품 미리보기</p>
       </div>
+
+      <div class="button-wrapper" v-if="products.length > 0">
+        <button class="detail-button" v-if="!random" @click="goToProducts">
+          <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
+        </button>
+        <button class="detail-button" v-if="random" @click="goToTest">
+          <PackageSearch class="icon-large" /> 설문 하러 가기
+        </button>
+      </div>
+
       <div v-if="isLoggedIn && products.length == 0" class="Product-Text"></div>
       <div class="foodstuffs">
         <img
@@ -51,14 +63,6 @@
             ▶
           </div>
         </div>
-
-        <button
-          class="detail-button"
-          @click="goToProducts"
-          v-if="products.length > 0"
-        >
-          <PackageSearch class="icon-large" /> 나의 추천 아이템 보러 가기
-        </button>
       </div>
     </div>
   </div>
@@ -81,7 +85,10 @@ const isLoggedIn = computed(() => authStore.isLoggedIn);
 const random = ref(false);
 const products = ref([]);
 const isLoading = ref(true);
+const userName = ref('');
 onMounted(async () => {
+  userName.value = localStorage.getItem('username');
+  localStorage.setItem('username', userName.value);
   try {
     isLoading.value = true;
     if (isLoggedIn.value) {
@@ -111,6 +118,9 @@ const goToProducts = () => {
   router.push('/products');
 };
 
+const goToTest = () => {
+  router.push('/quizstart');
+};
 const currentIndex = ref(0);
 
 const visibleProducts = computed(() =>
@@ -131,6 +141,7 @@ const next = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+
   margin-bottom: 1vh;
   gap: 10vh;
 }
@@ -146,7 +157,7 @@ const next = () => {
 
 .Product-Container {
   width: 200vh;
-  height: 75vh;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   font-family: var(--font-wanted);
@@ -154,18 +165,43 @@ const next = () => {
 }
 
 .Product-Text {
-  margin-top: 2vh;
   color: var(--color-black);
   font-weight: var(--font-weight-bold);
-  font-size: 3rem;
+  font-size: 2.5rem;
   text-align: center;
+  height: 30vh;
+}
+
+.Product-Text-title {
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
+  font-size: 2rem;
+  text-align: center;
+  display: flex;
+  background-image: url('@/assets/images/backgroundImage/title-text.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 40vw;
+  height: 20vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.name {
+  color: var(--color-white);
+  font-size: 2.5rem;
+}
+
+.title-text {
+  margin-top: 2vh;
 }
 
 .foodstuffs {
   background: url('@/assets/images/etc/soil.png') no-repeat center;
   background-size: 100% 100%;
-  width: 200vh;
-  height: 75vh;
+  width: 250vh;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   font-family: var(--font-wanted);
@@ -185,31 +221,41 @@ const next = () => {
   transform: scale(1.1);
 }
 
+.button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .detail-button {
   width: 15vw;
   height: 5vh;
-  border-radius: 2vh;
+  border-radius: 3.5vh;
   border: 0.2vh solid var(--color-light-gray);
   color: var(--color-black);
   background-color: var(--color-white);
   font-weight: var(--font-weight-medium);
   transition: all 0.1s ease;
   margin-top: 3.5vh;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 .detail-button:hover {
-  background-color: var(--color-black);
-  border: 0.2vh solid var(--color-black);
+  background: var(--btn-gradient);
+  border: 0.2vh solid var(--btn-gradient);
   color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 0.2vh 0.3vw var(--color-black);
+  box-shadow: 0 0.2vh 0.3vw var(--color-light-gray);
   transform: translateY(-0.5vh);
+  opacity: 1;
+  background-clip: padding-box;
 }
 
 .icon-large {
   width: 2vw;
   height: 2vh;
-  margin-right: 0.3rem;
 }
 
 .arrow-button {
@@ -232,8 +278,17 @@ const next = () => {
   width: 100%;
   height: 60vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.not-spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .loader {

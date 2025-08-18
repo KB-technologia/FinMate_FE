@@ -11,6 +11,7 @@
     label {
       background: none;
       border: 0.5vh solid var(--color-light-gray);
+      border: 0.5vh solid white;
       height: 40px;
       width: 80px;
       display: inline-block;
@@ -22,7 +23,8 @@
       &:after {
         content: '';
         position: absolute;
-        background: var(--color-light-gray);
+        // background: var(--color-light-gray);
+        background: white;
         top: 3px;
         left: 4px;
         width: 25px;

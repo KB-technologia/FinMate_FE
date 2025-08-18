@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-card">
+  <div class="chart-card" id="chart">
     <div class="chart-header">
       <h3 class="chart-title">{{ title }}</h3>
       <span class="legend-pill">{{ unitLabel }}</span>
