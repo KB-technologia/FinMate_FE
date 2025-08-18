@@ -35,9 +35,9 @@
 
       <p class="level-text">
         <template v-if="!isLoadinglevel">
-          <span v-if="hasMemberLevel">Lv.{{ memberLevel }}</span>
-          &nbsp;<span v-if="hasMemberLevel">{{ summary }}</span> &nbsp;<span
-            v-if="animalName"
+          <span v-if="showLevel">Lv.{{ memberLevel }}</span>
+          &nbsp;<span v-if="showLevel">{{ summary }}</span> &nbsp;<span
+            v-if="showLevel && animalName"
             >{{ animalName }}</span
           >
         </template>
@@ -46,10 +46,11 @@
         </template>
       </p>
 
-      <div v-if="hasMemberLevel" class="xp-bar">
+      <div v-if="showLevel" class="xp-bar">
         <div class="xp-fill" :style="{ width: fillPercentage + '%' }"></div>
         <span class="xp-text">{{ levelexp }}/{{ maxXp }}</span>
       </div>
+
       <div v-else></div>
     </div>
 
@@ -159,6 +160,10 @@ const closeDailyQuiz = () => {
 const hasMemberLevel = computed(
   () => memberLevel.value !== null && memberLevel.value !== undefined
 );
+
+const hasCharacter = computed(() => !!animalName.value || !!animalImage.value);
+
+const showLevel = computed(() => hasMemberLevel.value && hasCharacter.value);
 
 function handleLoginClick() {
   if (!isLoggedIn.value) {

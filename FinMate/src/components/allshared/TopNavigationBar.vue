@@ -43,10 +43,10 @@
 </template>
 
 <script setup>
-import '@/styles/fonts.css';
-import { CircleUserRound, PackageSearch, Heart } from 'lucide-vue-next';
-import { useRoute } from 'vue-router';
-import Tooltip from '@/components/allshared/Tooltip.vue';
+import "@/styles/fonts.css";
+import { CircleUserRound, PackageSearch, Heart } from "lucide-vue-next";
+import { useRoute } from "vue-router";
+import Tooltip from "@/components/allshared/Tooltip.vue";
 
 const route = useRoute();
 </script>
@@ -65,6 +65,7 @@ const route = useRoute();
   font-weight: var(--font-weight-bold);
   margin-top: 1vh;
   margin-bottom: 1vh;
+  z-index: 1000;
 }
 
 .top-navigation-bar-logo-container {
