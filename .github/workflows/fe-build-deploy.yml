@@ -26,6 +26,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: FinMate/package-lock.json
 
+      - name: Upgrade npm (fix optional deps issue)
+        run: npm i -g npm@11.3.0
+        
       - name: Install & Build
         env:
           VITE_BASE_API_URL: ${{ secrets.VITE_BASE_API_URL }}
