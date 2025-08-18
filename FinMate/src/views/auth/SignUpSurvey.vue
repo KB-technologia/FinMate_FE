@@ -38,7 +38,7 @@ import SurveyComponent from '@/components/auth/SurveyComponent.vue';
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.3;
+  /* opacity: 0.3; */
   z-index: -1;
 }
 

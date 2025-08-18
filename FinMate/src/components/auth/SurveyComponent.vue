@@ -114,23 +114,21 @@ onMounted(() => {
             </label>
           </li>
         </ul>
+        <!-- 이전/다음 버튼 -->
+        <div class="survey-navigation">
+          <button @click="prevQuestion" :disabled="currentIndex === 0">
+            ◀ 이전
+          </button>
+          <span>{{ currentIndex + 1 }} / {{ surveyData.length }}</span>
+          <button
+            @click="nextQuestion"
+            :disabled="currentIndex === surveyData.length - 1"
+          >
+            다음 ▶
+          </button>
+        </div>
       </div>
     </transition>
-
-    <!-- 이전/다음 버튼 -->
-    <div class="survey-navigation">
-      <button @click="prevQuestion" :disabled="currentIndex === 0">
-        ◀ 이전
-      </button>
-      <span>{{ currentIndex + 1 }} / {{ surveyData.length }}</span>
-      <button
-        @click="nextQuestion"
-        :disabled="currentIndex === surveyData.length - 1"
-      >
-        다음 ▶
-      </button>
-    </div>
-
     <!-- 제출 버튼 -->
     <div class="submit-container">
       <button
@@ -195,6 +193,9 @@ onMounted(() => {
   font-weight: bold;
   margin-bottom: 1rem;
 }
+.survey-card {
+  background-color: rgba(255, 255, 255, 0.8);
+}
 
 /* 선택지 */
 .survey-options li {
@@ -240,7 +241,10 @@ onMounted(() => {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 2vh;
+  padding: 5vh;
+  padding-top: 0vh;
+  padding-bottom: 0vh;
+  margin: 0;
 }
 .survey-navigation button {
   background-color: var(--color-primary-green);

@@ -57,6 +57,7 @@ button {
 
 /* 설문지 카드 */
 .survey-card {
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   width: 70vw;
@@ -67,4 +68,8 @@ button {
   display: flex;
   flex-direction: column;
   border: 0.2vh solid var(--color-light-gray);
+  margin-top: 0;
+  margin-bottom: 0vh;
+  padding: 0;
+  height: 50vh;
 }
