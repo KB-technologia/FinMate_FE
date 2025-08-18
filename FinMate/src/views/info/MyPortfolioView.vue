@@ -14,9 +14,7 @@ async function fetchPortfolio() {
   try {
     const res = await getPortfolio();
     portfolio.value = res.data;
-    console.log("포트폴리오 로딩 성공");
   } catch (e) {
-    console.error("포트폴리오 로딩 실패", e);
     portfolio.value = null;
   }
 }

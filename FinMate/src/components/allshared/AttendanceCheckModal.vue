@@ -35,10 +35,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { postAttendance } from '@/api/main/main.js';
-import { useAuthStore } from '@/stores/auth/auth';
-import { useToast } from '@/composables/useToast';
+import { ref } from "vue";
+import { postAttendance } from "@/api/main/main.js";
+import { useAuthStore } from "@/stores/auth/auth";
+import { useToast } from "@/composables/useToast";
 
 const props = defineProps({
   userName: String,
@@ -49,22 +49,25 @@ const currentAttendance = ref(props.attendanceDays);
 const authStore = useAuthStore();
 const { toast } = useToast();
 
-const handleAttendance = async () => {
-  try {
-    if (authStore.isFirst == false) {
-      toast('오늘 이미 출석했어요!', 'warning');
-      return;
-    }
-    const result = await postAttendance();
-    console.log('✅ 출석 성공:', result);
+const isSubmitting = ref(false);
 
-    if (result === 200) {
-      console.log('🎯 조건 통과!');
+const handleAttendance = async () => {
+  if (authStore.isFirst === false) {
+    toast("오늘 이미 출석했어요!", "warning");
+    return;
+  }
+
+  try {
+    const status = await postAttendance();
+    if (status === 200) {
       currentAttendance.value++;
       authStore.isFirst = false;
+      toast("출석 완료! 내일도 만나요!", "success");
+    } else {
+      toast("출석 처리에 문제가 발생했어요.", "warning");
     }
-  } catch (error) {
-    console.error('❌ 출석 실패:', error);
+  } catch (e) {
+    toast(e?.message || "출석에 실패했어요.", "warning");
   }
 };
 </script>

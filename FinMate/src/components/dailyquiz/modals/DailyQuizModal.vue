@@ -45,6 +45,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useToast } from "@/composables/useToast";
 import { updateUserData } from "@/api/mypage/level.js";
 import { updateQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
 import { getDailyQuiz, getAnswerDailyQuiz } from "@/api/dailyquiz/dailyQuiz.js";
@@ -59,6 +60,8 @@ import TalkResultModal from "@/components/dailyquiz/modals/TalkResultModal.vue";
 import quizBg from "@/assets/images/backgroundImage/quiz-bg.png";
 import correctKiwi from "@/assets/images/logos/correctkiwi.png";
 import wrongKiwi from "@/assets/images/logos/wrongkiwi.png";
+
+const { toast } = useToast();
 
 const emit = defineEmits(["close", "exp-updated"]);
 
@@ -77,7 +80,7 @@ onMounted(async () => {
     const res = await getDailyQuiz();
     quiz.value = res.data;
   } catch (e) {
-    console.error("퀴즈 가져오기 실패", e);
+    toast("퀴즈를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.", "warning");
   }
 });
 
@@ -95,7 +98,10 @@ async function checkAnswer(userAnswer) {
         const levelRes = await updateUserData({ exp: gainedExp });
         emit("exp-updated", levelRes.data);
       } catch (e) {
-        console.warn("경험치 반영 실패:", e);
+        toast(
+          "경험치를 반영하지 못했어요. 잠시 후 다시 시도해 주세요.",
+          "warning"
+        );
       }
       resultLines.value = ["정답입니다!\n", message || ""];
       showExp.value = true;
@@ -113,7 +119,7 @@ async function checkAnswer(userAnswer) {
     }
     showResult.value = true;
   } catch (e) {
-    console.error("정답 확인 실패", e);
+    toast("정답 확인이 불가능합니다. 잠시 후 다시 시도해 주세요.", "warning");
     resultLines.value = [
       "앗, 결과를 확인하지 못했어요.",
       "그래도 오늘의 시도는 기록되었어요. 내일 다시 도전해주세요!",
@@ -124,7 +130,10 @@ async function checkAnswer(userAnswer) {
     try {
       await updateQuizSolved();
     } catch (e) {
-      console.warn("퀴즈 완료 처리 실패:", e);
+      toast(
+        "퀴즈 완료 처리에 실패했어요.\n 잠시 후 다시 시도해 주세요.",
+        "warning"
+      );
     }
     // 클라이언트 가드도 같이 저장 (오프라인 대비)
     try {

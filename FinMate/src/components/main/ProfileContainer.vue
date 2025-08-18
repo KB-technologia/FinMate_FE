@@ -34,17 +34,19 @@
       </div>
 
       <p class="level-text">
-        <template v-if="!isLoading">
-          <span v-if="memberLevel">Lv.{{ memberLevel }}</span
-          >&nbsp; <span v-if="memberLevel">{{ summary }}</span
-          >&nbsp;<span v-if="memberLevel">{{ animalName }}</span>
+        <template v-if="!isLoadinglevel">
+          <span v-if="hasMemberLevel">Lv.{{ memberLevel }}</span>
+          &nbsp;<span v-if="hasMemberLevel">{{ summary }}</span> &nbsp;<span
+            v-if="animalName"
+            >{{ animalName }}</span
+          >
         </template>
         <template v-else>
           <div class="skeleton-text long"></div>
         </template>
       </p>
 
-      <div v-if="memberLevel" class="xp-bar">
+      <div v-if="hasMemberLevel" class="xp-bar">
         <div class="xp-fill" :style="{ width: fillPercentage + '%' }"></div>
         <span class="xp-text">{{ levelexp }}/{{ maxXp }}</span>
       </div>
@@ -99,22 +101,22 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth/auth';
-import { ref, computed, onMounted } from 'vue';
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth/auth";
+import { ref, computed, onMounted } from "vue";
 
-import { useToast } from '@/composables/useToast';
-import DailyQuizModal from '@/components/dailyquiz/modals/DailyQuizModal.vue';
-import ConfirmModal from '@/components/allshared/ConfirmModal.vue';
-import logoutImage from '@/assets/images/logos/logoutkiwi.png';
-import { getMemberLevel } from '@/api/main/main.js';
-import { getMemberCharacter } from '@/api/info/userStatsAPI';
-import { getQuizSolved } from '@/api/dailyquiz/dailyQuizSolved.js';
+import { useToast } from "@/composables/useToast";
+import DailyQuizModal from "@/components/dailyquiz/modals/DailyQuizModal.vue";
+import ConfirmModal from "@/components/allshared/ConfirmModal.vue";
+import logoutImage from "@/assets/images/logos/logoutkiwi.png";
+import { getMemberLevel } from "@/api/main/main.js";
+import { getMemberCharacter } from "@/api/info/userStatsAPI";
+import { getQuizSolved } from "@/api/dailyquiz/dailyQuizSolved.js";
 
-import QuizRewardIntroModal from '@/components/dailyquiz/modals/QuizRewardIntroModal.vue';
-import QuizDailyLimitModal from '@/components/dailyquiz/modals/QuizDailyLimitModal.vue';
+import QuizRewardIntroModal from "@/components/dailyquiz/modals/QuizRewardIntroModal.vue";
+import QuizDailyLimitModal from "@/components/dailyquiz/modals/QuizDailyLimitModal.vue";
 
-import noimage from '@/assets/images/logos/kiwiLogo.png';
+import noimage from "@/assets/images/logos/kiwiLogo.png";
 
 const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
@@ -133,15 +135,17 @@ const maxXp = 1000;
 const memberLevel = ref(0);
 const totalexp = ref(0);
 const levelexp = ref(0);
-const fillPercentage = computed(() => (levelexp.value / maxXp) * 100);
-const animalName = ref('');
-const animalImage = ref('');
-const summary = ref('');
+const fillPercentage = computed(() =>
+  Math.min(100, Math.max(0, (Number(levelexp.value || 0) / maxXp) * 100))
+);
+const animalName = ref("");
+const animalImage = ref("");
+const summary = ref("");
 
-const stage = ref('reward');
+const stage = ref("reward");
 const closeOnboarding = () => {
   showOnboarding.value = false;
-  stage.value = 'reward';
+  stage.value = "reward";
 };
 const openDailyQuiz = () => {
   showOnboarding.value = false;
@@ -152,9 +156,13 @@ const closeDailyQuiz = () => {
   if (isLoggedIn.value) refreshLevel();
 };
 
+const hasMemberLevel = computed(
+  () => memberLevel.value !== null && memberLevel.value !== undefined
+);
+
 function handleLoginClick() {
   if (!isLoggedIn.value) {
-    router.push('/login');
+    router.push("/login");
   } else {
     showLogoutConfirm.value = true;
   }
@@ -165,33 +173,37 @@ function handleLogoutConfirm(confirmed) {
 }
 
 onMounted(async () => {
-  try {
-    if (isLoggedIn.value) {
-      const levelData = await getMemberLevel();
-      if (levelData.status == 404) {
-        isLoadinglevel.value = false;
-        memberLevel.value = '';
-      }
-      const character = await getMemberCharacter();
-      if (character.status == 404) {
-        isLoadingImage.value = false;
-        animalImage.value = '';
-      }
-      memberLevel.value = levelData.data.currentLevel;
-      animalName.value = character.data.animalName;
-      animalImage.value = `${BASE_API_URL}${character.data.animalImage}`;
-      summary.value = levelData.data.profileSummary;
-      totalexp.value = levelData.data.totalExp;
-      levelexp.value = totalexp.value % 1000;
-      console.log(levelData.data);
-      console.log(character.data);
-    }
-  } catch (err) {
-    console.error('⚠️ 사용자 정보 로딩 실패:', err);
-  } finally {
-    isLoadinglevel.value = false;
-    isLoadingImage.value = false;
+  if (!isLoggedIn.value) return;
+
+  isLoadinglevel.value = true;
+  isLoadingImage.value = true;
+
+  const [levelRes, charRes] = await Promise.allSettled([
+    getMemberLevel(),
+    getMemberCharacter(),
+  ]);
+
+  if (levelRes.status === "fulfilled") {
+    const data = levelRes.value.data;
+    memberLevel.value = Number(data.currentLevel);
+    totalexp.value = Number(data.totalExp ?? 0);
+    levelexp.value = totalexp.value % maxXp;
+    summary.value = data.profileSummary ?? "";
+  } else {
+    memberLevel.value = null;
+    levelexp.value = 0;
   }
+  isLoadinglevel.value = false;
+
+  if (charRes.status === "fulfilled") {
+    const c = charRes.value.data;
+    animalName.value = c.animalName ?? "";
+    animalImage.value = `${BASE_API_URL}${c.animalImage ?? ""}`;
+  } else {
+    animalName.value = "";
+    animalImage.value = "";
+  }
+  isLoadingImage.value = false;
 });
 
 async function openQuizModal() {
@@ -199,18 +211,16 @@ async function openQuizModal() {
 
   try {
     const res = await getQuizSolved();
-    console.log('퀴즈 풀이 상태', res.data.quizSolved);
     if (res.data.quizSolved) {
-      toast('오늘은 이미 퀴즈를 푸셨군요?\n내일 다시 도전해주세요!', 'warning');
+      toast("오늘은 이미 퀴즈를 푸셨군요?\n내일 다시 도전해주세요!", "warning");
       return;
     }
     showOnboarding.value = true;
-    stage.value = 'reward';
+    stage.value = "reward";
   } catch (error) {
-    console.error('퀴즈 로딩 실패', error);
     toast(
-      '퀴즈 상태를 가져오지 못했어요. 잠시 후 다시 시도해주세요.',
-      'warning'
+      "퀴즈 상태를 가져오지 못했어요. 잠시 후 다시 시도해주세요.",
+      "warning"
     );
   }
 }
@@ -222,14 +232,12 @@ async function refreshLevel() {
     totalexp.value = levelData.data.totalExp;
     levelexp.value = totalexp.value % maxXp;
     summary.value = levelData.data.profileSummary;
-    console.log('[Profile] refreshLevel:', levelData.data);
   } catch (err) {
-    console.error('레벨 재조회 실패:', err);
+    toast("레벨 조회에 실패했어요. 잠시 후 다시 시도해주세요.", "warning");
   }
 }
 
 function applyExpPatch(payload) {
-  console.log('[Profile] exp-updated payload:', payload);
   if (payload?.currentLevel != null) memberLevel.value = payload.currentLevel;
   if (payload?.totalExp != null) {
     totalexp.value = payload.totalExp;
@@ -455,7 +463,7 @@ function applyExpPatch(payload) {
 }
 
 .text:after {
-  content: '';
+  content: "";
   position: absolute;
   left: -1.8rem;
   top: 50%;

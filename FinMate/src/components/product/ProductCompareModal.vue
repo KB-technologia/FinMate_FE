@@ -366,11 +366,11 @@
                   <div class="comparison-row">
                     <div class="comparison-label">환매 소요일</div>
                     <div class="comparison-value left">
-                      {{ selectedProducts[0].detail?.redemptionPeriod || '-' }}
+                      {{ selectedProducts[0].detail?.redemptionPeriod || "-" }}
                       영업일
                     </div>
                     <div class="comparison-value right">
-                      {{ selectedProducts[1].detail?.redemptionPeriod || '-' }}
+                      {{ selectedProducts[1].detail?.redemptionPeriod || "-" }}
                       영업일
                     </div>
                   </div>
@@ -383,7 +383,7 @@
               class="comparison-section chart-section"
             >
               <h3 class="section-title">
-                {{ isFund ? '수익률 추이 비교' : '금리 추이 비교' }}
+                {{ isFund ? "수익률 추이 비교" : "금리 추이 비교" }}
               </h3>
               <div class="charts-container">
                 <div class="chart-item chart-item-first">
@@ -516,18 +516,18 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, computed } from 'vue';
-import { productService } from '../../api/product/productService';
-import ProductRateChart from './ProductRateChart.vue';
-import { getBankLogo, handleImageError } from '../../utils/bank';
-import { getCharacter } from '../../api/mypage/character';
+import { ref, watch, nextTick, computed } from "vue";
+import { productService } from "../../api/product/productService";
+import ProductRateChart from "./ProductRateChart.vue";
+import { getBankLogo, handleImageError } from "../../utils/bank";
+import { getCharacter } from "../../api/mypage/character";
 
 const props = defineProps({
   isVisible: { type: Boolean, default: false },
   selectedProducts: { type: Array, default: () => [] },
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(["close"]);
 
 const isLoadingAnalysis = ref(false);
 const analysisError = ref(null);
@@ -540,8 +540,8 @@ const characterImagePath = computed(() => {
 
   // lv0를 lv3로 변경
   const imagePath = characterData.value.animalImage.replace(
-    'level0/panda_lv0.png',
-    'level3/panda_lv3.png'
+    "level0/panda_lv0.png",
+    "level3/panda_lv3.png"
   );
   return import.meta.env.VITE_BASE_API_URL + imagePath;
 });
@@ -551,7 +551,7 @@ const shouldFlipCharacter = computed(() => {
 
   const imagePath = characterData.value.animalImage;
   // cat이나 koala가 포함되면 반전하지 않음
-  return !imagePath.includes('cat') && !imagePath.includes('koala');
+  return !imagePath.includes("cat") && !imagePath.includes("koala");
 });
 
 const fetchCharacter = async () => {
@@ -564,14 +564,13 @@ const fetchCharacter = async () => {
     }
     characterImage.value = true;
   } catch (error) {
-    console.error('캐릭터 데이터 로드 실패:', error);
     characterImage.value = false;
   }
 };
 
 const getInvestmentPeriod = (product) => {
-  if (product.productType === 'FUND') {
-    return '제한없음';
+  if (product.productType === "FUND") {
+    return "제한없음";
   }
   return product.detail?.defaultTermMonths
     ? `${product.detail.defaultTermMonths}개월`
@@ -579,40 +578,40 @@ const getInvestmentPeriod = (product) => {
 };
 
 const getMinInvestmentAmount = (product) => {
-  if (product.productType === 'FUND') {
-    return '제한없음';
+  if (product.productType === "FUND") {
+    return "제한없음";
   }
-  return formatAmount(product.minAmount) + '원';
+  return formatAmount(product.minAmount) + "원";
 };
 
 const getRiskDescription = (product) => {
-  if (product.productType === 'DEPOSIT' || product.productType === 'SAVINGS') {
-    return '원금보장';
+  if (product.productType === "DEPOSIT" || product.productType === "SAVINGS") {
+    return "원금보장";
   }
   const riskLevel = product.detail?.riskGrade || product.riskLevel;
   return getRiskLevel(riskLevel);
 };
 
 const getFeeDescription = (product) => {
-  if (product.productType === 'DEPOSIT' || product.productType === 'SAVINGS') {
+  if (product.productType === "DEPOSIT" || product.productType === "SAVINGS") {
     const penalty = product.detail?.earlyWithdrawalPenalty;
     return penalty
       ? `중도해지 ${formatRate(penalty)}%`
-      : '중도해지 수수료 없음';
+      : "중도해지 수수료 없음";
   }
   const expenseRatio = product.detail?.expenseRatio;
   return expenseRatio
     ? `총비용비율 ${formatRate(expenseRatio)}%`
-    : '비용정보 없음';
+    : "비용정보 없음";
 };
 
 const hasDepositOrSavings = computed(() => {
   return (
     props.selectedProducts.length === 2 &&
-    (props.selectedProducts[0].productType === 'DEPOSIT' ||
-      props.selectedProducts[0].productType === 'SAVINGS') &&
-    (props.selectedProducts[1].productType === 'DEPOSIT' ||
-      props.selectedProducts[1].productType === 'SAVINGS')
+    (props.selectedProducts[0].productType === "DEPOSIT" ||
+      props.selectedProducts[0].productType === "SAVINGS") &&
+    (props.selectedProducts[1].productType === "DEPOSIT" ||
+      props.selectedProducts[1].productType === "SAVINGS")
   );
 });
 
@@ -621,16 +620,16 @@ const isMixedComparison = computed(() => {
   const types = props.selectedProducts.map((p) => p.productType);
   // 펀드와 예금/적금을 비교하는 경우만 true 반환 (예금-적금 비교는 제외)
   return (
-    types.includes('FUND') &&
-    (types.includes('DEPOSIT') || types.includes('SAVINGS'))
+    types.includes("FUND") &&
+    (types.includes("DEPOSIT") || types.includes("SAVINGS"))
   );
 });
 
 const isFund = computed(() => {
   return (
     props.selectedProducts.length === 2 &&
-    props.selectedProducts[0].productType === 'FUND' &&
-    props.selectedProducts[1].productType === 'FUND'
+    props.selectedProducts[0].productType === "FUND" &&
+    props.selectedProducts[1].productType === "FUND"
   );
 });
 
@@ -639,19 +638,19 @@ const hasProductRateData = computed(() => {
 });
 
 const getRiskColorClass = (product) => {
-  if (product.productType === 'DEPOSIT' || product.productType === 'SAVINGS') {
-    return '';
+  if (product.productType === "DEPOSIT" || product.productType === "SAVINGS") {
+    return "";
   }
 
   const riskLevel = product.detail?.riskGrade || product.riskLevel;
 
   if (riskLevel >= 4) {
-    if (riskLevel === 4) return 'risk-medium-high';
-    if (riskLevel === 5) return 'risk-high';
-    if (riskLevel === 6) return 'risk-very-high';
+    if (riskLevel === 4) return "risk-medium-high";
+    if (riskLevel === 5) return "risk-high";
+    if (riskLevel === 6) return "risk-very-high";
   }
 
-  return '';
+  return "";
 };
 
 watch(
@@ -679,9 +678,8 @@ const fetchComparisonAnalysis = async () => {
     );
     analysisResult.value = response.data.comparisonResult;
   } catch (error) {
-    console.error('분석 API 호출 실패:', error);
     analysisError.value =
-      error.response?.data?.message || '분석을 불러오는데 실패했습니다.';
+      error.response?.data?.message || "분석을 불러오는데 실패했습니다.";
   } finally {
     isLoadingAnalysis.value = false;
   }
@@ -691,7 +689,7 @@ const closeModal = () => {
   analysisResult.value = null;
   analysisError.value = null;
   isLoadingAnalysis.value = false;
-  emit('close');
+  emit("close");
 };
 
 const handleOverlayClick = () => {
@@ -699,32 +697,32 @@ const handleOverlayClick = () => {
 };
 
 const getTypeLabel = (type) => {
-  const labels = { DEPOSIT: '예금', SAVINGS: '적금', FUND: '펀드' };
+  const labels = { DEPOSIT: "예금", SAVINGS: "적금", FUND: "펀드" };
   return labels[type] || type;
 };
 
 const getInterestType = (type) => {
-  const types = { SIMPLE: '단리', COMPOUND: '복리' };
-  return types[type] || type || '-';
+  const types = { SIMPLE: "단리", COMPOUND: "복리" };
+  return types[type] || type || "-";
 };
 
 const getFundType = (type) => {
   const types = {
-    STOCK: '주식형',
-    BOND: '채권형',
-    MIXED_EQUITY_BOND: '혼합형',
-    REAL_ESTATE: '부동산형',
-    SPECIAL_ASSET: '특별자산형',
-    HYBRID_ASSET: '혼합자산형',
+    STOCK: "주식형",
+    BOND: "채권형",
+    MIXED_EQUITY_BOND: "혼합형",
+    REAL_ESTATE: "부동산형",
+    SPECIAL_ASSET: "특별자산형",
+    HYBRID_ASSET: "혼합자산형",
   };
-  return types[type] || type || '-';
+  return types[type] || type || "-";
 };
 
-const formatRate = (rate) => (rate ? rate.toFixed(2) : '0.00');
+const formatRate = (rate) => (rate ? rate.toFixed(2) : "0.00");
 const formatAmount = (amount) =>
-  !amount ? '-' : new Intl.NumberFormat('ko-KR').format(amount);
+  !amount ? "-" : new Intl.NumberFormat("ko-KR").format(amount);
 const formatAum = (aum) => {
-  if (!aum || aum === 0) return '-';
+  if (!aum || aum === 0) return "-";
   const value = Number(aum);
   if (value >= 1e12) {
     return `${(value / 1e12).toFixed(1)}조원`;
@@ -736,27 +734,27 @@ const formatAum = (aum) => {
 };
 
 const parseMarkdown = (text) => {
-  if (!text) return '';
+  if (!text) return "";
   return text
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/^\d+\.\s+(.*$)/gim, '<li>$1</li>')
-    .replace(/^-\s+(.*$)/gim, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>')
-    .replace(/^(.*)$/s, '<p>$1</p>')
-    .replace(/<p><\/p>/g, '');
+    .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+    .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+    .replace(/^# (.*$)/gim, "<h1>$1</h1>")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/^\d+\.\s+(.*$)/gim, "<li>$1</li>")
+    .replace(/^-\s+(.*$)/gim, "<li>$1</li>")
+    .replace(/(<li>.*<\/li>)/s, "<ul>$1</ul>")
+    .replace(/\n\n/g, "</p><p>")
+    .replace(/\n/g, "<br>")
+    .replace(/^(.*)$/s, "<p>$1</p>")
+    .replace(/<p><\/p>/g, "");
 };
 
 const getChatMessages = (text) => {
   if (!text) return [];
 
   return text
-    .split('\n\n')
+    .split("\n\n")
     .map((msg) => msg.trim())
     .filter((msg) => {
       if (msg.length === 0) return false;
@@ -769,8 +767,8 @@ const getChatMessages = (text) => {
     })
     .map((msg) => {
       return msg
-        .replace(/\n{3,}/g, '\n\n')
-        .replace(/^\n+|\n+$/g, '')
+        .replace(/\n{3,}/g, "\n\n")
+        .replace(/^\n+|\n+$/g, "")
         .trim();
     })
     .filter((msg) => msg.length > 0);
@@ -778,12 +776,12 @@ const getChatMessages = (text) => {
 
 const getRiskLevel = (level) => {
   const levels = {
-    1: '매우 낮은 위험',
-    2: '낮은 위험',
-    3: '보통 위험',
-    4: '다소 높은 위험',
-    5: '높은 위험',
-    6: '매우 높은 위험',
+    1: "매우 낮은 위험",
+    2: "낮은 위험",
+    3: "보통 위험",
+    4: "다소 높은 위험",
+    5: "높은 위험",
+    6: "매우 높은 위험",
   };
   return levels[level] || `${level}등급`;
 };
@@ -888,7 +886,7 @@ const getRiskLevel = (level) => {
 }
 
 .chat-bubble:before {
-  content: '';
+  content: "";
   position: absolute;
   left: -0.5vw;
   bottom: 1vh;

@@ -1,16 +1,16 @@
 ``
 <script setup>
-import { ref, onMounted } from 'vue';
-import { createPortfolio, updatePortfolio } from '@/api/portfolio/portfolio.js';
-import { Info } from 'lucide-vue-next';
+import { ref, onMounted } from "vue";
+import { createPortfolio, updatePortfolio } from "@/api/portfolio/portfolio.js";
+import { Info } from "lucide-vue-next";
 
-const emit = defineEmits(['close', 'save']);
+const emit = defineEmits(["close", "save"]);
 const error = ref(false);
 
 const props = defineProps({
   mode: {
     type: String,
-    default: 'write',
+    default: "write",
   },
   initialData: {
     type: Object,
@@ -25,23 +25,23 @@ const form = ref({
 
 onMounted(() => {
   //
-  if (props.mode === 'edit' && props.initialData) {
+  if (props.mode === "edit" && props.initialData) {
     form.value = { ...props.initialData };
   }
 });
 
 const fields = [
-  { name: 'cash', label: '현금', unit: '원' },
-  { name: 'other', label: '기타 자산', unit: '원' },
+  { name: "cash", label: "현금", unit: "원" },
+  { name: "other", label: "기타 자산", unit: "원" },
 ];
 
 async function onSubmit() {
-  const requiredFields = ['cash', 'other'];
+  const requiredFields = ["cash", "other"];
 
   const hasEmpty = requiredFields.some(
     (key) =>
       form.value[key] === null ||
-      form.value[key] === '' ||
+      form.value[key] === "" ||
       isNaN(form.value[key])
   );
 
@@ -57,22 +57,24 @@ async function onSubmit() {
   };
 
   try {
-    if (props.mode === 'edit') {
+    if (props.mode === "edit") {
       await updatePortfolio(fullData);
-      console.log(fullData);
     } else {
       await createPortfolio(fullData);
     }
-    emit('save');
+    emit("save");
   } catch (err) {
-    console.error('저장 실패', err);
+    toast(
+      "포트폴리오 저장 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
+      "warning"
+    );
   } finally {
     onCancel();
   }
 }
 
 function onCancel() {
-  emit('close');
+  emit("close");
 }
 </script>
 
@@ -85,7 +87,7 @@ function onCancel() {
         alt="totalassets이미지"
       />
       <h2 class="modal-title">
-        {{ mode === 'edit' ? '재무 정보 수정' : '재무 정보 작성' }}
+        {{ mode === "edit" ? "재무 정보 수정" : "재무 정보 작성" }}
       </h2>
       <div class="form-group" v-for="field in fields" :key="field.name">
         <label :for="field.name">{{ field.label }}</label>

@@ -78,27 +78,27 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 
-import { Pencil } from 'lucide-vue-next';
+import { Pencil } from "lucide-vue-next";
 
-import { getBankLogo } from '@/utils/bank';
+import { getBankLogo } from "@/utils/bank";
 
-import TopNavigationBar from '@/components/allshared/TopNavigationBar.vue';
-import FooterComponent from '@/components/allshared/FooterComponent.vue';
-import ProductDetailCardFund from '@/components/product/ProductDetailCardFund.vue';
-import ProductDetailCardDeposit from '@/components/product/ProductDetailCardDeposit.vue';
-import ProductDetailController from '@/components/product/ProductDetailController.vue';
-import StarRatingWithDetail from '@/components/allshared/star/StarRatingWithDetail.vue';
-import ReviewFilterBar from '@/components/review/ReviewFilterBar.vue';
-import ReviewCard from '@/components/review/ReviewCard.vue';
-import Pagination from '@/components/allshared/Pagination.vue';
-import WriteReviewModal from '@/components/review/WriteReviewModal.vue';
-import RatingDetailModal from '@/components/review/RatingDetailModal.vue';
-import { productService } from '@/api/product/productService';
-import { useToast } from '@/composables/useToast';
-import { useAuthStore } from '@/stores/auth/auth';
+import TopNavigationBar from "@/components/allshared/TopNavigationBar.vue";
+import FooterComponent from "@/components/allshared/FooterComponent.vue";
+import ProductDetailCardFund from "@/components/product/ProductDetailCardFund.vue";
+import ProductDetailCardDeposit from "@/components/product/ProductDetailCardDeposit.vue";
+import ProductDetailController from "@/components/product/ProductDetailController.vue";
+import StarRatingWithDetail from "@/components/allshared/star/StarRatingWithDetail.vue";
+import ReviewFilterBar from "@/components/review/ReviewFilterBar.vue";
+import ReviewCard from "@/components/review/ReviewCard.vue";
+import Pagination from "@/components/allshared/Pagination.vue";
+import WriteReviewModal from "@/components/review/WriteReviewModal.vue";
+import RatingDetailModal from "@/components/review/RatingDetailModal.vue";
+import { productService } from "@/api/product/productService";
+import { useToast } from "@/composables/useToast";
+import { useAuthStore } from "@/stores/auth/auth";
 
 const route = useRoute();
 
@@ -106,8 +106,8 @@ const product = ref(null);
 const reviews = ref([]);
 const isFavorite = ref(false);
 
-const filter = ref('all');
-const sort = ref('latest');
+const filter = ref("all");
+const sort = ref("latest");
 const currentPage = ref(1);
 const pageSize = 5;
 const { toast } = useToast();
@@ -127,18 +127,18 @@ const getProductComponent = (productType) => {
 const transformedProduct = computed(() => {
   if (!product.value) return null;
   const detailKeys = [
-    'minAge',
-    'maxAge',
-    'gender',
-    'isMarried',
-    'hasJob',
-    'usesPublicTransport',
-    'travelsFrequently',
-    'doesExercise',
-    'hasChildren',
-    'hasHouse',
-    'employedAtSme',
-    'usesMicroloan',
+    "minAge",
+    "maxAge",
+    "gender",
+    "isMarried",
+    "hasJob",
+    "usesPublicTransport",
+    "travelsFrequently",
+    "doesExercise",
+    "hasChildren",
+    "hasHouse",
+    "employedAtSme",
+    "usesMicroloan",
   ];
 
   const base = {
@@ -162,8 +162,8 @@ const transformedProduct = computed(() => {
       bonusRate: product.value.detail?.bonusRate || 0,
       defaultTermMonths:
         product.value.detail?.defaultTermMonths || product.value.minTerm,
-      interestType: product.value.detail?.interestType || 'SIMPLE',
-      compoundingPeriod: product.value.detail?.compoundingPeriod || 'MONTHLY',
+      interestType: product.value.detail?.interestType || "SIMPLE",
+      compoundingPeriod: product.value.detail?.compoundingPeriod || "MONTHLY",
       earlyWithdrawalPenalty: product.value.detail?.earlyWithdrawalPenalty || 0,
       isFlexible: product.value.detail?.isFlexible || false,
       ...Object.fromEntries(
@@ -175,16 +175,16 @@ const transformedProduct = computed(() => {
   };
 
   // 적금의 경우 추가 필드
-  if (product.value.productType === 'SAVINGS') {
-    base.detail.paymentCycle = product.value.detail?.paymentCycle || 'MONTHLY';
+  if (product.value.productType === "SAVINGS") {
+    base.detail.paymentCycle = product.value.detail?.paymentCycle || "MONTHLY";
     base.detail.maxMonthlyPayment =
       product.value.detail?.maxMonthlyPayment || product.value.maxAmount;
   }
   //펀드일 경우 추가 필드...
-  else if (product.value.productType === 'FUND') {
+  else if (product.value.productType === "FUND") {
     base.detail = {
       fundType: product.value.detail?.fundType || null,
-      manager: product.value.detail?.manager || '',
+      manager: product.value.detail?.manager || "",
       inceptionDate: product.value.detail?.inceptionDate || null,
       initialNav: product.value.detail?.initialNav || 0,
       nav: product.value.detail?.nav || 0,
@@ -193,8 +193,8 @@ const transformedProduct = computed(() => {
       expenseRatio: product.value.detail?.expenseRatio || 0,
       redemptionPeriod: product.value.detail?.redemptionPeriod || 0,
       riskGrade: product.value.detail?.riskGrade || 0,
-      productClassCode: product.value.detail?.productClassCode || '',
-      associationCode: product.value.detail?.associationCode || '',
+      productClassCode: product.value.detail?.productClassCode || "",
+      associationCode: product.value.detail?.associationCode || "",
     };
   }
 
@@ -212,7 +212,7 @@ watch(transformedProduct, (newVal) => {
 });
 
 const logoPath = computed(() => {
-  return product.value ? getBankLogo(product.value.bankName) : '';
+  return product.value ? getBankLogo(product.value.bankName) : "";
 });
 
 // 평균 평점 계산 (데이터베이스 구조에 맞춤)
@@ -246,7 +246,7 @@ const isRatingDetailOpen = ref(false);
 
 const openReviewModal = () => {
   if (!isLoggedIn) {
-    toast('로그인이 필요합니다.', 'warning');
+    toast("로그인이 필요합니다.", "warning");
     return;
   }
   isRatingDetailOpen.value = false;
@@ -261,18 +261,18 @@ const openRatingDetailModal = () => {
 const filteredAndSortedReviews = computed(() => {
   let filteredReviews = [...reviews.value];
 
-  if (filter.value !== 'all') {
+  if (filter.value !== "all") {
     const ratingFilter = parseInt(filter.value);
     filteredReviews = filteredReviews.filter(
       (r) => Number(r.rating) === ratingFilter
     );
   }
 
-  if (sort.value === 'latest') {
+  if (sort.value === "latest") {
     return filteredReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
-  } else if (sort.value === 'high') {
+  } else if (sort.value === "high") {
     return filteredReviews.sort((a, b) => b.rating - a.rating);
-  } else if (sort.value === 'low') {
+  } else if (sort.value === "low") {
     return filteredReviews.sort((a, b) => a.rating - b.rating);
   }
   return filteredReviews;
@@ -291,27 +291,26 @@ const formatDate = (dateString) => {
     if (Array.isArray(dateString) && dateString.length >= 3) {
       // [2025, 7, 28, 22, 0, 28] 형태
       const [year, month, day] = dateString;
-      return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(
+      return `${year}.${String(month).padStart(2, "0")}.${String(day).padStart(
         2,
-        '0'
+        "0"
       )}`;
     }
 
-    if (typeof dateString === 'string') {
+    if (typeof dateString === "string") {
       // ISO 문자열 또는 MySQL DATETIME 형태
       const date = new Date(dateString);
       if (!isNaN(date.getTime())) {
         return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(
           2,
-          '0'
-        )}.${String(date.getDate()).padStart(2, '0')}`;
+          "0"
+        )}.${String(date.getDate()).padStart(2, "0")}`;
       }
     }
 
-    return '날짜 없음';
+    return "날짜 없음";
   } catch (error) {
-    console.error('Date formatting error:', error);
-    return '날짜 없음';
+    return "날짜 없음";
   }
 };
 
@@ -319,10 +318,9 @@ const formatDate = (dateString) => {
 const checkFavoriteStatus = async () => {
   try {
     const productId = route.params.id;
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      console.log('토큰이 없음');
       isFavorite.value = false;
       return;
     }
@@ -338,7 +336,6 @@ const checkFavoriteStatus = async () => {
 
     isFavorite.value = isInFavorites;
   } catch (error) {
-    console.error('에러 발생:', error);
     isFavorite.value = false;
   }
 };
@@ -359,10 +356,10 @@ const handleToggleFavorite = async () => {
     }
   } catch (error) {
     // 에러 메시지 처리
-    if (error.message === '로그인이 필요합니다.') {
-      toast('로그인이 필요합니다.', 'warning');
+    if (error.message === "로그인이 필요합니다.") {
+      toast("로그인이 필요합니다.", "warning");
     } else {
-      toast('즐겨찾기 처리에 실패했습니다.', 'warning');
+      toast("즐겨찾기 처리에 실패했습니다.", "warning");
     }
   }
 };
@@ -384,21 +381,20 @@ const loadProductData = async () => {
       : [];
 
     // 즐겨찾기 상태 확인
-    console.log(reviewsResponse.data);
     await checkFavoriteStatus();
     if (product.value) {
       const level = product.value.riskLevel;
 
       if (level == 7) {
-        toast(getToastMessage('highRisk1'), 'highRisk1');
+        toast(getToastMessage("highRisk1"), "highRisk1");
       } else if (level == 6) {
-        toast(getToastMessage('highRisk2'), 'highRisk2');
+        toast(getToastMessage("highRisk2"), "highRisk2");
       } else if (level == 5) {
-        toast(getToastMessage('highRisk3'), 'highRisk3');
+        toast(getToastMessage("highRisk3"), "highRisk3");
       }
     }
   } catch (err) {
-    console.error('데이터 로딩 중 오류 발생:', err);
+    toast("데이터 로딩 중 오류가 발생했습니다.", "warning");
   }
 };
 
@@ -425,19 +421,19 @@ const handleReviewSubmit = async (reviewData) => {
       : [];
 
     isReviewModalOpen.value = false;
-  } catch (err) {
-    console.error('리뷰 제출 중 오류 발생:', err);
+  } catch (e) {
+    toast("리뷰 제출 중 오류가 발생했습니다. 다시 시도해주세요", "warning");
   }
 };
 
 const getToastMessage = (type) => {
   switch (type) {
-    case 'highRisk1':
-      return '큰 수익을 노릴 수 있지만 원금을 잃을 위험이 가장 높아요';
-    case 'highRisk2':
-      return '시장 평균보다 높은 수익을 추구하지만 원금 손실 위험이 있어요';
-    case 'highRisk3':
-      return '예금보다 수익이 높지만 원금이 줄어들 수 있어요';
+    case "highRisk1":
+      return "큰 수익을 노릴 수 있지만 원금을 잃을 위험이 가장 높아요";
+    case "highRisk2":
+      return "시장 평균보다 높은 수익을 추구하지만 원금 손실 위험이 있어요";
+    case "highRisk3":
+      return "예금보다 수익이 높지만 원금이 줄어들 수 있어요";
   }
 };
 
@@ -457,13 +453,13 @@ onMounted(() => {
 }
 
 .product-page::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_main.png');
+  background-image: url("@/assets/images/backgroundImage/background_main.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

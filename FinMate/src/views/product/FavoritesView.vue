@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from "vue";
 import {
   Search,
   Heart,
@@ -95,17 +95,17 @@ import {
   Coins,
   CreditCard,
   TrendingUp,
-} from 'lucide-vue-next';
-import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
-import FavoriteProductCard from '@/components/product/FavoriteProductCard.vue';
-import { productService } from '@/api/product/productService.js';
-import { useToast } from '@/composables/useToast';
+} from "lucide-vue-next";
+import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
+import FooterComponent from "../../components/allshared/FooterComponent.vue";
+import FavoriteProductCard from "@/components/product/FavoriteProductCard.vue";
+import { productService } from "@/api/product/productService.js";
+import { useToast } from "@/composables/useToast";
 
 // 반응형 데이터
-const searchQuery = ref('');
+const searchQuery = ref("");
 const selectedTypes = ref([]);
-const sortBy = ref('interest');
+const sortBy = ref("interest");
 const favoriteProducts = ref([]);
 const loading = ref(false);
 const error = ref(null);
@@ -113,9 +113,9 @@ const { toast } = useToast();
 
 // 상품 유형
 const productTypes = ref([
-  { id: 'SAVINGS', name: '예금', icon: Coins },
-  { id: 'DEPOSIT', name: '적금', icon: CreditCard },
-  { id: 'FUND', name: '펀드', icon: TrendingUp },
+  { id: "SAVINGS", name: "예금", icon: Coins },
+  { id: "DEPOSIT", name: "적금", icon: CreditCard },
+  { id: "FUND", name: "펀드", icon: TrendingUp },
 ]);
 
 // 필터링된 상품
@@ -142,16 +142,16 @@ const filteredProducts = computed(() => {
   // 정렬
   products.sort((a, b) => {
     switch (sortBy.value) {
-      case 'recent':
+      case "recent":
         return (b.favoriteItemId || 0) - (a.favoriteItemId || 0);
-      case 'interest':
+      case "interest":
         return (
           parseFloat(b.maxInterestRate || 0) -
           parseFloat(a.maxInterestRate || 0)
         );
-      case 'name':
+      case "name":
         return a.productName.localeCompare(b.productName);
-      case 'bank':
+      case "bank":
         return a.bankName.localeCompare(b.bankName);
       default:
         return 0;
@@ -188,13 +188,10 @@ const removeFavorite = async (productId) => {
       (product) => product.id !== productId
     );
   } catch (error) {
-    console.error('즐겨찾기 제거 실패:', error);
-
-    // 에러 메시지 처리
-    if (error.message === '로그인이 필요합니다.') {
-      toast('로그인이 필요합니다.', 'warning');
+    if (error.message === "로그인이 필요합니다.") {
+      toast("로그인이 필요합니다.", "warning");
     } else {
-      toast('즐겨찾기 제거에 실패했습니다.', 'warning');
+      toast("즐겨찾기 제거에 실패했습니다.", "warning");
     }
   }
 };
@@ -217,10 +214,10 @@ const transformFavoriteData = (favoriteItems) => {
           productType: product.productType,
           maxInterestRate:
             product.expectedReturn || product.maxInterestRate || 0, // 예상 수익률을 최고금리로 사용
-          url: product.url || '', // 상품 URL
+          url: product.url || "", // 상품 URL
           baseInterestRate: product.baseInterestRate || 0,
           riskGrade: product.detail.riskGrade,
-          specialCondition: product.description || '', // 설명을 특별조건으로 사용
+          specialCondition: product.description || "", // 설명을 특별조건으로 사용
           favoriteItemId: favoriteItem.id, // 즐겨찾기 항목 ID (참고용)
         };
 
@@ -245,12 +242,10 @@ const fetchFavoriteProducts = async () => {
 
     favoriteProducts.value = transformedProducts;
   } catch (err) {
-    console.error('즐겨찾기 조회 실패:', err);
-
-    if (err.message === '로그인이 필요합니다.') {
-      error.value = '로그인이 필요합니다.';
+    if (err.message === "로그인이 필요합니다.") {
+      error.value = "로그인이 필요합니다.";
     } else {
-      error.value = '즐겨찾기 목록을 불러오는데 실패했습니다.';
+      error.value = "즐겨찾기 목록을 불러오는데 실패했습니다.";
     }
   } finally {
     loading.value = false;
@@ -275,13 +270,13 @@ onMounted(() => {
 }
 
 .favorites-view::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_main.png');
+  background-image: url("@/assets/images/backgroundImage/background_main.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

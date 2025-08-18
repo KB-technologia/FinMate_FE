@@ -106,7 +106,7 @@ onMounted(async () => {
       category: review.productType?.toLowerCase() || "etc",
     }));
   } catch (error) {
-    console.error("리뷰 불러오기 실패:", error);
+    toast("리뷰 불러오기에 실패했어요. 다시 시도해주세요.", "error");
   }
 });
 
@@ -117,7 +117,6 @@ const handleDelete = async (review) => {
     toast("리뷰가 삭제되었습니다.", "success");
   } catch (error) {
     toast("리뷰 삭제에 실패했습니다. 다시 시도해주세요.", "error");
-    console.error("리뷰 삭제 실패:", error);
   }
 };
 

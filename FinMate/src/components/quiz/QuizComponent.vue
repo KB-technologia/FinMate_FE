@@ -83,11 +83,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import quizJson from '@/assets/quiz.json';
-import { postAssessment } from '@/api/quiz/quiz.js';
-import { useToast } from '@/composables/useToast';
-import { Info } from 'lucide-vue-next';
+import { ref, computed, onMounted } from "vue";
+import quizJson from "@/assets/quiz.json";
+import { postAssessment } from "@/api/quiz/quiz.js";
+import { useToast } from "@/composables/useToast";
+import { Info } from "lucide-vue-next";
 
 const quizData = ref([]);
 const currentIndex = ref(0);
@@ -113,19 +113,17 @@ onMounted(() => {
   quizData.value = quizJson;
 });
 
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const onSubmit = async () => {
   try {
     const result = await postAssessment(selectedAnswers.value);
-    console.log('Assessment 결과:', result);
-    router.push('/');
-    toast('투자 테스트가 완료되었습니다. 스탯을 확인해주세요.', 'success');
+    router.push("/");
+    toast("투자 테스트가 완료되었습니다. 스탯을 확인해주세요.", "success");
   } catch (error) {
-    console.error('Assessment 요청 실패:', error);
-    toast('투자 테스트 제출에 실패하였습니다. 다시 확인해주세요.', 'error');
+    toast("투자 테스트 제출에 실패하였습니다. 다시 확인해주세요.", "error");
   }
 };
 
@@ -140,7 +138,7 @@ const handleOptionSelect = () => {
 </script>
 
 <style scoped lang="scss">
-@use '@/styles/checkbox.scss';
+@use "@/styles/checkbox.scss";
 </style>
 
 <style scoped>
@@ -222,7 +220,7 @@ const handleOptionSelect = () => {
   border: 0.2vh solid var(--color-primary-green);
   box-shadow: 0 0 1vh var(--color-primary-green);
 }
-.label input[type='radio'] {
+.label input[type="radio"] {
   display: none;
 }
 

@@ -140,8 +140,6 @@
       </div>
     </template>
   </div>
-
-  <ToastContainer ref="toastRef" />
 </template>
 
 <script setup>
@@ -149,7 +147,7 @@ import { ref, computed, onMounted } from "vue";
 import { ScrollText, Info } from "lucide-vue-next";
 
 import Tooltip from "@/components/allshared/Tooltip.vue";
-import ToastContainer from "@/components/allshared/ToastContainer.vue";
+import { useToast } from "@/composables/useToast";
 import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue";
 
 import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
@@ -161,16 +159,15 @@ import { getUserData, FILE_BASE } from "@/api/mypage/level.js";
 import { getCharacter } from "@/api/mypage/character.js";
 
 const userData = ref(null);
-
 const characterData = ref(null);
 
-const toastRef = ref(null);
+const { toast } = useToast();
 const showGachaModal = ref(false);
 
 const openTicketModal = () => {
   const currentTicket = userData.value?.characterTicket ?? 0;
   if (currentTicket <= 0) {
-    toastRef.value?.addToast("보유한 티켓이 없어요...!", "warning");
+    toast("보유한 티켓이 없어요...!", "warning");
     return;
   }
   showGachaModal.value = true;
@@ -236,21 +233,21 @@ onMounted(async () => {
     selectedLuckOrStrategy.value =
       descs.luckStrategy.enumToLabel?.[stat.strategyTag] ?? "";
   } catch (e) {
-    console.warn("사용자 스탯 조회 실패:", e);
+    toast("사용자 스탯을 불러오지 못했어요.", "warning");
   }
 
   try {
     const data = await getUserData();
     userData.value = data;
   } catch (e) {
-    console.log("레벨 불러오기 실패", e);
+    toast("레벨 정보를 불러오지 못했어요.", "warning");
   }
 
   try {
     const data = await getCharacter();
     characterData.value = data;
   } catch (e) {
-    console.log("캐릭터 가져오기 실패", e);
+    toast("캐릭터 정보를 불러오지 못했어요.", "warning");
   }
 });
 
@@ -261,7 +258,7 @@ const mypagereloading = async () => {
     const character = await getCharacter();
     characterData.value = character;
   } catch (e) {
-    console.log("갱신 중 오류 발생!", e);
+    toast("갱신 중 오류가 발생했어요.", "warning");
   }
 };
 </script>
