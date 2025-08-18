@@ -58,7 +58,6 @@ const handleConfirm = (egg) => {
   selectedEgg.value = egg;
   lockOverlayCloseBriefly();
   stage.value = 'result';
-  emit('confirm', egg);
 };
 
 const closeAll = () => {
