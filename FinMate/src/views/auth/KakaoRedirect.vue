@@ -58,6 +58,7 @@ onMounted(async () => {
       authStore.setToken(token);
       authStore.setIsFirst(!rewardClaimed);
       authStore.setUserName(user.name);
+      localStorage.setItem("username", user.name);
       authStore.setDays(consecutiveDays);
       router.push("/");
     }
