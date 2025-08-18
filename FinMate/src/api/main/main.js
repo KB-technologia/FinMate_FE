@@ -1,71 +1,57 @@
-import axios from 'axios';
+import axios from "axios";
 
 const BASE_API_URL = import.meta.env.VITE_BASE_API_URL;
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+const toError = (error, fallback) =>
+  new Error(error?.response?.data?.message ?? error?.message ?? fallback);
+
 export const getPortfolio = async () => {
   try {
-    const token = localStorage.getItem('token');
     const response = await axios.get(`${BASE_API_URL}/api/portfolio`, {
       headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
       },
     });
     return response;
   } catch (error) {
-    console.error('❌ Portfolio 요청 실패:', error);
-    if (error.response) {
-      console.error('❗ 서버 응답 데이터:', error.response.data);
-      console.error('❗ 서버 응답 상태코드:', error.response.status);
-      console.error('❗ 서버 응답 헤더:', error.response.headers);
-    }
-    throw error;
+    throw toError(error, "포트폴리오 조회에 실패했습니다.");
   }
 };
 
 export const getMemberStat = async () => {
   try {
-    const token = localStorage.getItem('token');
     const response = await axios.get(`${BASE_API_URL}/api/my-page/stat`, {
       headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
       },
     });
-    console.log(response);
     return response;
   } catch (error) {
-    console.error('❌ Member Stat 요청 실패:', error);
-    if (error.response) {
-      console.error('❗ 서버 응답 데이터:', error.response.data);
-      console.error('❗ 서버 응답 상태코드:', error.response.status);
-      console.error('❗ 서버 응답 헤더:', error.response.headers);
-    }
-    throw error;
+    throw toError(error, "회원 통계 조회에 실패했습니다.");
   }
 };
 
 export const getAllRecommendations = async () => {
   try {
-    const token = localStorage.getItem('token');
     const response = await axios.get(
       `${BASE_API_URL}/api/product/recommendation`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
         },
       }
     );
     return response;
   } catch (error) {
-    console.error('❌ 전체 추천상품 요청 실패:', error);
-    if (error.response) {
-      console.error('❗ 서버 응답 데이터:', error.response.data);
-      console.error('❗ 서버 응답 상태코드:', error.response.status);
-      console.error('❗ 서버 응답 헤더:', error.response.headers);
-    }
-    throw error;
+    throw toError(error, "추천 상품 조회에 실패했습니다.");
   }
 };
 
@@ -75,64 +61,44 @@ export const getRandomRecommendation = async () => {
       `${BASE_API_URL}/api/product/recommendation/random`,
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
     return response;
   } catch (error) {
-    console.error('❌ 랜덤 추천상품 요청 실패:', error);
-    if (error.response) {
-      console.error('❗ 서버 응답 데이터:', error.response.data);
-      console.error('❗ 서버 응답 상태코드:', error.response.status);
-      console.error('❗ 서버 응답 헤더:', error.response.headers);
-    }
-    throw error;
+    throw toError(error, "랜덤 추천 상품 조회에 실패했습니다.");
   }
 };
 
 export const postAttendance = async (payload = {}) => {
   try {
-    const token = localStorage.getItem('token');
     const response = await axios.post(
       `${BASE_API_URL}/api/attendance`,
       payload,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
         },
       }
     );
     return response.status;
   } catch (error) {
-    console.error('❌ Attendance 등록 요청 실패:', error);
-    if (error.response) {
-      console.error('❗ 서버 응답 데이터:', error.response.data);
-      console.error('❗ 서버 응답 상태코드:', error.response.status);
-      console.error('❗ 서버 응답 헤더:', error.response.headers);
-    }
-    throw error;
+    throw toError(error, "출석 등록에 실패했습니다.");
   }
 };
 
 export const getMemberLevel = async () => {
   try {
-    const token = localStorage.getItem('token');
     const response = await axios.get(`${BASE_API_URL}/api/level`, {
       headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
       },
     });
     return response;
   } catch (error) {
-    console.error('❌ Member Level 요청 실패:', error);
-    if (error.response) {
-      console.error('❗ 서버 응답 데이터:', error.response.data);
-      console.error('❗ 서버 응답 상태코드:', error.response.status);
-      console.error('❗ 서버 응답 헤더:', error.response.headers);
-    }
-    throw error;
+    throw toError(error, "회원 레벨 조회에 실패했습니다.");
   }
 };

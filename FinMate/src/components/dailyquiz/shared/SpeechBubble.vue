@@ -1,6 +1,5 @@
 <template>
   <div class="bubble-container">
-    <p v-if="sender" class="bubble-sender-name">{{ sender }}</p>
     <img :src="speechUrl" alt="말풍선" class="speech-bubble" />
     <div class="bubble-text">
       <slot />
@@ -12,8 +11,7 @@
 </template>
 
 <script setup>
-import speechUrl from "@/assets/images/etc/speech.svg";
-defineProps({ sender: { type: String, default: "FINMATE" } });
+import speechUrl from "@/assets/images/etc/speech.png";
 </script>
 
 <style scoped>

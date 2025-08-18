@@ -29,16 +29,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import CharacterGachaWelcomeModal from './CharacterGachaWelcomeModal.vue';
-import CharacterGachaIntroModal from './CharacterGachaIntroModal.vue';
-import CharacterGachaDrawModal from './CharacterGachaDrawModal.vue';
-import CharacterGachaResultStep from './CharacterGachaResultStep.vue';
+import { ref, onMounted, onUnmounted } from "vue";
+import CharacterGachaWelcomeModal from "./CharacterGachaWelcomeModal.vue";
+import CharacterGachaIntroModal from "./CharacterGachaIntroModal.vue";
+import CharacterGachaDrawModal from "./CharacterGachaDrawModal.vue";
+import CharacterGachaResultStep from "./CharacterGachaResultStep.vue";
 
-const emit = defineEmits(['confirm', 'close', 'reloading']);
-const stage = ref('welcome');
+const emit = defineEmits(["confirm", "close", "reloading"]);
+const stage = ref("welcome");
 
-const selectedEgg = ref({ url: '' });
+const selectedEgg = ref({ url: "" });
 
 const overlayClosable = ref(true);
 let overlayUnlockTimer = null;
@@ -50,29 +50,29 @@ const lockOverlayCloseBriefly = (ms = 250) => {
 };
 
 const onOverlayClick = () => {
-  if (!overlayClosable.value || stage.value === 'result') return;
+  if (!overlayClosable.value || stage.value === "result") return;
   closeAll();
 };
 
 const handleConfirm = (egg) => {
   selectedEgg.value = egg;
   lockOverlayCloseBriefly();
-  stage.value = 'result';
+  stage.value = "result";
 };
 
 const closeAll = () => {
-  stage.value = 'welcome';
-  emit('close');
-  emit('reloading');
+  stage.value = "welcome";
+  emit("close");
+  emit("reloading");
 };
 
 onMounted(() => {
   const prev = document.body.style.overflow;
   document.body.dataset.prevOverflow = prev;
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = "hidden";
 });
 onUnmounted(() => {
-  document.body.style.overflow = document.body.dataset.prevOverflow || '';
+  document.body.style.overflow = document.body.dataset.prevOverflow || "";
   delete document.body.dataset.prevOverflow;
   clearTimeout(overlayUnlockTimer);
 });

@@ -2,7 +2,7 @@
   <TalkModalShell :bg-image="quizBg" @close="$emit('close')">
     <template #bubble>
       <ModalMascot :src="kiwiIntroQuiz" />
-      <SpeechBubble sender="FINMATE">
+      <SpeechBubble>
         <TypewriterText
           :lines="[
             '오늘의 퀴즈를 풀러 오셨군요? 환영합니다!\n오늘의 퀴즈를 맞히신다면 경험치를 드려요!',

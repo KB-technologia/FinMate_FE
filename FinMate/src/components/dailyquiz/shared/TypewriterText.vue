@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onUnmounted } from "vue";
+import { ref, watch, onUnmounted, defineExpose } from "vue";
 
 const props = defineProps({
   lines: { type: Array, required: true },
@@ -13,6 +13,7 @@ const props = defineProps({
 
 const visible = ref("");
 let timerId = null;
+let lastLines = [];
 
 function clearTimer() {
   if (timerId) {
@@ -24,6 +25,7 @@ function clearTimer() {
 function play(lines) {
   clearTimer();
   visible.value = "";
+  lastLines = Array.isArray(lines) ? lines : [];
   if (!lines || !lines.length) return;
 
   let li = 0,
@@ -58,6 +60,12 @@ function play(lines) {
   }
 }
 
+function skip() {
+  clearTimer();
+  const all = (lastLines || []).join("\n");
+  visible.value = all.replace(/\n/g, "<br>");
+}
+
 watch(
   () => props.lines,
   (v) => play(v),
@@ -65,4 +73,6 @@ watch(
 );
 
 onUnmounted(clearTimer);
+
+defineExpose({ skip });
 </script>

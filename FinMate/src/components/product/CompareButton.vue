@@ -56,7 +56,7 @@
           class="compare-btn"
           :disabled="isComparing"
         >
-          {{ isComparing ? '비교 중...' : '비교하기' }}
+          {{ isComparing ? "비교 중..." : "비교하기" }}
         </button>
       </div>
     </div>
@@ -89,8 +89,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { getBankLogo, handleImageError } from '../../utils/bank';
+import { ref } from "vue";
+import { getBankLogo, handleImageError } from "../../utils/bank";
 
 const props = defineProps({
   selectedProducts: {
@@ -99,7 +99,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['compare', 'remove-product']);
+const emit = defineEmits(["compare", "remove-product"]);
 
 const isComparing = ref(false);
 
@@ -113,16 +113,16 @@ const compareProducts = async () => {
 
   try {
     const [product1, product2] = props.selectedProducts;
-    await emit('compare', { product1, product2 });
+    await emit("compare", { product1, product2 });
   } catch (error) {
-    console.error('비교 중 오류 발생:', error);
+    toast("상품 비교에 실패했어요. 다시 시도해주세요.", "error");
   } finally {
     isComparing.value = false;
   }
 };
 
 const getBankClass = (bankName) => {
-  return bankName.replace(/\s+/g, '').toLowerCase();
+  return bankName.replace(/\s+/g, "").toLowerCase();
 };
 </script>
 

@@ -172,11 +172,8 @@ const findUserAccountId = async () => {
     foundAccountId.value = response.accountId;
     joinDate.value = response.joinDate || "정보 없음";
     isEmailVerified.value = true;
-
-    toast("아이디를 찾았습니다!", "success");
   } catch (error) {
     toast("해당 이메일로 가입된 계정을 찾을 수 없습니다.", "error");
-    console.error("Find account ID error:", error);
   } finally {
     ui.isLoading = false;
   }

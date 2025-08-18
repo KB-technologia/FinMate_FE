@@ -9,8 +9,6 @@ export const useToast = () => {
     const instance = getToastInstance();
     if (instance) {
       instance.addToast(message, type, duration);
-    } else {
-      console.warn("ToastContainer 인스턴스를 찾을 수 없습니다.");
     }
   };
 

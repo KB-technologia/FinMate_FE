@@ -184,10 +184,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, nextTick, watch } from 'vue';
-import { useAuthStore } from '@/stores/auth/auth';
-import { useRouter } from 'vue-router';
-import { getPortfolio, getMemberStat } from '@/api/main/main.js';
+import { ref, onMounted, computed, nextTick, watch } from "vue";
+import { useAuthStore } from "@/stores/auth/auth";
+import { useRouter } from "vue-router";
+import { getPortfolio, getMemberStat } from "@/api/main/main.js";
 import {
   Swords,
   Coins,
@@ -195,8 +195,8 @@ import {
   Brain,
   Sparkle,
   UserRoundCheck,
-} from 'lucide-vue-next';
-import { Chart } from 'chart.js/auto';
+} from "lucide-vue-next";
+import { Chart } from "chart.js/auto";
 
 const chartCanvasRef = ref(null);
 const chartInstance = ref(null);
@@ -213,9 +213,9 @@ const statData = ref(null);
 const portfolioRevealed = ref(false);
 let hoverTimer = null;
 
-const goToStatsPage = () => router.push('/my-stats');
-const goToPortfolio = () => router.push('/my-portfolio');
-const goToTest = () => router.push('/quizstart');
+const goToStatsPage = () => router.push("/my-stats");
+const goToPortfolio = () => router.push("/my-portfolio");
+const goToTest = () => router.push("/quizstart");
 
 const handleMouseEnter = () => {
   hoverTimer = setTimeout(() => (portfolioRevealed.value = true), 0);
@@ -225,16 +225,16 @@ const handleMouseLeave = () => {
   portfolioRevealed.value = false;
 };
 const images = [
-  new URL('@/assets/images/animals/cat.png', import.meta.url).href,
-  new URL('@/assets/images/animals/capybara.png', import.meta.url).href,
-  new URL('@/assets/images/animals/desertfox.png', import.meta.url).href,
-  new URL('@/assets/images/animals/flyingsquirrel.png', import.meta.url).href,
-  new URL('@/assets/images/animals/kiwibird.png', import.meta.url).href,
-  new URL('@/assets/images/animals/koala.png', import.meta.url).href,
-  new URL('@/assets/images/animals/panda.png', import.meta.url).href,
-  new URL('@/assets/images/animals/penguin.png', import.meta.url).href,
-  new URL('@/assets/images/animals/redpanda.png', import.meta.url).href,
-  new URL('@/assets/images/animals/seaotter.png', import.meta.url).href,
+  new URL("@/assets/images/animals/cat.png", import.meta.url).href,
+  new URL("@/assets/images/animals/capybara.png", import.meta.url).href,
+  new URL("@/assets/images/animals/desertfox.png", import.meta.url).href,
+  new URL("@/assets/images/animals/flyingsquirrel.png", import.meta.url).href,
+  new URL("@/assets/images/animals/kiwibird.png", import.meta.url).href,
+  new URL("@/assets/images/animals/koala.png", import.meta.url).href,
+  new URL("@/assets/images/animals/panda.png", import.meta.url).href,
+  new URL("@/assets/images/animals/penguin.png", import.meta.url).href,
+  new URL("@/assets/images/animals/redpanda.png", import.meta.url).href,
+  new URL("@/assets/images/animals/seaotter.png", import.meta.url).href,
 ];
 const currentImages = ref([]);
 const animate = ref(true);
@@ -244,17 +244,17 @@ function getRandomImages() {
   return shuffled.slice(0, 8);
 }
 const getSpeedLabel = (speed) =>
-  ({ FAST: '빠름', MEDIUM: '중간', SLOW: '느림', VERY_SLOW: '매우 느림' }[
+  ({ FAST: "빠름", MEDIUM: "중간", SLOW: "느림", VERY_SLOW: "매우 느림" }[
     speed
   ] || speed);
 const getLuckStrategy = (strategy) =>
-  ({ LUCK: '운', STRATEGY: '전략' }[strategy] || strategy);
+  ({ LUCK: "운", STRATEGY: "전략" }[strategy] || strategy);
 const getValue = (value) =>
   ({
-    SURVIVAL: '생존형',
-    STABILITY: '안정형',
-    GROWTH: '성장형',
-    HIGH_RETURN: '고수익형',
+    SURVIVAL: "생존형",
+    STABILITY: "안정형",
+    GROWTH: "성장형",
+    HIGH_RETURN: "고수익형",
   }[value] || value);
 
 onMounted(async () => {
@@ -271,7 +271,6 @@ onMounted(async () => {
       const portfolio = await getPortfolio();
       isPortfolio.value = !!portfolio && Object.keys(portfolio).length > 0;
       portfolioData.value = portfolio.data;
-      console.log(`포트폴리오 로그 : ${portfolio.data}`);
       if (isPortfolio.value) {
         await nextTick();
         renderPortfolioChart();
@@ -285,7 +284,6 @@ onMounted(async () => {
       const stat = await getMemberStat();
       isstats.value = !!stat && Object.keys(stat).length > 0;
       statData.value = stat.data;
-      console.log(`스탯 로그 : ${stat.status.toLocaleString()}`);
     } catch (e) {
       if (e.status === 404) isstats.value = false;
     } finally {
@@ -306,7 +304,7 @@ watch(isPortfolio, async (v) => {
 function renderPortfolioChart() {
   const canvas = chartCanvasRef.value;
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
 
   if (chartInstance.value) {
     chartInstance.value.destroy();
@@ -314,9 +312,9 @@ function renderPortfolioChart() {
   }
 
   chartInstance.value = new Chart(ctx, {
-    type: 'pie',
+    type: "pie",
     data: {
-      labels: ['현금', '예금', '적금', '채권', '펀드', '주식', '기타'],
+      labels: ["현금", "예금", "적금", "채권", "펀드", "주식", "기타"],
       datasets: [
         {
           data: [
@@ -329,13 +327,13 @@ function renderPortfolioChart() {
             portfolioData.value.other,
           ],
           backgroundColor: [
-            '#9ECAD6',
-            '#748DAE',
-            '#F5CBCB',
-            '#FFEAEA',
-            '#A3DC9A',
-            '#DEE791',
-            '#DCD0A8',
+            "#9ECAD6",
+            "#748DAE",
+            "#F5CBCB",
+            "#FFEAEA",
+            "#A3DC9A",
+            "#DEE791",
+            "#DCD0A8",
           ],
           hoverOffset: 7,
         },
@@ -544,7 +542,7 @@ function renderPortfolioChart() {
   box-shadow: var(--card-shadow);
 }
 .nologin-text:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   width: 0;
