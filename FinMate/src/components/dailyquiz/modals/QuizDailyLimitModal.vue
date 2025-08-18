@@ -2,7 +2,7 @@
   <TalkModalShell :bg-image="quizBg" @close="$emit('close')">
     <template #bubble>
       <ModalMascot :src="kiwiIntroQuiz" />
-      <SpeechBubble sender="FINMATE">
+      <SpeechBubble>
         <TypewriterText
           :lines="['하루에 딱! 한 번만 도전할 수 있어요. \n준비되셨나요?']"
         />

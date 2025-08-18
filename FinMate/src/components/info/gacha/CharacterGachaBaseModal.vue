@@ -6,9 +6,8 @@
       <slot name="footer" />
 
       <div class="bubble-container">
-        <p class="bubble-sender-name">FINMATE</p>
         <img
-          src="@/assets/images/etc/speech.svg"
+          src="@/assets/images/etc/speech.png"
           alt="말풍선"
           class="speech-bubble"
         />
@@ -207,16 +206,6 @@ onMounted(() => {
   text-align: center;
   line-height: 1.5;
   word-break: break-word;
-}
-
-.bubble-sender-name {
-  position: absolute;
-  top: 1.6rem;
-  left: 5.2rem;
-  font-size: 1.1rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-brown);
-  transform: rotate(-2deg);
 }
 
 .floating-button-box {

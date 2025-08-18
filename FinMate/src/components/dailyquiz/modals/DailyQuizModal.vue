@@ -6,7 +6,7 @@
   >
     <template #bubble>
       <ModalMascot class="ask-mascot" />
-      <SpeechBubble sender="FINMATE">
+      <SpeechBubble>
         <TypewriterText
           v-if="quiz?.quiz"
           class="question-text"
