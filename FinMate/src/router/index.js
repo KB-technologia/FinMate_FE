@@ -23,7 +23,7 @@ const routes = [
   {
     path: "/signup-survey",
     name: "signupSurvey",
-    component: () => import("@/views/auth/SignupSurvey.vue"),
+    component: () => import("@/views/auth/SignUpSurvey.vue"),
     meta: { requiresAuth: false },
   },
   {
