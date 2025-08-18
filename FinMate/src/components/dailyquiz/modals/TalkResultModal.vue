@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <SpeechBubble :sender="sender">
+      <SpeechBubble>
         <TypewriterText
           :lines="lines"
           :speed="speed"

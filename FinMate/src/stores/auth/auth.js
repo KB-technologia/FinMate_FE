@@ -1,12 +1,12 @@
-import { defineStore } from 'pinia';
-import { Login } from '@/api/auth/auth';
+import { defineStore } from "pinia";
+import { Login } from "@/api/auth/auth";
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem("token"),
     isFirst: null,
     username: null,
-    provide: null,
+    provider: null,
     days: null,
   }),
   getters: {
@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     setToken(token) {
       this.token = token;
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
     },
 
     setIsFirst(isFirst) {
@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     setProvider(provider) {
-      this.provide = provider;
+      this.provider = provider;
     },
 
     setDays(days) {
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
       this.provider = null;
       this.days = null;
       this.username = null;
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       window.location.reload();
     },
 
@@ -51,17 +51,13 @@ export const useAuthStore = defineStore('auth', {
           this.setToken(res.data.token);
           this.setIsFirst(!res.data.rewardClaimed);
           this.setUserName(res.data.user.name);
-          localStorage.setItem('username', res.data.user.name);
+          localStorage.setItem("username", res.data.user.name);
           this.setDays(res.data.consecutiveDays);
-          this.setProvider('LOCAL');
-          console.log(res.data);
-
+          this.setProvider("LOCAL");
           return true;
-        } else {
-          return false;
         }
-      } catch (error) {
-        console.error('로그인 중 오류 발생:', error);
+        return false;
+      } catch {
         return false;
       }
     },

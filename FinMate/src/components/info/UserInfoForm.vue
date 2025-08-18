@@ -152,7 +152,6 @@ const onSubmit = async () => {
     }
   } catch (e) {
     toast("회원 정보 수정 중 오류가 발생했습니다.", "error");
-    console.error(e);
   }
 };
 

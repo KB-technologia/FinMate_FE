@@ -29,35 +29,39 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { Rocket } from 'lucide-vue-next';
-import { getCharacter } from '@/api/mypage/character.js';
+import { ref, onMounted } from "vue";
+import { Rocket } from "lucide-vue-next";
+import { getCharacter } from "@/api/mypage/character.js";
+import { useToast } from "@/composables/useToast";
 
-defineProps({
-  selectedEgg: {
-    type: Object,
-    required: true,
-  },
-});
+defineProps({ selectedEgg: { type: Object, required: true } });
+defineEmits(["close"]);
 
-defineEmits(['close']);
-
+const { toast } = useToast();
 const isRevealed = ref(false);
-const character = ref({ animalName: '', animalImage: '' });
-const BASE_URL = 'http://localhost:8080';
+const character = ref({ animalName: "", animalImage: "" });
 
-const toLv3 = (url = '') =>
-  url.replace(/level\d+/g, 'level3').replace(/_lv\d+/g, '_lv3');
+const API_BASE = (import.meta.env.VITE_BASE_API_URL || "").replace(/\/+$/, "");
+
+const toLv3 = (url = "") =>
+  url.replace(/level\d+/g, "level3").replace(/_lv\d+/g, "_lv3");
+
+const toAbsUrl = (path = "") => {
+  const p = String(path || "");
+  if (/^https?:\/\//i.test(p)) return p;
+  return `${API_BASE}/${p.replace(/^\/+/, "")}`;
+};
 
 onMounted(async () => {
   try {
     const res = await getCharacter();
+    const imgPath = toLv3(res?.animalImage || "");
     character.value = {
-      animalName: res.animalName,
-      animalImage: BASE_URL + toLv3(res.animalImage),
+      animalName: res?.animalName || "",
+      animalImage: toAbsUrl(imgPath),
     };
-  } catch (err) {
-    console.log('캐릭터 API 호출 실패');
+  } catch (e) {
+    toast("캐릭터 정보를 불러오지 못했어요.", "warning");
   } finally {
     setTimeout(() => {
       isRevealed.value = true;

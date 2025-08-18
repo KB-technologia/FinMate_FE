@@ -103,11 +103,11 @@ watch(selected, async (val) => {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.4rem;
+  gap: var(--fcb-gap, 0.4rem);
   min-width: 6rem;
   height: 2.1rem;
   padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
+  font-size: var(--fcb-font-size, 0.8rem);
   line-height: 1;
   border-radius: 1rem;
   white-space: nowrap;
@@ -126,8 +126,8 @@ watch(selected, async (val) => {
 }
 
 .icon {
-  width: 1rem;
-  height: 1rem;
+  width: var(--fcb-icon-size, 1rem);
+  height: var(--fcb-icon-size, 1rem);
   visibility: hidden;
   flex: 0 0 auto;
 }

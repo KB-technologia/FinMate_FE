@@ -1,11 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useSignupStore } from '@/stores/signup/signupStore';
-import { useToast } from '@/composables/useToast';
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useSignupStore } from "@/stores/signup/signupStore";
+import { useToast } from "@/composables/useToast";
 
-import axios from 'axios';
-import surveyJson from '@/assets/signupSurvey.json';
+import axios from "axios";
+import surveyJson from "@/assets/signupSurvey.json";
 
 const { toast } = useToast();
 const router = useRouter();
@@ -39,15 +39,15 @@ const nextQuestion = () => {
 // 설문 응답 -> SignupRequestDTO로 변환하는 함수
 function convertAnswersToDto(answers, baseInfo) {
   return {
-    isMarried: answers[0]?.includes('기혼'),
-    hasJob: answers[1]?.includes('직장인'),
-    usesPublicTransport: answers[2]?.includes('대중교통'),
-    doesExercises: !answers[3]?.includes('운동 안 함'),
-    travelsFrequently: answers[4]?.includes('자주'),
-    hasChildren: !answers[5]?.includes('0명'),
-    hasHouse: answers[6]?.includes('자가'),
-    employedAtSme: answers[7]?.includes('중소기업'),
-    usesMicroloan: !answers[8]?.includes('없어요'),
+    isMarried: answers[0]?.includes("기혼"),
+    hasJob: answers[1]?.includes("직장인"),
+    usesPublicTransport: answers[2]?.includes("대중교통"),
+    doesExercises: !answers[3]?.includes("운동 안 함"),
+    travelsFrequently: answers[4]?.includes("자주"),
+    hasChildren: !answers[5]?.includes("0명"),
+    hasHouse: answers[6]?.includes("자가"),
+    employedAtSme: answers[7]?.includes("중소기업"),
+    usesMicroloan: !answers[8]?.includes("없어요"),
   };
 }
 
@@ -65,16 +65,12 @@ const submitSurvey = async () => {
   const surveyResult = convertAnswersToDto(selectedAnswers.value); // 설문 변환
   signupStore.$patch(surveyResult); // 스토어에 반영
   const dto = { ...signupStore }; // 서버 전송
-
-  console.log('!!!!!!!최종 전송 DTO : ', dto);
   try {
-    const res = await axios.post(`${BASE_URL}/api/member/join`, dto); // 서버 전송
-    console.log('가입 완료 : ', res.data);
-    toast('설문이 저장되었습니다!', 'success');
-    router.push('/signup/complete'); // 회원가입 완료 페이지
+    const res = await axios.post(`${BASE_URL}/api/member/join`, dto);
+    toast("설문이 저장되었습니다!", "success");
+    router.push("/signup/complete"); // 회원가입 완료 페이지
   } catch (err) {
-    console.error('전송 실패 : ', err);
-    toast('회원가입 중 문제가 발생했습니다.', 'warning');
+    toast("회원가입 중 문제가 발생했습니다.", "warning");
   }
 };
 
@@ -82,7 +78,7 @@ onMounted(() => {
   surveyData.value = surveyJson;
 
   if (!signupStore.provider) {
-    const savedProvider = sessionStorage.getItem('provider');
+    const savedProvider = sessionStorage.getItem("provider");
     if (savedProvider) {
       signupStore.provider = savedProvider;
     }
@@ -235,7 +231,7 @@ onMounted(() => {
   border: 0.2vh solid var(--color-primary-green);
   box-shadow: 0 0 1vh var(--color-primary-green);
 }
-.survey-options input[type='radio'] {
+.survey-options input[type="radio"] {
   display: none;
 }
 

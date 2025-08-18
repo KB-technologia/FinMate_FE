@@ -157,9 +157,9 @@ const handleWithdrawConfirm = async (confirmed) => {
       localStorage.removeItem("token");
       window.location.href = "/";
     } catch (error) {
-      // TODO: 콘솔 로그 지우기
-      console.error("회원 탈퇴 처리 실패:", error);
-      toast("탈퇴 처리 중 오류가 발생했습니다.", "error");
+      const msg =
+        error?.response?.data?.message ?? "탈퇴 처리 중 오류가 발생했습니다.";
+      toast(msg, "error");
     }
   }
 };

@@ -48,15 +48,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import TopNavigationBar from '../../components/allshared/TopNavigationBar.vue';
-import FooterComponent from '../../components/allshared/FooterComponent.vue';
-import SearchByCondition from '@/components/product/SearchByCondition.vue';
-import ProductContainer from '@/components/product/ProductContainer.vue';
-import CompareButton from '@/components/product/CompareButton.vue';
-import ProductCompareModal from '@/components/product/ProductCompareModal.vue';
-import { productService } from '../../api/product/productService';
+import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import TopNavigationBar from "../../components/allshared/TopNavigationBar.vue";
+import FooterComponent from "../../components/allshared/FooterComponent.vue";
+import SearchByCondition from "@/components/product/SearchByCondition.vue";
+import ProductContainer from "@/components/product/ProductContainer.vue";
+import CompareButton from "@/components/product/CompareButton.vue";
+import ProductCompareModal from "@/components/product/ProductCompareModal.vue";
+import { productService } from "../../api/product/productService";
 
 // Router
 const router = useRouter();
@@ -66,14 +66,14 @@ const products = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const selectedProducts = ref([]);
-const currentSortType = ref('YIELD_DESC'); // 기본 정렬 방식
+const currentSortType = ref("YIELD_DESC"); // 기본 정렬 방식
 
 // 모달 상태
 const isCompareModalVisible = ref(false);
 
 // 필터링 관련 상태
 const currentFilters = ref({
-  query: '',
+  query: "",
   banks: [],
   productTypes: [],
   subCategories: [],
@@ -81,13 +81,13 @@ const currentFilters = ref({
 
 // 로그인 여부 확인
 const isLoggedIn = computed(() => {
-  return !!localStorage.getItem('token');
+  return !!localStorage.getItem("token");
 });
 
 // 컴포넌트 마운트 시 실행
 onMounted(() => {
   if (isLoggedIn.value) {
-    currentSortType.value = 'RECOMMENDED';
+    currentSortType.value = "RECOMMENDED";
   }
   fetchProducts();
 });
@@ -104,8 +104,7 @@ const fetchProducts = async () => {
     products.value = response.data || [];
   } catch (err) {
     error.value =
-      err.response?.data?.message || '상품 데이터를 불러오는데 실패했습니다.';
-    console.error('API Error:', err);
+      err.response?.data?.message || "상품 데이터를 불러오는데 실패했습니다.";
   } finally {
     loading.value = false;
   }
@@ -116,19 +115,15 @@ const fetchFilteredProducts = async (apiParams) => {
   error.value = null;
 
   try {
-    // console.log('필터링 API 호출:', apiParams);
     const response = await productService.getFilteredProducts(apiParams);
 
     products.value = response.data || [];
   } catch (err) {
-    console.error('필터링 에러:', err);
-
     if (err.response?.status === 404) {
-      // 404는 결과 없음을 의미할 수 있음
       products.value = [];
     } else {
       error.value =
-        err.response?.data?.message || '상품을 불러오는데 실패했습니다.';
+        err.response?.data?.message || "상품을 불러오는데 실패했습니다.";
     }
   } finally {
     loading.value = false;
@@ -210,7 +205,7 @@ const buildApiParams = () => {
 
   // 펀드 타입 (FUND 선택 시에만)
   if (
-    currentFilters.value.productTypes?.includes('FUND') &&
+    currentFilters.value.productTypes?.includes("FUND") &&
     currentFilters.value.subCategories?.length > 0
   ) {
     params.fundType = currentFilters.value.subCategories;
@@ -222,18 +217,18 @@ const buildApiParams = () => {
 // 은행 코드를 실제 은행명으로 변환
 const getBankNameForCode = (bankCode) => {
   const bankMap = {
-    KB: 'KB국민은행',
-    SHINHAN: '신한은행',
-    HANA: '하나은행',
-    WOORI: '우리은행',
-    NH: 'NH농협은행',
-    IBK: 'IBK기업은행',
-    KAKAO: '카카오뱅크',
-    KBANK: '케이뱅크',
-    SC: 'SC제일은행',
-    TOSS: '토스뱅크',
-    BNK: 'BNK부산은행',
-    IM: 'iM뱅크',
+    KB: "KB국민은행",
+    SHINHAN: "신한은행",
+    HANA: "하나은행",
+    WOORI: "우리은행",
+    NH: "NH농협은행",
+    IBK: "IBK기업은행",
+    KAKAO: "카카오뱅크",
+    KBANK: "케이뱅크",
+    SC: "SC제일은행",
+    TOSS: "토스뱅크",
+    BNK: "BNK부산은행",
+    IM: "iM뱅크",
   };
   return bankMap[bankCode] || bankCode;
 };
@@ -249,23 +244,18 @@ const handleProductSelect = (product) => {
     if (selectedProducts.value.length < 2) {
       selectedProducts.value.push(product);
     } else {
-      alert('최대 2개 상품까지 선택할 수 있습니다.');
+      alert("최대 2개 상품까지 선택할 수 있습니다.");
     }
   }
 };
 
 const handleProductDetail = (product) => {
-  console.log('--- 클릭된 상품 정보 ---');
-  console.log('상품 객체:', product);
-  console.log('상품 타입:', product.productType);
-  console.log('위험 등급:', product.detail?.riskGrade);
-  console.log('----------------------');
   const routePayload = {
     path: `/product/${product.id}`,
     query: {},
   };
 
-  if (product.productType === 'FUND' && product.detail?.riskGrade) {
+  if (product.productType === "FUND" && product.detail?.riskGrade) {
     const toastType = getToastTypeByRisk(product.detail.riskGrade);
 
     if (toastType) {
@@ -296,9 +286,9 @@ const handleRemoveProduct = (product) => {
 };
 
 const getToastTypeByRisk = (riskGrade) => {
-  if (riskGrade == 6) return 'highRisk1';
-  if (riskGrade == 5) return 'highRisk2';
-  if (riskGrade == 4) return 'highRisk3';
+  if (riskGrade == 6) return "highRisk1";
+  if (riskGrade == 5) return "highRisk2";
+  if (riskGrade == 4) return "highRisk3";
   return null;
 };
 </script>
@@ -327,13 +317,13 @@ const getToastTypeByRisk = (riskGrade) => {
 }
 
 .all-product-view::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/backgroundImage/background_main.png');
+  background-image: url("@/assets/images/backgroundImage/background_main.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -72,8 +72,6 @@ const kakaoLogin = () => {
   const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
   const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
   window.location.href = kakaoAuthUrl;
-
-  console.log("카카오 로그인 URL : ", kakaoAuthUrl);
 };
 </script>
 

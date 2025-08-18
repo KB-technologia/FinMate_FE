@@ -69,15 +69,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import MainProductCard from './MainProductCard.vue';
-import { PackageSearch } from 'lucide-vue-next';
-import { useAuthStore } from '@/stores/auth/auth.js';
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import MainProductCard from "./MainProductCard.vue";
+import { PackageSearch } from "lucide-vue-next";
+import { useAuthStore } from "@/stores/auth/auth.js";
 import {
   getAllRecommendations,
   getRandomRecommendation,
-} from '@/api/main/main.js';
+} from "@/api/main/main.js";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -85,27 +85,24 @@ const isLoggedIn = computed(() => authStore.isLoggedIn);
 const random = ref(false);
 const products = ref([]);
 const isLoading = ref(true);
-const userName = ref('');
+const userName = ref("");
 onMounted(async () => {
-  userName.value = localStorage.getItem('username');
-  localStorage.setItem('username', userName.value);
+  userName.value = localStorage.getItem("username");
+  localStorage.setItem("username", userName.value);
   try {
     isLoading.value = true;
     if (isLoggedIn.value) {
       const allResult = await getAllRecommendations();
-      console.log('✅ 전체 추천 결과:', allResult.data);
       products.value = allResult.data;
     } else {
       const randomResult = await getRandomRecommendation();
-      console.log('✅ 랜덤 추천 결과:', randomResult.data);
       products.value = randomResult.data;
       random.value = true;
     }
   } catch (error) {
-    console.error('❌ 추천 상품 요청 실패:', error.status);
+    toast("추천 상품 요청에 실패했어요. 다시 시도해주세요.", "error");
     if (error.status == 500) {
       const randomResult = await getRandomRecommendation();
-      console.log('✅ 랜덤 추천 결과:', randomResult.data);
       products.value = randomResult.data;
       random.value = true;
     }
@@ -115,11 +112,11 @@ onMounted(async () => {
 });
 
 const goToProducts = () => {
-  router.push('/products');
+  router.push("/products");
 };
 
 const goToTest = () => {
-  router.push('/quizstart');
+  router.push("/quizstart");
 };
 const currentIndex = ref(0);
 
@@ -178,7 +175,7 @@ const next = () => {
   font-size: 2rem;
   text-align: center;
   display: flex;
-  background-image: url('@/assets/images/backgroundImage/title-text.png');
+  background-image: url("@/assets/images/backgroundImage/title-text.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -198,7 +195,7 @@ const next = () => {
 }
 
 .foodstuffs {
-  background: url('@/assets/images/etc/soil.png') no-repeat center;
+  background: url("@/assets/images/etc/soil.png") no-repeat center;
   background-size: 100% 100%;
   width: 250vh;
   height: 70vh;
