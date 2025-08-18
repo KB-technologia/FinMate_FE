@@ -314,7 +314,7 @@ function applyExpPatch(payload) {
   margin-bottom: 0.5rem;
 }
 .capybara-img {
-  width: 10vw;
+  width: 8vw;
 }
 .image-spinner {
   width: 12vh;
@@ -434,11 +434,12 @@ function applyExpPatch(payload) {
   display: flex;
   align-items: center;
   height: 12vh;
+  width: 20vw;
   margin-top: 3vh;
 }
 
 .text {
-  width: 8vw;
+  width: 10vw;
   height: 10vh;
   font-size: 1.2rem;
   text-align: center;

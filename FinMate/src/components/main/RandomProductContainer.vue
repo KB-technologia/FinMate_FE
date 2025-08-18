@@ -182,7 +182,7 @@ const next = () => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  width: 35vw;
+  width: 40vw;
   height: 20vh;
   align-items: center;
   justify-content: center;
