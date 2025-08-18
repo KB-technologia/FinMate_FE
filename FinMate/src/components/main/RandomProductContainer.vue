@@ -100,8 +100,7 @@ onMounted(async () => {
       random.value = true;
     }
   } catch (error) {
-    toast("추천 상품 요청에 실패했어요. 다시 시도해주세요.", "error");
-    if (error.status == 500) {
+    if (error.status == undefined) {
       const randomResult = await getRandomRecommendation();
       products.value = randomResult.data;
       random.value = true;
@@ -343,7 +342,6 @@ const next = () => {
   will-change: transform;
 }
 
-/* translateX로 좌→우 이동 */
 @keyframes moveLeftToRight {
   0% {
     transform: translateX(-60vw);
