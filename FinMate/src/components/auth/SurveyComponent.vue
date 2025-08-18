@@ -64,7 +64,7 @@ const handleOptionSelect = () => {
 const submitSurvey = async () => {
   const surveyResult = convertAnswersToDto(selectedAnswers.value); // 설문 변환
   signupStore.$patch(surveyResult); // 스토어에 반영
-  const dto = { ...signupStore }; // 서버 전송
+  const dto = { ...signupStore.$state }; // 서버 전송
   try {
     const res = await axios.post(`${BASE_URL}/api/member/join`, dto);
     toast("설문이 저장되었습니다!", "success");
