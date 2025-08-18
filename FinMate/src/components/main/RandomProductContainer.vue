@@ -88,7 +88,6 @@ const isLoading = ref(true);
 const userName = ref("");
 onMounted(async () => {
   userName.value = localStorage.getItem("username");
-  localStorage.setItem("username", userName.value);
   try {
     isLoading.value = true;
     if (isLoggedIn.value) {
