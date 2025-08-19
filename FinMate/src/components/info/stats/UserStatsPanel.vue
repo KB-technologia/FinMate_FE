@@ -152,7 +152,7 @@ import CharacterGachaModal from "@/components/info/gacha/CharacterGachaModal.vue
 
 import ChoiceStatCard from "@/components/info/stats/ChoiceStatCard.vue";
 import BarStatCard from "@/components/info/stats/BarStatCard.vue";
-import { userStatDescriptions as descs } from "@/constants/userStatDescriptions";
+import { userStatDescriptions as descs } from "@/utils/userStatDescriptions";
 
 import { getMemberStat } from "@/api/main/main.js";
 import { getUserData, FILE_BASE } from "@/api/mypage/level.js";
